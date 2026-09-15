@@ -226,6 +226,13 @@ function App() {
         </div>
       </section>
 
+      <section className="theme-picker" aria-label="Escolher problemática">
+        <div className="theme-picker__intro"><span>Primeiro passo</span><h2>Escolha a problemática</h2><p>O panorama mundial abre com os indicadores disponíveis para o tema selecionado.</p></div>
+        <div className="theme-picker__options">
+          {data.themes.map((theme) => <button key={theme.id} className={themeId === theme.id ? 'is-active' : ''} onClick={() => { setThemeId(theme.id); setSelectedIndicatorId(''); setView('world') }}><strong>{theme.name}</strong><span>{theme.description}</span></button>)}
+        </div>
+      </section>
+
       <nav className="view-switcher" aria-label="Escala de análise">
         <button className={view === 'world' ? 'is-active' : ''} onClick={() => setView('world')}>
           1. Mundo
@@ -253,7 +260,6 @@ function App() {
       {view === 'world' ? (
         <>
           <section className="panel controls controls--world">
-            <label>Tema<select value={themeId} onChange={(event) => setThemeId(event.target.value)}>{data.themes.map((theme) => <option key={theme.id} value={theme.id}>{theme.name}</option>)}</select></label>
             <label>Indicador<select value={indicatorId} onChange={(event) => setSelectedIndicatorId(event.target.value)}>{themeIndicators.map((item) => <option key={item.id} value={item.id}>{item.name}</option>)}</select></label>
             <label>Continente<select value={continent} onChange={(event) => { const nextContinent = event.target.value; const nextCountries = nextContinent === 'Todos' ? data.countries : data.countries.filter((country) => country.continent === nextContinent); setContinent(nextContinent); setCountryCode(nextCountries[0]?.code ?? ''); setComparisonCountryCodes(nextCountries.slice(0, 3).map((country) => country.code)) }}><option value="Todos">Mundo inteiro</option>{data.continents.map((item) => <option key={item} value={item}>{item}</option>)}</select></label>
             <label>País<select value={countryCode} onChange={(event) => setCountryCode(event.target.value)}>{filteredCountries.map((country) => <option key={country.code} value={country.code}>{country.name}</option>)}</select></label>
@@ -298,7 +304,6 @@ function App() {
       ) : view === 'country' ? (
         <>
           <section className="panel controls controls--country">
-            <label>Tema<select value={themeId} onChange={(event) => setThemeId(event.target.value)}>{data.themes.map((theme) => <option key={theme.id} value={theme.id}>{theme.name}</option>)}</select></label>
             <label>Indicador<select value={indicatorId} onChange={(event) => setSelectedIndicatorId(event.target.value)}>{themeIndicators.map((item) => <option key={item.id} value={item.id}>{item.name}</option>)}</select></label>
             <label>Continente<select value={continent} onChange={(event) => { const nextContinent = event.target.value; const nextCountries = nextContinent === 'Todos' ? data.countries : data.countries.filter((country) => country.continent === nextContinent); setContinent(nextContinent); setCountryCode(nextCountries[0]?.code ?? '') }}><option value="Todos">Mundo inteiro</option>{data.continents.map((item) => <option key={item} value={item}>{item}</option>)}</select></label>
             <label>País<select value={countryCode} onChange={(event) => setCountryCode(event.target.value)}>{filteredCountries.map((country) => <option key={country.code} value={country.code}>{country.name}</option>)}</select></label>
