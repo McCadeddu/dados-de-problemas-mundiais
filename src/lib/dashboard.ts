@@ -44,6 +44,9 @@ export function formatValue(value: number, unit: string) {
   if (unit === '%') {
     return `${value.toFixed(1)}%`
   }
+  if (unit === 'p.p.') {
+    return `${value.toFixed(1)} p.p.`
+  }
   if (unit === 'mil pessoas') {
     return `${value.toLocaleString('pt-BR', { maximumFractionDigits: 0 })} mil`
   }
@@ -67,4 +70,3 @@ export function getMetricSummary(data: DashboardData) {
     ).length,
   }
 }
-

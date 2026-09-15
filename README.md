@@ -46,6 +46,16 @@ acesso básico e serviço de água com critérios de disponibilidade e qualidade
 Os deslocados internos publicados pela UNHCR cobrem populações sob sua proteção ou assistência;
 eles não representam, sozinhos, o total global de deslocamento interno.
 
+### Indicadores iniciais de desigualdade de gênero
+
+- Diferença de participação na força de trabalho entre homens e mulheres.
+- Diferença de tempo dedicado a cuidado não remunerado entre homens e mulheres.
+- Mulheres sujeitas a violência física e/ou sexual recente.
+
+As diferenças são apresentadas em pontos percentuais. A cobertura de cuidado e violência é menor
+e possui anos de referência diferentes entre países; o painel informa o ano mais recente de cada série.
+Uma série mundial de diferença salarial comparável continua prevista para uma fonte específica.
+
 ## Licenças e redistribuição
 
 O projeto prefere fontes públicas, gratuitas e com licença clara. No MVP:

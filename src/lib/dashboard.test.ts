@@ -47,6 +47,10 @@ describe('dashboard helpers', () => {
     expect(formatValue(12.34, '%')).toBe('12.3%')
   })
 
+  it('formats percentage-point gaps', () => {
+    expect(formatValue(12.34, 'p.p.')).toBe('12.3 p.p.')
+  })
+
   it('returns ranking slices', () => {
     expect(getTopRanked(fixture, 'a', 1)[0]?.geographyCode).toBe('ARG')
   })

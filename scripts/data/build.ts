@@ -78,6 +78,11 @@ type WorldBankIndicatorConfig = Omit<Indicator, 'latestYear'> & {
   wbCode: string
 }
 
+type WorldBankGapIndicatorConfig = Omit<Indicator, 'latestYear'> & {
+  femaleCode: string
+  maleCode: string
+}
+
 const ROOT = process.cwd()
 const PUBLIC_DATA_DIR = path.join(ROOT, 'public', 'data')
 const RAW_DIR = path.join(ROOT, 'data', 'raw')
@@ -213,6 +218,17 @@ const WORLD_BANK_INDICATORS: WorldBankIndicatorConfig[] = [
     direction: 'higher-better',
   },
   {
+    id: 'wb-women-violence-recent',
+    wbCode: 'SG.VAW.1549.ZS',
+    name: 'Mulheres sujeitas a violência física e/ou sexual recente',
+    themeId: 'gender-equality',
+    description: 'Mulheres de 15 a 49 anos que sofreram violência física e/ou sexual por parceiro íntimo ou não parceiro nos últimos 12 meses (%).',
+    unit: '%',
+    geographyType: 'country',
+    sourceId: WORLD_BANK_SOURCE_ID,
+    direction: 'higher-worse',
+  },
+  {
     id: 'wb-poverty-685',
     wbCode: 'SI.POV.UMIC',
     name: 'Pobreza na linha de US$ 6,85/dia',
@@ -230,6 +246,33 @@ const WORLD_BANK_INDICATORS: WorldBankIndicatorConfig[] = [
     themeId: 'poverty-inequality',
     description: 'Índice de desigualdade de renda.',
     unit: 'índice',
+    geographyType: 'country',
+    sourceId: WORLD_BANK_SOURCE_ID,
+    direction: 'higher-worse',
+  },
+]
+
+const WORLD_BANK_GAP_INDICATORS: WorldBankGapIndicatorConfig[] = [
+  {
+    id: 'wb-labor-participation-gap',
+    femaleCode: 'SL.TLF.CACT.FE.ZS',
+    maleCode: 'SL.TLF.CACT.MA.ZS',
+    name: 'Diferença de participação na força de trabalho',
+    themeId: 'gender-equality',
+    description: 'Diferença entre a participação masculina e feminina na força de trabalho (homens menos mulheres, em pontos percentuais).',
+    unit: 'p.p.',
+    geographyType: 'country',
+    sourceId: WORLD_BANK_SOURCE_ID,
+    direction: 'higher-worse',
+  },
+  {
+    id: 'wb-unpaid-care-gap',
+    femaleCode: 'SG.TIM.UWRK.FE',
+    maleCode: 'SG.TIM.UWRK.MA',
+    name: 'Diferença de tempo em cuidado não remunerado',
+    themeId: 'gender-equality',
+    description: 'Diferença entre o tempo diário feminino e masculino dedicado a trabalho doméstico e de cuidado não remunerado (pontos percentuais de 24 horas).',
+    unit: 'p.p.',
     geographyType: 'country',
     sourceId: WORLD_BANK_SOURCE_ID,
     direction: 'higher-worse',
@@ -459,6 +502,63 @@ async function loadWorldBankIndicator(
         'https://datahelpdesk.worldbank.org/knowledgebase/articles/889392-about-the-indicators-api-documentation',
       license: 'CC BY 4.0',
       lastUpdated: meta.lastupdated,
+    } satisfies Source,
+    series,
+  }
+}
+
+async function loadWorldBankGapIndicator(
+  config: WorldBankGapIndicatorConfig,
+  validCountryIso3: Set<string>,
+) {
+  type WorldBankRow = {
+    country: { value: string }
+    countryiso3code: string
+    date: string
+    value: number | null
+  }
+  const [femaleResponse, maleResponse] = await Promise.all([
+    fetchJson<[{ lastupdated: string }, WorldBankRow[]]>(`https://api.worldbank.org/v2/country/all/indicator/${config.femaleCode}?format=json&per_page=20000`),
+    fetchJson<[{ lastupdated: string }, WorldBankRow[]]>(`https://api.worldbank.org/v2/country/all/indicator/${config.maleCode}?format=json&per_page=20000`),
+  ])
+  const maleValues = new Map(
+    maleResponse[1].filter((row) => row.value !== null).map((row) => [
+      `${row.countryiso3code.toUpperCase()}-${row.date}`,
+      row.value as number,
+    ]),
+  )
+  const grouped = new Map<string, Series>()
+
+  femaleResponse[1].forEach((row) => {
+    const code = row.countryiso3code?.toUpperCase()
+    const year = Number(row.date)
+    const maleValue = maleValues.get(`${code}-${row.date}`)
+    if (!validCountryIso3.has(code) || row.value === null || maleValue === undefined || !Number.isFinite(year)) return
+
+    const current = grouped.get(code) ?? {
+      indicatorId: config.id,
+      geographyType: 'country' as const,
+      geographyCode: code,
+      geographyName: row.country.value,
+      points: [],
+    }
+    current.points.push({ year, value: maleValue - row.value })
+    grouped.set(code, current)
+  })
+
+  const series = Array.from(grouped.values()).map((entry) => ({ ...entry, points: sortPoints(entry.points) }))
+  return {
+    indicator: {
+      ...config,
+      latestYear: Math.max(...series.flatMap((entry) => entry.points.map((point) => point.year))),
+    } satisfies Indicator,
+    source: {
+      id: WORLD_BANK_SOURCE_ID,
+      name: 'World Bank Open Data',
+      url: 'https://data.worldbank.org/',
+      methodologyUrl: 'https://datahelpdesk.worldbank.org/knowledgebase/articles/889392-about-the-indicators-api-documentation',
+      license: 'CC BY 4.0',
+      lastUpdated: femaleResponse[0].lastupdated,
     } satisfies Source,
     series,
   }
@@ -784,11 +884,10 @@ async function main() {
   const countriesByIso3 = new Map(countries.map((country) => [country.code, country.name]))
   const validCountryIso3 = new Set(countries.map((country) => country.code))
 
-  const worldBankResults = await Promise.all(
-    WORLD_BANK_INDICATORS.map((indicator) =>
-      loadWorldBankIndicator(indicator, validCountryIso3),
-    ),
-  )
+  const [worldBankResults, worldBankGapResults] = await Promise.all([
+    Promise.all(WORLD_BANK_INDICATORS.map((indicator) => loadWorldBankIndicator(indicator, validCountryIso3))),
+    Promise.all(WORLD_BANK_GAP_INDICATORS.map((indicator) => loadWorldBankGapIndicator(indicator, validCountryIso3))),
+  ])
   const [ndGain, unhcr] = await Promise.all([
     loadNdGain(countriesByIso3),
     loadUnhcrIndicators(validCountryIso3),
@@ -807,6 +906,7 @@ async function main() {
 
   const indicators = [
     ...worldBankResults.map((result) => result.indicator),
+    ...worldBankGapResults.map((result) => result.indicator),
     ...unhcr.results.map((result) => result.indicator),
     ndGain.indicator,
     brazilStates.indicator,
@@ -815,6 +915,7 @@ async function main() {
   ]
   const series = [
     ...worldBankResults.flatMap((result) => result.series),
+    ...worldBankGapResults.flatMap((result) => result.series),
     ...unhcr.results.flatMap((result) => result.series),
     ...ndGain.series,
     ...brazilStates.series,
@@ -825,7 +926,7 @@ async function main() {
   const rankings = buildRankings(indicators, latest)
 
   const sources = new Map<string, Source>()
-  for (const source of [...worldBankResults.map((result) => result.source), unhcr.source, ndGain.source, brazilStates.source]) {
+  for (const source of [...worldBankResults.map((result) => result.source), ...worldBankGapResults.map((result) => result.source), unhcr.source, ndGain.source, brazilStates.source]) {
     sources.set(source.id, source)
   }
   sources.set(NATURAL_EARTH_SOURCE_ID, {
