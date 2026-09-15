@@ -24,6 +24,7 @@ Mundialidade é um dashboard web open-source para acompanhar indicadores sociais
 
 - World Bank Open Data
 - ND-GAIN Country Index
+- UNHCR Refugee Data Finder
 - IBGE SIDRA
 - Natural Earth
 
@@ -36,11 +37,21 @@ Mundialidade é um dashboard web open-source para acompanhar indicadores sociais
 As duas primeiras séries ampliam o recorte de fome e sede ao separar privação alimentar,
 acesso básico e serviço de água com critérios de disponibilidade e qualidade.
 
+### Indicadores iniciais de migração e crise humanitária
+
+- Refugiados por país de origem e refugiados acolhidos, da UNHCR.
+- Solicitantes de asilo acolhidos, da UNHCR.
+- Deslocados internos por conflito ou violência acompanhados pela UNHCR.
+
+Os deslocados internos publicados pela UNHCR cobrem populações sob sua proteção ou assistência;
+eles não representam, sozinhos, o total global de deslocamento interno.
+
 ## Licenças e redistribuição
 
 O projeto prefere fontes públicas, gratuitas e com licença clara. No MVP:
 
 - World Bank Open Data: CC BY 4.0
+- UNHCR Refugee Data Finder: CC BY 4.0
 - ND-GAIN: licença aberta informada pela fonte
 - Natural Earth: domínio público
 - IBGE SIDRA: dados públicos do IBGE

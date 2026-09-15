@@ -112,6 +112,7 @@ const THEMES: DashboardData['themes'] = [
 
 const WORLD_BANK_SOURCE_ID = 'world-bank'
 const ND_GAIN_SOURCE_ID = 'nd-gain'
+const UNHCR_SOURCE_ID = 'unhcr'
 const SIDRA_SOURCE_ID = 'ibge-sidra'
 const NATURAL_EARTH_SOURCE_ID = 'natural-earth'
 const BRAZIL_STATE_CODE_BY_POSTAL: Record<string, string> = {
@@ -233,16 +234,61 @@ const WORLD_BANK_INDICATORS: WorldBankIndicatorConfig[] = [
     sourceId: WORLD_BANK_SOURCE_ID,
     direction: 'higher-worse',
   },
+]
+
+type UnhcrIndicatorConfig = Omit<Indicator, 'latestYear'> & {
+  field: 'refugees' | 'asylum_seekers' | 'idps'
+  perspective: 'origin' | 'asylum'
+}
+
+const UNHCR_INDICATORS: UnhcrIndicatorConfig[] = [
   {
-    id: 'wb-refugees-origin',
-    wbCode: 'SM.POP.RHCR.EO',
+    id: 'unhcr-refugees-origin',
     name: 'Refugiados por país de origem',
     themeId: 'forced-migration',
-    description: 'Total de refugiados por país de origem.',
+    description: 'Pessoas refugiadas ou em situação semelhante, segundo o país de origem.',
     unit: 'pessoas',
     geographyType: 'country',
-    sourceId: WORLD_BANK_SOURCE_ID,
+    sourceId: UNHCR_SOURCE_ID,
     direction: 'higher-worse',
+    field: 'refugees',
+    perspective: 'origin',
+  },
+  {
+    id: 'unhcr-refugees-hosted',
+    name: 'Refugiados acolhidos',
+    themeId: 'forced-migration',
+    description: 'Pessoas refugiadas ou em situação semelhante acolhidas pelo país de asilo.',
+    unit: 'pessoas',
+    geographyType: 'country',
+    sourceId: UNHCR_SOURCE_ID,
+    direction: 'higher-worse',
+    field: 'refugees',
+    perspective: 'asylum',
+  },
+  {
+    id: 'unhcr-asylum-seekers-hosted',
+    name: 'Solicitantes de asilo acolhidos',
+    themeId: 'forced-migration',
+    description: 'Pessoas com pedido de proteção internacional ainda não decidido, segundo o país de asilo.',
+    unit: 'pessoas',
+    geographyType: 'country',
+    sourceId: UNHCR_SOURCE_ID,
+    direction: 'higher-worse',
+    field: 'asylum_seekers',
+    perspective: 'asylum',
+  },
+  {
+    id: 'unhcr-conflict-idps-origin',
+    name: 'Deslocados internos acompanhados pela UNHCR',
+    themeId: 'forced-migration',
+    description: 'Deslocados internos por conflito ou violência sob proteção ou assistência da UNHCR; não representa o total global de deslocamento interno.',
+    unit: 'pessoas',
+    geographyType: 'country',
+    sourceId: UNHCR_SOURCE_ID,
+    direction: 'higher-worse',
+    field: 'idps',
+    perspective: 'origin',
   },
 ]
 
@@ -415,6 +461,69 @@ async function loadWorldBankIndicator(
       lastUpdated: meta.lastupdated,
     } satisfies Source,
     series,
+  }
+}
+
+type UnhcrPopulationRow = {
+  year: number
+  coo_iso: string
+  coo_name: string
+  coa_iso: string
+  coa_name: string
+  refugees: string | number
+  asylum_seekers: string | number
+  idps: string | number
+}
+
+type UnhcrPopulationResponse = { items: UnhcrPopulationRow[] }
+
+async function loadUnhcrIndicators(validCountryIso3: Set<string>) {
+  const [originResponse, asylumResponse] = await Promise.all([
+    fetchJson<UnhcrPopulationResponse>('https://api.unhcr.org/population/v1/population/?limit=10000&yearFrom=2000&yearTo=2025&coo_all=true&cf_type=ISO'),
+    fetchJson<UnhcrPopulationResponse>('https://api.unhcr.org/population/v1/population/?limit=10000&yearFrom=2000&yearTo=2025&coa_all=true&cf_type=ISO'),
+  ])
+
+  const results = UNHCR_INDICATORS.map((config) => {
+    const rows = config.perspective === 'origin' ? originResponse.items : asylumResponse.items
+    const grouped = new Map<string, Series>()
+
+    rows.forEach((row) => {
+      const code = (config.perspective === 'origin' ? row.coo_iso : row.coa_iso)?.toUpperCase()
+      const name = config.perspective === 'origin' ? row.coo_name : row.coa_name
+      const value = toNumber(row[config.field])
+      if (!validCountryIso3.has(code) || !name || !Number.isFinite(row.year) || value === null) return
+
+      const current = grouped.get(code) ?? {
+        indicatorId: config.id,
+        geographyType: 'country' as const,
+        geographyCode: code,
+        geographyName: name,
+        points: [],
+      }
+      current.points.push({ year: row.year, value })
+      grouped.set(code, current)
+    })
+
+    const series = Array.from(grouped.values()).map((entry) => ({ ...entry, points: sortPoints(entry.points) }))
+    return {
+      indicator: {
+        ...config,
+        latestYear: Math.max(...series.flatMap((entry) => entry.points.map((point) => point.year))),
+      } satisfies Indicator,
+      series,
+    }
+  })
+
+  return {
+    results,
+    source: {
+      id: UNHCR_SOURCE_ID,
+      name: 'UNHCR Refugee Data Finder',
+      url: 'https://www.unhcr.org/refugee-statistics',
+      methodologyUrl: 'https://www.unhcr.org/refugee-statistics/methodology',
+      license: 'CC BY 4.0',
+      lastUpdated: '2026-06-11',
+    } satisfies Source,
   }
 }
 
@@ -680,7 +789,10 @@ async function main() {
       loadWorldBankIndicator(indicator, validCountryIso3),
     ),
   )
-  const ndGain = await loadNdGain(countriesByIso3)
+  const [ndGain, unhcr] = await Promise.all([
+    loadNdGain(countriesByIso3),
+    loadUnhcrIndicators(validCountryIso3),
+  ])
   const [brazilStates, immediateRegions, immediateSanitation] = await Promise.all([
     loadBrazilStateIndicator(),
     loadBrazilImmediateRegionCoverage(BRAZIL_IMMEDIATE_WATER_INDICATOR, '6803', '1821%5B72144%5D'),
@@ -695,6 +807,7 @@ async function main() {
 
   const indicators = [
     ...worldBankResults.map((result) => result.indicator),
+    ...unhcr.results.map((result) => result.indicator),
     ndGain.indicator,
     brazilStates.indicator,
     immediateRegions.indicator,
@@ -702,6 +815,7 @@ async function main() {
   ]
   const series = [
     ...worldBankResults.flatMap((result) => result.series),
+    ...unhcr.results.flatMap((result) => result.series),
     ...ndGain.series,
     ...brazilStates.series,
     ...immediateRegions.series,
@@ -711,7 +825,7 @@ async function main() {
   const rankings = buildRankings(indicators, latest)
 
   const sources = new Map<string, Source>()
-  for (const source of [...worldBankResults.map((result) => result.source), ndGain.source, brazilStates.source]) {
+  for (const source of [...worldBankResults.map((result) => result.source), unhcr.source, ndGain.source, brazilStates.source]) {
     sources.set(source.id, source)
   }
   sources.set(NATURAL_EARTH_SOURCE_ID, {
