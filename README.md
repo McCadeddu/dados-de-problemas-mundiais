@@ -55,6 +55,12 @@ npm run test
 npm run build
 ```
 
+## Atualização dos dados
+
+O GitHub Actions consulta as fontes públicas diariamente às 09:00 UTC (06:00 em São Paulo).
+O workflow só cria um commit quando o arquivo de dados gerado contém mudanças. A frequência de
+publicação de cada fonte continua sendo exibida no painel, pois muitos indicadores são anuais.
+
 ## O que o MVP entrega
 
 - dashboard responsivo
@@ -95,4 +101,3 @@ Checklist sugerido:
 3. ativar GitHub Actions
 4. escolher hospedagem estática
 5. configurar branch padrão e proteção
-
