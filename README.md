@@ -27,6 +27,15 @@ Mundialidade é um dashboard web open-source para acompanhar indicadores sociais
 - IBGE SIDRA
 - Natural Earth
 
+### Indicadores iniciais de fome e sede
+
+- Insegurança alimentar moderada ou grave: World Bank, série `SN.ITK.MSFI.ZS`.
+- Água potável gerida com segurança: World Bank/JMP, série `SH.H2O.SMDW.ZS`.
+- Acesso básico à água: World Bank/JMP, série `SH.H2O.BASW.ZS`.
+
+As duas primeiras séries ampliam o recorte de fome e sede ao separar privação alimentar,
+acesso básico e serviço de água com critérios de disponibilidade e qualidade.
+
 ## Licenças e redistribuição
 
 O projeto prefere fontes públicas, gratuitas e com licença clara. No MVP:
