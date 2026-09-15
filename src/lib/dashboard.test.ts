@@ -1,0 +1,62 @@
+import { describe, expect, it } from 'vitest'
+import { formatValue, getMetricSummary, getTopRanked } from './dashboard'
+import type { DashboardData } from '../types'
+
+const fixture: DashboardData = {
+  generatedAt: '2026-09-04T00:00:00.000Z',
+  themes: [],
+  indicators: [
+    {
+      id: 'a',
+      name: 'A',
+      themeId: 'hunger-water',
+      description: '',
+      unit: '%',
+      geographyType: 'country',
+      sourceId: 's',
+      direction: 'higher-worse',
+      latestYear: 2024,
+    },
+  ],
+  sources: [],
+  countries: [{ code: 'BRA', name: 'Brasil', continent: 'América do Sul' }],
+  continents: ['América do Sul'],
+  brazilStates: [{ code: '35', name: 'São Paulo' }],
+  brazilImmediateRegions: [],
+  series: [],
+  latest: [
+    { indicatorId: 'a', geographyType: 'country', geographyCode: 'BRA', geographyName: 'Brasil', year: 2024, value: 10 },
+    { indicatorId: 'a', geographyType: 'country', geographyCode: 'ARG', geographyName: 'Argentina', year: 2024, value: 20 },
+  ],
+  rankings: [
+    {
+      indicatorId: 'a',
+      geographyType: 'country',
+      year: 2024,
+      items: [
+        { indicatorId: 'a', geographyType: 'country', geographyCode: 'ARG', geographyName: 'Argentina', year: 2024, value: 20 },
+        { indicatorId: 'a', geographyType: 'country', geographyCode: 'BRA', geographyName: 'Brasil', year: 2024, value: 10 },
+      ],
+    },
+  ],
+  notes: [],
+}
+
+describe('dashboard helpers', () => {
+  it('formats percentages', () => {
+    expect(formatValue(12.34, '%')).toBe('12.3%')
+  })
+
+  it('returns ranking slices', () => {
+    expect(getTopRanked(fixture, 'a', 1)[0]?.geographyCode).toBe('ARG')
+  })
+
+  it('summarizes coverage', () => {
+    expect(getMetricSummary(fixture)).toEqual({
+      countries: 1,
+      states: 1,
+      countryIndicators: 1,
+      brazilIndicators: 0,
+    })
+  })
+})

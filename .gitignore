@@ -1,0 +1,6 @@
+node_modules/
+dist/
+coverage/
+.env
+data/raw/
+ndgain_countryindex_2026.zip
