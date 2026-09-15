@@ -310,6 +310,12 @@ select {
   font-size: 0.78rem;
 }
 
+.map__projection {
+  margin-top: 0.35rem !important;
+  color: #5eead4 !important;
+  font-size: 0.8rem;
+}
+
 .map__legend-scale {
   display: grid;
   grid-template-columns: repeat(5, 1fr);

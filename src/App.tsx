@@ -158,7 +158,7 @@ function App() {
           </section>
 
           <section className="content-grid content-grid--world">
-            <MapPanel title="Mapa mundial" subtitle={`${indicator.name} • clique para selecionar um país`} geography={worldGeo} valueByCode={worldValueByCode} codeKeys={['ADM0_A3', 'ISO_A3', 'SOV_A3', 'gu_a3']} onSelect={setCountryCode} selectedCode={countryCode} formatValue={(value) => formatValue(value, indicator.unit)} />
+            <MapPanel title="Mapa mundial" subtitle={`${indicator.name} • clique para selecionar um país`} geography={worldGeo} valueByCode={worldValueByCode} codeKeys={['ADM0_A3', 'ISO_A3', 'SOV_A3', 'gu_a3']} onSelect={setCountryCode} selectedCode={countryCode} formatValue={(value) => formatValue(value, indicator.unit)} projectionKind="peters" />
             <article className="panel">
               <div className="panel__header"><div><h3>{countryName}</h3><p>{indicator.description}</p></div><strong className="badge">{indicator.latestYear}</strong></div>
               <div className="chart"><ResponsiveContainer width="100%" height={300}><LineChart data={selectedCountrySeries?.points ?? []}><CartesianGrid stroke="#334155" strokeDasharray="4 4" /><XAxis dataKey="year" stroke="#a8b8cc" /><YAxis stroke="#a8b8cc" /><Tooltip formatter={tooltipFormatter(indicator.unit)} /><Line type="monotone" dataKey="value" stroke="#2dd4bf" strokeWidth={3} dot={false} /></LineChart></ResponsiveContainer></div>

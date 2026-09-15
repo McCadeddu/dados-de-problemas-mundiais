@@ -1,4 +1,4 @@
-import { geoMercator, geoPath } from 'd3-geo'
+import { geoMercator, geoPath, geoProjection } from 'd3-geo'
 import { scaleQuantize } from 'd3-scale'
 import { useMemo } from 'react'
 import type { FeatureCollection } from 'geojson'
@@ -12,11 +12,19 @@ type MapPanelProps = {
   onSelect: (code: string) => void
   selectedCode?: string
   formatValue?: (value: number) => string
+  projectionKind?: 'mercator' | 'peters'
   width?: number
   height?: number
 }
 
 const COLORS = ['#dbeafe', '#93c5fd', '#60a5fa', '#2563eb', '#1d4ed8']
+const PETERS_STANDARD_PARALLEL = Math.PI / 4
+
+// Cylindrical equal-area projection with the Peters standard parallel (45 degrees).
+function petersRaw(lambda: number, phi: number): [number, number] {
+  const scale = Math.cos(PETERS_STANDARD_PARALLEL)
+  return [lambda * scale, Math.sin(phi) / scale]
+}
 
 function resolveCode(properties: Record<string, unknown>, codeKeys: string[]) {
   for (const key of codeKeys) {
@@ -37,16 +45,17 @@ export function MapPanel({
   onSelect,
   selectedCode,
   formatValue = (value) => value.toFixed(1),
+  projectionKind = 'mercator',
   width = 760,
   height = 420,
 }: MapPanelProps) {
-  const projection = useMemo(() => {
-    const next = geoMercator()
+  const mapProjection = useMemo(() => {
+    const next = projectionKind === 'peters' ? geoProjection(petersRaw) : geoMercator()
     next.fitSize([width, height], geography)
     return next
-  }, [geography, height, width])
+  }, [geography, height, projectionKind, width])
 
-  const path = useMemo(() => geoPath(projection), [projection])
+  const path = useMemo(() => geoPath(mapProjection), [mapProjection])
   const values = Array.from(valueByCode.values()).map((item) => item.value)
   const minValue = Math.min(...values)
   const maxValue = Math.max(...values)
@@ -67,6 +76,7 @@ export function MapPanel({
         <div>
           <h3>{title}</h3>
           <p>{subtitle}</p>
+          {projectionKind === 'peters' && <p className="map__projection">Projeção Peters: áreas proporcionais.</p>}
         </div>
       </div>
       <svg className="map" viewBox={`0 0 ${width} ${height}`} role="img" aria-label={title}>
