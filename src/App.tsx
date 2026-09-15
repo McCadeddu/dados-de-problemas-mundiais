@@ -26,21 +26,38 @@ import type { DashboardData } from './types'
 type GeoJson = GeoJSON.FeatureCollection
 type ViewMode = 'world' | 'states' | 'regions'
 
+const initialParams = new URLSearchParams(window.location.search)
+
+function initialView(): ViewMode {
+  const value = initialParams.get('visao')
+  return value === 'states' || value === 'regions' || value === 'world' ? value : 'world'
+}
+
+function initialValue(key: string, fallback: string) {
+  return initialParams.get(key) ?? fallback
+}
+
+function initialCodes(key: string, fallback: string[]) {
+  const value = initialParams.get(key)
+  return value ? value.split(',').filter(Boolean).slice(0, 5) : fallback
+}
+
 function App() {
   const [data, setData] = useState<DashboardData | null>(null)
   const [worldGeo, setWorldGeo] = useState<GeoJson | null>(null)
   const [brazilGeo, setBrazilGeo] = useState<GeoJson | null>(null)
-  const [view, setView] = useState<ViewMode>('world')
-  const [themeId, setThemeId] = useState('hunger-water')
-  const [selectedIndicatorId, setSelectedIndicatorId] = useState('')
-  const [continent, setContinent] = useState('Todos')
-  const [countryCode, setCountryCode] = useState('BRA')
-  const [stateCode, setStateCode] = useState('35')
-  const [immediateRegionCode, setImmediateRegionCode] = useState('350001')
-  const [immediateIndicatorId, setImmediateIndicatorId] = useState('ibge-water-network-coverage')
-  const [comparisonCountryCodes, setComparisonCountryCodes] = useState(['BRA', 'IND', 'ZAF'])
-  const [comparisonStateCodes, setComparisonStateCodes] = useState(['35', '29', '15'])
-  const [comparisonImmediateRegionCodes, setComparisonImmediateRegionCodes] = useState(['350019', '350048', '350024'])
+  const [view, setView] = useState<ViewMode>(initialView)
+  const [themeId, setThemeId] = useState(() => initialValue('tema', 'hunger-water'))
+  const [selectedIndicatorId, setSelectedIndicatorId] = useState(() => initialValue('indicador', ''))
+  const [continent, setContinent] = useState(() => initialValue('continente', 'Todos'))
+  const [countryCode, setCountryCode] = useState(() => initialValue('pais', 'BRA'))
+  const [stateCode, setStateCode] = useState(() => initialValue('uf', '35'))
+  const [immediateRegionCode, setImmediateRegionCode] = useState(() => initialValue('regiao', '350001'))
+  const [immediateIndicatorId, setImmediateIndicatorId] = useState(() => initialValue('indicadorRegional', 'ibge-water-network-coverage'))
+  const [comparisonCountryCodes, setComparisonCountryCodes] = useState(() => initialCodes('compararPaises', ['BRA', 'IND', 'ZAF']))
+  const [comparisonStateCodes, setComparisonStateCodes] = useState(() => initialCodes('compararEstados', ['35', '29', '15']))
+  const [comparisonImmediateRegionCodes, setComparisonImmediateRegionCodes] = useState(() => initialCodes('compararRegioes', ['350019', '350048', '350024']))
+  const [copied, setCopied] = useState(false)
 
   useEffect(() => {
     const dataBaseUrl = import.meta.env.BASE_URL
@@ -54,6 +71,29 @@ function App() {
       setBrazilGeo(brazil)
     })
   }, [])
+
+  useEffect(() => {
+    const params = new URLSearchParams({
+      visao: view,
+      tema: themeId,
+      indicador: selectedIndicatorId,
+      continente: continent,
+      pais: countryCode,
+      uf: stateCode,
+      regiao: immediateRegionCode,
+      indicadorRegional: immediateIndicatorId,
+      compararPaises: comparisonCountryCodes.join(','),
+      compararEstados: comparisonStateCodes.join(','),
+      compararRegioes: comparisonImmediateRegionCodes.join(','),
+    })
+    window.history.replaceState(null, '', `${window.location.pathname}?${params.toString()}`)
+  }, [comparisonCountryCodes, comparisonImmediateRegionCodes, comparisonStateCodes, continent, countryCode, immediateIndicatorId, immediateRegionCode, selectedIndicatorId, stateCode, themeId, view])
+
+  const copyShareLink = async () => {
+    await navigator.clipboard.writeText(window.location.href)
+    setCopied(true)
+    window.setTimeout(() => setCopied(false), 1800)
+  }
 
   const themeIndicators = data ? getIndicatorsByTheme(data, themeId).filter(
     (item) => item.geographyType === 'country',
@@ -152,6 +192,7 @@ function App() {
             Indicadores públicos para acompanhar desafios socioambientais em duas escalas:
             comparações entre países e leitura detalhada dos estados brasileiros.
           </p>
+          <button className="share-button" onClick={() => void copyShareLink()}>{copied ? 'Link copiado' : 'Copiar link desta análise'}</button>
         </div>
         <div className="hero__grid">
           <article className="stat"><strong>{summary.countries}</strong><span>países comparáveis</span></article>
@@ -288,7 +329,19 @@ type RankingPanelProps = {
 }
 
 function RankingPanel({ title, description, ranking, unit, color, tooltipFormatter }: RankingPanelProps) {
-  return <section className="panel ranking-panel"><div className="panel__header"><div><h3>{title}</h3><p>{description}</p></div></div><div className="chart"><ResponsiveContainer width="100%" height={340}><BarChart data={[...ranking].reverse()}><CartesianGrid stroke="#334155" strokeDasharray="4 4" /><XAxis type="number" stroke="#a8b8cc" /><YAxis type="category" dataKey="geographyName" width={140} stroke="#a8b8cc" /><Tooltip formatter={tooltipFormatter(unit)} /><Bar dataKey="value" fill={color} radius={[0, 6, 6, 0]} /></BarChart></ResponsiveContainer></div></section>
+  return <section className="panel ranking-panel"><div className="panel__header"><div><h3>{title}</h3><p>{description}</p></div><button className="export-button" onClick={() => exportRankingCsv(title, ranking, unit)}>Baixar CSV</button></div><div className="chart"><ResponsiveContainer width="100%" height={340}><BarChart data={[...ranking].reverse()}><CartesianGrid stroke="#334155" strokeDasharray="4 4" /><XAxis type="number" stroke="#a8b8cc" /><YAxis type="category" dataKey="geographyName" width={140} stroke="#a8b8cc" /><Tooltip formatter={tooltipFormatter(unit)} /><Bar dataKey="value" fill={color} radius={[0, 6, 6, 0]} /></BarChart></ResponsiveContainer></div></section>
+}
+
+function exportRankingCsv(title: string, ranking: DashboardData['latest'], unit: string) {
+  const escape = (value: string | number) => `"${String(value).replaceAll('"', '""')}"`
+  const rows = ['posicao,territorio,valor,unidade']
+  ranking.forEach((item, index) => rows.push([index + 1, item.geographyName, item.value, unit].map(escape).join(',')))
+  const blob = new Blob([`\ufeff${rows.join('\n')}`], { type: 'text/csv;charset=utf-8' })
+  const anchor = document.createElement('a')
+  anchor.href = URL.createObjectURL(blob)
+  anchor.download = `${title.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/[^a-z0-9]+/g, '-')}.csv`
+  anchor.click()
+  URL.revokeObjectURL(anchor.href)
 }
 
 type TerritoryComparisonPanelProps = {

@@ -74,6 +74,31 @@ select {
   font-size: 1.05rem;
 }
 
+.share-button,
+.export-button {
+  border: 1px solid rgba(94, 234, 212, 0.7);
+  border-radius: 999px;
+  background: rgba(6, 78, 59, 0.42);
+  color: #ccfbf1;
+  cursor: pointer;
+  transition: transform 140ms ease, background 140ms ease;
+}
+
+.share-button {
+  padding: 0.65rem 1rem;
+}
+
+.export-button {
+  padding: 0.45rem 0.75rem;
+  white-space: nowrap;
+}
+
+.share-button:hover,
+.export-button:hover {
+  transform: translateY(-1px);
+  background: rgba(13, 148, 136, 0.42);
+}
+
 .hero__grid,
 .content-grid,
 .sources {
