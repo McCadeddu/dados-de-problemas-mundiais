@@ -278,6 +278,26 @@ select {
   color: #a8b8cc;
 }
 
+.indicator-meaning,
+.ranking-meaning {
+  font-weight: 700;
+}
+
+.indicator-meaning--higher-worse,
+.ranking-meaning--higher-worse {
+  color: #fbbf24 !important;
+}
+
+.indicator-meaning--higher-better,
+.ranking-meaning--higher-better {
+  color: #5eead4 !important;
+}
+
+.ranking-meaning {
+  margin-top: 0.45rem !important;
+  font-size: 0.86rem;
+}
+
 .controls label {
   display: grid;
   gap: 0.4rem;

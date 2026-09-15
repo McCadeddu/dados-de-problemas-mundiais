@@ -145,6 +145,20 @@ function App() {
       ? brazilIndicator
       : immediateRegionIndicator
   const activeSource = data.sources.find((source) => source.id === activeIndicator.sourceId)
+  const activeLatest = getLatestByIndicator(data, activeIndicator.id, activeIndicator.geographyType)
+  const activeCoverageTotal = activeIndicator.geographyType === 'country'
+    ? data.countries.length
+    : activeIndicator.geographyType === 'brazil-state'
+      ? data.brazilStates.length
+      : data.brazilImmediateRegions.length
+  const activeTerritoryLabel = activeIndicator.geographyType === 'country'
+    ? 'países'
+    : activeIndicator.geographyType === 'brazil-state'
+      ? 'estados'
+      : 'regiões imediatas'
+  const directionLabel = activeIndicator.direction === 'higher-worse'
+    ? 'Valores maiores indicam maior pressão ou vulnerabilidade.'
+    : 'Valores maiores indicam maior acesso, proteção ou capacidade.'
   const activeRanking = getTopRanked(data, activeIndicator.id, 10)
   const filteredCountries = continent === 'Todos'
     ? data.countries
@@ -241,7 +255,7 @@ function App() {
               <p className="meta">Fonte: <a href={activeSource?.url}>{activeSource?.name}</a> • Atualização conhecida: {activeSource?.lastUpdated}</p>
             </article>
           </section>
-          <RankingPanel title={continent === 'Todos' ? 'Ranking global' : `Ranking: ${continent}`} description="10 países com os maiores valores para o indicador e recorte selecionados." ranking={worldRanking} unit={indicator.unit} color="#2563eb" tooltipFormatter={tooltipFormatter} />
+          <RankingPanel title={continent === 'Todos' ? 'Ranking global' : `Ranking: ${continent}`} description="10 países com os maiores valores para o indicador e recorte selecionados." ranking={worldRanking} unit={indicator.unit} direction={indicator.direction} color="#2563eb" tooltipFormatter={tooltipFormatter} />
           <TerritoryComparisonPanel
             title="Comparar continentes"
             description="Média simples entre os países com dados disponíveis em cada continente; não é ponderada pela população."
@@ -283,7 +297,7 @@ function App() {
               <p className="meta">Fonte: <a href={activeSource?.url}>{activeSource?.name}</a> • Atualização conhecida: {activeSource?.lastUpdated}</p>
             </article>
           </section>
-          <RankingPanel title="Ranking entre estados" description="10 UFs com os maiores valores no indicador estadual disponível." ranking={activeRanking} unit={brazilIndicator.unit} color="#b45309" tooltipFormatter={tooltipFormatter} />
+          <RankingPanel title="Ranking entre estados" description="10 UFs com os maiores valores no indicador estadual disponível." ranking={activeRanking} unit={brazilIndicator.unit} direction={brazilIndicator.direction} color="#b45309" tooltipFormatter={tooltipFormatter} />
           <TerritoryComparisonPanel
             title="Comparar estados"
             description="Selecione de 2 a 5 UFs para comparar a evolução e o valor mais recente do indicador."
@@ -314,7 +328,7 @@ function App() {
               <p className="meta">Fonte: <a href={activeSource?.url}>{activeSource?.name}</a> • Atualização conhecida: {activeSource?.lastUpdated}</p>
             </article>
           </section>
-          <RankingPanel title="Ranking entre Regiões Imediatas" description="20 regiões brasileiras para o indicador regional do IBGE." ranking={activeRanking} unit={immediateRegionIndicator.unit} color="#8b5cf6" tooltipFormatter={tooltipFormatter} />
+          <RankingPanel title="Ranking entre Regiões Imediatas" description="20 regiões brasileiras para o indicador regional do IBGE." ranking={activeRanking} unit={immediateRegionIndicator.unit} direction={immediateRegionIndicator.direction} color="#8b5cf6" tooltipFormatter={tooltipFormatter} />
           <TerritoryComparisonPanel
             title="Comparar regiões imediatas"
             description="Confronte até cinco regiões geográficas imediatas da UF selecionada."
@@ -333,7 +347,7 @@ function App() {
 
       <section className="content-grid content-grid--footer">
         <article className="panel"><div className="panel__header"><div><h3>Arquitetura pronta para crescer</h3><p>Coleta, processamento e visualização permanecem separados.</p></div></div><ul className="stack-list"><li><strong>Coleta:</strong> conectores por fonte em `scripts/data`.</li><li><strong>Processamento:</strong> schema único para séries, rankings e metadados.</li><li><strong>Frontend:</strong> dados estáticos em `public/data`, sem dependência direta das APIs.</li></ul></article>
-        <article className="panel"><div className="panel__header"><div><h3>Fonte e metodologia da visão</h3><p>Dados e critérios do indicador atualmente selecionado.</p></div></div><div className="source-summary"><strong>{activeSource?.name}</strong><p><a href={activeSource?.url}>fonte</a> • <a href={activeSource?.methodologyUrl}>metodologia</a></p><p>Licença: {activeSource?.license} • Atualização: {activeSource?.lastUpdated}</p></div></article>
+        <article className="panel"><div className="panel__header"><div><h3>Fonte e metodologia da visão</h3><p>Dados e critérios do indicador atualmente selecionado.</p></div></div><div className="source-summary"><strong>{activeSource?.name}</strong><p><a href={activeSource?.url}>fonte</a> • <a href={activeSource?.methodologyUrl}>metodologia</a></p><p>Licença: {activeSource?.license} • Atualização da fonte: {activeSource?.lastUpdated}</p><p className={`indicator-meaning indicator-meaning--${activeIndicator.direction}`}>{directionLabel}</p><p>Cobertura: {activeLatest.length} de {activeCoverageTotal} {activeTerritoryLabel} com último dado disponível. Ano mais recente do indicador: {activeIndicator.latestYear}.</p><p>Arquivo do painel gerado em: {new Date(data.generatedAt).toLocaleString('pt-BR')}.</p></div></article>
       </section>
     </main>
   )
@@ -344,12 +358,16 @@ type RankingPanelProps = {
   description: string
   ranking: DashboardData['latest']
   unit: string
+  direction: 'higher-better' | 'higher-worse'
   color: string
   tooltipFormatter: (unit: string) => (value: unknown) => string
 }
 
-function RankingPanel({ title, description, ranking, unit, color, tooltipFormatter }: RankingPanelProps) {
-  return <section className="panel ranking-panel"><div className="panel__header"><div><h3>{title}</h3><p>{description}</p></div><button className="export-button" onClick={() => exportRankingCsv(title, ranking, unit)}>Baixar CSV</button></div><div className="chart"><ResponsiveContainer width="100%" height={340}><BarChart data={[...ranking].reverse()}><CartesianGrid stroke="#334155" strokeDasharray="4 4" /><XAxis type="number" stroke="#a8b8cc" /><YAxis type="category" dataKey="geographyName" width={140} stroke="#a8b8cc" /><Tooltip formatter={tooltipFormatter(unit)} /><Bar dataKey="value" fill={color} radius={[0, 6, 6, 0]} /></BarChart></ResponsiveContainer></div></section>
+function RankingPanel({ title, description, ranking, unit, direction, color, tooltipFormatter }: RankingPanelProps) {
+  const directionText = direction === 'higher-worse'
+    ? 'Neste indicador, valores mais altos sinalizam maior pressão ou vulnerabilidade.'
+    : 'Neste indicador, valores mais altos sinalizam maior acesso, proteção ou capacidade.'
+  return <section className="panel ranking-panel"><div className="panel__header"><div><h3>{title}</h3><p>{description}</p><p className={`ranking-meaning ranking-meaning--${direction}`}>{directionText}</p></div><button className="export-button" onClick={() => exportRankingCsv(title, ranking, unit)}>Baixar CSV</button></div><div className="chart"><ResponsiveContainer width="100%" height={340}><BarChart data={[...ranking].reverse()}><CartesianGrid stroke="#334155" strokeDasharray="4 4" /><XAxis type="number" stroke="#a8b8cc" /><YAxis type="category" dataKey="geographyName" width={140} stroke="#a8b8cc" /><Tooltip formatter={tooltipFormatter(unit)} /><Bar dataKey="value" fill={color} radius={[0, 6, 6, 0]} /></BarChart></ResponsiveContainer></div></section>
 }
 
 function exportRankingCsv(title: string, ranking: DashboardData['latest'], unit: string) {
