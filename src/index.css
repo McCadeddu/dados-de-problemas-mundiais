@@ -148,6 +148,25 @@ select {
   margin-bottom: 1.5rem;
 }
 
+.hierarchy {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.45rem;
+  align-items: center;
+  margin: -0.55rem 0 1.4rem;
+  color: #a8b8cc;
+  font-size: 0.9rem;
+}
+
+.hierarchy strong {
+  color: #ccfbf1;
+}
+
+.hierarchy span {
+  color: #2dd4bf;
+  font-size: 1.1rem;
+}
+
 .view-switcher button {
   display: grid;
   gap: 0.18rem;
@@ -192,6 +211,76 @@ select {
   align-content: center;
   min-height: 300px;
   background: linear-gradient(145deg, rgba(91, 33, 182, 0.3), rgba(15, 30, 49, 0.86));
+}
+
+.country-callout,
+.country-next-step {
+  display: grid;
+  align-content: center;
+  gap: 0.65rem;
+  min-height: 300px;
+  background: linear-gradient(145deg, rgba(8, 145, 178, 0.25), rgba(15, 30, 49, 0.86));
+}
+
+.country-callout span,
+.country-next-step span {
+  color: #67e8f9;
+  font-size: 0.8rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.country-callout h3,
+.country-next-step h3 {
+  margin: 0;
+  font-size: 2rem;
+}
+
+.country-callout p,
+.country-next-step p {
+  margin: 0;
+  color: #a8b8cc;
+}
+
+.country-next-step {
+  grid-template-columns: 1fr auto;
+  min-height: 0;
+  margin-bottom: 1.5rem;
+  padding: 1.35rem;
+}
+
+.country-next-step > div:last-child {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.7rem;
+  align-items: center;
+}
+
+.country-next-step--empty {
+  grid-template-columns: 1fr;
+  border-color: rgba(148, 163, 184, 0.3);
+}
+
+.advance-button,
+.text-button {
+  border-radius: 12px;
+  cursor: pointer;
+  font: inherit;
+}
+
+.advance-button {
+  padding: 0.72rem 0.95rem;
+  border: 1px solid #2dd4bf;
+  background: #0f766e;
+  color: #f0fdfa;
+}
+
+.text-button {
+  padding: 0.55rem 0;
+  border: 0;
+  background: transparent;
+  color: #5eead4;
+  text-align: left;
 }
 
 .region-callout span {
@@ -447,7 +536,8 @@ select {
   }
 
   .comparison-controls,
-  .comparison-grid {
+  .comparison-grid,
+  .country-next-step {
     grid-template-columns: 1fr;
   }
 }

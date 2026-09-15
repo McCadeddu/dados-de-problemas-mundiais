@@ -24,13 +24,13 @@ import {
 import type { DashboardData, LatestValue } from './types'
 
 type GeoJson = GeoJSON.FeatureCollection
-type ViewMode = 'world' | 'states' | 'regions'
+type ViewMode = 'world' | 'country' | 'states' | 'regions'
 
 const initialParams = new URLSearchParams(window.location.search)
 
 function initialView(): ViewMode {
   const value = initialParams.get('visao')
-  return value === 'states' || value === 'regions' || value === 'world' ? value : 'world'
+  return value === 'country' || value === 'states' || value === 'regions' || value === 'world' ? value : 'world'
 }
 
 function initialValue(key: string, fallback: string) {
@@ -139,7 +139,7 @@ function App() {
   const summary = getMetricSummary(data)
   const countryName = data.countries.find((country) => country.code === countryCode)?.name ?? countryCode
   const stateName = data.brazilStates.find((state) => state.code === stateCode)?.name ?? stateCode
-  const activeIndicator = view === 'world'
+  const activeIndicator = view === 'world' || view === 'country'
     ? indicator
     : view === 'states'
       ? brazilIndicator
@@ -225,18 +225,27 @@ function App() {
 
       <nav className="view-switcher" aria-label="Escala de análise">
         <button className={view === 'world' ? 'is-active' : ''} onClick={() => setView('world')}>
-          Mundo
-          <span>Comparar países e tendências globais</span>
+          1. Mundo
+          <span>Panorama, continentes e comparação entre países</span>
+        </button>
+        <button className={view === 'country' ? 'is-active' : ''} onClick={() => setView('country')}>
+          2. País
+          <span>{countryName}: leitura nacional e passagem ao detalhe</span>
         </button>
         <button className={view === 'states' ? 'is-active' : ''} onClick={() => setView('states')}>
-          Estados
-          <span>Visualizar as unidades federativas do Brasil</span>
+          3. Brasil: estados
+          <span>Comparar unidades federativas equivalentes</span>
         </button>
         <button className={view === 'regions' ? 'is-active' : ''} onClick={() => setView('regions')}>
-          Regiões IBGE
+          4. Regiões IBGE
           <span>Comparar Regiões Geográficas Imediatas</span>
         </button>
       </nav>
+
+      <p className="hierarchy" aria-label="Caminho de análise">
+        Problemática: <strong>{data.themes.find((theme) => theme.id === themeId)?.name}</strong>
+        <span>›</span> {view === 'world' ? 'Mundo' : view === 'country' ? `Mundo › ${countryName}` : view === 'states' ? 'Brasil › Estados' : `Brasil › ${stateName} › Regiões Imediatas`}
+      </p>
 
       {view === 'world' ? (
         <>
@@ -248,7 +257,7 @@ function App() {
           </section>
 
           <section className="content-grid content-grid--world">
-            <MapPanel title="Mapa mundial" subtitle={`${indicator.name} • clique para selecionar um país`} geography={worldGeo} valueByCode={worldValueByCode} codeKeys={['ADM0_A3', 'ISO_A3', 'SOV_A3', 'gu_a3']} onSelect={setCountryCode} selectedCode={countryCode} formatValue={(value) => formatValue(value, indicator.unit)} projectionKind="peters" />
+            <MapPanel title="Mapa mundial" subtitle={`${indicator.name} • clique para abrir a análise de um país`} geography={worldGeo} valueByCode={worldValueByCode} codeKeys={['ADM0_A3', 'ISO_A3', 'SOV_A3', 'gu_a3']} onSelect={(code) => { setCountryCode(code); setContinent(data.countries.find((country) => country.code === code)?.continent ?? 'Todos'); setView('country') }} selectedCode={countryCode} formatValue={(value) => formatValue(value, indicator.unit)} projectionKind="peters" />
             <article className="panel">
               <div className="panel__header"><div><h3>{countryName || continent}</h3><p>{indicator.description}</p>{continentAverage !== null && <p className="context-metric">Média do recorte: {formatValue(continentAverage, indicator.unit)}</p>}</div><strong className="badge">{indicator.latestYear}</strong></div>
               <div className="chart"><ResponsiveContainer width="100%" height={300}><LineChart data={selectedCountrySeries?.points ?? []}><CartesianGrid stroke="#334155" strokeDasharray="4 4" /><XAxis dataKey="year" stroke="#a8b8cc" /><YAxis stroke="#a8b8cc" /><Tooltip formatter={tooltipFormatter(indicator.unit)} /><Line type="monotone" dataKey="value" stroke="#2dd4bf" strokeWidth={3} dot={false} /></LineChart></ResponsiveContainer></div>
@@ -282,6 +291,28 @@ function App() {
             onRemove={(code) => setComparisonCountryCodes((current) => removeFromComparison(current, code))}
             tooltipFormatter={tooltipFormatter}
           />
+        </>
+      ) : view === 'country' ? (
+        <>
+          <section className="panel controls controls--country">
+            <label>Tema<select value={themeId} onChange={(event) => setThemeId(event.target.value)}>{data.themes.map((theme) => <option key={theme.id} value={theme.id}>{theme.name}</option>)}</select></label>
+            <label>Indicador<select value={indicatorId} onChange={(event) => setSelectedIndicatorId(event.target.value)}>{themeIndicators.map((item) => <option key={item.id} value={item.id}>{item.name}</option>)}</select></label>
+            <label>Continente<select value={continent} onChange={(event) => { const nextContinent = event.target.value; const nextCountries = nextContinent === 'Todos' ? data.countries : data.countries.filter((country) => country.continent === nextContinent); setContinent(nextContinent); setCountryCode(nextCountries[0]?.code ?? '') }}><option value="Todos">Mundo inteiro</option>{data.continents.map((item) => <option key={item} value={item}>{item}</option>)}</select></label>
+            <label>País<select value={countryCode} onChange={(event) => setCountryCode(event.target.value)}>{filteredCountries.map((country) => <option key={country.code} value={country.code}>{country.name}</option>)}</select></label>
+          </section>
+          <section className="content-grid content-grid--states">
+            <article className="panel country-callout"><span>Leitura nacional</span><h3>{countryName}</h3><p>{data.countries.find((country) => country.code === countryCode)?.continent ?? 'Continente não identificado'} • {indicator.name}</p><button className="text-button" onClick={() => setView('world')}>Voltar ao panorama mundial</button></article>
+            <article className="panel">
+              <div className="panel__header"><div><h3>Evolução de {countryName}</h3><p>{indicator.description}</p></div><strong className="badge">{indicator.latestYear}</strong></div>
+              <div className="chart"><ResponsiveContainer width="100%" height={300}><LineChart data={selectedCountrySeries?.points ?? []}><CartesianGrid stroke="#334155" strokeDasharray="4 4" /><XAxis dataKey="year" stroke="#a8b8cc" /><YAxis stroke="#a8b8cc" /><Tooltip formatter={tooltipFormatter(indicator.unit)} /><Line type="monotone" dataKey="value" stroke="#2dd4bf" strokeWidth={3} dot={false} /></LineChart></ResponsiveContainer></div>
+              <p className="meta">Fonte: <a href={activeSource?.url}>{activeSource?.name}</a> • Atualização conhecida: {activeSource?.lastUpdated}</p>
+            </article>
+          </section>
+          {countryCode === 'BRA' ? (
+            <section className="panel country-next-step"><div><span>Próximo nível disponível</span><h3>Subdivisões brasileiras</h3><p>Compare unidades federativas e, quando houver dados, Regiões Geográficas Imediatas do IBGE.</p></div><div><button className="advance-button" onClick={() => setView('states')}>Ver estados brasileiros</button><button className="text-button" onClick={() => setView('regions')}>Ir para regiões imediatas</button></div></section>
+          ) : (
+            <section className="panel country-next-step country-next-step--empty"><div><span>Detalhe territorial</span><h3>Sem série subnacional comparável neste MVP</h3><p>O programa não compara países a estados ou províncias. Novos conectores serão adicionados quando houver fonte pública, licença clara e unidades equivalentes.</p></div></section>
+          )}
         </>
       ) : view === 'states' ? (
         <>
