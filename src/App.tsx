@@ -21,7 +21,7 @@ import {
   getSeriesForGeography,
   getTopRanked,
 } from './lib/dashboard'
-import type { DashboardData } from './types'
+import type { DashboardData, LatestValue } from './types'
 
 type GeoJson = GeoJSON.FeatureCollection
 type ViewMode = 'world' | 'states' | 'regions'
@@ -55,6 +55,7 @@ function App() {
   const [immediateRegionCode, setImmediateRegionCode] = useState(() => initialValue('regiao', '350001'))
   const [immediateIndicatorId, setImmediateIndicatorId] = useState(() => initialValue('indicadorRegional', 'ibge-water-network-coverage'))
   const [comparisonCountryCodes, setComparisonCountryCodes] = useState(() => initialCodes('compararPaises', ['BRA', 'IND', 'ZAF']))
+  const [comparisonContinentCodes, setComparisonContinentCodes] = useState(() => initialCodes('compararContinentes', ['Africa', 'Asia', 'Europe']))
   const [comparisonStateCodes, setComparisonStateCodes] = useState(() => initialCodes('compararEstados', ['35', '29', '15']))
   const [comparisonImmediateRegionCodes, setComparisonImmediateRegionCodes] = useState(() => initialCodes('compararRegioes', ['350019', '350048', '350024']))
   const [copied, setCopied] = useState(false)
@@ -83,11 +84,12 @@ function App() {
       regiao: immediateRegionCode,
       indicadorRegional: immediateIndicatorId,
       compararPaises: comparisonCountryCodes.join(','),
+      compararContinentes: comparisonContinentCodes.join(','),
       compararEstados: comparisonStateCodes.join(','),
       compararRegioes: comparisonImmediateRegionCodes.join(','),
     })
     window.history.replaceState(null, '', `${window.location.pathname}?${params.toString()}`)
-  }, [comparisonCountryCodes, comparisonImmediateRegionCodes, comparisonStateCodes, continent, countryCode, immediateIndicatorId, immediateRegionCode, selectedIndicatorId, stateCode, themeId, view])
+  }, [comparisonContinentCodes, comparisonCountryCodes, comparisonImmediateRegionCodes, comparisonStateCodes, continent, countryCode, immediateIndicatorId, immediateRegionCode, selectedIndicatorId, stateCode, themeId, view])
 
   const copyShareLink = async () => {
     await navigator.clipboard.writeText(window.location.href)
@@ -172,6 +174,11 @@ function App() {
   const comparisonCountries = filteredCountries.filter((country) => comparisonCountryCodes.includes(country.code))
   const comparisonCountryLatest = countryLatest.filter((item) => comparisonCountryCodes.includes(item.geographyCode))
   const comparisonCountryChartData = buildComparisonChartData(data, indicator.id, comparisonCountries)
+  const continentTerritories = data.continents.map((name) => ({ code: name, name }))
+  const comparisonContinents = continentTerritories.filter((item) => comparisonContinentCodes.includes(item.code))
+  const continentLatest = buildContinentLatestValues(data, indicator.id)
+  const comparisonContinentLatest = continentLatest.filter((item) => comparisonContinentCodes.includes(item.geographyCode))
+  const comparisonContinentChartData = buildContinentComparisonChartData(data, indicator.id, comparisonContinents)
   const comparisonImmediateRegions = regionsForState.filter((region) => comparisonImmediateRegionCodes.includes(region.code))
   const comparisonImmediateLatest = getLatestByIndicator(data, immediateRegionIndicator.id, 'brazil-immediate-region').filter(
     (item) => comparisonImmediateRegionCodes.includes(item.geographyCode),
@@ -235,6 +242,19 @@ function App() {
             </article>
           </section>
           <RankingPanel title={continent === 'Todos' ? 'Ranking global' : `Ranking: ${continent}`} description="10 países com os maiores valores para o indicador e recorte selecionados." ranking={worldRanking} unit={indicator.unit} color="#2563eb" tooltipFormatter={tooltipFormatter} />
+          <TerritoryComparisonPanel
+            title="Comparar continentes"
+            description="Média simples entre os países com dados disponíveis em cada continente; não é ponderada pela população."
+            territories={continentTerritories}
+            selectedCodes={comparisonContinentCodes}
+            latestValues={comparisonContinentLatest}
+            chartData={comparisonContinentChartData}
+            unit={indicator.unit}
+            color="#14b8a6"
+            onAdd={(code) => setComparisonContinentCodes((current) => addToComparison(current, code))}
+            onRemove={(code) => setComparisonContinentCodes((current) => removeFromComparison(current, code))}
+            tooltipFormatter={tooltipFormatter}
+          />
           <TerritoryComparisonPanel
             title="Comparar países"
             description="Selecione de 2 a 5 países do recorte atual para confrontar séries históricas e o último valor disponível."
@@ -385,6 +405,48 @@ function buildComparisonChartData(
     pointsByCode.forEach((points, code) => {
       const point = points.find((item) => item.year === year)
       if (point) row[code] = point.value
+    })
+    return row
+  })
+}
+
+function buildContinentLatestValues(data: DashboardData, indicatorId: string): LatestValue[] {
+  return data.continents.flatMap((continent) => {
+    const countryCodes = new Set(data.countries.filter((country) => country.continent === continent).map((country) => country.code))
+    const values = getLatestByIndicator(data, indicatorId, 'country').filter((item) => countryCodes.has(item.geographyCode))
+    if (!values.length) return []
+    return [{
+      indicatorId,
+      geographyType: 'country' as const,
+      geographyCode: continent,
+      geographyName: continent,
+      year: Math.max(...values.map((item) => item.year)),
+      value: values.reduce((total, item) => total + item.value, 0) / values.length,
+    }]
+  })
+}
+
+function buildContinentComparisonChartData(
+  data: DashboardData,
+  indicatorId: string,
+  continents: Array<{ code: string }>,
+) {
+  const valuesByContinent = new Map<string, Map<number, number[]>>()
+  continents.forEach(({ code: continent }) => {
+    const countryCodes = new Set(data.countries.filter((country) => country.continent === continent).map((country) => country.code))
+    const valuesByYear = new Map<number, number[]>()
+    data.series.filter((series) => series.indicatorId === indicatorId && countryCodes.has(series.geographyCode)).forEach((series) => {
+      series.points.forEach((point) => valuesByYear.set(point.year, [...(valuesByYear.get(point.year) ?? []), point.value]))
+    })
+    valuesByContinent.set(continent, valuesByYear)
+  })
+  const years = new Set(Array.from(valuesByContinent.values()).flatMap((values) => [...values.keys()]))
+
+  return [...years].sort((a, b) => a - b).map((year) => {
+    const row: Record<string, number | string> = { year }
+    valuesByContinent.forEach((values, continent) => {
+      const points = values.get(year) ?? []
+      if (points.length) row[continent] = points.reduce((total, value) => total + value, 0) / points.length
     })
     return row
   })
