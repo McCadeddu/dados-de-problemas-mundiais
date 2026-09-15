@@ -352,6 +352,17 @@ const BRAZIL_STATE_INDICATOR: Omit<Indicator, 'latestYear'> & {
   direction: 'higher-worse',
 }
 
+const BRAZIL_STATE_GINI_INDICATOR: Omit<Indicator, 'latestYear'> = {
+  id: 'ibge-state-gini-2022',
+  name: 'Índice de Gini da renda domiciliar per capita',
+  themeId: 'poverty-inequality',
+  description: 'Desigualdade da distribuição do rendimento mensal domiciliar per capita, segundo o Censo Demográfico 2022.',
+  unit: 'índice',
+  geographyType: 'brazil-state',
+  sourceId: SIDRA_SOURCE_ID,
+  direction: 'higher-worse',
+}
+
 const BRAZIL_IMMEDIATE_WATER_INDICATOR: Omit<Indicator, 'latestYear'> = {
   id: 'ibge-water-network-coverage',
   name: 'Domicílios com rede geral de água',
@@ -739,6 +750,22 @@ async function loadBrazilStateIndicator() {
   }
 }
 
+async function loadBrazilStateGiniIndicator() {
+  const rows = await fetchJson<Array<Record<string, string>>>('https://apisidra.ibge.gov.br/values/t/10301/n3/all/v/13418/p/all?formato=json')
+  const series = rows.slice(1).flatMap((row) => {
+    const value = toNumber(row.V)
+    const year = Number(row.D3C)
+    return row.D1C && row.D1N && value !== null && Number.isFinite(year) ? [{
+      indicatorId: BRAZIL_STATE_GINI_INDICATOR.id,
+      geographyType: 'brazil-state' as const,
+      geographyCode: row.D1C,
+      geographyName: row.D1N,
+      points: [{ year, value }],
+    }] : []
+  })
+  return { indicator: { ...BRAZIL_STATE_GINI_INDICATOR, latestYear: 2022 } satisfies Indicator, series }
+}
+
 type IbgeAggregateResponse = Array<{
   resultados: Array<{
     series: Array<{ localidade: { id: string; nome: string }; serie: Record<string, string> }>
@@ -892,8 +919,9 @@ async function main() {
     loadNdGain(countriesByIso3),
     loadUnhcrIndicators(validCountryIso3),
   ])
-  const [brazilStates, immediateRegions, immediateSanitation] = await Promise.all([
+  const [brazilStates, brazilStateGini, immediateRegions, immediateSanitation] = await Promise.all([
     loadBrazilStateIndicator(),
+    loadBrazilStateGiniIndicator(),
     loadBrazilImmediateRegionCoverage(BRAZIL_IMMEDIATE_WATER_INDICATOR, '6803', '1821%5B72144%5D'),
     loadBrazilImmediateRegionCoverage(BRAZIL_IMMEDIATE_SANITATION_INDICATOR, '6805', '11558%5B46290%5D'),
   ])
@@ -910,6 +938,7 @@ async function main() {
     ...unhcr.results.map((result) => result.indicator),
     ndGain.indicator,
     brazilStates.indicator,
+    brazilStateGini.indicator,
     immediateRegions.indicator,
     immediateSanitation.indicator,
   ]
@@ -919,6 +948,7 @@ async function main() {
     ...unhcr.results.flatMap((result) => result.series),
     ...ndGain.series,
     ...brazilStates.series,
+    ...brazilStateGini.series,
     ...immediateRegions.series,
     ...immediateSanitation.series,
   ]

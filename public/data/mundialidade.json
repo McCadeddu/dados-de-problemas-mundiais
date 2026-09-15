@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-09-15T15:20:24.170Z",
+  "generatedAt": "2026-09-15T15:26:44.666Z",
   "themes": [
     {
       "id": "hunger-water",
@@ -237,6 +237,17 @@
       "sourceId": "ibge-sidra",
       "direction": "higher-worse",
       "latestYear": 2025
+    },
+    {
+      "id": "ibge-state-gini-2022",
+      "name": "Índice de Gini da renda domiciliar per capita",
+      "themeId": "poverty-inequality",
+      "description": "Desigualdade da distribuição do rendimento mensal domiciliar per capita, segundo o Censo Demográfico 2022.",
+      "unit": "índice",
+      "geographyType": "brazil-state",
+      "sourceId": "ibge-sidra",
+      "direction": "higher-worse",
+      "latestYear": 2022
     },
     {
       "id": "ibge-water-network-coverage",
@@ -274438,6 +274449,330 @@
       ]
     },
     {
+      "indicatorId": "ibge-state-gini-2022",
+      "geographyType": "brazil-state",
+      "geographyCode": "11",
+      "geographyName": "Rondônia",
+      "points": [
+        {
+          "year": 2022,
+          "value": 0.489
+        }
+      ]
+    },
+    {
+      "indicatorId": "ibge-state-gini-2022",
+      "geographyType": "brazil-state",
+      "geographyCode": "12",
+      "geographyName": "Acre",
+      "points": [
+        {
+          "year": 2022,
+          "value": 0.547
+        }
+      ]
+    },
+    {
+      "indicatorId": "ibge-state-gini-2022",
+      "geographyType": "brazil-state",
+      "geographyCode": "13",
+      "geographyName": "Amazonas",
+      "points": [
+        {
+          "year": 2022,
+          "value": 0.572
+        }
+      ]
+    },
+    {
+      "indicatorId": "ibge-state-gini-2022",
+      "geographyType": "brazil-state",
+      "geographyCode": "14",
+      "geographyName": "Roraima",
+      "points": [
+        {
+          "year": 2022,
+          "value": 0.572
+        }
+      ]
+    },
+    {
+      "indicatorId": "ibge-state-gini-2022",
+      "geographyType": "brazil-state",
+      "geographyCode": "15",
+      "geographyName": "Pará",
+      "points": [
+        {
+          "year": 2022,
+          "value": 0.539
+        }
+      ]
+    },
+    {
+      "indicatorId": "ibge-state-gini-2022",
+      "geographyType": "brazil-state",
+      "geographyCode": "16",
+      "geographyName": "Amapá",
+      "points": [
+        {
+          "year": 2022,
+          "value": 0.542
+        }
+      ]
+    },
+    {
+      "indicatorId": "ibge-state-gini-2022",
+      "geographyType": "brazil-state",
+      "geographyCode": "17",
+      "geographyName": "Tocantins",
+      "points": [
+        {
+          "year": 2022,
+          "value": 0.511
+        }
+      ]
+    },
+    {
+      "indicatorId": "ibge-state-gini-2022",
+      "geographyType": "brazil-state",
+      "geographyCode": "21",
+      "geographyName": "Maranhão",
+      "points": [
+        {
+          "year": 2022,
+          "value": 0.525
+        }
+      ]
+    },
+    {
+      "indicatorId": "ibge-state-gini-2022",
+      "geographyType": "brazil-state",
+      "geographyCode": "22",
+      "geographyName": "Piauí",
+      "points": [
+        {
+          "year": 2022,
+          "value": 0.52
+        }
+      ]
+    },
+    {
+      "indicatorId": "ibge-state-gini-2022",
+      "geographyType": "brazil-state",
+      "geographyCode": "23",
+      "geographyName": "Ceará",
+      "points": [
+        {
+          "year": 2022,
+          "value": 0.536
+        }
+      ]
+    },
+    {
+      "indicatorId": "ibge-state-gini-2022",
+      "geographyType": "brazil-state",
+      "geographyCode": "24",
+      "geographyName": "Rio Grande do Norte",
+      "points": [
+        {
+          "year": 2022,
+          "value": 0.555
+        }
+      ]
+    },
+    {
+      "indicatorId": "ibge-state-gini-2022",
+      "geographyType": "brazil-state",
+      "geographyCode": "25",
+      "geographyName": "Paraíba",
+      "points": [
+        {
+          "year": 2022,
+          "value": 0.536
+        }
+      ]
+    },
+    {
+      "indicatorId": "ibge-state-gini-2022",
+      "geographyType": "brazil-state",
+      "geographyCode": "26",
+      "geographyName": "Pernambuco",
+      "points": [
+        {
+          "year": 2022,
+          "value": 0.564
+        }
+      ]
+    },
+    {
+      "indicatorId": "ibge-state-gini-2022",
+      "geographyType": "brazil-state",
+      "geographyCode": "27",
+      "geographyName": "Alagoas",
+      "points": [
+        {
+          "year": 2022,
+          "value": 0.538
+        }
+      ]
+    },
+    {
+      "indicatorId": "ibge-state-gini-2022",
+      "geographyType": "brazil-state",
+      "geographyCode": "28",
+      "geographyName": "Sergipe",
+      "points": [
+        {
+          "year": 2022,
+          "value": 0.557
+        }
+      ]
+    },
+    {
+      "indicatorId": "ibge-state-gini-2022",
+      "geographyType": "brazil-state",
+      "geographyCode": "29",
+      "geographyName": "Bahia",
+      "points": [
+        {
+          "year": 2022,
+          "value": 0.531
+        }
+      ]
+    },
+    {
+      "indicatorId": "ibge-state-gini-2022",
+      "geographyType": "brazil-state",
+      "geographyCode": "31",
+      "geographyName": "Minas Gerais",
+      "points": [
+        {
+          "year": 2022,
+          "value": 0.495
+        }
+      ]
+    },
+    {
+      "indicatorId": "ibge-state-gini-2022",
+      "geographyType": "brazil-state",
+      "geographyCode": "32",
+      "geographyName": "Espírito Santo",
+      "points": [
+        {
+          "year": 2022,
+          "value": 0.505
+        }
+      ]
+    },
+    {
+      "indicatorId": "ibge-state-gini-2022",
+      "geographyType": "brazil-state",
+      "geographyCode": "33",
+      "geographyName": "Rio de Janeiro",
+      "points": [
+        {
+          "year": 2022,
+          "value": 0.574
+        }
+      ]
+    },
+    {
+      "indicatorId": "ibge-state-gini-2022",
+      "geographyType": "brazil-state",
+      "geographyCode": "35",
+      "geographyName": "São Paulo",
+      "points": [
+        {
+          "year": 2022,
+          "value": 0.525
+        }
+      ]
+    },
+    {
+      "indicatorId": "ibge-state-gini-2022",
+      "geographyType": "brazil-state",
+      "geographyCode": "41",
+      "geographyName": "Paraná",
+      "points": [
+        {
+          "year": 2022,
+          "value": 0.482
+        }
+      ]
+    },
+    {
+      "indicatorId": "ibge-state-gini-2022",
+      "geographyType": "brazil-state",
+      "geographyCode": "42",
+      "geographyName": "Santa Catarina",
+      "points": [
+        {
+          "year": 2022,
+          "value": 0.452
+        }
+      ]
+    },
+    {
+      "indicatorId": "ibge-state-gini-2022",
+      "geographyType": "brazil-state",
+      "geographyCode": "43",
+      "geographyName": "Rio Grande do Sul",
+      "points": [
+        {
+          "year": 2022,
+          "value": 0.484
+        }
+      ]
+    },
+    {
+      "indicatorId": "ibge-state-gini-2022",
+      "geographyType": "brazil-state",
+      "geographyCode": "50",
+      "geographyName": "Mato Grosso do Sul",
+      "points": [
+        {
+          "year": 2022,
+          "value": 0.503
+        }
+      ]
+    },
+    {
+      "indicatorId": "ibge-state-gini-2022",
+      "geographyType": "brazil-state",
+      "geographyCode": "51",
+      "geographyName": "Mato Grosso",
+      "points": [
+        {
+          "year": 2022,
+          "value": 0.496
+        }
+      ]
+    },
+    {
+      "indicatorId": "ibge-state-gini-2022",
+      "geographyType": "brazil-state",
+      "geographyCode": "52",
+      "geographyName": "Goiás",
+      "points": [
+        {
+          "year": 2022,
+          "value": 0.501
+        }
+      ]
+    },
+    {
+      "indicatorId": "ibge-state-gini-2022",
+      "geographyType": "brazil-state",
+      "geographyCode": "53",
+      "geographyName": "Distrito Federal",
+      "points": [
+        {
+          "year": 2022,
+          "value": 0.584
+        }
+      ]
+    },
+    {
       "indicatorId": "ibge-water-network-coverage",
       "geographyType": "brazil-immediate-region",
       "geographyCode": "110005",
@@ -308616,6 +308951,222 @@
       "value": 319
     },
     {
+      "indicatorId": "ibge-state-gini-2022",
+      "geographyType": "brazil-state",
+      "geographyCode": "11",
+      "geographyName": "Rondônia",
+      "year": 2022,
+      "value": 0.489
+    },
+    {
+      "indicatorId": "ibge-state-gini-2022",
+      "geographyType": "brazil-state",
+      "geographyCode": "12",
+      "geographyName": "Acre",
+      "year": 2022,
+      "value": 0.547
+    },
+    {
+      "indicatorId": "ibge-state-gini-2022",
+      "geographyType": "brazil-state",
+      "geographyCode": "13",
+      "geographyName": "Amazonas",
+      "year": 2022,
+      "value": 0.572
+    },
+    {
+      "indicatorId": "ibge-state-gini-2022",
+      "geographyType": "brazil-state",
+      "geographyCode": "14",
+      "geographyName": "Roraima",
+      "year": 2022,
+      "value": 0.572
+    },
+    {
+      "indicatorId": "ibge-state-gini-2022",
+      "geographyType": "brazil-state",
+      "geographyCode": "15",
+      "geographyName": "Pará",
+      "year": 2022,
+      "value": 0.539
+    },
+    {
+      "indicatorId": "ibge-state-gini-2022",
+      "geographyType": "brazil-state",
+      "geographyCode": "16",
+      "geographyName": "Amapá",
+      "year": 2022,
+      "value": 0.542
+    },
+    {
+      "indicatorId": "ibge-state-gini-2022",
+      "geographyType": "brazil-state",
+      "geographyCode": "17",
+      "geographyName": "Tocantins",
+      "year": 2022,
+      "value": 0.511
+    },
+    {
+      "indicatorId": "ibge-state-gini-2022",
+      "geographyType": "brazil-state",
+      "geographyCode": "21",
+      "geographyName": "Maranhão",
+      "year": 2022,
+      "value": 0.525
+    },
+    {
+      "indicatorId": "ibge-state-gini-2022",
+      "geographyType": "brazil-state",
+      "geographyCode": "22",
+      "geographyName": "Piauí",
+      "year": 2022,
+      "value": 0.52
+    },
+    {
+      "indicatorId": "ibge-state-gini-2022",
+      "geographyType": "brazil-state",
+      "geographyCode": "23",
+      "geographyName": "Ceará",
+      "year": 2022,
+      "value": 0.536
+    },
+    {
+      "indicatorId": "ibge-state-gini-2022",
+      "geographyType": "brazil-state",
+      "geographyCode": "24",
+      "geographyName": "Rio Grande do Norte",
+      "year": 2022,
+      "value": 0.555
+    },
+    {
+      "indicatorId": "ibge-state-gini-2022",
+      "geographyType": "brazil-state",
+      "geographyCode": "25",
+      "geographyName": "Paraíba",
+      "year": 2022,
+      "value": 0.536
+    },
+    {
+      "indicatorId": "ibge-state-gini-2022",
+      "geographyType": "brazil-state",
+      "geographyCode": "26",
+      "geographyName": "Pernambuco",
+      "year": 2022,
+      "value": 0.564
+    },
+    {
+      "indicatorId": "ibge-state-gini-2022",
+      "geographyType": "brazil-state",
+      "geographyCode": "27",
+      "geographyName": "Alagoas",
+      "year": 2022,
+      "value": 0.538
+    },
+    {
+      "indicatorId": "ibge-state-gini-2022",
+      "geographyType": "brazil-state",
+      "geographyCode": "28",
+      "geographyName": "Sergipe",
+      "year": 2022,
+      "value": 0.557
+    },
+    {
+      "indicatorId": "ibge-state-gini-2022",
+      "geographyType": "brazil-state",
+      "geographyCode": "29",
+      "geographyName": "Bahia",
+      "year": 2022,
+      "value": 0.531
+    },
+    {
+      "indicatorId": "ibge-state-gini-2022",
+      "geographyType": "brazil-state",
+      "geographyCode": "31",
+      "geographyName": "Minas Gerais",
+      "year": 2022,
+      "value": 0.495
+    },
+    {
+      "indicatorId": "ibge-state-gini-2022",
+      "geographyType": "brazil-state",
+      "geographyCode": "32",
+      "geographyName": "Espírito Santo",
+      "year": 2022,
+      "value": 0.505
+    },
+    {
+      "indicatorId": "ibge-state-gini-2022",
+      "geographyType": "brazil-state",
+      "geographyCode": "33",
+      "geographyName": "Rio de Janeiro",
+      "year": 2022,
+      "value": 0.574
+    },
+    {
+      "indicatorId": "ibge-state-gini-2022",
+      "geographyType": "brazil-state",
+      "geographyCode": "35",
+      "geographyName": "São Paulo",
+      "year": 2022,
+      "value": 0.525
+    },
+    {
+      "indicatorId": "ibge-state-gini-2022",
+      "geographyType": "brazil-state",
+      "geographyCode": "41",
+      "geographyName": "Paraná",
+      "year": 2022,
+      "value": 0.482
+    },
+    {
+      "indicatorId": "ibge-state-gini-2022",
+      "geographyType": "brazil-state",
+      "geographyCode": "42",
+      "geographyName": "Santa Catarina",
+      "year": 2022,
+      "value": 0.452
+    },
+    {
+      "indicatorId": "ibge-state-gini-2022",
+      "geographyType": "brazil-state",
+      "geographyCode": "43",
+      "geographyName": "Rio Grande do Sul",
+      "year": 2022,
+      "value": 0.484
+    },
+    {
+      "indicatorId": "ibge-state-gini-2022",
+      "geographyType": "brazil-state",
+      "geographyCode": "50",
+      "geographyName": "Mato Grosso do Sul",
+      "year": 2022,
+      "value": 0.503
+    },
+    {
+      "indicatorId": "ibge-state-gini-2022",
+      "geographyType": "brazil-state",
+      "geographyCode": "51",
+      "geographyName": "Mato Grosso",
+      "year": 2022,
+      "value": 0.496
+    },
+    {
+      "indicatorId": "ibge-state-gini-2022",
+      "geographyType": "brazil-state",
+      "geographyCode": "52",
+      "geographyName": "Goiás",
+      "year": 2022,
+      "value": 0.501
+    },
+    {
+      "indicatorId": "ibge-state-gini-2022",
+      "geographyType": "brazil-state",
+      "geographyCode": "53",
+      "geographyName": "Distrito Federal",
+      "year": 2022,
+      "value": 0.584
+    },
+    {
       "indicatorId": "ibge-water-network-coverage",
       "geographyType": "brazil-immediate-region",
       "geographyCode": "110005",
@@ -319613,6 +320164,173 @@
           "geographyName": "Distrito Federal",
           "year": 2025,
           "value": 319
+        }
+      ]
+    },
+    {
+      "indicatorId": "ibge-state-gini-2022",
+      "geographyType": "brazil-state",
+      "year": 2022,
+      "items": [
+        {
+          "indicatorId": "ibge-state-gini-2022",
+          "geographyType": "brazil-state",
+          "geographyCode": "53",
+          "geographyName": "Distrito Federal",
+          "year": 2022,
+          "value": 0.584
+        },
+        {
+          "indicatorId": "ibge-state-gini-2022",
+          "geographyType": "brazil-state",
+          "geographyCode": "33",
+          "geographyName": "Rio de Janeiro",
+          "year": 2022,
+          "value": 0.574
+        },
+        {
+          "indicatorId": "ibge-state-gini-2022",
+          "geographyType": "brazil-state",
+          "geographyCode": "13",
+          "geographyName": "Amazonas",
+          "year": 2022,
+          "value": 0.572
+        },
+        {
+          "indicatorId": "ibge-state-gini-2022",
+          "geographyType": "brazil-state",
+          "geographyCode": "14",
+          "geographyName": "Roraima",
+          "year": 2022,
+          "value": 0.572
+        },
+        {
+          "indicatorId": "ibge-state-gini-2022",
+          "geographyType": "brazil-state",
+          "geographyCode": "26",
+          "geographyName": "Pernambuco",
+          "year": 2022,
+          "value": 0.564
+        },
+        {
+          "indicatorId": "ibge-state-gini-2022",
+          "geographyType": "brazil-state",
+          "geographyCode": "28",
+          "geographyName": "Sergipe",
+          "year": 2022,
+          "value": 0.557
+        },
+        {
+          "indicatorId": "ibge-state-gini-2022",
+          "geographyType": "brazil-state",
+          "geographyCode": "24",
+          "geographyName": "Rio Grande do Norte",
+          "year": 2022,
+          "value": 0.555
+        },
+        {
+          "indicatorId": "ibge-state-gini-2022",
+          "geographyType": "brazil-state",
+          "geographyCode": "12",
+          "geographyName": "Acre",
+          "year": 2022,
+          "value": 0.547
+        },
+        {
+          "indicatorId": "ibge-state-gini-2022",
+          "geographyType": "brazil-state",
+          "geographyCode": "16",
+          "geographyName": "Amapá",
+          "year": 2022,
+          "value": 0.542
+        },
+        {
+          "indicatorId": "ibge-state-gini-2022",
+          "geographyType": "brazil-state",
+          "geographyCode": "15",
+          "geographyName": "Pará",
+          "year": 2022,
+          "value": 0.539
+        },
+        {
+          "indicatorId": "ibge-state-gini-2022",
+          "geographyType": "brazil-state",
+          "geographyCode": "27",
+          "geographyName": "Alagoas",
+          "year": 2022,
+          "value": 0.538
+        },
+        {
+          "indicatorId": "ibge-state-gini-2022",
+          "geographyType": "brazil-state",
+          "geographyCode": "23",
+          "geographyName": "Ceará",
+          "year": 2022,
+          "value": 0.536
+        },
+        {
+          "indicatorId": "ibge-state-gini-2022",
+          "geographyType": "brazil-state",
+          "geographyCode": "25",
+          "geographyName": "Paraíba",
+          "year": 2022,
+          "value": 0.536
+        },
+        {
+          "indicatorId": "ibge-state-gini-2022",
+          "geographyType": "brazil-state",
+          "geographyCode": "29",
+          "geographyName": "Bahia",
+          "year": 2022,
+          "value": 0.531
+        },
+        {
+          "indicatorId": "ibge-state-gini-2022",
+          "geographyType": "brazil-state",
+          "geographyCode": "21",
+          "geographyName": "Maranhão",
+          "year": 2022,
+          "value": 0.525
+        },
+        {
+          "indicatorId": "ibge-state-gini-2022",
+          "geographyType": "brazil-state",
+          "geographyCode": "35",
+          "geographyName": "São Paulo",
+          "year": 2022,
+          "value": 0.525
+        },
+        {
+          "indicatorId": "ibge-state-gini-2022",
+          "geographyType": "brazil-state",
+          "geographyCode": "22",
+          "geographyName": "Piauí",
+          "year": 2022,
+          "value": 0.52
+        },
+        {
+          "indicatorId": "ibge-state-gini-2022",
+          "geographyType": "brazil-state",
+          "geographyCode": "17",
+          "geographyName": "Tocantins",
+          "year": 2022,
+          "value": 0.511
+        },
+        {
+          "indicatorId": "ibge-state-gini-2022",
+          "geographyType": "brazil-state",
+          "geographyCode": "32",
+          "geographyName": "Espírito Santo",
+          "year": 2022,
+          "value": 0.505
+        },
+        {
+          "indicatorId": "ibge-state-gini-2022",
+          "geographyType": "brazil-state",
+          "geographyCode": "50",
+          "geographyName": "Mato Grosso do Sul",
+          "year": 2022,
+          "value": 0.503
         }
       ]
     },
