@@ -33,6 +33,7 @@ function App() {
   const [view, setView] = useState<ViewMode>('world')
   const [themeId, setThemeId] = useState('hunger-water')
   const [selectedIndicatorId, setSelectedIndicatorId] = useState('')
+  const [continent, setContinent] = useState('Todos')
   const [countryCode, setCountryCode] = useState('BRA')
   const [stateCode, setStateCode] = useState('35')
   const [comparisonStateCodes, setComparisonStateCodes] = useState(['35', '29', '15'])
@@ -90,6 +91,20 @@ function App() {
   const activeIndicator = view === 'world' ? indicator : brazilIndicator
   const activeSource = data.sources.find((source) => source.id === activeIndicator.sourceId)
   const activeRanking = getTopRanked(data, activeIndicator.id, 10)
+  const filteredCountries = continent === 'Todos'
+    ? data.countries
+    : data.countries.filter((country) => country.continent === continent)
+  const worldRanking = activeRanking.filter((item) => {
+    const country = data.countries.find((candidate) => candidate.code === item.geographyCode)
+    return continent === 'Todos' || country?.continent === continent
+  })
+  const continentValues = countryLatest.filter((item) => {
+    const country = data.countries.find((candidate) => candidate.code === item.geographyCode)
+    return continent === 'Todos' || country?.continent === continent
+  })
+  const continentAverage = continentValues.length
+    ? continentValues.reduce((total, item) => total + item.value, 0) / continentValues.length
+    : null
   const comparisonStates = data.brazilStates.filter((state) => comparisonStateCodes.includes(state.code))
   const comparisonLatest = brazilLatest.filter((item) => comparisonStateCodes.includes(item.geographyCode))
   const comparisonChartData = Array.from(
@@ -154,18 +169,19 @@ function App() {
           <section className="panel controls controls--world">
             <label>Tema<select value={themeId} onChange={(event) => setThemeId(event.target.value)}>{data.themes.map((theme) => <option key={theme.id} value={theme.id}>{theme.name}</option>)}</select></label>
             <label>Indicador<select value={indicatorId} onChange={(event) => setSelectedIndicatorId(event.target.value)}>{themeIndicators.map((item) => <option key={item.id} value={item.id}>{item.name}</option>)}</select></label>
-            <label>País<select value={countryCode} onChange={(event) => setCountryCode(event.target.value)}>{data.countries.map((country) => <option key={country.code} value={country.code}>{country.name}</option>)}</select></label>
+            <label>Continente<select value={continent} onChange={(event) => { const nextContinent = event.target.value; setContinent(nextContinent); setCountryCode(nextContinent === 'Todos' ? 'BRA' : data.countries.find((country) => country.continent === nextContinent)?.code ?? '') }}><option value="Todos">Mundo inteiro</option>{data.continents.map((item) => <option key={item} value={item}>{item}</option>)}</select></label>
+            <label>País<select value={countryCode} onChange={(event) => setCountryCode(event.target.value)}>{filteredCountries.map((country) => <option key={country.code} value={country.code}>{country.name}</option>)}</select></label>
           </section>
 
           <section className="content-grid content-grid--world">
             <MapPanel title="Mapa mundial" subtitle={`${indicator.name} • clique para selecionar um país`} geography={worldGeo} valueByCode={worldValueByCode} codeKeys={['ADM0_A3', 'ISO_A3', 'SOV_A3', 'gu_a3']} onSelect={setCountryCode} selectedCode={countryCode} formatValue={(value) => formatValue(value, indicator.unit)} projectionKind="peters" />
             <article className="panel">
-              <div className="panel__header"><div><h3>{countryName}</h3><p>{indicator.description}</p></div><strong className="badge">{indicator.latestYear}</strong></div>
+              <div className="panel__header"><div><h3>{countryName || continent}</h3><p>{indicator.description}</p>{continentAverage !== null && <p className="context-metric">Média do recorte: {formatValue(continentAverage, indicator.unit)}</p>}</div><strong className="badge">{indicator.latestYear}</strong></div>
               <div className="chart"><ResponsiveContainer width="100%" height={300}><LineChart data={selectedCountrySeries?.points ?? []}><CartesianGrid stroke="#334155" strokeDasharray="4 4" /><XAxis dataKey="year" stroke="#a8b8cc" /><YAxis stroke="#a8b8cc" /><Tooltip formatter={tooltipFormatter(indicator.unit)} /><Line type="monotone" dataKey="value" stroke="#2dd4bf" strokeWidth={3} dot={false} /></LineChart></ResponsiveContainer></div>
               <p className="meta">Fonte: <a href={activeSource?.url}>{activeSource?.name}</a> • Atualização conhecida: {activeSource?.lastUpdated}</p>
             </article>
           </section>
-          <RankingPanel title="Ranking global" description="10 países com os maiores valores para o indicador selecionado." ranking={activeRanking} unit={indicator.unit} color="#2563eb" tooltipFormatter={tooltipFormatter} />
+          <RankingPanel title={continent === 'Todos' ? 'Ranking global' : `Ranking: ${continent}`} description="10 países com os maiores valores para o indicador e recorte selecionados." ranking={worldRanking} unit={indicator.unit} color="#2563eb" tooltipFormatter={tooltipFormatter} />
         </>
       ) : (
         <>

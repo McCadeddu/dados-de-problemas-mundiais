@@ -111,7 +111,7 @@ select {
 
 .controls {
   display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
+  grid-template-columns: repeat(4, minmax(0, 1fr));
   gap: 1rem;
   margin-bottom: 1.5rem;
 }
@@ -314,6 +314,12 @@ select {
   margin-top: 0.35rem !important;
   color: #5eead4 !important;
   font-size: 0.8rem;
+}
+
+.context-metric {
+  margin-top: 0.65rem !important;
+  color: #fbbf24 !important;
+  font-weight: 700;
 }
 
 .map__legend-scale {
