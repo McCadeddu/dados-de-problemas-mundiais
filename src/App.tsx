@@ -37,6 +37,7 @@ function App() {
   const [countryCode, setCountryCode] = useState('BRA')
   const [stateCode, setStateCode] = useState('35')
   const [immediateRegionCode, setImmediateRegionCode] = useState('350001')
+  const [immediateIndicatorId, setImmediateIndicatorId] = useState('ibge-water-network-coverage')
   const [comparisonStateCodes, setComparisonStateCodes] = useState(['35', '29', '15'])
 
   useEffect(() => {
@@ -62,9 +63,11 @@ function App() {
       : ''
   const indicator = data && indicatorId ? getIndicator(data, indicatorId) : undefined
   const brazilIndicator = data?.indicators.find((item) => item.geographyType === 'brazil-state')
-  const immediateRegionIndicator = data?.indicators.find(
+  const immediateIndicators = data?.indicators.filter(
     (item) => item.geographyType === 'brazil-immediate-region',
-  )
+  ) ?? []
+  const immediateRegionIndicator = immediateIndicators.find((item) => item.id === immediateIndicatorId)
+    ?? immediateIndicators[0]
   const selectedCountrySeries = data && indicator
     ? getSeriesForGeography(data, indicator.id, countryCode)
     : undefined
@@ -233,6 +236,7 @@ function App() {
         <>
           <section className="panel controls controls--regions">
             <label>Estado do Brasil<select value={stateCode} onChange={(event) => { const nextState = event.target.value; setStateCode(nextState); setImmediateRegionCode(data.brazilImmediateRegions.find((region) => region.stateCode === nextState)?.code ?? '') }}>{data.brazilStates.map((state) => <option key={state.code} value={state.code}>{state.name}</option>)}</select></label>
+            <label>Indicador regional<select value={immediateRegionIndicator.id} onChange={(event) => setImmediateIndicatorId(event.target.value)}>{immediateIndicators.map((item) => <option key={item.id} value={item.id}>{item.name}</option>)}</select></label>
             <label>Região Geográfica Imediata<select value={immediateRegionCode} onChange={(event) => setImmediateRegionCode(event.target.value)}>{regionsForState.map((region) => <option key={region.code} value={region.code}>{region.name}</option>)}</select></label>
             <p className="controls__context">Indicador regional: <strong>{immediateRegionIndicator.name}</strong>. Agregação municipal do Censo 2022/SIDRA pela divisão territorial do IBGE.</p>
           </section>

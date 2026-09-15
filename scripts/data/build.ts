@@ -252,6 +252,17 @@ const BRAZIL_IMMEDIATE_WATER_INDICATOR: Omit<Indicator, 'latestYear'> = {
   direction: 'higher-better',
 }
 
+const BRAZIL_IMMEDIATE_SANITATION_INDICATOR: Omit<Indicator, 'latestYear'> = {
+  id: 'ibge-sanitation-network-coverage',
+  name: 'Domicílios com esgotamento por rede',
+  themeId: 'hunger-water',
+  description: 'Percentual de domicílios ocupados com rede geral, rede pluvial ou fossa ligada à rede.',
+  unit: '%',
+  geographyType: 'brazil-immediate-region',
+  sourceId: SIDRA_SOURCE_ID,
+  direction: 'higher-better',
+}
+
 async function ensureDirs() {
   await mkdir(PUBLIC_DATA_DIR, { recursive: true })
   await mkdir(path.join(PUBLIC_DATA_DIR, 'geo'), { recursive: true })
@@ -503,14 +514,18 @@ type IbgeAggregateResponse = Array<{
   }>
 }>
 
-async function loadBrazilImmediateRegionWaterIndicator() {
+async function loadBrazilImmediateRegionCoverage(
+  indicator: Omit<Indicator, 'latestYear'>,
+  table: string,
+  classification: string,
+) {
   const [municipalities, totalResponse, networkResponse] = await Promise.all([
     fetchJson<Array<{
       id: number
       'regiao-imediata': { id: number; nome: string; 'regiao-intermediaria': { UF: { id: number } } }
     }>>('https://servicodados.ibge.gov.br/api/v1/localidades/municipios'),
-    fetchJson<IbgeAggregateResponse>('https://servicodados.ibge.gov.br/api/v3/agregados/6803/periodos/2022/variaveis/381?localidades=N6%5Ball%5D'),
-    fetchJson<IbgeAggregateResponse>('https://servicodados.ibge.gov.br/api/v3/agregados/6803/periodos/2022/variaveis/381?localidades=N6%5Ball%5D&classificacao=1821%5B72144%5D'),
+    fetchJson<IbgeAggregateResponse>(`https://servicodados.ibge.gov.br/api/v3/agregados/${table}/periodos/2022/variaveis/381?localidades=N6%5Ball%5D`),
+    fetchJson<IbgeAggregateResponse>(`https://servicodados.ibge.gov.br/api/v3/agregados/${table}/periodos/2022/variaveis/381?localidades=N6%5Ball%5D&classificacao=${classification}`),
   ])
 
   const regionsByMunicipality = new Map(municipalities.map((municipality) => [
@@ -542,13 +557,13 @@ async function loadBrazilImmediateRegionWaterIndicator() {
   }
 
   const series = Array.from(grouped.entries()).map(([code, region]) => ({
-    indicatorId: BRAZIL_IMMEDIATE_WATER_INDICATOR.id,
+    indicatorId: indicator.id,
     geographyType: 'brazil-immediate-region' as const,
     geographyCode: code,
     geographyName: region.name,
     points: [{ year: 2022, value: (region.network / region.total) * 100 }],
   }))
-  return { indicator: { ...BRAZIL_IMMEDIATE_WATER_INDICATOR, latestYear: 2022 } satisfies Indicator, series, regions: Array.from(grouped.entries()).map(([code, region]) => ({ code, name: region.name, stateCode: region.stateCode })) }
+  return { indicator: { ...indicator, latestYear: 2022 } satisfies Indicator, series, regions: Array.from(grouped.entries()).map(([code, region]) => ({ code, name: region.name, stateCode: region.stateCode })) }
 }
 
 function buildLatest(series: Series[]) {
@@ -644,9 +659,10 @@ async function main() {
     ),
   )
   const ndGain = await loadNdGain(countriesByIso3)
-  const [brazilStates, immediateRegions] = await Promise.all([
+  const [brazilStates, immediateRegions, immediateSanitation] = await Promise.all([
     loadBrazilStateIndicator(),
-    loadBrazilImmediateRegionWaterIndicator(),
+    loadBrazilImmediateRegionCoverage(BRAZIL_IMMEDIATE_WATER_INDICATOR, '6803', '1821%5B72144%5D'),
+    loadBrazilImmediateRegionCoverage(BRAZIL_IMMEDIATE_SANITATION_INDICATOR, '6805', '11558%5B46290%5D'),
   ])
 
   const continentByIso3 = await writeGeoJsonFiles()
@@ -660,12 +676,14 @@ async function main() {
     ndGain.indicator,
     brazilStates.indicator,
     immediateRegions.indicator,
+    immediateSanitation.indicator,
   ]
   const series = [
     ...worldBankResults.flatMap((result) => result.series),
     ...ndGain.series,
     ...brazilStates.series,
     ...immediateRegions.series,
+    ...immediateSanitation.series,
   ]
   const latest = buildLatest(series)
   const rankings = buildRankings(indicators, latest)
