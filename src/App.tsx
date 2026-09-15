@@ -38,10 +38,11 @@ function App() {
   const [comparisonStateCodes, setComparisonStateCodes] = useState(['35', '29', '15'])
 
   useEffect(() => {
+    const dataBaseUrl = import.meta.env.BASE_URL
     Promise.all([
-      fetch('/data/mundialidade.json').then((response) => response.json() as Promise<DashboardData>),
-      fetch('/data/geo/world.geojson').then((response) => response.json() as Promise<GeoJson>),
-      fetch('/data/geo/brazil-states.geojson').then((response) => response.json() as Promise<GeoJson>),
+      fetch(`${dataBaseUrl}data/mundialidade.json`).then((response) => response.json() as Promise<DashboardData>),
+      fetch(`${dataBaseUrl}data/geo/world.geojson`).then((response) => response.json() as Promise<GeoJson>),
+      fetch(`${dataBaseUrl}data/geo/brazil-states.geojson`).then((response) => response.json() as Promise<GeoJson>),
     ]).then(([dashboardData, world, brazil]) => {
       setData(dashboardData)
       setWorldGeo(world)
