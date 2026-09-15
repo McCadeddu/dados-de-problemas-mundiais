@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-09-15T15:26:44.666Z",
+  "generatedAt": "2026-09-15T15:29:07.303Z",
   "themes": [
     {
       "id": "hunger-water",
@@ -248,6 +248,17 @@
       "sourceId": "ibge-sidra",
       "direction": "higher-worse",
       "latestYear": 2022
+    },
+    {
+      "id": "ibge-state-real-income-per-capita",
+      "name": "Rendimento domiciliar per capita real",
+      "themeId": "poverty-inequality",
+      "description": "Rendimento médio mensal real domiciliar per capita, a preços médios do último ano, da PNAD Contínua anual.",
+      "unit": "R$",
+      "geographyType": "brazil-state",
+      "sourceId": "ibge-sidra",
+      "direction": "higher-better",
+      "latestYear": 2025
     },
     {
       "id": "ibge-water-network-coverage",
@@ -274773,6 +274784,1194 @@
       ]
     },
     {
+      "indicatorId": "ibge-state-real-income-per-capita",
+      "geographyType": "brazil-state",
+      "geographyCode": "11",
+      "geographyName": "Rondônia",
+      "points": [
+        {
+          "year": 2016,
+          "value": 1321
+        },
+        {
+          "year": 2017,
+          "value": 1396
+        },
+        {
+          "year": 2018,
+          "value": 1487
+        },
+        {
+          "year": 2019,
+          "value": 1537
+        },
+        {
+          "year": 2021,
+          "value": 1432
+        },
+        {
+          "year": 2022,
+          "value": 1642
+        },
+        {
+          "year": 2023,
+          "value": 1647
+        },
+        {
+          "year": 2024,
+          "value": 1829
+        },
+        {
+          "year": 2025,
+          "value": 2020
+        }
+      ]
+    },
+    {
+      "indicatorId": "ibge-state-real-income-per-capita",
+      "geographyType": "brazil-state",
+      "geographyCode": "12",
+      "geographyName": "Acre",
+      "points": [
+        {
+          "year": 2016,
+          "value": 1135
+        },
+        {
+          "year": 2017,
+          "value": 1148
+        },
+        {
+          "year": 2018,
+          "value": 1226
+        },
+        {
+          "year": 2019,
+          "value": 1229
+        },
+        {
+          "year": 2021,
+          "value": 1185
+        },
+        {
+          "year": 2022,
+          "value": 1201
+        },
+        {
+          "year": 2023,
+          "value": 1167
+        },
+        {
+          "year": 2024,
+          "value": 1316
+        },
+        {
+          "year": 2025,
+          "value": 1427
+        }
+      ]
+    },
+    {
+      "indicatorId": "ibge-state-real-income-per-capita",
+      "geographyType": "brazil-state",
+      "geographyCode": "13",
+      "geographyName": "Amazonas",
+      "points": [
+        {
+          "year": 2016,
+          "value": 1016
+        },
+        {
+          "year": 2017,
+          "value": 1217
+        },
+        {
+          "year": 2018,
+          "value": 1095
+        },
+        {
+          "year": 2019,
+          "value": 1098
+        },
+        {
+          "year": 2021,
+          "value": 989
+        },
+        {
+          "year": 2022,
+          "value": 1204
+        },
+        {
+          "year": 2023,
+          "value": 1284
+        },
+        {
+          "year": 2024,
+          "value": 1330
+        },
+        {
+          "year": 2025,
+          "value": 1425
+        }
+      ]
+    },
+    {
+      "indicatorId": "ibge-state-real-income-per-capita",
+      "geographyType": "brazil-state",
+      "geographyCode": "14",
+      "geographyName": "Roraima",
+      "points": [
+        {
+          "year": 2016,
+          "value": 1428
+        },
+        {
+          "year": 2017,
+          "value": 1515
+        },
+        {
+          "year": 2018,
+          "value": 1540
+        },
+        {
+          "year": 2019,
+          "value": 1418
+        },
+        {
+          "year": 2021,
+          "value": 1310
+        },
+        {
+          "year": 2022,
+          "value": 1527
+        },
+        {
+          "year": 2023,
+          "value": 1538
+        },
+        {
+          "year": 2024,
+          "value": 1721
+        },
+        {
+          "year": 2025,
+          "value": 1808
+        }
+      ]
+    },
+    {
+      "indicatorId": "ibge-state-real-income-per-capita",
+      "geographyType": "brazil-state",
+      "geographyCode": "15",
+      "geographyName": "Pará",
+      "points": [
+        {
+          "year": 2016,
+          "value": 995
+        },
+        {
+          "year": 2017,
+          "value": 1062
+        },
+        {
+          "year": 2018,
+          "value": 1120
+        },
+        {
+          "year": 2019,
+          "value": 1123
+        },
+        {
+          "year": 2021,
+          "value": 1098
+        },
+        {
+          "year": 2022,
+          "value": 1310
+        },
+        {
+          "year": 2023,
+          "value": 1379
+        },
+        {
+          "year": 2024,
+          "value": 1419
+        },
+        {
+          "year": 2025,
+          "value": 1472
+        }
+      ]
+    },
+    {
+      "indicatorId": "ibge-state-real-income-per-capita",
+      "geographyType": "brazil-state",
+      "geographyCode": "16",
+      "geographyName": "Amapá",
+      "points": [
+        {
+          "year": 2016,
+          "value": 1314
+        },
+        {
+          "year": 2017,
+          "value": 1214
+        },
+        {
+          "year": 2018,
+          "value": 1157
+        },
+        {
+          "year": 2019,
+          "value": 1185
+        },
+        {
+          "year": 2021,
+          "value": 1230
+        },
+        {
+          "year": 2022,
+          "value": 1384
+        },
+        {
+          "year": 2023,
+          "value": 1525
+        },
+        {
+          "year": 2024,
+          "value": 1568
+        },
+        {
+          "year": 2025,
+          "value": 1769
+        }
+      ]
+    },
+    {
+      "indicatorId": "ibge-state-real-income-per-capita",
+      "geographyType": "brazil-state",
+      "geographyCode": "17",
+      "geographyName": "Tocantins",
+      "points": [
+        {
+          "year": 2016,
+          "value": 1296
+        },
+        {
+          "year": 2017,
+          "value": 1387
+        },
+        {
+          "year": 2018,
+          "value": 1417
+        },
+        {
+          "year": 2019,
+          "value": 1398
+        },
+        {
+          "year": 2021,
+          "value": 1373
+        },
+        {
+          "year": 2022,
+          "value": 1673
+        },
+        {
+          "year": 2023,
+          "value": 1736
+        },
+        {
+          "year": 2024,
+          "value": 1884
+        },
+        {
+          "year": 2025,
+          "value": 2061
+        }
+      ]
+    },
+    {
+      "indicatorId": "ibge-state-real-income-per-capita",
+      "geographyType": "brazil-state",
+      "geographyCode": "21",
+      "geographyName": "Maranhão",
+      "points": [
+        {
+          "year": 2016,
+          "value": 813
+        },
+        {
+          "year": 2017,
+          "value": 889
+        },
+        {
+          "year": 2018,
+          "value": 881
+        },
+        {
+          "year": 2019,
+          "value": 891
+        },
+        {
+          "year": 2021,
+          "value": 822
+        },
+        {
+          "year": 2022,
+          "value": 1032
+        },
+        {
+          "year": 2023,
+          "value": 1056
+        },
+        {
+          "year": 2024,
+          "value": 1151
+        },
+        {
+          "year": 2025,
+          "value": 1206
+        }
+      ]
+    },
+    {
+      "indicatorId": "ibge-state-real-income-per-capita",
+      "geographyType": "brazil-state",
+      "geographyCode": "22",
+      "geographyName": "Piauí",
+      "points": [
+        {
+          "year": 2016,
+          "value": 1106
+        },
+        {
+          "year": 2017,
+          "value": 1086
+        },
+        {
+          "year": 2018,
+          "value": 1145
+        },
+        {
+          "year": 2019,
+          "value": 1105
+        },
+        {
+          "year": 2021,
+          "value": 1163
+        },
+        {
+          "year": 2022,
+          "value": 1376
+        },
+        {
+          "year": 2023,
+          "value": 1396
+        },
+        {
+          "year": 2024,
+          "value": 1490
+        },
+        {
+          "year": 2025,
+          "value": 1520
+        }
+      ]
+    },
+    {
+      "indicatorId": "ibge-state-real-income-per-capita",
+      "geographyType": "brazil-state",
+      "geographyCode": "23",
+      "geographyName": "Ceará",
+      "points": [
+        {
+          "year": 2016,
+          "value": 1100
+        },
+        {
+          "year": 2017,
+          "value": 1208
+        },
+        {
+          "year": 2018,
+          "value": 1255
+        },
+        {
+          "year": 2019,
+          "value": 1323
+        },
+        {
+          "year": 2021,
+          "value": 1127
+        },
+        {
+          "year": 2022,
+          "value": 1204
+        },
+        {
+          "year": 2023,
+          "value": 1261
+        },
+        {
+          "year": 2024,
+          "value": 1292
+        },
+        {
+          "year": 2025,
+          "value": 1423
+        }
+      ]
+    },
+    {
+      "indicatorId": "ibge-state-real-income-per-capita",
+      "geographyType": "brazil-state",
+      "geographyCode": "24",
+      "geographyName": "Rio Grande do Norte",
+      "points": [
+        {
+          "year": 2016,
+          "value": 1332
+        },
+        {
+          "year": 2017,
+          "value": 1240
+        },
+        {
+          "year": 2018,
+          "value": 1306
+        },
+        {
+          "year": 2019,
+          "value": 1481
+        },
+        {
+          "year": 2021,
+          "value": 1274
+        },
+        {
+          "year": 2022,
+          "value": 1397
+        },
+        {
+          "year": 2023,
+          "value": 1503
+        },
+        {
+          "year": 2024,
+          "value": 1580
+        },
+        {
+          "year": 2025,
+          "value": 1737
+        }
+      ]
+    },
+    {
+      "indicatorId": "ibge-state-real-income-per-capita",
+      "geographyType": "brazil-state",
+      "geographyCode": "25",
+      "geographyName": "Paraíba",
+      "points": [
+        {
+          "year": 2016,
+          "value": 1207
+        },
+        {
+          "year": 2017,
+          "value": 1310
+        },
+        {
+          "year": 2018,
+          "value": 1275
+        },
+        {
+          "year": 2019,
+          "value": 1249
+        },
+        {
+          "year": 2021,
+          "value": 1097
+        },
+        {
+          "year": 2022,
+          "value": 1270
+        },
+        {
+          "year": 2023,
+          "value": 1429
+        },
+        {
+          "year": 2024,
+          "value": 1485
+        },
+        {
+          "year": 2025,
+          "value": 1567
+        }
+      ]
+    },
+    {
+      "indicatorId": "ibge-state-real-income-per-capita",
+      "geographyType": "brazil-state",
+      "geographyCode": "26",
+      "geographyName": "Pernambuco",
+      "points": [
+        {
+          "year": 2016,
+          "value": 1200
+        },
+        {
+          "year": 2017,
+          "value": 1218
+        },
+        {
+          "year": 2018,
+          "value": 1229
+        },
+        {
+          "year": 2019,
+          "value": 1261
+        },
+        {
+          "year": 2021,
+          "value": 1045
+        },
+        {
+          "year": 2022,
+          "value": 1254
+        },
+        {
+          "year": 2023,
+          "value": 1258
+        },
+        {
+          "year": 2024,
+          "value": 1507
+        },
+        {
+          "year": 2025,
+          "value": 1548
+        }
+      ]
+    },
+    {
+      "indicatorId": "ibge-state-real-income-per-capita",
+      "geographyType": "brazil-state",
+      "geographyCode": "27",
+      "geographyName": "Alagoas",
+      "points": [
+        {
+          "year": 2016,
+          "value": 970
+        },
+        {
+          "year": 2017,
+          "value": 938
+        },
+        {
+          "year": 2018,
+          "value": 1019
+        },
+        {
+          "year": 2019,
+          "value": 962
+        },
+        {
+          "year": 2021,
+          "value": 1048
+        },
+        {
+          "year": 2022,
+          "value": 1154
+        },
+        {
+          "year": 2023,
+          "value": 1196
+        },
+        {
+          "year": 2024,
+          "value": 1366
+        },
+        {
+          "year": 2025,
+          "value": 1435
+        }
+      ]
+    },
+    {
+      "indicatorId": "ibge-state-real-income-per-capita",
+      "geographyType": "brazil-state",
+      "geographyCode": "28",
+      "geographyName": "Sergipe",
+      "points": [
+        {
+          "year": 2016,
+          "value": 1257
+        },
+        {
+          "year": 2017,
+          "value": 1199
+        },
+        {
+          "year": 2018,
+          "value": 1241
+        },
+        {
+          "year": 2019,
+          "value": 1281
+        },
+        {
+          "year": 2021,
+          "value": 1237
+        },
+        {
+          "year": 2022,
+          "value": 1322
+        },
+        {
+          "year": 2023,
+          "value": 1316
+        },
+        {
+          "year": 2024,
+          "value": 1541
+        },
+        {
+          "year": 2025,
+          "value": 1678
+        }
+      ]
+    },
+    {
+      "indicatorId": "ibge-state-real-income-per-capita",
+      "geographyType": "brazil-state",
+      "geographyCode": "29",
+      "geographyName": "Bahia",
+      "points": [
+        {
+          "year": 2016,
+          "value": 1130
+        },
+        {
+          "year": 2017,
+          "value": 1221
+        },
+        {
+          "year": 2018,
+          "value": 1216
+        },
+        {
+          "year": 2019,
+          "value": 1199
+        },
+        {
+          "year": 2021,
+          "value": 1078
+        },
+        {
+          "year": 2022,
+          "value": 1183
+        },
+        {
+          "year": 2023,
+          "value": 1272
+        },
+        {
+          "year": 2024,
+          "value": 1379
+        },
+        {
+          "year": 2025,
+          "value": 1498
+        }
+      ]
+    },
+    {
+      "indicatorId": "ibge-state-real-income-per-capita",
+      "geographyType": "brazil-state",
+      "geographyCode": "31",
+      "geographyName": "Minas Gerais",
+      "points": [
+        {
+          "year": 2016,
+          "value": 1708
+        },
+        {
+          "year": 2017,
+          "value": 1809
+        },
+        {
+          "year": 2018,
+          "value": 1797
+        },
+        {
+          "year": 2019,
+          "value": 1844
+        },
+        {
+          "year": 2021,
+          "value": 1717
+        },
+        {
+          "year": 2022,
+          "value": 1883
+        },
+        {
+          "year": 2023,
+          "value": 2008
+        },
+        {
+          "year": 2024,
+          "value": 2079
+        },
+        {
+          "year": 2025,
+          "value": 2259
+        }
+      ]
+    },
+    {
+      "indicatorId": "ibge-state-real-income-per-capita",
+      "geographyType": "brazil-state",
+      "geographyCode": "32",
+      "geographyName": "Espírito Santo",
+      "points": [
+        {
+          "year": 2016,
+          "value": 1716
+        },
+        {
+          "year": 2017,
+          "value": 1746
+        },
+        {
+          "year": 2018,
+          "value": 1825
+        },
+        {
+          "year": 2019,
+          "value": 1896
+        },
+        {
+          "year": 2021,
+          "value": 1796
+        },
+        {
+          "year": 2022,
+          "value": 1965
+        },
+        {
+          "year": 2023,
+          "value": 2014
+        },
+        {
+          "year": 2024,
+          "value": 2166
+        },
+        {
+          "year": 2025,
+          "value": 2229
+        }
+      ]
+    },
+    {
+      "indicatorId": "ibge-state-real-income-per-capita",
+      "geographyType": "brazil-state",
+      "geographyCode": "33",
+      "geographyName": "Rio de Janeiro",
+      "points": [
+        {
+          "year": 2016,
+          "value": 1980
+        },
+        {
+          "year": 2017,
+          "value": 2052
+        },
+        {
+          "year": 2018,
+          "value": 2232
+        },
+        {
+          "year": 2019,
+          "value": 2407
+        },
+        {
+          "year": 2021,
+          "value": 2172
+        },
+        {
+          "year": 2022,
+          "value": 2378
+        },
+        {
+          "year": 2023,
+          "value": 2433
+        },
+        {
+          "year": 2024,
+          "value": 2496
+        },
+        {
+          "year": 2025,
+          "value": 2711
+        }
+      ]
+    },
+    {
+      "indicatorId": "ibge-state-real-income-per-capita",
+      "geographyType": "brazil-state",
+      "geographyCode": "35",
+      "geographyName": "São Paulo",
+      "points": [
+        {
+          "year": 2016,
+          "value": 2505
+        },
+        {
+          "year": 2017,
+          "value": 2510
+        },
+        {
+          "year": 2018,
+          "value": 2613
+        },
+        {
+          "year": 2019,
+          "value": 2626
+        },
+        {
+          "year": 2021,
+          "value": 2271
+        },
+        {
+          "year": 2022,
+          "value": 2564
+        },
+        {
+          "year": 2023,
+          "value": 2715
+        },
+        {
+          "year": 2024,
+          "value": 2847
+        },
+        {
+          "year": 2025,
+          "value": 2917
+        }
+      ]
+    },
+    {
+      "indicatorId": "ibge-state-real-income-per-capita",
+      "geographyType": "brazil-state",
+      "geographyCode": "41",
+      "geographyName": "Paraná",
+      "points": [
+        {
+          "year": 2016,
+          "value": 2068
+        },
+        {
+          "year": 2017,
+          "value": 2123
+        },
+        {
+          "year": 2018,
+          "value": 2183
+        },
+        {
+          "year": 2019,
+          "value": 2209
+        },
+        {
+          "year": 2021,
+          "value": 1978
+        },
+        {
+          "year": 2022,
+          "value": 2152
+        },
+        {
+          "year": 2023,
+          "value": 2220
+        },
+        {
+          "year": 2024,
+          "value": 2468
+        },
+        {
+          "year": 2025,
+          "value": 2710
+        }
+      ]
+    },
+    {
+      "indicatorId": "ibge-state-real-income-per-capita",
+      "geographyType": "brazil-state",
+      "geographyCode": "42",
+      "geographyName": "Santa Catarina",
+      "points": [
+        {
+          "year": 2016,
+          "value": 2122
+        },
+        {
+          "year": 2017,
+          "value": 2304
+        },
+        {
+          "year": 2018,
+          "value": 2285
+        },
+        {
+          "year": 2019,
+          "value": 2342
+        },
+        {
+          "year": 2021,
+          "value": 2165
+        },
+        {
+          "year": 2022,
+          "value": 2381
+        },
+        {
+          "year": 2023,
+          "value": 2480
+        },
+        {
+          "year": 2024,
+          "value": 2658
+        },
+        {
+          "year": 2025,
+          "value": 2807
+        }
+      ]
+    },
+    {
+      "indicatorId": "ibge-state-real-income-per-capita",
+      "geographyType": "brazil-state",
+      "geographyCode": "43",
+      "geographyName": "Rio Grande do Sul",
+      "points": [
+        {
+          "year": 2016,
+          "value": 2253
+        },
+        {
+          "year": 2017,
+          "value": 2311
+        },
+        {
+          "year": 2018,
+          "value": 2299
+        },
+        {
+          "year": 2019,
+          "value": 2395
+        },
+        {
+          "year": 2021,
+          "value": 2169
+        },
+        {
+          "year": 2022,
+          "value": 2486
+        },
+        {
+          "year": 2023,
+          "value": 2531
+        },
+        {
+          "year": 2024,
+          "value": 2701
+        },
+        {
+          "year": 2025,
+          "value": 2782
+        }
+      ]
+    },
+    {
+      "indicatorId": "ibge-state-real-income-per-capita",
+      "geographyType": "brazil-state",
+      "geographyCode": "50",
+      "geographyName": "Mato Grosso do Sul",
+      "points": [
+        {
+          "year": 2016,
+          "value": 1939
+        },
+        {
+          "year": 2017,
+          "value": 1962
+        },
+        {
+          "year": 2018,
+          "value": 2039
+        },
+        {
+          "year": 2019,
+          "value": 2052
+        },
+        {
+          "year": 2021,
+          "value": 1838
+        },
+        {
+          "year": 2022,
+          "value": 2305
+        },
+        {
+          "year": 2023,
+          "value": 2274
+        },
+        {
+          "year": 2024,
+          "value": 2246
+        },
+        {
+          "year": 2025,
+          "value": 2304
+        }
+      ]
+    },
+    {
+      "indicatorId": "ibge-state-real-income-per-capita",
+      "geographyType": "brazil-state",
+      "geographyCode": "51",
+      "geographyName": "Mato Grosso",
+      "points": [
+        {
+          "year": 2016,
+          "value": 1687
+        },
+        {
+          "year": 2017,
+          "value": 1797
+        },
+        {
+          "year": 2018,
+          "value": 1925
+        },
+        {
+          "year": 2019,
+          "value": 1908
+        },
+        {
+          "year": 2021,
+          "value": 1740
+        },
+        {
+          "year": 2022,
+          "value": 2106
+        },
+        {
+          "year": 2023,
+          "value": 2200
+        },
+        {
+          "year": 2024,
+          "value": 2354
+        },
+        {
+          "year": 2025,
+          "value": 2381
+        }
+      ]
+    },
+    {
+      "indicatorId": "ibge-state-real-income-per-capita",
+      "geographyType": "brazil-state",
+      "geographyCode": "52",
+      "geographyName": "Goiás",
+      "points": [
+        {
+          "year": 2016,
+          "value": 1674
+        },
+        {
+          "year": 2017,
+          "value": 1851
+        },
+        {
+          "year": 2018,
+          "value": 1802
+        },
+        {
+          "year": 2019,
+          "value": 1780
+        },
+        {
+          "year": 2021,
+          "value": 1688
+        },
+        {
+          "year": 2022,
+          "value": 1981
+        },
+        {
+          "year": 2023,
+          "value": 2156
+        },
+        {
+          "year": 2024,
+          "value": 2215
+        },
+        {
+          "year": 2025,
+          "value": 2378
+        }
+      ]
+    },
+    {
+      "indicatorId": "ibge-state-real-income-per-capita",
+      "geographyType": "brazil-state",
+      "geographyCode": "53",
+      "geographyName": "Distrito Federal",
+      "points": [
+        {
+          "year": 2016,
+          "value": 3367
+        },
+        {
+          "year": 2017,
+          "value": 3483
+        },
+        {
+          "year": 2018,
+          "value": 3622
+        },
+        {
+          "year": 2019,
+          "value": 3460
+        },
+        {
+          "year": 2021,
+          "value": 3116
+        },
+        {
+          "year": 2022,
+          "value": 3827
+        },
+        {
+          "year": 2023,
+          "value": 3597
+        },
+        {
+          "year": 2024,
+          "value": 3694
+        },
+        {
+          "year": 2025,
+          "value": 4286
+        }
+      ]
+    },
+    {
       "indicatorId": "ibge-water-network-coverage",
       "geographyType": "brazil-immediate-region",
       "geographyCode": "110005",
@@ -309167,6 +310366,222 @@
       "value": 0.584
     },
     {
+      "indicatorId": "ibge-state-real-income-per-capita",
+      "geographyType": "brazil-state",
+      "geographyCode": "11",
+      "geographyName": "Rondônia",
+      "year": 2025,
+      "value": 2020
+    },
+    {
+      "indicatorId": "ibge-state-real-income-per-capita",
+      "geographyType": "brazil-state",
+      "geographyCode": "12",
+      "geographyName": "Acre",
+      "year": 2025,
+      "value": 1427
+    },
+    {
+      "indicatorId": "ibge-state-real-income-per-capita",
+      "geographyType": "brazil-state",
+      "geographyCode": "13",
+      "geographyName": "Amazonas",
+      "year": 2025,
+      "value": 1425
+    },
+    {
+      "indicatorId": "ibge-state-real-income-per-capita",
+      "geographyType": "brazil-state",
+      "geographyCode": "14",
+      "geographyName": "Roraima",
+      "year": 2025,
+      "value": 1808
+    },
+    {
+      "indicatorId": "ibge-state-real-income-per-capita",
+      "geographyType": "brazil-state",
+      "geographyCode": "15",
+      "geographyName": "Pará",
+      "year": 2025,
+      "value": 1472
+    },
+    {
+      "indicatorId": "ibge-state-real-income-per-capita",
+      "geographyType": "brazil-state",
+      "geographyCode": "16",
+      "geographyName": "Amapá",
+      "year": 2025,
+      "value": 1769
+    },
+    {
+      "indicatorId": "ibge-state-real-income-per-capita",
+      "geographyType": "brazil-state",
+      "geographyCode": "17",
+      "geographyName": "Tocantins",
+      "year": 2025,
+      "value": 2061
+    },
+    {
+      "indicatorId": "ibge-state-real-income-per-capita",
+      "geographyType": "brazil-state",
+      "geographyCode": "21",
+      "geographyName": "Maranhão",
+      "year": 2025,
+      "value": 1206
+    },
+    {
+      "indicatorId": "ibge-state-real-income-per-capita",
+      "geographyType": "brazil-state",
+      "geographyCode": "22",
+      "geographyName": "Piauí",
+      "year": 2025,
+      "value": 1520
+    },
+    {
+      "indicatorId": "ibge-state-real-income-per-capita",
+      "geographyType": "brazil-state",
+      "geographyCode": "23",
+      "geographyName": "Ceará",
+      "year": 2025,
+      "value": 1423
+    },
+    {
+      "indicatorId": "ibge-state-real-income-per-capita",
+      "geographyType": "brazil-state",
+      "geographyCode": "24",
+      "geographyName": "Rio Grande do Norte",
+      "year": 2025,
+      "value": 1737
+    },
+    {
+      "indicatorId": "ibge-state-real-income-per-capita",
+      "geographyType": "brazil-state",
+      "geographyCode": "25",
+      "geographyName": "Paraíba",
+      "year": 2025,
+      "value": 1567
+    },
+    {
+      "indicatorId": "ibge-state-real-income-per-capita",
+      "geographyType": "brazil-state",
+      "geographyCode": "26",
+      "geographyName": "Pernambuco",
+      "year": 2025,
+      "value": 1548
+    },
+    {
+      "indicatorId": "ibge-state-real-income-per-capita",
+      "geographyType": "brazil-state",
+      "geographyCode": "27",
+      "geographyName": "Alagoas",
+      "year": 2025,
+      "value": 1435
+    },
+    {
+      "indicatorId": "ibge-state-real-income-per-capita",
+      "geographyType": "brazil-state",
+      "geographyCode": "28",
+      "geographyName": "Sergipe",
+      "year": 2025,
+      "value": 1678
+    },
+    {
+      "indicatorId": "ibge-state-real-income-per-capita",
+      "geographyType": "brazil-state",
+      "geographyCode": "29",
+      "geographyName": "Bahia",
+      "year": 2025,
+      "value": 1498
+    },
+    {
+      "indicatorId": "ibge-state-real-income-per-capita",
+      "geographyType": "brazil-state",
+      "geographyCode": "31",
+      "geographyName": "Minas Gerais",
+      "year": 2025,
+      "value": 2259
+    },
+    {
+      "indicatorId": "ibge-state-real-income-per-capita",
+      "geographyType": "brazil-state",
+      "geographyCode": "32",
+      "geographyName": "Espírito Santo",
+      "year": 2025,
+      "value": 2229
+    },
+    {
+      "indicatorId": "ibge-state-real-income-per-capita",
+      "geographyType": "brazil-state",
+      "geographyCode": "33",
+      "geographyName": "Rio de Janeiro",
+      "year": 2025,
+      "value": 2711
+    },
+    {
+      "indicatorId": "ibge-state-real-income-per-capita",
+      "geographyType": "brazil-state",
+      "geographyCode": "35",
+      "geographyName": "São Paulo",
+      "year": 2025,
+      "value": 2917
+    },
+    {
+      "indicatorId": "ibge-state-real-income-per-capita",
+      "geographyType": "brazil-state",
+      "geographyCode": "41",
+      "geographyName": "Paraná",
+      "year": 2025,
+      "value": 2710
+    },
+    {
+      "indicatorId": "ibge-state-real-income-per-capita",
+      "geographyType": "brazil-state",
+      "geographyCode": "42",
+      "geographyName": "Santa Catarina",
+      "year": 2025,
+      "value": 2807
+    },
+    {
+      "indicatorId": "ibge-state-real-income-per-capita",
+      "geographyType": "brazil-state",
+      "geographyCode": "43",
+      "geographyName": "Rio Grande do Sul",
+      "year": 2025,
+      "value": 2782
+    },
+    {
+      "indicatorId": "ibge-state-real-income-per-capita",
+      "geographyType": "brazil-state",
+      "geographyCode": "50",
+      "geographyName": "Mato Grosso do Sul",
+      "year": 2025,
+      "value": 2304
+    },
+    {
+      "indicatorId": "ibge-state-real-income-per-capita",
+      "geographyType": "brazil-state",
+      "geographyCode": "51",
+      "geographyName": "Mato Grosso",
+      "year": 2025,
+      "value": 2381
+    },
+    {
+      "indicatorId": "ibge-state-real-income-per-capita",
+      "geographyType": "brazil-state",
+      "geographyCode": "52",
+      "geographyName": "Goiás",
+      "year": 2025,
+      "value": 2378
+    },
+    {
+      "indicatorId": "ibge-state-real-income-per-capita",
+      "geographyType": "brazil-state",
+      "geographyCode": "53",
+      "geographyName": "Distrito Federal",
+      "year": 2025,
+      "value": 4286
+    },
+    {
       "indicatorId": "ibge-water-network-coverage",
       "geographyType": "brazil-immediate-region",
       "geographyCode": "110005",
@@ -320331,6 +321746,173 @@
           "geographyName": "Mato Grosso do Sul",
           "year": 2022,
           "value": 0.503
+        }
+      ]
+    },
+    {
+      "indicatorId": "ibge-state-real-income-per-capita",
+      "geographyType": "brazil-state",
+      "year": 2025,
+      "items": [
+        {
+          "indicatorId": "ibge-state-real-income-per-capita",
+          "geographyType": "brazil-state",
+          "geographyCode": "53",
+          "geographyName": "Distrito Federal",
+          "year": 2025,
+          "value": 4286
+        },
+        {
+          "indicatorId": "ibge-state-real-income-per-capita",
+          "geographyType": "brazil-state",
+          "geographyCode": "35",
+          "geographyName": "São Paulo",
+          "year": 2025,
+          "value": 2917
+        },
+        {
+          "indicatorId": "ibge-state-real-income-per-capita",
+          "geographyType": "brazil-state",
+          "geographyCode": "42",
+          "geographyName": "Santa Catarina",
+          "year": 2025,
+          "value": 2807
+        },
+        {
+          "indicatorId": "ibge-state-real-income-per-capita",
+          "geographyType": "brazil-state",
+          "geographyCode": "43",
+          "geographyName": "Rio Grande do Sul",
+          "year": 2025,
+          "value": 2782
+        },
+        {
+          "indicatorId": "ibge-state-real-income-per-capita",
+          "geographyType": "brazil-state",
+          "geographyCode": "33",
+          "geographyName": "Rio de Janeiro",
+          "year": 2025,
+          "value": 2711
+        },
+        {
+          "indicatorId": "ibge-state-real-income-per-capita",
+          "geographyType": "brazil-state",
+          "geographyCode": "41",
+          "geographyName": "Paraná",
+          "year": 2025,
+          "value": 2710
+        },
+        {
+          "indicatorId": "ibge-state-real-income-per-capita",
+          "geographyType": "brazil-state",
+          "geographyCode": "51",
+          "geographyName": "Mato Grosso",
+          "year": 2025,
+          "value": 2381
+        },
+        {
+          "indicatorId": "ibge-state-real-income-per-capita",
+          "geographyType": "brazil-state",
+          "geographyCode": "52",
+          "geographyName": "Goiás",
+          "year": 2025,
+          "value": 2378
+        },
+        {
+          "indicatorId": "ibge-state-real-income-per-capita",
+          "geographyType": "brazil-state",
+          "geographyCode": "50",
+          "geographyName": "Mato Grosso do Sul",
+          "year": 2025,
+          "value": 2304
+        },
+        {
+          "indicatorId": "ibge-state-real-income-per-capita",
+          "geographyType": "brazil-state",
+          "geographyCode": "31",
+          "geographyName": "Minas Gerais",
+          "year": 2025,
+          "value": 2259
+        },
+        {
+          "indicatorId": "ibge-state-real-income-per-capita",
+          "geographyType": "brazil-state",
+          "geographyCode": "32",
+          "geographyName": "Espírito Santo",
+          "year": 2025,
+          "value": 2229
+        },
+        {
+          "indicatorId": "ibge-state-real-income-per-capita",
+          "geographyType": "brazil-state",
+          "geographyCode": "17",
+          "geographyName": "Tocantins",
+          "year": 2025,
+          "value": 2061
+        },
+        {
+          "indicatorId": "ibge-state-real-income-per-capita",
+          "geographyType": "brazil-state",
+          "geographyCode": "11",
+          "geographyName": "Rondônia",
+          "year": 2025,
+          "value": 2020
+        },
+        {
+          "indicatorId": "ibge-state-real-income-per-capita",
+          "geographyType": "brazil-state",
+          "geographyCode": "14",
+          "geographyName": "Roraima",
+          "year": 2025,
+          "value": 1808
+        },
+        {
+          "indicatorId": "ibge-state-real-income-per-capita",
+          "geographyType": "brazil-state",
+          "geographyCode": "16",
+          "geographyName": "Amapá",
+          "year": 2025,
+          "value": 1769
+        },
+        {
+          "indicatorId": "ibge-state-real-income-per-capita",
+          "geographyType": "brazil-state",
+          "geographyCode": "24",
+          "geographyName": "Rio Grande do Norte",
+          "year": 2025,
+          "value": 1737
+        },
+        {
+          "indicatorId": "ibge-state-real-income-per-capita",
+          "geographyType": "brazil-state",
+          "geographyCode": "28",
+          "geographyName": "Sergipe",
+          "year": 2025,
+          "value": 1678
+        },
+        {
+          "indicatorId": "ibge-state-real-income-per-capita",
+          "geographyType": "brazil-state",
+          "geographyCode": "25",
+          "geographyName": "Paraíba",
+          "year": 2025,
+          "value": 1567
+        },
+        {
+          "indicatorId": "ibge-state-real-income-per-capita",
+          "geographyType": "brazil-state",
+          "geographyCode": "26",
+          "geographyName": "Pernambuco",
+          "year": 2025,
+          "value": 1548
+        },
+        {
+          "indicatorId": "ibge-state-real-income-per-capita",
+          "geographyType": "brazil-state",
+          "geographyCode": "22",
+          "geographyName": "Piauí",
+          "year": 2025,
+          "value": 1520
         }
       ]
     },

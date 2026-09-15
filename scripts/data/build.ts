@@ -363,6 +363,17 @@ const BRAZIL_STATE_GINI_INDICATOR: Omit<Indicator, 'latestYear'> = {
   direction: 'higher-worse',
 }
 
+const BRAZIL_STATE_INCOME_INDICATOR: Omit<Indicator, 'latestYear'> = {
+  id: 'ibge-state-real-income-per-capita',
+  name: 'Rendimento domiciliar per capita real',
+  themeId: 'poverty-inequality',
+  description: 'Rendimento médio mensal real domiciliar per capita, a preços médios do último ano, da PNAD Contínua anual.',
+  unit: 'R$',
+  geographyType: 'brazil-state',
+  sourceId: SIDRA_SOURCE_ID,
+  direction: 'higher-better',
+}
+
 const BRAZIL_IMMEDIATE_WATER_INDICATOR: Omit<Indicator, 'latestYear'> = {
   id: 'ibge-water-network-coverage',
   name: 'Domicílios com rede geral de água',
@@ -766,6 +777,21 @@ async function loadBrazilStateGiniIndicator() {
   return { indicator: { ...BRAZIL_STATE_GINI_INDICATOR, latestYear: 2022 } satisfies Indicator, series }
 }
 
+async function loadBrazilStateIncomeIndicator() {
+  const rows = await fetchJson<Array<Record<string, string>>>('https://apisidra.ibge.gov.br/values/t/7395/n3/all/v/4196/p/all?formato=json')
+  const grouped = new Map<string, Series>()
+  rows.slice(1).forEach((row) => {
+    const value = toNumber(row.V)
+    const year = Number(row.D3C)
+    if (!row.D1C || !row.D1N || value === null || !Number.isFinite(year)) return
+    const current = grouped.get(row.D1C) ?? { indicatorId: BRAZIL_STATE_INCOME_INDICATOR.id, geographyType: 'brazil-state' as const, geographyCode: row.D1C, geographyName: row.D1N, points: [] }
+    current.points.push({ year, value })
+    grouped.set(row.D1C, current)
+  })
+  const series = Array.from(grouped.values()).map((entry) => ({ ...entry, points: sortPoints(entry.points) }))
+  return { indicator: { ...BRAZIL_STATE_INCOME_INDICATOR, latestYear: Math.max(...series.flatMap((entry) => entry.points.map((point) => point.year))) } satisfies Indicator, series }
+}
+
 type IbgeAggregateResponse = Array<{
   resultados: Array<{
     series: Array<{ localidade: { id: string; nome: string }; serie: Record<string, string> }>
@@ -919,9 +945,10 @@ async function main() {
     loadNdGain(countriesByIso3),
     loadUnhcrIndicators(validCountryIso3),
   ])
-  const [brazilStates, brazilStateGini, immediateRegions, immediateSanitation] = await Promise.all([
+  const [brazilStates, brazilStateGini, brazilStateIncome, immediateRegions, immediateSanitation] = await Promise.all([
     loadBrazilStateIndicator(),
     loadBrazilStateGiniIndicator(),
+    loadBrazilStateIncomeIndicator(),
     loadBrazilImmediateRegionCoverage(BRAZIL_IMMEDIATE_WATER_INDICATOR, '6803', '1821%5B72144%5D'),
     loadBrazilImmediateRegionCoverage(BRAZIL_IMMEDIATE_SANITATION_INDICATOR, '6805', '11558%5B46290%5D'),
   ])
@@ -939,6 +966,7 @@ async function main() {
     ndGain.indicator,
     brazilStates.indicator,
     brazilStateGini.indicator,
+    brazilStateIncome.indicator,
     immediateRegions.indicator,
     immediateSanitation.indicator,
   ]
@@ -949,6 +977,7 @@ async function main() {
     ...ndGain.series,
     ...brazilStates.series,
     ...brazilStateGini.series,
+    ...brazilStateIncome.series,
     ...immediateRegions.series,
     ...immediateSanitation.series,
   ]
