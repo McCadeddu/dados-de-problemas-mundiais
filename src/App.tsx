@@ -24,7 +24,7 @@ import {
 import type { DashboardData } from './types'
 
 type GeoJson = GeoJSON.FeatureCollection
-type ViewMode = 'world' | 'states'
+type ViewMode = 'world' | 'states' | 'regions'
 
 function App() {
   const [data, setData] = useState<DashboardData | null>(null)
@@ -36,6 +36,7 @@ function App() {
   const [continent, setContinent] = useState('Todos')
   const [countryCode, setCountryCode] = useState('BRA')
   const [stateCode, setStateCode] = useState('35')
+  const [immediateRegionCode, setImmediateRegionCode] = useState('350001')
   const [comparisonStateCodes, setComparisonStateCodes] = useState(['35', '29', '15'])
 
   useEffect(() => {
@@ -61,6 +62,9 @@ function App() {
       : ''
   const indicator = data && indicatorId ? getIndicator(data, indicatorId) : undefined
   const brazilIndicator = data?.indicators.find((item) => item.geographyType === 'brazil-state')
+  const immediateRegionIndicator = data?.indicators.find(
+    (item) => item.geographyType === 'brazil-immediate-region',
+  )
   const selectedCountrySeries = data && indicator
     ? getSeriesForGeography(data, indicator.id, countryCode)
     : undefined
@@ -70,7 +74,7 @@ function App() {
   const countryLatest = data && indicator ? getLatestByIndicator(data, indicator.id, 'country') : []
   const brazilLatest = data && brazilIndicator
     ? getLatestByIndicator(data, brazilIndicator.id, 'brazil-state')
-    : []
+      : []
 
   const worldValueByCode = new Map(countryLatest.map((item) => [
     item.geographyCode,
@@ -81,14 +85,18 @@ function App() {
     { name: item.geographyName, value: item.value },
   ]))
 
-  if (!data || !worldGeo || !brazilGeo || !indicator || !brazilIndicator) {
+  if (!data || !worldGeo || !brazilGeo || !indicator || !brazilIndicator || !immediateRegionIndicator) {
     return <main className="shell"><p>Carregando painel e séries...</p></main>
   }
 
   const summary = getMetricSummary(data)
   const countryName = data.countries.find((country) => country.code === countryCode)?.name ?? countryCode
   const stateName = data.brazilStates.find((state) => state.code === stateCode)?.name ?? stateCode
-  const activeIndicator = view === 'world' ? indicator : brazilIndicator
+  const activeIndicator = view === 'world'
+    ? indicator
+    : view === 'states'
+      ? brazilIndicator
+      : immediateRegionIndicator
   const activeSource = data.sources.find((source) => source.id === activeIndicator.sourceId)
   const activeRanking = getTopRanked(data, activeIndicator.id, 10)
   const filteredCountries = continent === 'Todos'
@@ -105,6 +113,14 @@ function App() {
   const continentAverage = continentValues.length
     ? continentValues.reduce((total, item) => total + item.value, 0) / continentValues.length
     : null
+  const regionsForState = data.brazilImmediateRegions.filter((region) => region.stateCode === stateCode)
+  const selectedImmediateRegion = data.brazilImmediateRegions.find(
+    (region) => region.code === immediateRegionCode)
+  const selectedImmediateSeries = getSeriesForGeography(
+    data,
+    immediateRegionIndicator.id,
+    immediateRegionCode,
+  )
   const comparisonStates = data.brazilStates.filter((state) => comparisonStateCodes.includes(state.code))
   const comparisonLatest = brazilLatest.filter((item) => comparisonStateCodes.includes(item.geographyCode))
   const comparisonChartData = Array.from(
@@ -162,6 +178,10 @@ function App() {
           Estados
           <span>Visualizar as unidades federativas do Brasil</span>
         </button>
+        <button className={view === 'regions' ? 'is-active' : ''} onClick={() => setView('regions')}>
+          Regiões IBGE
+          <span>Comparar Regiões Geográficas Imediatas</span>
+        </button>
       </nav>
 
       {view === 'world' ? (
@@ -183,7 +203,7 @@ function App() {
           </section>
           <RankingPanel title={continent === 'Todos' ? 'Ranking global' : `Ranking: ${continent}`} description="10 países com os maiores valores para o indicador e recorte selecionados." ranking={worldRanking} unit={indicator.unit} color="#2563eb" tooltipFormatter={tooltipFormatter} />
         </>
-      ) : (
+      ) : view === 'states' ? (
         <>
           <section className="panel controls controls--states">
             <label>Estado do Brasil<select value={stateCode} onChange={(event) => setStateCode(event.target.value)}>{data.brazilStates.map((state) => <option key={state.code} value={state.code}>{state.name}</option>)}</select></label>
@@ -208,6 +228,23 @@ function App() {
             onRemove={removeComparisonState}
             tooltipFormatter={tooltipFormatter}
           />
+        </>
+      ) : (
+        <>
+          <section className="panel controls controls--regions">
+            <label>Estado do Brasil<select value={stateCode} onChange={(event) => { const nextState = event.target.value; setStateCode(nextState); setImmediateRegionCode(data.brazilImmediateRegions.find((region) => region.stateCode === nextState)?.code ?? '') }}>{data.brazilStates.map((state) => <option key={state.code} value={state.code}>{state.name}</option>)}</select></label>
+            <label>Região Geográfica Imediata<select value={immediateRegionCode} onChange={(event) => setImmediateRegionCode(event.target.value)}>{regionsForState.map((region) => <option key={region.code} value={region.code}>{region.name}</option>)}</select></label>
+            <p className="controls__context">Indicador regional: <strong>{immediateRegionIndicator.name}</strong>. Agregação municipal do Censo 2022/SIDRA pela divisão territorial do IBGE.</p>
+          </section>
+          <section className="content-grid content-grid--states">
+            <article className="panel region-callout"><span>UF selecionada</span><h3>{stateName}</h3><p>{regionsForState.length} Regiões Geográficas Imediatas disponíveis para análise.</p></article>
+            <article className="panel">
+              <div className="panel__header"><div><h3>{selectedImmediateRegion?.name ?? 'Selecione uma região'}</h3><p>{immediateRegionIndicator.description}</p></div><strong className="badge">{immediateRegionIndicator.latestYear}</strong></div>
+              <div className="chart"><ResponsiveContainer width="100%" height={300}><LineChart data={selectedImmediateSeries?.points ?? []}><CartesianGrid stroke="#334155" strokeDasharray="4 4" /><XAxis dataKey="year" stroke="#a8b8cc" /><YAxis stroke="#a8b8cc" /><Tooltip formatter={tooltipFormatter(immediateRegionIndicator.unit)} /><Line type="monotone" dataKey="value" stroke="#a78bfa" strokeWidth={3} dot /></LineChart></ResponsiveContainer></div>
+              <p className="meta">Fonte: <a href={activeSource?.url}>{activeSource?.name}</a> • Atualização conhecida: {activeSource?.lastUpdated}</p>
+            </article>
+          </section>
+          <RankingPanel title="Ranking entre Regiões Imediatas" description="20 regiões brasileiras para o indicador regional do IBGE." ranking={activeRanking} unit={immediateRegionIndicator.unit} color="#8b5cf6" tooltipFormatter={tooltipFormatter} />
         </>
       )}
 
