@@ -38,7 +38,9 @@ function App() {
   const [stateCode, setStateCode] = useState('35')
   const [immediateRegionCode, setImmediateRegionCode] = useState('350001')
   const [immediateIndicatorId, setImmediateIndicatorId] = useState('ibge-water-network-coverage')
+  const [comparisonCountryCodes, setComparisonCountryCodes] = useState(['BRA', 'IND', 'ZAF'])
   const [comparisonStateCodes, setComparisonStateCodes] = useState(['35', '29', '15'])
+  const [comparisonImmediateRegionCodes, setComparisonImmediateRegionCodes] = useState(['350019', '350048', '350024'])
 
   useEffect(() => {
     const dataBaseUrl = import.meta.env.BASE_URL
@@ -126,28 +128,15 @@ function App() {
   )
   const comparisonStates = data.brazilStates.filter((state) => comparisonStateCodes.includes(state.code))
   const comparisonLatest = brazilLatest.filter((item) => comparisonStateCodes.includes(item.geographyCode))
-  const comparisonChartData = Array.from(
-    new Set(comparisonStates.flatMap((state) => (
-      getSeriesForGeography(data, brazilIndicator.id, state.code)?.points.map((point) => point.year) ?? []
-    ))),
-  ).sort((a, b) => a - b).map((year) => {
-    const row: Record<string, number | string> = { year }
-    comparisonStates.forEach((state) => {
-      const point = getSeriesForGeography(data, brazilIndicator.id, state.code)?.points.find(
-        (item) => item.year === year,
-      )
-      if (point) row[state.code] = point.value
-    })
-    return row
-  })
-  const addComparisonState = (code: string) => {
-    if (!code || comparisonStateCodes.includes(code) || comparisonStateCodes.length >= 5) return
-    setComparisonStateCodes((current) => [...current, code])
-  }
-  const removeComparisonState = (code: string) => {
-    if (comparisonStateCodes.length <= 2) return
-    setComparisonStateCodes((current) => current.filter((item) => item !== code))
-  }
+  const comparisonChartData = buildComparisonChartData(data, brazilIndicator.id, comparisonStates)
+  const comparisonCountries = filteredCountries.filter((country) => comparisonCountryCodes.includes(country.code))
+  const comparisonCountryLatest = countryLatest.filter((item) => comparisonCountryCodes.includes(item.geographyCode))
+  const comparisonCountryChartData = buildComparisonChartData(data, indicator.id, comparisonCountries)
+  const comparisonImmediateRegions = regionsForState.filter((region) => comparisonImmediateRegionCodes.includes(region.code))
+  const comparisonImmediateLatest = getLatestByIndicator(data, immediateRegionIndicator.id, 'brazil-immediate-region').filter(
+    (item) => comparisonImmediateRegionCodes.includes(item.geographyCode),
+  )
+  const comparisonImmediateChartData = buildComparisonChartData(data, immediateRegionIndicator.id, comparisonImmediateRegions)
   const tooltipFormatter = (unit: string) => (value: unknown) => {
     if (Array.isArray(value)) return String(value[0] ?? '')
     return formatValue(Number(value ?? 0), unit)
@@ -192,7 +181,7 @@ function App() {
           <section className="panel controls controls--world">
             <label>Tema<select value={themeId} onChange={(event) => setThemeId(event.target.value)}>{data.themes.map((theme) => <option key={theme.id} value={theme.id}>{theme.name}</option>)}</select></label>
             <label>Indicador<select value={indicatorId} onChange={(event) => setSelectedIndicatorId(event.target.value)}>{themeIndicators.map((item) => <option key={item.id} value={item.id}>{item.name}</option>)}</select></label>
-            <label>Continente<select value={continent} onChange={(event) => { const nextContinent = event.target.value; setContinent(nextContinent); setCountryCode(nextContinent === 'Todos' ? 'BRA' : data.countries.find((country) => country.continent === nextContinent)?.code ?? '') }}><option value="Todos">Mundo inteiro</option>{data.continents.map((item) => <option key={item} value={item}>{item}</option>)}</select></label>
+            <label>Continente<select value={continent} onChange={(event) => { const nextContinent = event.target.value; const nextCountries = nextContinent === 'Todos' ? data.countries : data.countries.filter((country) => country.continent === nextContinent); setContinent(nextContinent); setCountryCode(nextCountries[0]?.code ?? ''); setComparisonCountryCodes(nextCountries.slice(0, 3).map((country) => country.code)) }}><option value="Todos">Mundo inteiro</option>{data.continents.map((item) => <option key={item} value={item}>{item}</option>)}</select></label>
             <label>País<select value={countryCode} onChange={(event) => setCountryCode(event.target.value)}>{filteredCountries.map((country) => <option key={country.code} value={country.code}>{country.name}</option>)}</select></label>
           </section>
 
@@ -205,6 +194,19 @@ function App() {
             </article>
           </section>
           <RankingPanel title={continent === 'Todos' ? 'Ranking global' : `Ranking: ${continent}`} description="10 países com os maiores valores para o indicador e recorte selecionados." ranking={worldRanking} unit={indicator.unit} color="#2563eb" tooltipFormatter={tooltipFormatter} />
+          <TerritoryComparisonPanel
+            title="Comparar países"
+            description="Selecione de 2 a 5 países do recorte atual para confrontar séries históricas e o último valor disponível."
+            territories={filteredCountries}
+            selectedCodes={comparisonCountryCodes.filter((code) => filteredCountries.some((country) => country.code === code))}
+            latestValues={comparisonCountryLatest}
+            chartData={comparisonCountryChartData}
+            unit={indicator.unit}
+            color="#2563eb"
+            onAdd={(code) => setComparisonCountryCodes((current) => addToComparison(current, code))}
+            onRemove={(code) => setComparisonCountryCodes((current) => removeFromComparison(current, code))}
+            tooltipFormatter={tooltipFormatter}
+          />
         </>
       ) : view === 'states' ? (
         <>
@@ -221,21 +223,24 @@ function App() {
             </article>
           </section>
           <RankingPanel title="Ranking entre estados" description="10 UFs com os maiores valores no indicador estadual disponível." ranking={activeRanking} unit={brazilIndicator.unit} color="#b45309" tooltipFormatter={tooltipFormatter} />
-          <StateComparisonPanel
-            states={data.brazilStates}
+          <TerritoryComparisonPanel
+            title="Comparar estados"
+            description="Selecione de 2 a 5 UFs para comparar a evolução e o valor mais recente do indicador."
+            territories={data.brazilStates}
             selectedCodes={comparisonStateCodes}
             latestValues={comparisonLatest}
             chartData={comparisonChartData}
             unit={brazilIndicator.unit}
-            onAdd={addComparisonState}
-            onRemove={removeComparisonState}
+            color="#f59e0b"
+            onAdd={(code) => setComparisonStateCodes((current) => addToComparison(current, code))}
+            onRemove={(code) => setComparisonStateCodes((current) => removeFromComparison(current, code))}
             tooltipFormatter={tooltipFormatter}
           />
         </>
       ) : (
         <>
           <section className="panel controls controls--regions">
-            <label>Estado do Brasil<select value={stateCode} onChange={(event) => { const nextState = event.target.value; setStateCode(nextState); setImmediateRegionCode(data.brazilImmediateRegions.find((region) => region.stateCode === nextState)?.code ?? '') }}>{data.brazilStates.map((state) => <option key={state.code} value={state.code}>{state.name}</option>)}</select></label>
+            <label>Estado do Brasil<select value={stateCode} onChange={(event) => { const nextState = event.target.value; const nextRegions = data.brazilImmediateRegions.filter((region) => region.stateCode === nextState); setStateCode(nextState); setImmediateRegionCode(nextRegions[0]?.code ?? ''); setComparisonImmediateRegionCodes(nextRegions.slice(0, 3).map((region) => region.code)) }}>{data.brazilStates.map((state) => <option key={state.code} value={state.code}>{state.name}</option>)}</select></label>
             <label>Indicador regional<select value={immediateRegionIndicator.id} onChange={(event) => setImmediateIndicatorId(event.target.value)}>{immediateIndicators.map((item) => <option key={item.id} value={item.id}>{item.name}</option>)}</select></label>
             <label>Região Geográfica Imediata<select value={immediateRegionCode} onChange={(event) => setImmediateRegionCode(event.target.value)}>{regionsForState.map((region) => <option key={region.code} value={region.code}>{region.name}</option>)}</select></label>
             <p className="controls__context">Indicador regional: <strong>{immediateRegionIndicator.name}</strong>. Agregação municipal do Censo 2022/SIDRA pela divisão territorial do IBGE.</p>
@@ -249,6 +254,19 @@ function App() {
             </article>
           </section>
           <RankingPanel title="Ranking entre Regiões Imediatas" description="20 regiões brasileiras para o indicador regional do IBGE." ranking={activeRanking} unit={immediateRegionIndicator.unit} color="#8b5cf6" tooltipFormatter={tooltipFormatter} />
+          <TerritoryComparisonPanel
+            title="Comparar regiões imediatas"
+            description="Confronte até cinco regiões geográficas imediatas da UF selecionada."
+            territories={regionsForState}
+            selectedCodes={comparisonImmediateRegionCodes}
+            latestValues={comparisonImmediateLatest}
+            chartData={comparisonImmediateChartData}
+            unit={immediateRegionIndicator.unit}
+            color="#8b5cf6"
+            onAdd={(code) => setComparisonImmediateRegionCodes((current) => addToComparison(current, code))}
+            onRemove={(code) => setComparisonImmediateRegionCodes((current) => removeFromComparison(current, code))}
+            tooltipFormatter={tooltipFormatter}
+          />
         </>
       )}
 
@@ -273,12 +291,15 @@ function RankingPanel({ title, description, ranking, unit, color, tooltipFormatt
   return <section className="panel ranking-panel"><div className="panel__header"><div><h3>{title}</h3><p>{description}</p></div></div><div className="chart"><ResponsiveContainer width="100%" height={340}><BarChart data={[...ranking].reverse()}><CartesianGrid stroke="#334155" strokeDasharray="4 4" /><XAxis type="number" stroke="#a8b8cc" /><YAxis type="category" dataKey="geographyName" width={140} stroke="#a8b8cc" /><Tooltip formatter={tooltipFormatter(unit)} /><Bar dataKey="value" fill={color} radius={[0, 6, 6, 0]} /></BarChart></ResponsiveContainer></div></section>
 }
 
-type StateComparisonPanelProps = {
-  states: DashboardData['brazilStates']
+type TerritoryComparisonPanelProps = {
+  title: string
+  description: string
+  territories: Array<{ code: string; name: string }>
   selectedCodes: string[]
   latestValues: DashboardData['latest']
   chartData: Array<Record<string, number | string>>
   unit: string
+  color: string
   onAdd: (code: string) => void
   onRemove: (code: string) => void
   tooltipFormatter: (unit: string) => (value: unknown) => string
@@ -286,23 +307,53 @@ type StateComparisonPanelProps = {
 
 const COMPARISON_COLORS = ['#b45309', '#0f766e', '#2563eb', '#9333ea', '#be123c']
 
-function StateComparisonPanel({ states, selectedCodes, latestValues, chartData, unit, onAdd, onRemove, tooltipFormatter }: StateComparisonPanelProps) {
-  const selectedStates = states.filter((state) => selectedCodes.includes(state.code))
+function addToComparison(current: string[], code: string) {
+  if (!code || current.includes(code) || current.length >= 5) return current
+  return [...current, code]
+}
+
+function removeFromComparison(current: string[], code: string) {
+  return current.length <= 2 ? current : current.filter((item) => item !== code)
+}
+
+function buildComparisonChartData(
+  data: DashboardData,
+  indicatorId: string,
+  territories: Array<{ code: string }>,
+) {
+  const pointsByCode = new Map(territories.map((territory) => [
+    territory.code,
+    getSeriesForGeography(data, indicatorId, territory.code)?.points ?? [],
+  ]))
+  const years = new Set(Array.from(pointsByCode.values()).flatMap((points) => points.map((point) => point.year)))
+
+  return [...years].sort((a, b) => a - b).map((year) => {
+    const row: Record<string, number | string> = { year }
+    pointsByCode.forEach((points, code) => {
+      const point = points.find((item) => item.year === year)
+      if (point) row[code] = point.value
+    })
+    return row
+  })
+}
+
+function TerritoryComparisonPanel({ title, description, territories, selectedCodes, latestValues, chartData, unit, color, onAdd, onRemove, tooltipFormatter }: TerritoryComparisonPanelProps) {
+  const selectedTerritories = territories.filter((territory) => selectedCodes.includes(territory.code))
   const latestByCode = new Map(latestValues.map((item) => [item.geographyCode, item]))
   return <section className="panel comparison-panel">
-    <div className="panel__header"><div><h3>Comparar estados</h3><p>Selecione de 2 a 5 UFs para comparar a evolução e o valor mais recente do indicador.</p></div></div>
+    <div className="panel__header"><div><h3>{title}</h3><p>{description}</p></div></div>
     <div className="comparison-controls">
       <select aria-label="Adicionar estado à comparação" defaultValue="" onChange={(event) => { onAdd(event.target.value); event.target.value = '' }}>
         <option value="">Adicionar estado</option>
-        {states.filter((state) => !selectedCodes.includes(state.code)).map((state) => <option key={state.code} value={state.code}>{state.name}</option>)}
+        {territories.filter((territory) => !selectedCodes.includes(territory.code)).map((territory) => <option key={territory.code} value={territory.code}>{territory.name}</option>)}
       </select>
       <div className="comparison-chips">
-        {selectedStates.map((state, index) => <button key={state.code} className="comparison-chip" style={{ '--chip-color': COMPARISON_COLORS[index] } as CSSProperties} onClick={() => onRemove(state.code)} title="Remover da comparação">{state.name} <span>×</span></button>)}
+        {selectedTerritories.map((territory, index) => <button key={territory.code} className="comparison-chip" style={{ '--chip-color': COMPARISON_COLORS[index] } as CSSProperties} onClick={() => onRemove(territory.code)} title="Remover da comparação">{territory.name} <span>×</span></button>)}
       </div>
     </div>
     <div className="comparison-grid">
-      <div className="chart"><h4>Evolução histórica</h4><ResponsiveContainer width="100%" height={300}><LineChart data={chartData}><CartesianGrid stroke="#cbd5e1" strokeDasharray="4 4" /><XAxis dataKey="year" /><YAxis /><Tooltip formatter={tooltipFormatter(unit)} />{selectedStates.map((state, index) => <Line key={state.code} type="monotone" dataKey={state.code} name={state.name} stroke={COMPARISON_COLORS[index]} strokeWidth={3} dot={false} />)}</LineChart></ResponsiveContainer></div>
-      <div className="chart"><h4>Último valor disponível</h4><ResponsiveContainer width="100%" height={300}><BarChart data={selectedStates.map((state) => ({ name: state.name, value: latestByCode.get(state.code)?.value ?? 0 }))}><CartesianGrid stroke="#cbd5e1" strokeDasharray="4 4" /><XAxis dataKey="name" interval={0} angle={-25} textAnchor="end" height={70} /><YAxis /><Tooltip formatter={tooltipFormatter(unit)} /><Bar dataKey="value" fill="#b45309" radius={[6, 6, 0, 0]} /></BarChart></ResponsiveContainer></div>
+      <div className="chart"><h4>Evolução histórica</h4><ResponsiveContainer width="100%" height={300}><LineChart data={chartData}><CartesianGrid stroke="#334155" strokeDasharray="4 4" /><XAxis dataKey="year" stroke="#a8b8cc" /><YAxis stroke="#a8b8cc" /><Tooltip formatter={tooltipFormatter(unit)} />{selectedTerritories.map((territory, index) => <Line key={territory.code} type="monotone" dataKey={territory.code} name={territory.name} stroke={COMPARISON_COLORS[index]} strokeWidth={3} dot={false} />)}</LineChart></ResponsiveContainer></div>
+      <div className="chart"><h4>Último valor disponível</h4><ResponsiveContainer width="100%" height={300}><BarChart data={selectedTerritories.map((territory) => ({ name: territory.name, value: latestByCode.get(territory.code)?.value ?? 0 }))}><CartesianGrid stroke="#334155" strokeDasharray="4 4" /><XAxis dataKey="name" interval={0} angle={-25} textAnchor="end" height={70} stroke="#a8b8cc" /><YAxis stroke="#a8b8cc" /><Tooltip formatter={tooltipFormatter(unit)} /><Bar dataKey="value" fill={color} radius={[6, 6, 0, 0]} /></BarChart></ResponsiveContainer></div>
     </div>
   </section>
 }

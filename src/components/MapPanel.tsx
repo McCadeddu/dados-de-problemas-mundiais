@@ -1,6 +1,6 @@
 import { geoMercator, geoPath, geoProjection } from 'd3-geo'
 import { scaleQuantize } from 'd3-scale'
-import { useMemo } from 'react'
+import { useMemo, useState } from 'react'
 import type { FeatureCollection } from 'geojson'
 
 type MapPanelProps = {
@@ -49,6 +49,7 @@ export function MapPanel({
   width = 760,
   height = 420,
 }: MapPanelProps) {
+  const [hoveredCode, setHoveredCode] = useState<string | null>(null)
   const mapProjection = useMemo(() => {
     const next = projectionKind === 'peters' ? geoProjection(petersRaw) : geoMercator()
     next.fitSize([width, height], geography)
@@ -69,6 +70,7 @@ export function MapPanel({
   const legendValues = [0, 0.25, 0.5, 0.75, 1].map(
     (step) => scaleMin + (scaleMax - scaleMin) * step,
   )
+  const hoveredMetric = hoveredCode ? valueByCode.get(hoveredCode) : undefined
 
   return (
     <section className="panel">
@@ -103,12 +105,26 @@ export function MapPanel({
               stroke={code === selectedCode ? '#fbbf24' : '#64748b'}
               strokeWidth={code === selectedCode ? 2 : 0.5}
               onClick={() => onSelect(code)}
+              onMouseEnter={() => setHoveredCode(code)}
+              onMouseLeave={() => setHoveredCode(null)}
+              onFocus={() => setHoveredCode(code)}
+              onBlur={() => setHoveredCode(null)}
+              onKeyDown={(event) => {
+                if (event.key === 'Enter' || event.key === ' ') onSelect(code)
+              }}
+              role="button"
+              tabIndex={0}
             >
               <title>{metric ? `${name}: ${metric.value.toFixed(1)}` : `${name}: sem dado`}</title>
             </path>
           )
         })}
       </svg>
+      <p className="map__hover" aria-live="polite">
+        {hoveredCode
+          ? `${hoveredMetric?.name ?? 'Área sem identificação'}: ${hoveredMetric ? formatValue(hoveredMetric.value) : 'sem dado disponível'}`
+          : 'Passe o cursor pelo mapa para consultar um território.'}
+      </p>
       <div className="map__legend" aria-label="Escala de valores no mapa">
         <span>Sem dado</span>
         <div className="map__legend-scale">

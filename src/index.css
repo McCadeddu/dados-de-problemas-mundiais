@@ -324,6 +324,23 @@ select {
   opacity: 0.82;
 }
 
+.map__feature:focus {
+  outline: none;
+  stroke: #fbbf24;
+  stroke-width: 2;
+}
+
+.map__hover {
+  min-height: 2.5rem;
+  margin: 0.75rem 0 0;
+  padding: 0.55rem 0.75rem;
+  border-left: 3px solid #2dd4bf;
+  border-radius: 0 10px 10px 0;
+  background: rgba(45, 212, 191, 0.09);
+  color: #d7fdf8;
+  font-size: 0.88rem;
+}
+
 .map__legend {
   display: grid;
   grid-template-columns: auto 1fr auto auto;
