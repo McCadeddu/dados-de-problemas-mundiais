@@ -52,6 +52,7 @@ function App() {
   const [continent, setContinent] = useState(() => initialValue('continente', 'Todos'))
   const [countryCode, setCountryCode] = useState(() => initialValue('pais', 'BRA'))
   const [stateCode, setStateCode] = useState(() => initialValue('uf', '35'))
+  const [stateIndicatorId, setStateIndicatorId] = useState(() => initialValue('indicadorEstadual', 'sidra-bolsa-familia'))
   const [immediateRegionCode, setImmediateRegionCode] = useState(() => initialValue('regiao', '350001'))
   const [immediateIndicatorId, setImmediateIndicatorId] = useState(() => initialValue('indicadorRegional', 'ibge-water-network-coverage'))
   const [comparisonCountryCodes, setComparisonCountryCodes] = useState(() => initialCodes('compararPaises', ['BRA', 'IND', 'ZAF']))
@@ -81,6 +82,7 @@ function App() {
       continente: continent,
       pais: countryCode,
       uf: stateCode,
+      indicadorEstadual: stateIndicatorId,
       regiao: immediateRegionCode,
       indicadorRegional: immediateIndicatorId,
       compararPaises: comparisonCountryCodes.join(','),
@@ -89,7 +91,7 @@ function App() {
       compararRegioes: comparisonImmediateRegionCodes.join(','),
     })
     window.history.replaceState(null, '', `${window.location.pathname}?${params.toString()}`)
-  }, [comparisonContinentCodes, comparisonCountryCodes, comparisonImmediateRegionCodes, comparisonStateCodes, continent, countryCode, immediateIndicatorId, immediateRegionCode, selectedIndicatorId, stateCode, themeId, view])
+  }, [comparisonContinentCodes, comparisonCountryCodes, comparisonImmediateRegionCodes, comparisonStateCodes, continent, countryCode, immediateIndicatorId, immediateRegionCode, selectedIndicatorId, stateCode, stateIndicatorId, themeId, view])
 
   const copyShareLink = async () => {
     await navigator.clipboard.writeText(window.location.href)
@@ -106,7 +108,8 @@ function App() {
       ? getDefaultIndicator(data, themeId)?.id ?? ''
       : ''
   const indicator = data && indicatorId ? getIndicator(data, indicatorId) : undefined
-  const brazilIndicator = data?.indicators.find((item) => item.geographyType === 'brazil-state')
+  const brazilIndicators = data?.indicators.filter((item) => item.geographyType === 'brazil-state') ?? []
+  const brazilIndicator = brazilIndicators.find((item) => item.id === stateIndicatorId) ?? brazilIndicators[0]
   const immediateIndicators = data?.indicators.filter(
     (item) => item.geographyType === 'brazil-immediate-region',
   ) ?? []
@@ -318,7 +321,8 @@ function App() {
         <>
           <section className="panel controls controls--states">
             <label>Estado do Brasil<select value={stateCode} onChange={(event) => setStateCode(event.target.value)}>{data.brazilStates.map((state) => <option key={state.code} value={state.code}>{state.name}</option>)}</select></label>
-            <p className="controls__context">Indicador estadual disponível: <strong>{brazilIndicator.name}</strong>. Novas tabelas do IBGE podem ser adicionadas pelo conector de dados.</p>
+            <label>Indicador estadual<select value={brazilIndicator.id} onChange={(event) => setStateIndicatorId(event.target.value)}>{brazilIndicators.map((item) => <option key={item.id} value={item.id}>{item.name}</option>)}</select></label>
+            <p className="controls__context">Indicador estadual selecionado: <strong>{brazilIndicator.name}</strong>. Novas tabelas do IBGE podem ser adicionadas pelo conector de dados.</p>
           </section>
           <section className="content-grid content-grid--states">
             <MapPanel title="Mapa dos estados brasileiros" subtitle={`${brazilIndicator.name} • clique para selecionar uma UF`} geography={brazilGeo} valueByCode={brazilValueByCode} codeKeys={['sidra_code', 'iso_3166_2', 'postal']} onSelect={setStateCode} selectedCode={stateCode} formatValue={(value) => formatValue(value, brazilIndicator.unit)} />

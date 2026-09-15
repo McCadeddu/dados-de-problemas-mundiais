@@ -197,7 +197,7 @@ select {
 }
 
 .controls--states {
-  grid-template-columns: minmax(240px, 0.7fr) 2fr;
+  grid-template-columns: minmax(200px, 0.65fr) minmax(260px, 0.9fr) 1.7fr;
   align-items: end;
 }
 
