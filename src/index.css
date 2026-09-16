@@ -404,6 +404,12 @@ select {
   margin-bottom: 1.5rem;
 }
 
+.map__legend-caption {
+  margin: 0.7rem 0 0;
+  color: #cbd5e1;
+  font-size: 0.86rem;
+}
+
 .comparison-controls {
   display: grid;
   grid-template-columns: minmax(190px, 0.4fr) 1fr;
