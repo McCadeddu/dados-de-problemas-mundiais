@@ -439,6 +439,39 @@ select {
   color: #a8b8cc;
 }
 
+.source-status {
+  margin-bottom: 1.5rem;
+}
+
+.source-status__grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 0.75rem;
+}
+
+.source-status__item {
+  display: grid;
+  gap: 0.35rem;
+  padding: 0.85rem;
+  border: 1px solid rgba(148, 163, 184, 0.2);
+  border-radius: 14px;
+  background: rgba(11, 23, 40, 0.56);
+}
+
+.source-status__item span {
+  color: #5eead4;
+  font-size: 0.76rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.source-status__item p {
+  margin: 0;
+  color: #a8b8cc;
+  font-size: 0.85rem;
+}
+
 .indicator-meaning,
 .ranking-meaning {
   font-weight: 700;
@@ -600,7 +633,8 @@ select {
   .content-grid,
   .sources,
   .controls,
-  .theme-picker__options {
+  .theme-picker__options,
+  .source-status__grid {
     grid-template-columns: 1fr;
   }
 

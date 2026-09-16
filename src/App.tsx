@@ -405,6 +405,10 @@ function App() {
         <article className="panel"><div className="panel__header"><div><h3>Arquitetura pronta para crescer</h3><p>Coleta, processamento e visualização permanecem separados.</p></div></div><ul className="stack-list"><li><strong>Coleta:</strong> conectores por fonte em `scripts/data`.</li><li><strong>Processamento:</strong> schema único para séries, rankings e metadados.</li><li><strong>Frontend:</strong> dados estáticos em `public/data`, sem dependência direta das APIs.</li></ul></article>
         <article className="panel"><div className="panel__header"><div><h3>Fonte e metodologia da visão</h3><p>Dados e critérios do indicador atualmente selecionado.</p></div></div><div className="source-summary"><strong>{activeSource?.name}</strong><p><a href={activeSource?.url}>fonte</a> • <a href={activeSource?.methodologyUrl}>metodologia</a></p><p>Licença: {activeSource?.license} • Atualização da fonte: {activeSource?.lastUpdated}</p><p className={`indicator-meaning indicator-meaning--${activeIndicator.direction}`}>{directionLabel}</p><p>Cobertura: {activeLatest.length} de {activeCoverageTotal} {activeTerritoryLabel} com último dado disponível. Ano mais recente do indicador: {activeIndicator.latestYear}.</p><p>Arquivo do painel gerado em: {new Date(data.generatedAt).toLocaleString('pt-BR')}.</p></div></article>
       </section>
+      <section className="panel source-status">
+        <div className="panel__header"><div><h3>Status das fontes</h3><p>Fontes incluídas no último processamento bem-sucedido, em {new Date(data.generatedAt).toLocaleString('pt-BR')}.</p></div><strong className="badge">{data.sources.length} fontes</strong></div>
+        <div className="source-status__grid">{data.sources.map((source) => <article key={source.id} className="source-status__item"><span>Incluída</span><strong>{source.name}</strong><p>Referência: {source.lastUpdated}</p><a href={source.url}>Abrir fonte</a></article>)}</div>
+      </section>
     </main>
   )
 }
