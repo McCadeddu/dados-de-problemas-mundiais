@@ -663,53 +663,77 @@ async function loadNdGain(countriesByIso3: Map<string, string>) {
   await writeFile(path.join(RAW_DIR, 'ndgain_countryindex_2026.zip'), zipBuffer)
 
   const zip = new AdmZip(zipBuffer)
-  const gainEntry = zip
-    .getEntries()
-    .find((entry) => entry.entryName.endsWith('resources 2/gain/gain.csv'))
+  const datasetDefinitions = [
+    {
+      id: 'nd-gain-index',
+      entryName: 'resources 2/gain/gain.csv',
+      name: 'ND-GAIN',
+      description: 'Índice composto de vulnerabilidade climática e prontidão para adaptação.',
+      direction: 'higher-better' as const,
+    },
+    {
+      id: 'nd-gain-vulnerability',
+      entryName: 'resources 2/vulnerability/vulnerability.csv',
+      name: 'Vulnerabilidade climática',
+      description: 'Exposição, sensibilidade e capacidade adaptativa frente aos impactos climáticos. Menor pontuação é melhor.',
+      direction: 'higher-worse' as const,
+    },
+    {
+      id: 'nd-gain-readiness',
+      entryName: 'resources 2/readiness/readiness.csv',
+      name: 'Prontidão para adaptação',
+      description: 'Capacidade econômica, de governança e social para transformar investimentos em ações de adaptação.',
+      direction: 'higher-better' as const,
+    },
+  ]
 
-  if (!gainEntry) {
-    throw new Error('ND-GAIN gain.csv not found')
-  }
-
-  const rows = parseCsv<Record<string, string>>(gainEntry.getData().toString('utf-8'))
-  const series: Series[] = []
-
-  for (const row of rows) {
-    const iso3 = row.ISO3?.toUpperCase()
-    if (!iso3 || !countriesByIso3.has(iso3)) {
-      continue
+  const results = datasetDefinitions.map((definition) => {
+    const entry = zip.getEntries().find((candidate) => candidate.entryName.endsWith(definition.entryName))
+    if (!entry) {
+      throw new Error(`ND-GAIN ${definition.entryName} not found`)
     }
 
-    const points = Object.entries(row)
-      .filter(([key]) => /^\d{4}$/.test(key))
-      .map(([year, value]) => ({ year: Number(year), value: toNumber(value) }))
-      .filter((point): point is DataPoint => point.value !== null)
+    const series: Series[] = []
+    const rows = parseCsv<Record<string, string>>(entry.getData().toString('utf-8'))
+    for (const row of rows) {
+      const iso3 = row.ISO3?.toUpperCase()
+      if (!iso3 || !countriesByIso3.has(iso3)) {
+        continue
+      }
 
-    if (points.length === 0) {
-      continue
+      const points = Object.entries(row)
+        .filter(([key]) => /^\d{4}$/.test(key))
+        .map(([year, value]) => ({ year: Number(year), value: toNumber(value) }))
+        .filter((point): point is DataPoint => point.value !== null)
+
+      if (points.length > 0) {
+        series.push({
+          indicatorId: definition.id,
+          geographyType: 'country',
+          geographyCode: iso3,
+          geographyName: countriesByIso3.get(iso3) ?? row.Name,
+          points: sortPoints(points),
+        })
+      }
     }
 
-    series.push({
-      indicatorId: 'nd-gain-index',
-      geographyType: 'country',
-      geographyCode: iso3,
-      geographyName: countriesByIso3.get(iso3) ?? row.Name,
-      points: sortPoints(points),
-    })
-  }
+    return {
+      indicator: {
+        id: definition.id,
+        name: definition.name,
+        themeId: 'climate-vulnerability',
+        description: definition.description,
+        unit: 'score',
+        geographyType: 'country',
+        sourceId: ND_GAIN_SOURCE_ID,
+        direction: definition.direction,
+        latestYear: 2024,
+      } satisfies Indicator,
+      series,
+    }
+  })
 
   return {
-    indicator: {
-      id: 'nd-gain-index',
-      name: 'ND-GAIN',
-      themeId: 'climate-vulnerability',
-      description: 'Índice composto de vulnerabilidade climática e prontidão para adaptação.',
-      unit: 'score',
-      geographyType: 'country',
-      sourceId: ND_GAIN_SOURCE_ID,
-      direction: 'higher-better',
-      latestYear: 2024,
-    } satisfies Indicator,
     source: {
       id: ND_GAIN_SOURCE_ID,
       name: 'Notre Dame Global Adaptation Initiative',
@@ -718,7 +742,7 @@ async function loadNdGain(countriesByIso3: Map<string, string>) {
       license: 'Creative Commons open license',
       lastUpdated: '2026-07-15',
     } satisfies Source,
-    series,
+    results,
   }
 }
 
@@ -945,7 +969,7 @@ async function main() {
     ...worldBankResults.map((result) => result.indicator),
     ...worldBankGapResults.map((result) => result.indicator),
     ...unhcr.results.map((result) => result.indicator),
-    ndGain.indicator,
+    ...ndGain.results.map((result) => result.indicator),
     brazilStates.indicator,
     brazilStateGini.indicator,
     brazilStateIncome.indicator,
@@ -956,7 +980,7 @@ async function main() {
     ...worldBankResults.flatMap((result) => result.series),
     ...worldBankGapResults.flatMap((result) => result.series),
     ...unhcr.results.flatMap((result) => result.series),
-    ...ndGain.series,
+    ...ndGain.results.flatMap((result) => result.series),
     ...brazilStates.series,
     ...brazilStateGini.series,
     ...brazilStateIncome.series,
