@@ -47,6 +47,9 @@ export function formatValue(value: number, unit: string) {
   if (unit === 'p.p.') {
     return `${value.toFixed(1)} p.p.`
   }
+  if (unit === 'índice 0-1') {
+    return value.toFixed(3)
+  }
   if (unit === 'mil pessoas') {
     return `${value.toLocaleString('pt-BR', { maximumFractionDigits: 0 })} mil`
   }

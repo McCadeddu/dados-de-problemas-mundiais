@@ -51,6 +51,10 @@ describe('dashboard helpers', () => {
     expect(formatValue(12.34, 'p.p.')).toBe('12.3 p.p.')
   })
 
+  it('preserves precision for zero-to-one indexes', () => {
+    expect(formatValue(0.489, 'índice 0-1')).toBe('0.489')
+  })
+
   it('returns ranking slices', () => {
     expect(getTopRanked(fixture, 'a', 1)[0]?.geographyCode).toBe('ARG')
   })

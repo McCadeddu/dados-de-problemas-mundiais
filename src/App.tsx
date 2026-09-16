@@ -44,6 +44,8 @@ function initialCodes(key: string, fallback: string[]) {
 
 function App() {
   const [data, setData] = useState<DashboardData | null>(null)
+  const [loadError, setLoadError] = useState<string | null>(null)
+  const [loadAttempt, setLoadAttempt] = useState(0)
   const [worldGeo, setWorldGeo] = useState<GeoJson | null>(null)
   const [brazilGeo, setBrazilGeo] = useState<GeoJson | null>(null)
   const [view, setView] = useState<ViewMode>(initialView)
@@ -63,16 +65,21 @@ function App() {
 
   useEffect(() => {
     const dataBaseUrl = import.meta.env.BASE_URL
+    const loadJson = async <T,>(url: string) => {
+      const response = await fetch(url)
+      if (!response.ok) throw new Error(`Não foi possível carregar ${url}.`)
+      return response.json() as Promise<T>
+    }
     Promise.all([
-      fetch(`${dataBaseUrl}data/mundialidade.json`).then((response) => response.json() as Promise<DashboardData>),
-      fetch(`${dataBaseUrl}data/geo/world.geojson`).then((response) => response.json() as Promise<GeoJson>),
-      fetch(`${dataBaseUrl}data/geo/brazil-states.geojson`).then((response) => response.json() as Promise<GeoJson>),
+      loadJson<DashboardData>(`${dataBaseUrl}data/mundialidade.json`),
+      loadJson<GeoJson>(`${dataBaseUrl}data/geo/world.geojson`),
+      loadJson<GeoJson>(`${dataBaseUrl}data/geo/brazil-states.geojson`),
     ]).then(([dashboardData, world, brazil]) => {
       setData(dashboardData)
       setWorldGeo(world)
       setBrazilGeo(brazil)
-    })
-  }, [])
+    }).catch(() => setLoadError('Não foi possível carregar os dados do painel. Verifique a conexão e tente novamente.'))
+  }, [loadAttempt])
 
   useEffect(() => {
     const params = new URLSearchParams({
@@ -94,7 +101,11 @@ function App() {
   }, [comparisonContinentCodes, comparisonCountryCodes, comparisonImmediateRegionCodes, comparisonStateCodes, continent, countryCode, immediateIndicatorId, immediateRegionCode, selectedIndicatorId, stateCode, stateIndicatorId, themeId, view])
 
   const copyShareLink = async () => {
-    await navigator.clipboard.writeText(window.location.href)
+    try {
+      await navigator.clipboard.writeText(window.location.href)
+    } catch {
+      window.prompt('Copie o link desta análise:', window.location.href)
+    }
     setCopied(true)
     window.setTimeout(() => setCopied(false), 1800)
   }
@@ -109,7 +120,8 @@ function App() {
       : ''
   const indicator = data && indicatorId ? getIndicator(data, indicatorId) : undefined
   const brazilIndicators = data?.indicators.filter((item) => item.geographyType === 'brazil-state') ?? []
-  const brazilIndicator = brazilIndicators.find((item) => item.id === stateIndicatorId) ?? brazilIndicators[0]
+  const stateThemeIndicators = brazilIndicators.filter((item) => item.themeId === themeId)
+  const brazilIndicator = stateThemeIndicators.find((item) => item.id === stateIndicatorId) ?? stateThemeIndicators[0] ?? brazilIndicators[0]
   const immediateIndicators = data?.indicators.filter(
     (item) => item.geographyType === 'brazil-immediate-region',
   ) ?? []
@@ -135,6 +147,9 @@ function App() {
     { name: item.geographyName, value: item.value },
   ]))
 
+  if (loadError) {
+    return <main className="shell load-error"><h1>Falha ao abrir o painel</h1><p>{loadError}</p><button className="advance-button" onClick={() => { setLoadError(null); setLoadAttempt((attempt) => attempt + 1) }}>Tentar novamente</button></main>
+  }
   if (!data || !worldGeo || !brazilGeo || !indicator || !brazilIndicator || !immediateRegionIndicator) {
     return <main className="shell"><p>Carregando painel e séries...</p></main>
   }
@@ -242,7 +257,7 @@ function App() {
           2. País
           <span>{countryName}: leitura nacional e passagem ao detalhe</span>
         </button>
-        <button className={view === 'states' ? 'is-active' : ''} onClick={() => setView('states')}>
+        <button className={view === 'states' ? 'is-active' : ''} onClick={() => setView('states')} disabled={stateThemeIndicators.length === 0} title={stateThemeIndicators.length === 0 ? 'Ainda não há indicador estadual para esta problemática.' : undefined}>
           3. Brasil: estados
           <span>Comparar unidades federativas equivalentes</span>
         </button>
@@ -317,7 +332,7 @@ function App() {
             </article>
           </section>
           {countryCode === 'BRA' ? (
-            <section className="panel country-next-step"><div><span>Próximo nível disponível</span><h3>Subdivisões brasileiras</h3><p>Compare unidades federativas e, quando houver dados, Regiões Geográficas Imediatas do IBGE.</p></div><div><button className="advance-button" onClick={() => setView('states')}>Ver estados brasileiros</button><button className="text-button" onClick={() => setView('regions')}>Ir para regiões imediatas</button></div></section>
+            <section className="panel country-next-step"><div><span>Próximo nível disponível</span><h3>Subdivisões brasileiras</h3><p>Compare unidades federativas e, quando houver dados, Regiões Geográficas Imediatas do IBGE.</p></div><div><button className="advance-button" onClick={() => setView('states')} disabled={stateThemeIndicators.length === 0}>Ver estados brasileiros</button><button className="text-button" onClick={() => setView('regions')}>Ir para regiões imediatas</button></div></section>
           ) : (
             <section className="panel country-next-step country-next-step--empty"><div><span>Detalhe territorial</span><h3>Sem série subnacional comparável neste MVP</h3><p>O programa não compara países a estados ou províncias. Novos conectores serão adicionados quando houver fonte pública, licença clara e unidades equivalentes.</p></div></section>
           )}
@@ -326,7 +341,7 @@ function App() {
         <>
           <section className="panel controls controls--states">
             <label>Estado do Brasil<select value={stateCode} onChange={(event) => setStateCode(event.target.value)}>{data.brazilStates.map((state) => <option key={state.code} value={state.code}>{state.name}</option>)}</select></label>
-            <label>Indicador estadual<select value={brazilIndicator.id} onChange={(event) => setStateIndicatorId(event.target.value)}>{brazilIndicators.map((item) => <option key={item.id} value={item.id}>{item.name}</option>)}</select></label>
+            <label>Indicador estadual<select value={brazilIndicator.id} onChange={(event) => setStateIndicatorId(event.target.value)}>{stateThemeIndicators.map((item) => <option key={item.id} value={item.id}>{item.name}</option>)}</select></label>
             <p className="controls__context">Indicador estadual selecionado: <strong>{brazilIndicator.name}</strong>. Novas tabelas do IBGE podem ser adicionadas pelo conector de dados.</p>
           </section>
           <section className="content-grid content-grid--states">

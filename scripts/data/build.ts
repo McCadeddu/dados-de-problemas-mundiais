@@ -357,7 +357,7 @@ const BRAZIL_STATE_GINI_INDICATOR: Omit<Indicator, 'latestYear'> = {
   name: 'Índice de Gini da renda domiciliar per capita',
   themeId: 'poverty-inequality',
   description: 'Desigualdade da distribuição do rendimento mensal domiciliar per capita, segundo o Censo Demográfico 2022.',
-  unit: 'índice',
+  unit: 'índice 0-1',
   geographyType: 'brazil-state',
   sourceId: SIDRA_SOURCE_ID,
   direction: 'higher-worse',
@@ -403,12 +403,15 @@ async function ensureDirs() {
 }
 
 async function fetchJson<T>(url: string): Promise<T> {
-  const response = await fetch(url)
-  if (!response.ok) {
-    throw new Error(`Fetch failed for ${url}: ${response.status}`)
+  for (let attempt = 0; attempt < 3; attempt += 1) {
+    const response = await fetch(url, { headers: { Accept: 'application/json', 'User-Agent': 'Mundialidade-open-source-dashboard/1.0' } })
+    if (response.ok) return response.json() as Promise<T>
+    if (![403, 429, 500, 502, 503, 504].includes(response.status) || attempt === 2) {
+      throw new Error(`Fetch failed for ${url}: ${response.status}`)
+    }
+    await new Promise((resolve) => setTimeout(resolve, 1000 * (attempt + 1)))
   }
-
-  return response.json() as Promise<T>
+  throw new Error(`Fetch failed for ${url}`)
 }
 
 async function fetchText(url: string): Promise<string> {
@@ -714,37 +717,20 @@ async function loadNdGain(countriesByIso3: Map<string, string>) {
 }
 
 async function loadBrazilStateIndicator() {
-  const rows = await fetchJson<Array<Record<string, string>>>(
-    `https://apisidra.ibge.gov.br/values/t/${BRAZIL_STATE_INDICATOR.sidraTable}/n3/all/v/${BRAZIL_STATE_INDICATOR.sidraVariable}/p/all?formato=json`,
-  )
+  const response = await fetchJson<Array<{
+    resultados: Array<{ series: Array<{ localidade: { id: string; nome: string }; serie: Record<string, string> }> }>
+  }>>(`https://servicodados.ibge.gov.br/api/v3/agregados/${BRAZIL_STATE_INDICATOR.sidraTable}/periodos/all/variaveis/${BRAZIL_STATE_INDICATOR.sidraVariable}?localidades=N3%5Ball%5D`)
 
   const grouped = new Map<string, Series>()
-  for (const row of rows.slice(1)) {
-    const code = row.D1C
-    const name = row.D1N
-    const year = Number(row.D3C)
-    const value = toNumber(row.V)
-
-    if (!code || !name || !Number.isFinite(year) || value === null) {
-      continue
-    }
-
-    const current = grouped.get(code) ?? {
-      indicatorId: BRAZIL_STATE_INDICATOR.id,
-      geographyType: 'brazil-state' as const,
-      geographyCode: code,
-      geographyName: name,
-      points: [],
-    }
-
-    current.points.push({ year, value })
-    grouped.set(code, current)
-  }
+  response[0]?.resultados[0]?.series.forEach((entry) => {
+    const current = { indicatorId: BRAZIL_STATE_INDICATOR.id, geographyType: 'brazil-state' as const, geographyCode: entry.localidade.id, geographyName: entry.localidade.nome, points: Object.entries(entry.serie).flatMap(([year, value]) => { const parsed = toNumber(value); return parsed === null ? [] : [{ year: Number(year), value: parsed }] }) }
+    grouped.set(current.geographyCode, current)
+  })
 
   return {
     indicator: {
       ...BRAZIL_STATE_INDICATOR,
-      latestYear: 2025,
+      latestYear: Math.max(...Array.from(grouped.values()).flatMap((entry) => entry.points.map((point) => point.year))),
     } satisfies Indicator,
     source: {
       id: SIDRA_SOURCE_ID,
@@ -752,7 +738,7 @@ async function loadBrazilStateIndicator() {
       url: 'https://sidra.ibge.gov.br/',
       methodologyUrl: 'https://servicodados.ibge.gov.br/api/docs/agregados',
       license: 'Dados públicos do IBGE',
-      lastUpdated: '2026-05-08',
+      lastUpdated: new Date().toISOString().slice(0, 10),
     } satisfies Source,
     series: Array.from(grouped.values()).map((entry) => ({
       ...entry,
@@ -762,31 +748,20 @@ async function loadBrazilStateIndicator() {
 }
 
 async function loadBrazilStateGiniIndicator() {
-  const rows = await fetchJson<Array<Record<string, string>>>('https://apisidra.ibge.gov.br/values/t/10301/n3/all/v/13418/p/all?formato=json')
-  const series = rows.slice(1).flatMap((row) => {
-    const value = toNumber(row.V)
-    const year = Number(row.D3C)
-    return row.D1C && row.D1N && value !== null && Number.isFinite(year) ? [{
-      indicatorId: BRAZIL_STATE_GINI_INDICATOR.id,
-      geographyType: 'brazil-state' as const,
-      geographyCode: row.D1C,
-      geographyName: row.D1N,
-      points: [{ year, value }],
-    }] : []
-  })
-  return { indicator: { ...BRAZIL_STATE_GINI_INDICATOR, latestYear: 2022 } satisfies Indicator, series }
+  const response = await fetchJson<IbgeAggregateResponse>('https://servicodados.ibge.gov.br/api/v3/agregados/10301/periodos/all/variaveis/13418?localidades=N3%5Ball%5D')
+  const series = response[0]?.resultados[0]?.series.flatMap((entry) => {
+    const points = Object.entries(entry.serie).flatMap(([year, value]) => { const parsed = toNumber(value); return parsed === null ? [] : [{ year: Number(year), value: parsed }] })
+    return points.length ? [{ indicatorId: BRAZIL_STATE_GINI_INDICATOR.id, geographyType: 'brazil-state' as const, geographyCode: entry.localidade.id, geographyName: entry.localidade.nome, points }] : []
+  }) ?? []
+  return { indicator: { ...BRAZIL_STATE_GINI_INDICATOR, latestYear: Math.max(...series.flatMap((entry) => entry.points.map((point) => point.year))) } satisfies Indicator, series }
 }
 
 async function loadBrazilStateIncomeIndicator() {
-  const rows = await fetchJson<Array<Record<string, string>>>('https://apisidra.ibge.gov.br/values/t/7395/n3/all/v/4196/p/all?formato=json')
+  const response = await fetchJson<IbgeAggregateResponse>('https://servicodados.ibge.gov.br/api/v3/agregados/7395/periodos/all/variaveis/4196?localidades=N3%5Ball%5D')
   const grouped = new Map<string, Series>()
-  rows.slice(1).forEach((row) => {
-    const value = toNumber(row.V)
-    const year = Number(row.D3C)
-    if (!row.D1C || !row.D1N || value === null || !Number.isFinite(year)) return
-    const current = grouped.get(row.D1C) ?? { indicatorId: BRAZIL_STATE_INCOME_INDICATOR.id, geographyType: 'brazil-state' as const, geographyCode: row.D1C, geographyName: row.D1N, points: [] }
-    current.points.push({ year, value })
-    grouped.set(row.D1C, current)
+  response[0]?.resultados[0]?.series.forEach((entry) => {
+    const current = { indicatorId: BRAZIL_STATE_INCOME_INDICATOR.id, geographyType: 'brazil-state' as const, geographyCode: entry.localidade.id, geographyName: entry.localidade.nome, points: Object.entries(entry.serie).flatMap(([year, value]) => { const parsed = toNumber(value); return parsed === null ? [] : [{ year: Number(year), value: parsed }] }) }
+    grouped.set(current.geographyCode, current)
   })
   const series = Array.from(grouped.values()).map((entry) => ({ ...entry, points: sortPoints(entry.points) }))
   return { indicator: { ...BRAZIL_STATE_INCOME_INDICATOR, latestYear: Math.max(...series.flatMap((entry) => entry.points.map((point) => point.year))) } satisfies Indicator, series }

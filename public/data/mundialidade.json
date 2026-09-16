@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-09-15T15:29:07.303Z",
+  "generatedAt": "2026-09-16T14:22:48.988Z",
   "themes": [
     {
       "id": "hunger-water",
@@ -243,7 +243,7 @@
       "name": "Índice de Gini da renda domiciliar per capita",
       "themeId": "poverty-inequality",
       "description": "Desigualdade da distribuição do rendimento mensal domiciliar per capita, segundo o Censo Demográfico 2022.",
-      "unit": "índice",
+      "unit": "índice 0-1",
       "geographyType": "brazil-state",
       "sourceId": "ibge-sidra",
       "direction": "higher-worse",
@@ -314,7 +314,7 @@
       "url": "https://sidra.ibge.gov.br/",
       "methodologyUrl": "https://servicodados.ibge.gov.br/api/docs/agregados",
       "license": "Dados públicos do IBGE",
-      "lastUpdated": "2026-05-08"
+      "lastUpdated": "2026-09-16"
     },
     {
       "id": "natural-earth",
@@ -322,7 +322,7 @@
       "url": "https://www.naturalearthdata.com/",
       "methodologyUrl": "https://www.naturalearthdata.com/about/terms-of-use/",
       "license": "Public domain",
-      "lastUpdated": "2026-09-15"
+      "lastUpdated": "2026-09-16"
     }
   ],
   "countries": [

@@ -244,6 +244,13 @@ select {
   transform: translateY(-2px);
 }
 
+.view-switcher button:disabled,
+.advance-button:disabled {
+  cursor: not-allowed;
+  opacity: 0.45;
+  transform: none;
+}
+
 .view-switcher button span {
   font-size: 0.88rem;
   opacity: 0.8;
