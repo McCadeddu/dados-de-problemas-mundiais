@@ -387,6 +387,17 @@ const BRAZIL_STATE_MULTIDIMENSIONAL_POVERTY_INDICATOR: Omit<Indicator, 'latestYe
   direction: 'higher-worse',
 }
 
+const BRAZIL_STATE_MULTIDIMENSIONAL_VULNERABILITY_INDICATOR: Omit<Indicator, 'latestYear'> = {
+  id: 'ibge-pof-multidimensional-vulnerability',
+  name: 'Pessoas com vulnerabilidade multidimensional',
+  themeId: 'poverty-inequality',
+  description: 'Proporção de pessoas das famílias com algum grau de vulnerabilidade multidimensional não monetária, medida experimental da POF 2017-2018.',
+  unit: '%',
+  geographyType: 'brazil-state',
+  sourceId: IBGE_POF_SOURCE_ID,
+  direction: 'higher-worse',
+}
+
 const BRAZIL_IMMEDIATE_WATER_INDICATOR: Omit<Indicator, 'latestYear'> = {
   id: 'ibge-water-network-coverage',
   name: 'Domicílios com rede geral de água',
@@ -459,7 +470,7 @@ function decodeXmlText(value: string) {
     .replace(/&#(\d+);/g, (_, code) => String.fromCodePoint(Number(code)))
 }
 
-function readPofMultidimensionalPovertyRows(workbookBuffer: Buffer) {
+function readPofStatePercentageRows(workbookBuffer: Buffer) {
   const workbook = new AdmZip(workbookBuffer)
   const sharedStringsEntry = workbook.getEntry('xl/sharedStrings.xml')
   const sheetEntry = workbook.getEntry('xl/worksheets/sheet1.xml')
@@ -880,20 +891,20 @@ async function loadBrazilStateIncomeIndicator() {
   return { indicator: { ...BRAZIL_STATE_INCOME_INDICATOR, latestYear: Math.max(...series.flatMap((entry) => entry.points.map((point) => point.year))) } satisfies Indicator, series }
 }
 
-async function loadBrazilStateMultidimensionalPovertyIndicator() {
+async function loadBrazilStatePofIndicator(indicator: Omit<Indicator, 'latestYear'>, tableFileName: string) {
   const [pofZipBuffer, states] = await Promise.all([
     fetchBuffer('https://ftp.ibge.gov.br/Orcamentos_Familiares/Evolucao_dos_Indicadores_nao_Monetarios_de_Pobreza_e_Qualidade_de_Vida_no_Brasil/tabelas_2017_2018_xls.zip'),
     fetchJson<Array<{ id: number; nome: string }>>('https://servicodados.ibge.gov.br/api/v1/localidades/estados'),
   ])
   const pofZip = new AdmZip(pofZipBuffer)
-  const tableEntry = pofZip.getEntries().find((entry) => entry.entryName === 'Tabela 6b.xlsx')
-  if (!tableEntry) throw new Error('IBGE POF Tabela 6b.xlsx not found')
+  const tableEntry = pofZip.getEntries().find((entry) => entry.entryName === tableFileName)
+  if (!tableEntry) throw new Error(`IBGE POF ${tableFileName} not found`)
 
   const stateCodeByName = new Map(states.map((state) => [state.nome, String(state.id)]))
-  const series = readPofMultidimensionalPovertyRows(tableEntry.getData()).flatMap(({ name, value }) => {
+  const series = readPofStatePercentageRows(tableEntry.getData()).flatMap(({ name, value }) => {
     const code = stateCodeByName.get(name)
     return code ? [{
-      indicatorId: BRAZIL_STATE_MULTIDIMENSIONAL_POVERTY_INDICATOR.id,
+      indicatorId: indicator.id,
       geographyType: 'brazil-state' as const,
       geographyCode: code,
       geographyName: name,
@@ -903,7 +914,7 @@ async function loadBrazilStateMultidimensionalPovertyIndicator() {
   if (series.length !== 27) throw new Error(`IBGE POF expected 27 states, received ${series.length}`)
 
   return {
-    indicator: { ...BRAZIL_STATE_MULTIDIMENSIONAL_POVERTY_INDICATOR, latestYear: 2018 } satisfies Indicator,
+    indicator: { ...indicator, latestYear: 2018 } satisfies Indicator,
     source: {
       id: IBGE_POF_SOURCE_ID,
       name: 'IBGE Pesquisa de Orçamentos Familiares',
@@ -1070,11 +1081,12 @@ async function main() {
     loadNdGain(countriesByIso3),
     loadUnhcrIndicators(validCountryIso3),
   ])
-  const [brazilStates, brazilStateGini, brazilStateIncome, brazilStateMultidimensionalPoverty, immediateRegions, immediateSanitation] = await Promise.all([
+  const [brazilStates, brazilStateGini, brazilStateIncome, brazilStateMultidimensionalPoverty, brazilStateMultidimensionalVulnerability, immediateRegions, immediateSanitation] = await Promise.all([
     loadBrazilStateIndicator(),
     loadBrazilStateGiniIndicator(),
     loadBrazilStateIncomeIndicator(),
-    loadBrazilStateMultidimensionalPovertyIndicator(),
+    loadBrazilStatePofIndicator(BRAZIL_STATE_MULTIDIMENSIONAL_POVERTY_INDICATOR, 'Tabela 6b.xlsx'),
+    loadBrazilStatePofIndicator(BRAZIL_STATE_MULTIDIMENSIONAL_VULNERABILITY_INDICATOR, 'Tabela 5b.xlsx'),
     loadBrazilImmediateRegionCoverage(BRAZIL_IMMEDIATE_WATER_INDICATOR, '6803', '1821%5B72144%5D'),
     loadBrazilImmediateRegionCoverage(BRAZIL_IMMEDIATE_SANITATION_INDICATOR, '6805', '11558%5B46290%5D'),
   ])
@@ -1094,6 +1106,7 @@ async function main() {
     brazilStateGini.indicator,
     brazilStateIncome.indicator,
     brazilStateMultidimensionalPoverty.indicator,
+    brazilStateMultidimensionalVulnerability.indicator,
     immediateRegions.indicator,
     immediateSanitation.indicator,
   ]
@@ -1106,6 +1119,7 @@ async function main() {
     ...brazilStateGini.series,
     ...brazilStateIncome.series,
     ...brazilStateMultidimensionalPoverty.series,
+    ...brazilStateMultidimensionalVulnerability.series,
     ...immediateRegions.series,
     ...immediateSanitation.series,
   ]

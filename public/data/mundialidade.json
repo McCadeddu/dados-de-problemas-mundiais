@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-09-16T15:11:06.272Z",
+  "generatedAt": "2026-09-16T15:22:26.018Z",
   "themes": [
     {
       "id": "hunger-water",
@@ -331,6 +331,17 @@
       "name": "Pessoas com pobreza multidimensional",
       "themeId": "poverty-inequality",
       "description": "Proporção de pessoas das famílias com algum grau de pobreza multidimensional não monetária, medida experimental da POF 2017-2018.",
+      "unit": "%",
+      "geographyType": "brazil-state",
+      "sourceId": "ibge-pof",
+      "direction": "higher-worse",
+      "latestYear": 2018
+    },
+    {
+      "id": "ibge-pof-multidimensional-vulnerability",
+      "name": "Pessoas com vulnerabilidade multidimensional",
+      "themeId": "poverty-inequality",
+      "description": "Proporção de pessoas das famílias com algum grau de vulnerabilidade multidimensional não monetária, medida experimental da POF 2017-2018.",
       "unit": "%",
       "geographyType": "brazil-state",
       "sourceId": "ibge-pof",
@@ -420253,6 +420264,330 @@
       ]
     },
     {
+      "indicatorId": "ibge-pof-multidimensional-vulnerability",
+      "geographyType": "brazil-state",
+      "geographyCode": "11",
+      "geographyName": "Rondônia",
+      "points": [
+        {
+          "year": 2018,
+          "value": 84.84863682
+        }
+      ]
+    },
+    {
+      "indicatorId": "ibge-pof-multidimensional-vulnerability",
+      "geographyType": "brazil-state",
+      "geographyCode": "12",
+      "geographyName": "Acre",
+      "points": [
+        {
+          "year": 2018,
+          "value": 89.00282417999999
+        }
+      ]
+    },
+    {
+      "indicatorId": "ibge-pof-multidimensional-vulnerability",
+      "geographyType": "brazil-state",
+      "geographyCode": "13",
+      "geographyName": "Amazonas",
+      "points": [
+        {
+          "year": 2018,
+          "value": 83.61929294
+        }
+      ]
+    },
+    {
+      "indicatorId": "ibge-pof-multidimensional-vulnerability",
+      "geographyType": "brazil-state",
+      "geographyCode": "14",
+      "geographyName": "Roraima",
+      "points": [
+        {
+          "year": 2018,
+          "value": 72.34335388999999
+        }
+      ]
+    },
+    {
+      "indicatorId": "ibge-pof-multidimensional-vulnerability",
+      "geographyType": "brazil-state",
+      "geographyCode": "15",
+      "geographyName": "Pará",
+      "points": [
+        {
+          "year": 2018,
+          "value": 89.05627452
+        }
+      ]
+    },
+    {
+      "indicatorId": "ibge-pof-multidimensional-vulnerability",
+      "geographyType": "brazil-state",
+      "geographyCode": "16",
+      "geographyName": "Amapá",
+      "points": [
+        {
+          "year": 2018,
+          "value": 88.45420429
+        }
+      ]
+    },
+    {
+      "indicatorId": "ibge-pof-multidimensional-vulnerability",
+      "geographyType": "brazil-state",
+      "geographyCode": "17",
+      "geographyName": "Tocantins",
+      "points": [
+        {
+          "year": 2018,
+          "value": 80.65363963
+        }
+      ]
+    },
+    {
+      "indicatorId": "ibge-pof-multidimensional-vulnerability",
+      "geographyType": "brazil-state",
+      "geographyCode": "21",
+      "geographyName": "Maranhão",
+      "points": [
+        {
+          "year": 2018,
+          "value": 93.32370382
+        }
+      ]
+    },
+    {
+      "indicatorId": "ibge-pof-multidimensional-vulnerability",
+      "geographyType": "brazil-state",
+      "geographyCode": "22",
+      "geographyName": "Piauí",
+      "points": [
+        {
+          "year": 2018,
+          "value": 85.22046669
+        }
+      ]
+    },
+    {
+      "indicatorId": "ibge-pof-multidimensional-vulnerability",
+      "geographyType": "brazil-state",
+      "geographyCode": "23",
+      "geographyName": "Ceará",
+      "points": [
+        {
+          "year": 2018,
+          "value": 78.92312882
+        }
+      ]
+    },
+    {
+      "indicatorId": "ibge-pof-multidimensional-vulnerability",
+      "geographyType": "brazil-state",
+      "geographyCode": "24",
+      "geographyName": "Rio Grande do Norte",
+      "points": [
+        {
+          "year": 2018,
+          "value": 81.92241339
+        }
+      ]
+    },
+    {
+      "indicatorId": "ibge-pof-multidimensional-vulnerability",
+      "geographyType": "brazil-state",
+      "geographyCode": "25",
+      "geographyName": "Paraíba",
+      "points": [
+        {
+          "year": 2018,
+          "value": 81.17352902
+        }
+      ]
+    },
+    {
+      "indicatorId": "ibge-pof-multidimensional-vulnerability",
+      "geographyType": "brazil-state",
+      "geographyCode": "26",
+      "geographyName": "Pernambuco",
+      "points": [
+        {
+          "year": 2018,
+          "value": 81.37847419
+        }
+      ]
+    },
+    {
+      "indicatorId": "ibge-pof-multidimensional-vulnerability",
+      "geographyType": "brazil-state",
+      "geographyCode": "27",
+      "geographyName": "Alagoas",
+      "points": [
+        {
+          "year": 2018,
+          "value": 85.2646668
+        }
+      ]
+    },
+    {
+      "indicatorId": "ibge-pof-multidimensional-vulnerability",
+      "geographyType": "brazil-state",
+      "geographyCode": "28",
+      "geographyName": "Sergipe",
+      "points": [
+        {
+          "year": 2018,
+          "value": 76.41602324
+        }
+      ]
+    },
+    {
+      "indicatorId": "ibge-pof-multidimensional-vulnerability",
+      "geographyType": "brazil-state",
+      "geographyCode": "29",
+      "geographyName": "Bahia",
+      "points": [
+        {
+          "year": 2018,
+          "value": 79.89634892000001
+        }
+      ]
+    },
+    {
+      "indicatorId": "ibge-pof-multidimensional-vulnerability",
+      "geographyType": "brazil-state",
+      "geographyCode": "31",
+      "geographyName": "Minas Gerais",
+      "points": [
+        {
+          "year": 2018,
+          "value": 58.110392749999995
+        }
+      ]
+    },
+    {
+      "indicatorId": "ibge-pof-multidimensional-vulnerability",
+      "geographyType": "brazil-state",
+      "geographyCode": "32",
+      "geographyName": "Espírito Santo",
+      "points": [
+        {
+          "year": 2018,
+          "value": 58.8053144
+        }
+      ]
+    },
+    {
+      "indicatorId": "ibge-pof-multidimensional-vulnerability",
+      "geographyType": "brazil-state",
+      "geographyCode": "33",
+      "geographyName": "Rio de Janeiro",
+      "points": [
+        {
+          "year": 2018,
+          "value": 59.90697639
+        }
+      ]
+    },
+    {
+      "indicatorId": "ibge-pof-multidimensional-vulnerability",
+      "geographyType": "brazil-state",
+      "geographyCode": "35",
+      "geographyName": "São Paulo",
+      "points": [
+        {
+          "year": 2018,
+          "value": 45.70786719
+        }
+      ]
+    },
+    {
+      "indicatorId": "ibge-pof-multidimensional-vulnerability",
+      "geographyType": "brazil-state",
+      "geographyCode": "41",
+      "geographyName": "Paraná",
+      "points": [
+        {
+          "year": 2018,
+          "value": 45.66026696
+        }
+      ]
+    },
+    {
+      "indicatorId": "ibge-pof-multidimensional-vulnerability",
+      "geographyType": "brazil-state",
+      "geographyCode": "42",
+      "geographyName": "Santa Catarina",
+      "points": [
+        {
+          "year": 2018,
+          "value": 40.01068229
+        }
+      ]
+    },
+    {
+      "indicatorId": "ibge-pof-multidimensional-vulnerability",
+      "geographyType": "brazil-state",
+      "geographyCode": "43",
+      "geographyName": "Rio Grande do Sul",
+      "points": [
+        {
+          "year": 2018,
+          "value": 53.56241329
+        }
+      ]
+    },
+    {
+      "indicatorId": "ibge-pof-multidimensional-vulnerability",
+      "geographyType": "brazil-state",
+      "geographyCode": "50",
+      "geographyName": "Mato Grosso do Sul",
+      "points": [
+        {
+          "year": 2018,
+          "value": 68.98845828
+        }
+      ]
+    },
+    {
+      "indicatorId": "ibge-pof-multidimensional-vulnerability",
+      "geographyType": "brazil-state",
+      "geographyCode": "51",
+      "geographyName": "Mato Grosso",
+      "points": [
+        {
+          "year": 2018,
+          "value": 74.74170975
+        }
+      ]
+    },
+    {
+      "indicatorId": "ibge-pof-multidimensional-vulnerability",
+      "geographyType": "brazil-state",
+      "geographyCode": "52",
+      "geographyName": "Goiás",
+      "points": [
+        {
+          "year": 2018,
+          "value": 69.17814363
+        }
+      ]
+    },
+    {
+      "indicatorId": "ibge-pof-multidimensional-vulnerability",
+      "geographyType": "brazil-state",
+      "geographyCode": "53",
+      "geographyName": "Distrito Federal",
+      "points": [
+        {
+          "year": 2018,
+          "value": 57.82129544
+        }
+      ]
+    },
+    {
       "indicatorId": "ibge-water-network-coverage",
       "geographyType": "brazil-immediate-region",
       "geographyCode": "110005",
@@ -464071,6 +464406,222 @@
       "value": 14.89520915
     },
     {
+      "indicatorId": "ibge-pof-multidimensional-vulnerability",
+      "geographyType": "brazil-state",
+      "geographyCode": "11",
+      "geographyName": "Rondônia",
+      "year": 2018,
+      "value": 84.84863682
+    },
+    {
+      "indicatorId": "ibge-pof-multidimensional-vulnerability",
+      "geographyType": "brazil-state",
+      "geographyCode": "12",
+      "geographyName": "Acre",
+      "year": 2018,
+      "value": 89.00282417999999
+    },
+    {
+      "indicatorId": "ibge-pof-multidimensional-vulnerability",
+      "geographyType": "brazil-state",
+      "geographyCode": "13",
+      "geographyName": "Amazonas",
+      "year": 2018,
+      "value": 83.61929294
+    },
+    {
+      "indicatorId": "ibge-pof-multidimensional-vulnerability",
+      "geographyType": "brazil-state",
+      "geographyCode": "14",
+      "geographyName": "Roraima",
+      "year": 2018,
+      "value": 72.34335388999999
+    },
+    {
+      "indicatorId": "ibge-pof-multidimensional-vulnerability",
+      "geographyType": "brazil-state",
+      "geographyCode": "15",
+      "geographyName": "Pará",
+      "year": 2018,
+      "value": 89.05627452
+    },
+    {
+      "indicatorId": "ibge-pof-multidimensional-vulnerability",
+      "geographyType": "brazil-state",
+      "geographyCode": "16",
+      "geographyName": "Amapá",
+      "year": 2018,
+      "value": 88.45420429
+    },
+    {
+      "indicatorId": "ibge-pof-multidimensional-vulnerability",
+      "geographyType": "brazil-state",
+      "geographyCode": "17",
+      "geographyName": "Tocantins",
+      "year": 2018,
+      "value": 80.65363963
+    },
+    {
+      "indicatorId": "ibge-pof-multidimensional-vulnerability",
+      "geographyType": "brazil-state",
+      "geographyCode": "21",
+      "geographyName": "Maranhão",
+      "year": 2018,
+      "value": 93.32370382
+    },
+    {
+      "indicatorId": "ibge-pof-multidimensional-vulnerability",
+      "geographyType": "brazil-state",
+      "geographyCode": "22",
+      "geographyName": "Piauí",
+      "year": 2018,
+      "value": 85.22046669
+    },
+    {
+      "indicatorId": "ibge-pof-multidimensional-vulnerability",
+      "geographyType": "brazil-state",
+      "geographyCode": "23",
+      "geographyName": "Ceará",
+      "year": 2018,
+      "value": 78.92312882
+    },
+    {
+      "indicatorId": "ibge-pof-multidimensional-vulnerability",
+      "geographyType": "brazil-state",
+      "geographyCode": "24",
+      "geographyName": "Rio Grande do Norte",
+      "year": 2018,
+      "value": 81.92241339
+    },
+    {
+      "indicatorId": "ibge-pof-multidimensional-vulnerability",
+      "geographyType": "brazil-state",
+      "geographyCode": "25",
+      "geographyName": "Paraíba",
+      "year": 2018,
+      "value": 81.17352902
+    },
+    {
+      "indicatorId": "ibge-pof-multidimensional-vulnerability",
+      "geographyType": "brazil-state",
+      "geographyCode": "26",
+      "geographyName": "Pernambuco",
+      "year": 2018,
+      "value": 81.37847419
+    },
+    {
+      "indicatorId": "ibge-pof-multidimensional-vulnerability",
+      "geographyType": "brazil-state",
+      "geographyCode": "27",
+      "geographyName": "Alagoas",
+      "year": 2018,
+      "value": 85.2646668
+    },
+    {
+      "indicatorId": "ibge-pof-multidimensional-vulnerability",
+      "geographyType": "brazil-state",
+      "geographyCode": "28",
+      "geographyName": "Sergipe",
+      "year": 2018,
+      "value": 76.41602324
+    },
+    {
+      "indicatorId": "ibge-pof-multidimensional-vulnerability",
+      "geographyType": "brazil-state",
+      "geographyCode": "29",
+      "geographyName": "Bahia",
+      "year": 2018,
+      "value": 79.89634892000001
+    },
+    {
+      "indicatorId": "ibge-pof-multidimensional-vulnerability",
+      "geographyType": "brazil-state",
+      "geographyCode": "31",
+      "geographyName": "Minas Gerais",
+      "year": 2018,
+      "value": 58.110392749999995
+    },
+    {
+      "indicatorId": "ibge-pof-multidimensional-vulnerability",
+      "geographyType": "brazil-state",
+      "geographyCode": "32",
+      "geographyName": "Espírito Santo",
+      "year": 2018,
+      "value": 58.8053144
+    },
+    {
+      "indicatorId": "ibge-pof-multidimensional-vulnerability",
+      "geographyType": "brazil-state",
+      "geographyCode": "33",
+      "geographyName": "Rio de Janeiro",
+      "year": 2018,
+      "value": 59.90697639
+    },
+    {
+      "indicatorId": "ibge-pof-multidimensional-vulnerability",
+      "geographyType": "brazil-state",
+      "geographyCode": "35",
+      "geographyName": "São Paulo",
+      "year": 2018,
+      "value": 45.70786719
+    },
+    {
+      "indicatorId": "ibge-pof-multidimensional-vulnerability",
+      "geographyType": "brazil-state",
+      "geographyCode": "41",
+      "geographyName": "Paraná",
+      "year": 2018,
+      "value": 45.66026696
+    },
+    {
+      "indicatorId": "ibge-pof-multidimensional-vulnerability",
+      "geographyType": "brazil-state",
+      "geographyCode": "42",
+      "geographyName": "Santa Catarina",
+      "year": 2018,
+      "value": 40.01068229
+    },
+    {
+      "indicatorId": "ibge-pof-multidimensional-vulnerability",
+      "geographyType": "brazil-state",
+      "geographyCode": "43",
+      "geographyName": "Rio Grande do Sul",
+      "year": 2018,
+      "value": 53.56241329
+    },
+    {
+      "indicatorId": "ibge-pof-multidimensional-vulnerability",
+      "geographyType": "brazil-state",
+      "geographyCode": "50",
+      "geographyName": "Mato Grosso do Sul",
+      "year": 2018,
+      "value": 68.98845828
+    },
+    {
+      "indicatorId": "ibge-pof-multidimensional-vulnerability",
+      "geographyType": "brazil-state",
+      "geographyCode": "51",
+      "geographyName": "Mato Grosso",
+      "year": 2018,
+      "value": 74.74170975
+    },
+    {
+      "indicatorId": "ibge-pof-multidimensional-vulnerability",
+      "geographyType": "brazil-state",
+      "geographyCode": "52",
+      "geographyName": "Goiás",
+      "year": 2018,
+      "value": 69.17814363
+    },
+    {
+      "indicatorId": "ibge-pof-multidimensional-vulnerability",
+      "geographyType": "brazil-state",
+      "geographyCode": "53",
+      "geographyName": "Distrito Federal",
+      "year": 2018,
+      "value": 57.82129544
+    },
+    {
       "indicatorId": "ibge-water-network-coverage",
       "geographyType": "brazil-immediate-region",
       "geographyCode": "110005",
@@ -476571,6 +477122,173 @@
           "geographyName": "Mato Grosso do Sul",
           "year": 2018,
           "value": 17.50091605
+        }
+      ]
+    },
+    {
+      "indicatorId": "ibge-pof-multidimensional-vulnerability",
+      "geographyType": "brazil-state",
+      "year": 2018,
+      "items": [
+        {
+          "indicatorId": "ibge-pof-multidimensional-vulnerability",
+          "geographyType": "brazil-state",
+          "geographyCode": "21",
+          "geographyName": "Maranhão",
+          "year": 2018,
+          "value": 93.32370382
+        },
+        {
+          "indicatorId": "ibge-pof-multidimensional-vulnerability",
+          "geographyType": "brazil-state",
+          "geographyCode": "15",
+          "geographyName": "Pará",
+          "year": 2018,
+          "value": 89.05627452
+        },
+        {
+          "indicatorId": "ibge-pof-multidimensional-vulnerability",
+          "geographyType": "brazil-state",
+          "geographyCode": "12",
+          "geographyName": "Acre",
+          "year": 2018,
+          "value": 89.00282417999999
+        },
+        {
+          "indicatorId": "ibge-pof-multidimensional-vulnerability",
+          "geographyType": "brazil-state",
+          "geographyCode": "16",
+          "geographyName": "Amapá",
+          "year": 2018,
+          "value": 88.45420429
+        },
+        {
+          "indicatorId": "ibge-pof-multidimensional-vulnerability",
+          "geographyType": "brazil-state",
+          "geographyCode": "27",
+          "geographyName": "Alagoas",
+          "year": 2018,
+          "value": 85.2646668
+        },
+        {
+          "indicatorId": "ibge-pof-multidimensional-vulnerability",
+          "geographyType": "brazil-state",
+          "geographyCode": "22",
+          "geographyName": "Piauí",
+          "year": 2018,
+          "value": 85.22046669
+        },
+        {
+          "indicatorId": "ibge-pof-multidimensional-vulnerability",
+          "geographyType": "brazil-state",
+          "geographyCode": "11",
+          "geographyName": "Rondônia",
+          "year": 2018,
+          "value": 84.84863682
+        },
+        {
+          "indicatorId": "ibge-pof-multidimensional-vulnerability",
+          "geographyType": "brazil-state",
+          "geographyCode": "13",
+          "geographyName": "Amazonas",
+          "year": 2018,
+          "value": 83.61929294
+        },
+        {
+          "indicatorId": "ibge-pof-multidimensional-vulnerability",
+          "geographyType": "brazil-state",
+          "geographyCode": "24",
+          "geographyName": "Rio Grande do Norte",
+          "year": 2018,
+          "value": 81.92241339
+        },
+        {
+          "indicatorId": "ibge-pof-multidimensional-vulnerability",
+          "geographyType": "brazil-state",
+          "geographyCode": "26",
+          "geographyName": "Pernambuco",
+          "year": 2018,
+          "value": 81.37847419
+        },
+        {
+          "indicatorId": "ibge-pof-multidimensional-vulnerability",
+          "geographyType": "brazil-state",
+          "geographyCode": "25",
+          "geographyName": "Paraíba",
+          "year": 2018,
+          "value": 81.17352902
+        },
+        {
+          "indicatorId": "ibge-pof-multidimensional-vulnerability",
+          "geographyType": "brazil-state",
+          "geographyCode": "17",
+          "geographyName": "Tocantins",
+          "year": 2018,
+          "value": 80.65363963
+        },
+        {
+          "indicatorId": "ibge-pof-multidimensional-vulnerability",
+          "geographyType": "brazil-state",
+          "geographyCode": "29",
+          "geographyName": "Bahia",
+          "year": 2018,
+          "value": 79.89634892000001
+        },
+        {
+          "indicatorId": "ibge-pof-multidimensional-vulnerability",
+          "geographyType": "brazil-state",
+          "geographyCode": "23",
+          "geographyName": "Ceará",
+          "year": 2018,
+          "value": 78.92312882
+        },
+        {
+          "indicatorId": "ibge-pof-multidimensional-vulnerability",
+          "geographyType": "brazil-state",
+          "geographyCode": "28",
+          "geographyName": "Sergipe",
+          "year": 2018,
+          "value": 76.41602324
+        },
+        {
+          "indicatorId": "ibge-pof-multidimensional-vulnerability",
+          "geographyType": "brazil-state",
+          "geographyCode": "51",
+          "geographyName": "Mato Grosso",
+          "year": 2018,
+          "value": 74.74170975
+        },
+        {
+          "indicatorId": "ibge-pof-multidimensional-vulnerability",
+          "geographyType": "brazil-state",
+          "geographyCode": "14",
+          "geographyName": "Roraima",
+          "year": 2018,
+          "value": 72.34335388999999
+        },
+        {
+          "indicatorId": "ibge-pof-multidimensional-vulnerability",
+          "geographyType": "brazil-state",
+          "geographyCode": "52",
+          "geographyName": "Goiás",
+          "year": 2018,
+          "value": 69.17814363
+        },
+        {
+          "indicatorId": "ibge-pof-multidimensional-vulnerability",
+          "geographyType": "brazil-state",
+          "geographyCode": "50",
+          "geographyName": "Mato Grosso do Sul",
+          "year": 2018,
+          "value": 68.98845828
+        },
+        {
+          "indicatorId": "ibge-pof-multidimensional-vulnerability",
+          "geographyType": "brazil-state",
+          "geographyCode": "33",
+          "geographyName": "Rio de Janeiro",
+          "year": 2018,
+          "value": 59.90697639
         }
       ]
     },
