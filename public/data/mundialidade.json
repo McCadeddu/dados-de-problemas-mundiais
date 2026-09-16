@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-09-16T14:22:48.988Z",
+  "generatedAt": "2026-09-16T14:33:36.861Z",
   "themes": [
     {
       "id": "hunger-water",
@@ -314,7 +314,7 @@
       "url": "https://sidra.ibge.gov.br/",
       "methodologyUrl": "https://servicodados.ibge.gov.br/api/docs/agregados",
       "license": "Dados públicos do IBGE",
-      "lastUpdated": "2026-09-16"
+      "lastUpdated": "Dados públicos do IBGE"
     },
     {
       "id": "natural-earth",
@@ -322,7 +322,7 @@
       "url": "https://www.naturalearthdata.com/",
       "methodologyUrl": "https://www.naturalearthdata.com/about/terms-of-use/",
       "license": "Public domain",
-      "lastUpdated": "2026-09-16"
+      "lastUpdated": "Domínio público"
     }
   ],
   "countries": [

@@ -122,6 +122,7 @@ function App() {
   const brazilIndicators = data?.indicators.filter((item) => item.geographyType === 'brazil-state') ?? []
   const stateThemeIndicators = brazilIndicators.filter((item) => item.themeId === themeId)
   const brazilIndicator = stateThemeIndicators.find((item) => item.id === stateIndicatorId) ?? stateThemeIndicators[0] ?? brazilIndicators[0]
+  const effectiveView = view === 'states' && stateThemeIndicators.length === 0 ? 'world' : view
   const immediateIndicators = data?.indicators.filter(
     (item) => item.geographyType === 'brazil-immediate-region',
   ) ?? []
@@ -157,7 +158,7 @@ function App() {
   const summary = getMetricSummary(data)
   const countryName = data.countries.find((country) => country.code === countryCode)?.name ?? countryCode
   const stateName = data.brazilStates.find((state) => state.code === stateCode)?.name ?? stateCode
-  const activeIndicator = view === 'world' || view === 'country'
+  const activeIndicator = effectiveView === 'world' || effectiveView === 'country'
     ? indicator
     : view === 'states'
       ? brazilIndicator
@@ -249,7 +250,7 @@ function App() {
       </section>
 
       <nav className="view-switcher" aria-label="Escala de análise">
-        <button className={view === 'world' ? 'is-active' : ''} onClick={() => setView('world')}>
+        <button className={effectiveView === 'world' ? 'is-active' : ''} onClick={() => setView('world')}>
           1. Mundo
           <span>Panorama, continentes e comparação entre países</span>
         </button>
@@ -257,7 +258,7 @@ function App() {
           2. País
           <span>{countryName}: leitura nacional e passagem ao detalhe</span>
         </button>
-        <button className={view === 'states' ? 'is-active' : ''} onClick={() => setView('states')} disabled={stateThemeIndicators.length === 0} title={stateThemeIndicators.length === 0 ? 'Ainda não há indicador estadual para esta problemática.' : undefined}>
+        <button className={effectiveView === 'states' ? 'is-active' : ''} onClick={() => setView('states')} disabled={stateThemeIndicators.length === 0} title={stateThemeIndicators.length === 0 ? 'Ainda não há indicador estadual para esta problemática.' : undefined}>
           3. Brasil: estados
           <span>Comparar unidades federativas equivalentes</span>
         </button>
@@ -269,10 +270,10 @@ function App() {
 
       <p className="hierarchy" aria-label="Caminho de análise">
         Problemática: <strong>{data.themes.find((theme) => theme.id === themeId)?.name}</strong>
-        <span>›</span> {view === 'world' ? 'Mundo' : view === 'country' ? `Mundo › ${countryName}` : view === 'states' ? 'Brasil › Estados' : `Brasil › ${stateName} › Regiões Imediatas`}
+        <span>›</span> {effectiveView === 'world' ? 'Mundo' : effectiveView === 'country' ? `Mundo › ${countryName}` : effectiveView === 'states' ? 'Brasil › Estados' : `Brasil › ${stateName} › Regiões Imediatas`}
       </p>
 
-      {view === 'world' ? (
+      {effectiveView === 'world' ? (
         <>
           <section className="panel controls controls--world">
             <label>Indicador<select value={indicatorId} onChange={(event) => setSelectedIndicatorId(event.target.value)}>{themeIndicators.map((item) => <option key={item.id} value={item.id}>{item.name}</option>)}</select></label>
@@ -316,7 +317,7 @@ function App() {
             tooltipFormatter={tooltipFormatter}
           />
         </>
-      ) : view === 'country' ? (
+      ) : effectiveView === 'country' ? (
         <>
           <section className="panel controls controls--country">
             <label>Indicador<select value={indicatorId} onChange={(event) => setSelectedIndicatorId(event.target.value)}>{themeIndicators.map((item) => <option key={item.id} value={item.id}>{item.name}</option>)}</select></label>
@@ -337,7 +338,7 @@ function App() {
             <section className="panel country-next-step country-next-step--empty"><div><span>Detalhe territorial</span><h3>Sem série subnacional comparável neste MVP</h3><p>O programa não compara países a estados ou províncias. Novos conectores serão adicionados quando houver fonte pública, licença clara e unidades equivalentes.</p></div></section>
           )}
         </>
-      ) : view === 'states' ? (
+      ) : effectiveView === 'states' ? (
         <>
           <section className="panel controls controls--states">
             <label>Estado do Brasil<select value={stateCode} onChange={(event) => setStateCode(event.target.value)}>{data.brazilStates.map((state) => <option key={state.code} value={state.code}>{state.name}</option>)}</select></label>
@@ -541,7 +542,7 @@ function TerritoryComparisonPanel({ title, description, territories, selectedCod
     </div>
     <div className="comparison-grid">
       <div className="chart"><h4>Evolução histórica</h4><ResponsiveContainer width="100%" height={300}><LineChart data={chartData}><CartesianGrid stroke="#334155" strokeDasharray="4 4" /><XAxis dataKey="year" stroke="#a8b8cc" /><YAxis stroke="#a8b8cc" /><Tooltip formatter={tooltipFormatter(unit)} />{selectedTerritories.map((territory, index) => <Line key={territory.code} type="monotone" dataKey={territory.code} name={territory.name} stroke={COMPARISON_COLORS[index]} strokeWidth={3} dot={false} />)}</LineChart></ResponsiveContainer></div>
-      <div className="chart"><h4>Último valor disponível</h4><ResponsiveContainer width="100%" height={300}><BarChart data={selectedTerritories.map((territory) => ({ name: territory.name, value: latestByCode.get(territory.code)?.value ?? 0 }))}><CartesianGrid stroke="#334155" strokeDasharray="4 4" /><XAxis dataKey="name" interval={0} angle={-25} textAnchor="end" height={70} stroke="#a8b8cc" /><YAxis stroke="#a8b8cc" /><Tooltip formatter={tooltipFormatter(unit)} /><Bar dataKey="value" fill={color} radius={[6, 6, 0, 0]} /></BarChart></ResponsiveContainer></div>
+      <div className="chart"><h4>Último valor disponível</h4><ResponsiveContainer width="100%" height={300}><BarChart data={selectedTerritories.flatMap((territory) => { const latest = latestByCode.get(territory.code); return latest ? [{ name: territory.name, value: latest.value }] : [] })}><CartesianGrid stroke="#334155" strokeDasharray="4 4" /><XAxis dataKey="name" interval={0} angle={-25} textAnchor="end" height={70} stroke="#a8b8cc" /><YAxis stroke="#a8b8cc" /><Tooltip formatter={tooltipFormatter(unit)} /><Bar dataKey="value" fill={color} radius={[6, 6, 0, 0]} /></BarChart></ResponsiveContainer></div>
     </div>
   </section>
 }

@@ -1,5 +1,5 @@
 import AdmZip from 'adm-zip'
-import { mkdir, writeFile } from 'node:fs/promises'
+import { mkdir, readFile, writeFile } from 'node:fs/promises'
 import path from 'node:path'
 import Papa from 'papaparse'
 
@@ -402,10 +402,10 @@ async function ensureDirs() {
   await mkdir(RAW_DIR, { recursive: true })
 }
 
-async function fetchJson<T>(url: string): Promise<T> {
+async function fetchWithRetry(url: string, accept = '*/*') {
   for (let attempt = 0; attempt < 3; attempt += 1) {
-    const response = await fetch(url, { headers: { Accept: 'application/json', 'User-Agent': 'Mundialidade-open-source-dashboard/1.0' } })
-    if (response.ok) return response.json() as Promise<T>
+    const response = await fetch(url, { headers: { Accept: accept, 'User-Agent': 'Mundialidade-open-source-dashboard/1.0' } })
+    if (response.ok) return response
     if (![403, 429, 500, 502, 503, 504].includes(response.status) || attempt === 2) {
       throw new Error(`Fetch failed for ${url}: ${response.status}`)
     }
@@ -414,22 +414,16 @@ async function fetchJson<T>(url: string): Promise<T> {
   throw new Error(`Fetch failed for ${url}`)
 }
 
-async function fetchText(url: string): Promise<string> {
-  const response = await fetch(url)
-  if (!response.ok) {
-    throw new Error(`Fetch failed for ${url}: ${response.status}`)
-  }
+async function fetchJson<T>(url: string): Promise<T> {
+  return (await fetchWithRetry(url, 'application/json')).json() as Promise<T>
+}
 
-  return response.text()
+async function fetchText(url: string): Promise<string> {
+  return (await fetchWithRetry(url)).text()
 }
 
 async function fetchBuffer(url: string): Promise<Buffer> {
-  const response = await fetch(url)
-  if (!response.ok) {
-    throw new Error(`Fetch failed for ${url}: ${response.status}`)
-  }
-
-  return Buffer.from(await response.arrayBuffer())
+  return Buffer.from(await (await fetchWithRetry(url)).arrayBuffer())
 }
 
 function parseCsv<T>(csv: string): T[] {
@@ -738,7 +732,7 @@ async function loadBrazilStateIndicator() {
       url: 'https://sidra.ibge.gov.br/',
       methodologyUrl: 'https://servicodados.ibge.gov.br/api/docs/agregados',
       license: 'Dados públicos do IBGE',
-      lastUpdated: new Date().toISOString().slice(0, 10),
+      lastUpdated: 'Dados públicos do IBGE',
     } satisfies Source,
     series: Array.from(grouped.values()).map((entry) => ({
       ...entry,
@@ -969,7 +963,7 @@ async function main() {
     url: 'https://www.naturalearthdata.com/',
     methodologyUrl: 'https://www.naturalearthdata.com/about/terms-of-use/',
     license: 'Public domain',
-    lastUpdated: new Date().toISOString().slice(0, 10),
+    lastUpdated: 'Domínio público',
   })
 
   const data: DashboardData = {
@@ -996,8 +990,16 @@ async function main() {
     ],
   }
 
+  const outputPath = path.join(PUBLIC_DATA_DIR, 'mundialidade.json')
+  const previous = await readFile(outputPath, 'utf-8').then((content) => JSON.parse(content) as DashboardData).catch(() => null)
+  if (previous) {
+    const previousComparable = { ...previous, generatedAt: '' }
+    const nextComparable = { ...data, generatedAt: '' }
+    if (JSON.stringify(previousComparable) === JSON.stringify(nextComparable)) data.generatedAt = previous.generatedAt
+  }
+
   await writeFile(
-    path.join(PUBLIC_DATA_DIR, 'mundialidade.json'),
+    outputPath,
     JSON.stringify(data, null, 2),
   )
 }
