@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-09-16T15:26:06.654Z",
+  "generatedAt": "2026-09-16T15:29:53.075Z",
   "themes": [
     {
       "id": "hunger-water",
@@ -336,6 +336,28 @@
       "sourceId": "ibge-sidra",
       "direction": "higher-worse",
       "latestYear": 2022
+    },
+    {
+      "id": "ibge-state-female-labor-participation",
+      "name": "Participação feminina na força de trabalho",
+      "themeId": "gender-equality",
+      "description": "Taxa média anual de participação das mulheres de 14 anos ou mais na força de trabalho, calculada pela média dos quatro trimestres disponíveis da PNAD Contínua.",
+      "unit": "%",
+      "geographyType": "brazil-state",
+      "sourceId": "ibge-sidra",
+      "direction": "higher-better",
+      "latestYear": 2025
+    },
+    {
+      "id": "ibge-state-labor-participation-gap",
+      "name": "Diferença de participação na força de trabalho",
+      "themeId": "gender-equality",
+      "description": "Diferença entre as taxas médias anuais de participação masculina e feminina na força de trabalho, em pontos percentuais. Valores maiores indicam maior desigualdade.",
+      "unit": "p.p.",
+      "geographyType": "brazil-state",
+      "sourceId": "ibge-sidra",
+      "direction": "higher-worse",
+      "latestYear": 2025
     },
     {
       "id": "ibge-pof-multidimensional-poverty",
@@ -420275,6 +420297,2814 @@
       ]
     },
     {
+      "indicatorId": "ibge-state-female-labor-participation",
+      "geographyType": "brazil-state",
+      "geographyCode": "11",
+      "geographyName": "Rondônia",
+      "points": [
+        {
+          "year": 2012,
+          "value": 50.974999999999994
+        },
+        {
+          "year": 2013,
+          "value": 48.725
+        },
+        {
+          "year": 2014,
+          "value": 45.849999999999994
+        },
+        {
+          "year": 2015,
+          "value": 46.574999999999996
+        },
+        {
+          "year": 2016,
+          "value": 49.125
+        },
+        {
+          "year": 2017,
+          "value": 49.075
+        },
+        {
+          "year": 2018,
+          "value": 49.4
+        },
+        {
+          "year": 2019,
+          "value": 50.025
+        },
+        {
+          "year": 2023,
+          "value": 43.6
+        },
+        {
+          "year": 2024,
+          "value": 45.675
+        },
+        {
+          "year": 2025,
+          "value": 45.525000000000006
+        }
+      ]
+    },
+    {
+      "indicatorId": "ibge-state-female-labor-participation",
+      "geographyType": "brazil-state",
+      "geographyCode": "12",
+      "geographyName": "Acre",
+      "points": [
+        {
+          "year": 2012,
+          "value": 48.875
+        },
+        {
+          "year": 2013,
+          "value": 47.175
+        },
+        {
+          "year": 2014,
+          "value": 45.925
+        },
+        {
+          "year": 2015,
+          "value": 46.7
+        },
+        {
+          "year": 2016,
+          "value": 43.74999999999999
+        },
+        {
+          "year": 2017,
+          "value": 45.25
+        },
+        {
+          "year": 2018,
+          "value": 45.599999999999994
+        },
+        {
+          "year": 2019,
+          "value": 45.025000000000006
+        },
+        {
+          "year": 2023,
+          "value": 38.225
+        },
+        {
+          "year": 2024,
+          "value": 39.8
+        },
+        {
+          "year": 2025,
+          "value": 41.925
+        }
+      ]
+    },
+    {
+      "indicatorId": "ibge-state-female-labor-participation",
+      "geographyType": "brazil-state",
+      "geographyCode": "13",
+      "geographyName": "Amazonas",
+      "points": [
+        {
+          "year": 2012,
+          "value": 50.400000000000006
+        },
+        {
+          "year": 2013,
+          "value": 51.025000000000006
+        },
+        {
+          "year": 2014,
+          "value": 49.575
+        },
+        {
+          "year": 2015,
+          "value": 48.775
+        },
+        {
+          "year": 2016,
+          "value": 51.4
+        },
+        {
+          "year": 2017,
+          "value": 52.199999999999996
+        },
+        {
+          "year": 2018,
+          "value": 51.074999999999996
+        },
+        {
+          "year": 2019,
+          "value": 52.8
+        },
+        {
+          "year": 2023,
+          "value": 49.800000000000004
+        },
+        {
+          "year": 2024,
+          "value": 49.05
+        },
+        {
+          "year": 2025,
+          "value": 51.55
+        }
+      ]
+    },
+    {
+      "indicatorId": "ibge-state-female-labor-participation",
+      "geographyType": "brazil-state",
+      "geographyCode": "14",
+      "geographyName": "Roraima",
+      "points": [
+        {
+          "year": 2012,
+          "value": 53.875
+        },
+        {
+          "year": 2013,
+          "value": 54.775
+        },
+        {
+          "year": 2014,
+          "value": 55.625
+        },
+        {
+          "year": 2015,
+          "value": 55.4
+        },
+        {
+          "year": 2016,
+          "value": 51.75000000000001
+        },
+        {
+          "year": 2017,
+          "value": 51.925
+        },
+        {
+          "year": 2018,
+          "value": 54.224999999999994
+        },
+        {
+          "year": 2019,
+          "value": 54.425
+        },
+        {
+          "year": 2023,
+          "value": 49.925000000000004
+        },
+        {
+          "year": 2024,
+          "value": 53.95
+        },
+        {
+          "year": 2025,
+          "value": 52.825
+        }
+      ]
+    },
+    {
+      "indicatorId": "ibge-state-female-labor-participation",
+      "geographyType": "brazil-state",
+      "geographyCode": "15",
+      "geographyName": "Pará",
+      "points": [
+        {
+          "year": 2012,
+          "value": 48.099999999999994
+        },
+        {
+          "year": 2013,
+          "value": 48
+        },
+        {
+          "year": 2014,
+          "value": 47.775
+        },
+        {
+          "year": 2015,
+          "value": 49.224999999999994
+        },
+        {
+          "year": 2016,
+          "value": 47.724999999999994
+        },
+        {
+          "year": 2017,
+          "value": 47.875
+        },
+        {
+          "year": 2018,
+          "value": 47.35
+        },
+        {
+          "year": 2019,
+          "value": 46.625
+        },
+        {
+          "year": 2023,
+          "value": 48.25
+        },
+        {
+          "year": 2024,
+          "value": 48.25
+        },
+        {
+          "year": 2025,
+          "value": 47
+        }
+      ]
+    },
+    {
+      "indicatorId": "ibge-state-female-labor-participation",
+      "geographyType": "brazil-state",
+      "geographyCode": "16",
+      "geographyName": "Amapá",
+      "points": [
+        {
+          "year": 2012,
+          "value": 55.175000000000004
+        },
+        {
+          "year": 2013,
+          "value": 50.625
+        },
+        {
+          "year": 2014,
+          "value": 51.75
+        },
+        {
+          "year": 2015,
+          "value": 50.975
+        },
+        {
+          "year": 2016,
+          "value": 52.05
+        },
+        {
+          "year": 2017,
+          "value": 52.324999999999996
+        },
+        {
+          "year": 2018,
+          "value": 51.599999999999994
+        },
+        {
+          "year": 2019,
+          "value": 52.7
+        },
+        {
+          "year": 2023,
+          "value": 51.949999999999996
+        },
+        {
+          "year": 2024,
+          "value": 49.65
+        },
+        {
+          "year": 2025,
+          "value": 49.175
+        }
+      ]
+    },
+    {
+      "indicatorId": "ibge-state-female-labor-participation",
+      "geographyType": "brazil-state",
+      "geographyCode": "17",
+      "geographyName": "Tocantins",
+      "points": [
+        {
+          "year": 2012,
+          "value": 49.550000000000004
+        },
+        {
+          "year": 2013,
+          "value": 48.05
+        },
+        {
+          "year": 2014,
+          "value": 49.10000000000001
+        },
+        {
+          "year": 2015,
+          "value": 48.60000000000001
+        },
+        {
+          "year": 2016,
+          "value": 47.925
+        },
+        {
+          "year": 2017,
+          "value": 47.775
+        },
+        {
+          "year": 2018,
+          "value": 49.375
+        },
+        {
+          "year": 2019,
+          "value": 49.175
+        },
+        {
+          "year": 2023,
+          "value": 52.89999999999999
+        },
+        {
+          "year": 2024,
+          "value": 53.224999999999994
+        },
+        {
+          "year": 2025,
+          "value": 55.5
+        }
+      ]
+    },
+    {
+      "indicatorId": "ibge-state-female-labor-participation",
+      "geographyType": "brazil-state",
+      "geographyCode": "21",
+      "geographyName": "Maranhão",
+      "points": [
+        {
+          "year": 2012,
+          "value": 43.39999999999999
+        },
+        {
+          "year": 2013,
+          "value": 42.3
+        },
+        {
+          "year": 2014,
+          "value": 43.45
+        },
+        {
+          "year": 2015,
+          "value": 44.675
+        },
+        {
+          "year": 2016,
+          "value": 42.075
+        },
+        {
+          "year": 2017,
+          "value": 41.775
+        },
+        {
+          "year": 2018,
+          "value": 40.325
+        },
+        {
+          "year": 2019,
+          "value": 40.6
+        },
+        {
+          "year": 2023,
+          "value": 41.02499999999999
+        },
+        {
+          "year": 2024,
+          "value": 40.675
+        },
+        {
+          "year": 2025,
+          "value": 41.525
+        }
+      ]
+    },
+    {
+      "indicatorId": "ibge-state-female-labor-participation",
+      "geographyType": "brazil-state",
+      "geographyCode": "22",
+      "geographyName": "Piauí",
+      "points": [
+        {
+          "year": 2012,
+          "value": 46.5
+        },
+        {
+          "year": 2013,
+          "value": 46.849999999999994
+        },
+        {
+          "year": 2014,
+          "value": 49.025
+        },
+        {
+          "year": 2015,
+          "value": 48.55
+        },
+        {
+          "year": 2016,
+          "value": 45.025000000000006
+        },
+        {
+          "year": 2017,
+          "value": 45.7
+        },
+        {
+          "year": 2018,
+          "value": 45.6
+        },
+        {
+          "year": 2019,
+          "value": 47.62499999999999
+        },
+        {
+          "year": 2023,
+          "value": 42.95
+        },
+        {
+          "year": 2024,
+          "value": 43.625
+        },
+        {
+          "year": 2025,
+          "value": 43.775000000000006
+        }
+      ]
+    },
+    {
+      "indicatorId": "ibge-state-female-labor-participation",
+      "geographyType": "brazil-state",
+      "geographyCode": "23",
+      "geographyName": "Ceará",
+      "points": [
+        {
+          "year": 2012,
+          "value": 43.324999999999996
+        },
+        {
+          "year": 2013,
+          "value": 43.15
+        },
+        {
+          "year": 2014,
+          "value": 43.8
+        },
+        {
+          "year": 2015,
+          "value": 43.324999999999996
+        },
+        {
+          "year": 2016,
+          "value": 43.95
+        },
+        {
+          "year": 2017,
+          "value": 45.65
+        },
+        {
+          "year": 2018,
+          "value": 46.425000000000004
+        },
+        {
+          "year": 2019,
+          "value": 47.825
+        },
+        {
+          "year": 2023,
+          "value": 42.125
+        },
+        {
+          "year": 2024,
+          "value": 41.724999999999994
+        },
+        {
+          "year": 2025,
+          "value": 42.2
+        }
+      ]
+    },
+    {
+      "indicatorId": "ibge-state-female-labor-participation",
+      "geographyType": "brazil-state",
+      "geographyCode": "24",
+      "geographyName": "Rio Grande do Norte",
+      "points": [
+        {
+          "year": 2012,
+          "value": 43.55
+        },
+        {
+          "year": 2013,
+          "value": 44.075
+        },
+        {
+          "year": 2014,
+          "value": 44.849999999999994
+        },
+        {
+          "year": 2015,
+          "value": 46.4
+        },
+        {
+          "year": 2016,
+          "value": 44.7
+        },
+        {
+          "year": 2017,
+          "value": 43.9
+        },
+        {
+          "year": 2018,
+          "value": 45.2
+        },
+        {
+          "year": 2019,
+          "value": 44.8
+        },
+        {
+          "year": 2023,
+          "value": 41.5
+        },
+        {
+          "year": 2024,
+          "value": 42.9
+        },
+        {
+          "year": 2025,
+          "value": 42.65
+        }
+      ]
+    },
+    {
+      "indicatorId": "ibge-state-female-labor-participation",
+      "geographyType": "brazil-state",
+      "geographyCode": "25",
+      "geographyName": "Paraíba",
+      "points": [
+        {
+          "year": 2012,
+          "value": 43.224999999999994
+        },
+        {
+          "year": 2013,
+          "value": 43.475
+        },
+        {
+          "year": 2014,
+          "value": 43.89999999999999
+        },
+        {
+          "year": 2015,
+          "value": 44.875
+        },
+        {
+          "year": 2016,
+          "value": 42.475
+        },
+        {
+          "year": 2017,
+          "value": 42.599999999999994
+        },
+        {
+          "year": 2018,
+          "value": 43.449999999999996
+        },
+        {
+          "year": 2019,
+          "value": 42.95
+        },
+        {
+          "year": 2023,
+          "value": 42.425
+        },
+        {
+          "year": 2024,
+          "value": 43.775
+        },
+        {
+          "year": 2025,
+          "value": 43.875
+        }
+      ]
+    },
+    {
+      "indicatorId": "ibge-state-female-labor-participation",
+      "geographyType": "brazil-state",
+      "geographyCode": "26",
+      "geographyName": "Pernambuco",
+      "points": [
+        {
+          "year": 2012,
+          "value": 44.2
+        },
+        {
+          "year": 2013,
+          "value": 43.125
+        },
+        {
+          "year": 2014,
+          "value": 43.325
+        },
+        {
+          "year": 2015,
+          "value": 44.2
+        },
+        {
+          "year": 2016,
+          "value": 43.325
+        },
+        {
+          "year": 2017,
+          "value": 43.675
+        },
+        {
+          "year": 2018,
+          "value": 45.225
+        },
+        {
+          "year": 2019,
+          "value": 45.35
+        },
+        {
+          "year": 2023,
+          "value": 43.300000000000004
+        },
+        {
+          "year": 2024,
+          "value": 44.575
+        },
+        {
+          "year": 2025,
+          "value": 43.824999999999996
+        }
+      ]
+    },
+    {
+      "indicatorId": "ibge-state-female-labor-participation",
+      "geographyType": "brazil-state",
+      "geographyCode": "27",
+      "geographyName": "Alagoas",
+      "points": [
+        {
+          "year": 2012,
+          "value": 35.95
+        },
+        {
+          "year": 2013,
+          "value": 37.725
+        },
+        {
+          "year": 2014,
+          "value": 38.275000000000006
+        },
+        {
+          "year": 2015,
+          "value": 38.025
+        },
+        {
+          "year": 2016,
+          "value": 38.52499999999999
+        },
+        {
+          "year": 2017,
+          "value": 37.025000000000006
+        },
+        {
+          "year": 2018,
+          "value": 35.150000000000006
+        },
+        {
+          "year": 2019,
+          "value": 37.275
+        },
+        {
+          "year": 2023,
+          "value": 41.5
+        },
+        {
+          "year": 2024,
+          "value": 41.975
+        },
+        {
+          "year": 2025,
+          "value": 41.625
+        }
+      ]
+    },
+    {
+      "indicatorId": "ibge-state-female-labor-participation",
+      "geographyType": "brazil-state",
+      "geographyCode": "28",
+      "geographyName": "Sergipe",
+      "points": [
+        {
+          "year": 2012,
+          "value": 48.349999999999994
+        },
+        {
+          "year": 2013,
+          "value": 49.75
+        },
+        {
+          "year": 2014,
+          "value": 48.65
+        },
+        {
+          "year": 2015,
+          "value": 47.475
+        },
+        {
+          "year": 2016,
+          "value": 46.45
+        },
+        {
+          "year": 2017,
+          "value": 46.975
+        },
+        {
+          "year": 2018,
+          "value": 47.949999999999996
+        },
+        {
+          "year": 2019,
+          "value": 50.89999999999999
+        },
+        {
+          "year": 2023,
+          "value": 47.075
+        },
+        {
+          "year": 2024,
+          "value": 47.85
+        },
+        {
+          "year": 2025,
+          "value": 45.574999999999996
+        }
+      ]
+    },
+    {
+      "indicatorId": "ibge-state-female-labor-participation",
+      "geographyType": "brazil-state",
+      "geographyCode": "29",
+      "geographyName": "Bahia",
+      "points": [
+        {
+          "year": 2012,
+          "value": 50.825
+        },
+        {
+          "year": 2013,
+          "value": 49.85
+        },
+        {
+          "year": 2014,
+          "value": 51.25
+        },
+        {
+          "year": 2015,
+          "value": 52.65
+        },
+        {
+          "year": 2016,
+          "value": 50.625
+        },
+        {
+          "year": 2017,
+          "value": 49.75
+        },
+        {
+          "year": 2018,
+          "value": 49.325
+        },
+        {
+          "year": 2019,
+          "value": 50.225
+        },
+        {
+          "year": 2023,
+          "value": 47.050000000000004
+        },
+        {
+          "year": 2024,
+          "value": 47.4
+        },
+        {
+          "year": 2025,
+          "value": 49.224999999999994
+        }
+      ]
+    },
+    {
+      "indicatorId": "ibge-state-female-labor-participation",
+      "geographyType": "brazil-state",
+      "geographyCode": "31",
+      "geographyName": "Minas Gerais",
+      "points": [
+        {
+          "year": 2012,
+          "value": 53.425000000000004
+        },
+        {
+          "year": 2013,
+          "value": 53.675
+        },
+        {
+          "year": 2014,
+          "value": 53.175
+        },
+        {
+          "year": 2015,
+          "value": 54.400000000000006
+        },
+        {
+          "year": 2016,
+          "value": 54.75
+        },
+        {
+          "year": 2017,
+          "value": 55.925
+        },
+        {
+          "year": 2018,
+          "value": 56.35
+        },
+        {
+          "year": 2019,
+          "value": 56.99999999999999
+        },
+        {
+          "year": 2023,
+          "value": 54.35000000000001
+        },
+        {
+          "year": 2024,
+          "value": 55.724999999999994
+        },
+        {
+          "year": 2025,
+          "value": 55.45
+        }
+      ]
+    },
+    {
+      "indicatorId": "ibge-state-female-labor-participation",
+      "geographyType": "brazil-state",
+      "geographyCode": "32",
+      "geographyName": "Espírito Santo",
+      "points": [
+        {
+          "year": 2012,
+          "value": 55.05
+        },
+        {
+          "year": 2013,
+          "value": 54.75
+        },
+        {
+          "year": 2014,
+          "value": 53.65
+        },
+        {
+          "year": 2015,
+          "value": 52.775000000000006
+        },
+        {
+          "year": 2016,
+          "value": 53.15
+        },
+        {
+          "year": 2017,
+          "value": 55.349999999999994
+        },
+        {
+          "year": 2018,
+          "value": 56.625
+        },
+        {
+          "year": 2019,
+          "value": 58.425000000000004
+        },
+        {
+          "year": 2023,
+          "value": 53.625
+        },
+        {
+          "year": 2024,
+          "value": 54.2
+        },
+        {
+          "year": 2025,
+          "value": 52.025
+        }
+      ]
+    },
+    {
+      "indicatorId": "ibge-state-female-labor-participation",
+      "geographyType": "brazil-state",
+      "geographyCode": "33",
+      "geographyName": "Rio de Janeiro",
+      "points": [
+        {
+          "year": 2012,
+          "value": 50.225
+        },
+        {
+          "year": 2013,
+          "value": 49.375
+        },
+        {
+          "year": 2014,
+          "value": 48.5
+        },
+        {
+          "year": 2015,
+          "value": 48.575
+        },
+        {
+          "year": 2016,
+          "value": 49.925
+        },
+        {
+          "year": 2017,
+          "value": 51.599999999999994
+        },
+        {
+          "year": 2018,
+          "value": 52.150000000000006
+        },
+        {
+          "year": 2019,
+          "value": 52.65
+        },
+        {
+          "year": 2023,
+          "value": 51.825
+        },
+        {
+          "year": 2024,
+          "value": 52.550000000000004
+        },
+        {
+          "year": 2025,
+          "value": 52.525000000000006
+        }
+      ]
+    },
+    {
+      "indicatorId": "ibge-state-female-labor-participation",
+      "geographyType": "brazil-state",
+      "geographyCode": "35",
+      "geographyName": "São Paulo",
+      "points": [
+        {
+          "year": 2012,
+          "value": 55.225
+        },
+        {
+          "year": 2013,
+          "value": 55.8
+        },
+        {
+          "year": 2014,
+          "value": 55.3
+        },
+        {
+          "year": 2015,
+          "value": 56.45
+        },
+        {
+          "year": 2016,
+          "value": 58.025
+        },
+        {
+          "year": 2017,
+          "value": 59.775000000000006
+        },
+        {
+          "year": 2018,
+          "value": 60.37500000000001
+        },
+        {
+          "year": 2019,
+          "value": 60.75
+        },
+        {
+          "year": 2023,
+          "value": 58.625
+        },
+        {
+          "year": 2024,
+          "value": 58.35
+        },
+        {
+          "year": 2025,
+          "value": 58.55
+        }
+      ]
+    },
+    {
+      "indicatorId": "ibge-state-female-labor-participation",
+      "geographyType": "brazil-state",
+      "geographyCode": "41",
+      "geographyName": "Paraná",
+      "points": [
+        {
+          "year": 2012,
+          "value": 55.45
+        },
+        {
+          "year": 2013,
+          "value": 56.00000000000001
+        },
+        {
+          "year": 2014,
+          "value": 55.474999999999994
+        },
+        {
+          "year": 2015,
+          "value": 54.849999999999994
+        },
+        {
+          "year": 2016,
+          "value": 55.75000000000001
+        },
+        {
+          "year": 2017,
+          "value": 55.725
+        },
+        {
+          "year": 2018,
+          "value": 56.074999999999996
+        },
+        {
+          "year": 2019,
+          "value": 57.025
+        },
+        {
+          "year": 2023,
+          "value": 55.125
+        },
+        {
+          "year": 2024,
+          "value": 56.27499999999999
+        },
+        {
+          "year": 2025,
+          "value": 57.525000000000006
+        }
+      ]
+    },
+    {
+      "indicatorId": "ibge-state-female-labor-participation",
+      "geographyType": "brazil-state",
+      "geographyCode": "42",
+      "geographyName": "Santa Catarina",
+      "points": [
+        {
+          "year": 2012,
+          "value": 57.375
+        },
+        {
+          "year": 2013,
+          "value": 56.15
+        },
+        {
+          "year": 2014,
+          "value": 56.275
+        },
+        {
+          "year": 2015,
+          "value": 57.35
+        },
+        {
+          "year": 2016,
+          "value": 56.675
+        },
+        {
+          "year": 2017,
+          "value": 58.85000000000001
+        },
+        {
+          "year": 2018,
+          "value": 58.650000000000006
+        },
+        {
+          "year": 2019,
+          "value": 58.99999999999999
+        },
+        {
+          "year": 2023,
+          "value": 59.5
+        },
+        {
+          "year": 2024,
+          "value": 60.449999999999996
+        },
+        {
+          "year": 2025,
+          "value": 60.025000000000006
+        }
+      ]
+    },
+    {
+      "indicatorId": "ibge-state-female-labor-participation",
+      "geographyType": "brazil-state",
+      "geographyCode": "43",
+      "geographyName": "Rio Grande do Sul",
+      "points": [
+        {
+          "year": 2012,
+          "value": 55.95
+        },
+        {
+          "year": 2013,
+          "value": 56.5
+        },
+        {
+          "year": 2014,
+          "value": 56.3
+        },
+        {
+          "year": 2015,
+          "value": 57.400000000000006
+        },
+        {
+          "year": 2016,
+          "value": 57.5
+        },
+        {
+          "year": 2017,
+          "value": 57.800000000000004
+        },
+        {
+          "year": 2018,
+          "value": 56.224999999999994
+        },
+        {
+          "year": 2019,
+          "value": 58.025000000000006
+        },
+        {
+          "year": 2023,
+          "value": 57.974999999999994
+        },
+        {
+          "year": 2024,
+          "value": 58.099999999999994
+        },
+        {
+          "year": 2025,
+          "value": 57.65
+        }
+      ]
+    },
+    {
+      "indicatorId": "ibge-state-female-labor-participation",
+      "geographyType": "brazil-state",
+      "geographyCode": "50",
+      "geographyName": "Mato Grosso do Sul",
+      "points": [
+        {
+          "year": 2012,
+          "value": 54.125
+        },
+        {
+          "year": 2013,
+          "value": 53.3
+        },
+        {
+          "year": 2014,
+          "value": 54.125
+        },
+        {
+          "year": 2015,
+          "value": 55
+        },
+        {
+          "year": 2016,
+          "value": 56.525
+        },
+        {
+          "year": 2017,
+          "value": 56.099999999999994
+        },
+        {
+          "year": 2018,
+          "value": 57.425
+        },
+        {
+          "year": 2019,
+          "value": 58.65
+        },
+        {
+          "year": 2023,
+          "value": 57.50000000000001
+        },
+        {
+          "year": 2024,
+          "value": 57.099999999999994
+        },
+        {
+          "year": 2025,
+          "value": 55.15
+        }
+      ]
+    },
+    {
+      "indicatorId": "ibge-state-female-labor-participation",
+      "geographyType": "brazil-state",
+      "geographyCode": "51",
+      "geographyName": "Mato Grosso",
+      "points": [
+        {
+          "year": 2012,
+          "value": 51.550000000000004
+        },
+        {
+          "year": 2013,
+          "value": 52.7
+        },
+        {
+          "year": 2014,
+          "value": 52.475
+        },
+        {
+          "year": 2015,
+          "value": 52.6
+        },
+        {
+          "year": 2016,
+          "value": 52.825
+        },
+        {
+          "year": 2017,
+          "value": 52.3
+        },
+        {
+          "year": 2018,
+          "value": 54.1
+        },
+        {
+          "year": 2019,
+          "value": 57.6
+        },
+        {
+          "year": 2023,
+          "value": 54.45
+        },
+        {
+          "year": 2024,
+          "value": 59.025
+        },
+        {
+          "year": 2025,
+          "value": 58.150000000000006
+        }
+      ]
+    },
+    {
+      "indicatorId": "ibge-state-female-labor-participation",
+      "geographyType": "brazil-state",
+      "geographyCode": "52",
+      "geographyName": "Goiás",
+      "points": [
+        {
+          "year": 2012,
+          "value": 53.89999999999999
+        },
+        {
+          "year": 2013,
+          "value": 53.95
+        },
+        {
+          "year": 2014,
+          "value": 54.55
+        },
+        {
+          "year": 2015,
+          "value": 55.225
+        },
+        {
+          "year": 2016,
+          "value": 55
+        },
+        {
+          "year": 2017,
+          "value": 56.95
+        },
+        {
+          "year": 2018,
+          "value": 56.425
+        },
+        {
+          "year": 2019,
+          "value": 58.150000000000006
+        },
+        {
+          "year": 2023,
+          "value": 57.199999999999996
+        },
+        {
+          "year": 2024,
+          "value": 57.725
+        },
+        {
+          "year": 2025,
+          "value": 57.24999999999999
+        }
+      ]
+    },
+    {
+      "indicatorId": "ibge-state-female-labor-participation",
+      "geographyType": "brazil-state",
+      "geographyCode": "53",
+      "geographyName": "Distrito Federal",
+      "points": [
+        {
+          "year": 2012,
+          "value": 59.099999999999994
+        },
+        {
+          "year": 2013,
+          "value": 60.89999999999999
+        },
+        {
+          "year": 2014,
+          "value": 59.224999999999994
+        },
+        {
+          "year": 2015,
+          "value": 57.650000000000006
+        },
+        {
+          "year": 2016,
+          "value": 59.925
+        },
+        {
+          "year": 2017,
+          "value": 59.675000000000004
+        },
+        {
+          "year": 2018,
+          "value": 60.324999999999996
+        },
+        {
+          "year": 2019,
+          "value": 61.55
+        },
+        {
+          "year": 2023,
+          "value": 62.05
+        },
+        {
+          "year": 2024,
+          "value": 60.449999999999996
+        },
+        {
+          "year": 2025,
+          "value": 60.12499999999999
+        }
+      ]
+    },
+    {
+      "indicatorId": "ibge-state-labor-participation-gap",
+      "geographyType": "brazil-state",
+      "geographyCode": "11",
+      "geographyName": "Rondônia",
+      "points": [
+        {
+          "year": 2012,
+          "value": 26.72500000000001
+        },
+        {
+          "year": 2013,
+          "value": 29.275
+        },
+        {
+          "year": 2014,
+          "value": 31.025000000000006
+        },
+        {
+          "year": 2015,
+          "value": 31.07500000000001
+        },
+        {
+          "year": 2016,
+          "value": 29.099999999999994
+        },
+        {
+          "year": 2017,
+          "value": 27.250000000000014
+        },
+        {
+          "year": 2018,
+          "value": 27.125000000000007
+        },
+        {
+          "year": 2019,
+          "value": 27.04999999999999
+        },
+        {
+          "year": 2023,
+          "value": 25.85
+        },
+        {
+          "year": 2024,
+          "value": 26.075000000000003
+        },
+        {
+          "year": 2025,
+          "value": 26.724999999999994
+        }
+      ]
+    },
+    {
+      "indicatorId": "ibge-state-labor-participation-gap",
+      "geographyType": "brazil-state",
+      "geographyCode": "12",
+      "geographyName": "Acre",
+      "points": [
+        {
+          "year": 2012,
+          "value": 23.60000000000001
+        },
+        {
+          "year": 2013,
+          "value": 24.900000000000006
+        },
+        {
+          "year": 2014,
+          "value": 26.075000000000003
+        },
+        {
+          "year": 2015,
+          "value": 25.125
+        },
+        {
+          "year": 2016,
+          "value": 23.82500000000001
+        },
+        {
+          "year": 2017,
+          "value": 22.099999999999994
+        },
+        {
+          "year": 2018,
+          "value": 22.5
+        },
+        {
+          "year": 2019,
+          "value": 19.674999999999997
+        },
+        {
+          "year": 2023,
+          "value": 19.549999999999997
+        },
+        {
+          "year": 2024,
+          "value": 22.575000000000003
+        },
+        {
+          "year": 2025,
+          "value": 22.674999999999997
+        }
+      ]
+    },
+    {
+      "indicatorId": "ibge-state-labor-participation-gap",
+      "geographyType": "brazil-state",
+      "geographyCode": "13",
+      "geographyName": "Amazonas",
+      "points": [
+        {
+          "year": 2012,
+          "value": 25.69999999999999
+        },
+        {
+          "year": 2013,
+          "value": 25.299999999999997
+        },
+        {
+          "year": 2014,
+          "value": 24.950000000000003
+        },
+        {
+          "year": 2015,
+          "value": 25.6
+        },
+        {
+          "year": 2016,
+          "value": 23.65
+        },
+        {
+          "year": 2017,
+          "value": 22.000000000000007
+        },
+        {
+          "year": 2018,
+          "value": 21.175000000000004
+        },
+        {
+          "year": 2019,
+          "value": 21.450000000000003
+        },
+        {
+          "year": 2023,
+          "value": 22.574999999999996
+        },
+        {
+          "year": 2024,
+          "value": 22.625
+        },
+        {
+          "year": 2025,
+          "value": 21.25
+        }
+      ]
+    },
+    {
+      "indicatorId": "ibge-state-labor-participation-gap",
+      "geographyType": "brazil-state",
+      "geographyCode": "14",
+      "geographyName": "Roraima",
+      "points": [
+        {
+          "year": 2012,
+          "value": 20.174999999999997
+        },
+        {
+          "year": 2013,
+          "value": 20.275000000000013
+        },
+        {
+          "year": 2014,
+          "value": 21.32499999999999
+        },
+        {
+          "year": 2015,
+          "value": 19.250000000000007
+        },
+        {
+          "year": 2016,
+          "value": 20.974999999999987
+        },
+        {
+          "year": 2017,
+          "value": 19.35000000000001
+        },
+        {
+          "year": 2018,
+          "value": 18.150000000000006
+        },
+        {
+          "year": 2019,
+          "value": 19.549999999999997
+        },
+        {
+          "year": 2023,
+          "value": 21.9
+        },
+        {
+          "year": 2024,
+          "value": 19.75
+        },
+        {
+          "year": 2025,
+          "value": 21.02499999999999
+        }
+      ]
+    },
+    {
+      "indicatorId": "ibge-state-labor-participation-gap",
+      "geographyType": "brazil-state",
+      "geographyCode": "15",
+      "geographyName": "Pará",
+      "points": [
+        {
+          "year": 2012,
+          "value": 28.35000000000001
+        },
+        {
+          "year": 2013,
+          "value": 28.5
+        },
+        {
+          "year": 2014,
+          "value": 28.125000000000007
+        },
+        {
+          "year": 2015,
+          "value": 27.25
+        },
+        {
+          "year": 2016,
+          "value": 27.35000000000001
+        },
+        {
+          "year": 2017,
+          "value": 25.299999999999997
+        },
+        {
+          "year": 2018,
+          "value": 24.65
+        },
+        {
+          "year": 2019,
+          "value": 25.82499999999999
+        },
+        {
+          "year": 2023,
+          "value": 23.875
+        },
+        {
+          "year": 2024,
+          "value": 24.900000000000006
+        },
+        {
+          "year": 2025,
+          "value": 26.450000000000003
+        }
+      ]
+    },
+    {
+      "indicatorId": "ibge-state-labor-participation-gap",
+      "geographyType": "brazil-state",
+      "geographyCode": "16",
+      "geographyName": "Amapá",
+      "points": [
+        {
+          "year": 2012,
+          "value": 18.649999999999984
+        },
+        {
+          "year": 2013,
+          "value": 21.724999999999994
+        },
+        {
+          "year": 2014,
+          "value": 23.025000000000006
+        },
+        {
+          "year": 2015,
+          "value": 24.025
+        },
+        {
+          "year": 2016,
+          "value": 20.750000000000014
+        },
+        {
+          "year": 2017,
+          "value": 18.500000000000007
+        },
+        {
+          "year": 2018,
+          "value": 20.30000000000001
+        },
+        {
+          "year": 2019,
+          "value": 21.700000000000003
+        },
+        {
+          "year": 2023,
+          "value": 21.35
+        },
+        {
+          "year": 2024,
+          "value": 22.4
+        },
+        {
+          "year": 2025,
+          "value": 21.10000000000001
+        }
+      ]
+    },
+    {
+      "indicatorId": "ibge-state-labor-participation-gap",
+      "geographyType": "brazil-state",
+      "geographyCode": "17",
+      "geographyName": "Tocantins",
+      "points": [
+        {
+          "year": 2012,
+          "value": 25.749999999999993
+        },
+        {
+          "year": 2013,
+          "value": 25.75
+        },
+        {
+          "year": 2014,
+          "value": 25.599999999999994
+        },
+        {
+          "year": 2015,
+          "value": 25.44999999999999
+        },
+        {
+          "year": 2016,
+          "value": 25.799999999999997
+        },
+        {
+          "year": 2017,
+          "value": 21.675000000000004
+        },
+        {
+          "year": 2018,
+          "value": 20.650000000000006
+        },
+        {
+          "year": 2019,
+          "value": 21.35000000000001
+        },
+        {
+          "year": 2023,
+          "value": 19.85000000000001
+        },
+        {
+          "year": 2024,
+          "value": 19.67500000000001
+        },
+        {
+          "year": 2025,
+          "value": 19.69999999999999
+        }
+      ]
+    },
+    {
+      "indicatorId": "ibge-state-labor-participation-gap",
+      "geographyType": "brazil-state",
+      "geographyCode": "21",
+      "geographyName": "Maranhão",
+      "points": [
+        {
+          "year": 2012,
+          "value": 26.92500000000001
+        },
+        {
+          "year": 2013,
+          "value": 26.900000000000006
+        },
+        {
+          "year": 2014,
+          "value": 27.400000000000006
+        },
+        {
+          "year": 2015,
+          "value": 25.825000000000003
+        },
+        {
+          "year": 2016,
+          "value": 25.224999999999994
+        },
+        {
+          "year": 2017,
+          "value": 22.800000000000004
+        },
+        {
+          "year": 2018,
+          "value": 20.674999999999997
+        },
+        {
+          "year": 2019,
+          "value": 18.324999999999996
+        },
+        {
+          "year": 2023,
+          "value": 19.875000000000007
+        },
+        {
+          "year": 2024,
+          "value": 20.925000000000004
+        },
+        {
+          "year": 2025,
+          "value": 21.799999999999997
+        }
+      ]
+    },
+    {
+      "indicatorId": "ibge-state-labor-participation-gap",
+      "geographyType": "brazil-state",
+      "geographyCode": "22",
+      "geographyName": "Piauí",
+      "points": [
+        {
+          "year": 2012,
+          "value": 25.25
+        },
+        {
+          "year": 2013,
+          "value": 25.950000000000003
+        },
+        {
+          "year": 2014,
+          "value": 24.550000000000004
+        },
+        {
+          "year": 2015,
+          "value": 23.64999999999999
+        },
+        {
+          "year": 2016,
+          "value": 24.474999999999994
+        },
+        {
+          "year": 2017,
+          "value": 22.249999999999986
+        },
+        {
+          "year": 2018,
+          "value": 21.699999999999996
+        },
+        {
+          "year": 2019,
+          "value": 20.875000000000007
+        },
+        {
+          "year": 2023,
+          "value": 20.424999999999997
+        },
+        {
+          "year": 2024,
+          "value": 21.799999999999997
+        },
+        {
+          "year": 2025,
+          "value": 20.82499999999999
+        }
+      ]
+    },
+    {
+      "indicatorId": "ibge-state-labor-participation-gap",
+      "geographyType": "brazil-state",
+      "geographyCode": "23",
+      "geographyName": "Ceará",
+      "points": [
+        {
+          "year": 2012,
+          "value": 25.275
+        },
+        {
+          "year": 2013,
+          "value": 24.725
+        },
+        {
+          "year": 2014,
+          "value": 24.22500000000001
+        },
+        {
+          "year": 2015,
+          "value": 24.025
+        },
+        {
+          "year": 2016,
+          "value": 23.624999999999986
+        },
+        {
+          "year": 2017,
+          "value": 21.275
+        },
+        {
+          "year": 2018,
+          "value": 21.65
+        },
+        {
+          "year": 2019,
+          "value": 19.775000000000006
+        },
+        {
+          "year": 2023,
+          "value": 21.799999999999997
+        },
+        {
+          "year": 2024,
+          "value": 21.250000000000007
+        },
+        {
+          "year": 2025,
+          "value": 20.474999999999994
+        }
+      ]
+    },
+    {
+      "indicatorId": "ibge-state-labor-participation-gap",
+      "geographyType": "brazil-state",
+      "geographyCode": "24",
+      "geographyName": "Rio Grande do Norte",
+      "points": [
+        {
+          "year": 2012,
+          "value": 26.17500000000001
+        },
+        {
+          "year": 2013,
+          "value": 25.5
+        },
+        {
+          "year": 2014,
+          "value": 24.55000000000001
+        },
+        {
+          "year": 2015,
+          "value": 22.85
+        },
+        {
+          "year": 2016,
+          "value": 22.599999999999994
+        },
+        {
+          "year": 2017,
+          "value": 22.874999999999993
+        },
+        {
+          "year": 2018,
+          "value": 20.599999999999994
+        },
+        {
+          "year": 2019,
+          "value": 21.474999999999994
+        },
+        {
+          "year": 2023,
+          "value": 20.025
+        },
+        {
+          "year": 2024,
+          "value": 21.95000000000001
+        },
+        {
+          "year": 2025,
+          "value": 21.624999999999993
+        }
+      ]
+    },
+    {
+      "indicatorId": "ibge-state-labor-participation-gap",
+      "geographyType": "brazil-state",
+      "geographyCode": "25",
+      "geographyName": "Paraíba",
+      "points": [
+        {
+          "year": 2012,
+          "value": 28.35000000000001
+        },
+        {
+          "year": 2013,
+          "value": 27.57500000000001
+        },
+        {
+          "year": 2014,
+          "value": 27.950000000000003
+        },
+        {
+          "year": 2015,
+          "value": 26.549999999999997
+        },
+        {
+          "year": 2016,
+          "value": 25.6
+        },
+        {
+          "year": 2017,
+          "value": 24.875
+        },
+        {
+          "year": 2018,
+          "value": 23.500000000000007
+        },
+        {
+          "year": 2019,
+          "value": 21.849999999999994
+        },
+        {
+          "year": 2023,
+          "value": 21.075000000000003
+        },
+        {
+          "year": 2024,
+          "value": 22.425000000000004
+        },
+        {
+          "year": 2025,
+          "value": 21.52499999999999
+        }
+      ]
+    },
+    {
+      "indicatorId": "ibge-state-labor-participation-gap",
+      "geographyType": "brazil-state",
+      "geographyCode": "26",
+      "geographyName": "Pernambuco",
+      "points": [
+        {
+          "year": 2012,
+          "value": 25.02499999999999
+        },
+        {
+          "year": 2013,
+          "value": 25.125
+        },
+        {
+          "year": 2014,
+          "value": 25.450000000000003
+        },
+        {
+          "year": 2015,
+          "value": 25
+        },
+        {
+          "year": 2016,
+          "value": 24.82499999999999
+        },
+        {
+          "year": 2017,
+          "value": 23.650000000000006
+        },
+        {
+          "year": 2018,
+          "value": 23.525
+        },
+        {
+          "year": 2019,
+          "value": 22.349999999999987
+        },
+        {
+          "year": 2023,
+          "value": 22.574999999999996
+        },
+        {
+          "year": 2024,
+          "value": 22.22500000000001
+        },
+        {
+          "year": 2025,
+          "value": 22.125000000000007
+        }
+      ]
+    },
+    {
+      "indicatorId": "ibge-state-labor-participation-gap",
+      "geographyType": "brazil-state",
+      "geographyCode": "27",
+      "geographyName": "Alagoas",
+      "points": [
+        {
+          "year": 2012,
+          "value": 29.325000000000003
+        },
+        {
+          "year": 2013,
+          "value": 29.074999999999996
+        },
+        {
+          "year": 2014,
+          "value": 27.724999999999994
+        },
+        {
+          "year": 2015,
+          "value": 26.775
+        },
+        {
+          "year": 2016,
+          "value": 24.625000000000007
+        },
+        {
+          "year": 2017,
+          "value": 21.974999999999994
+        },
+        {
+          "year": 2018,
+          "value": 20.749999999999993
+        },
+        {
+          "year": 2019,
+          "value": 20.199999999999996
+        },
+        {
+          "year": 2023,
+          "value": 21.575000000000003
+        },
+        {
+          "year": 2024,
+          "value": 21.799999999999997
+        },
+        {
+          "year": 2025,
+          "value": 21.775
+        }
+      ]
+    },
+    {
+      "indicatorId": "ibge-state-labor-participation-gap",
+      "geographyType": "brazil-state",
+      "geographyCode": "28",
+      "geographyName": "Sergipe",
+      "points": [
+        {
+          "year": 2012,
+          "value": 24.974999999999994
+        },
+        {
+          "year": 2013,
+          "value": 22.80000000000001
+        },
+        {
+          "year": 2014,
+          "value": 24.475
+        },
+        {
+          "year": 2015,
+          "value": 25.074999999999996
+        },
+        {
+          "year": 2016,
+          "value": 24.60000000000001
+        },
+        {
+          "year": 2017,
+          "value": 21.775
+        },
+        {
+          "year": 2018,
+          "value": 21.9
+        },
+        {
+          "year": 2019,
+          "value": 19.825000000000003
+        },
+        {
+          "year": 2023,
+          "value": 20.94999999999999
+        },
+        {
+          "year": 2024,
+          "value": 22.225
+        },
+        {
+          "year": 2025,
+          "value": 21.4
+        }
+      ]
+    },
+    {
+      "indicatorId": "ibge-state-labor-participation-gap",
+      "geographyType": "brazil-state",
+      "geographyCode": "29",
+      "geographyName": "Bahia",
+      "points": [
+        {
+          "year": 2012,
+          "value": 24.474999999999994
+        },
+        {
+          "year": 2013,
+          "value": 24.099999999999987
+        },
+        {
+          "year": 2014,
+          "value": 23.5
+        },
+        {
+          "year": 2015,
+          "value": 21.875000000000007
+        },
+        {
+          "year": 2016,
+          "value": 22.25
+        },
+        {
+          "year": 2017,
+          "value": 20.875
+        },
+        {
+          "year": 2018,
+          "value": 20.10000000000001
+        },
+        {
+          "year": 2019,
+          "value": 18.875000000000007
+        },
+        {
+          "year": 2023,
+          "value": 21.35
+        },
+        {
+          "year": 2024,
+          "value": 20.800000000000004
+        },
+        {
+          "year": 2025,
+          "value": 19.42500000000001
+        }
+      ]
+    },
+    {
+      "indicatorId": "ibge-state-labor-participation-gap",
+      "geographyType": "brazil-state",
+      "geographyCode": "31",
+      "geographyName": "Minas Gerais",
+      "points": [
+        {
+          "year": 2012,
+          "value": 22.050000000000004
+        },
+        {
+          "year": 2013,
+          "value": 21.22500000000001
+        },
+        {
+          "year": 2014,
+          "value": 21.075000000000003
+        },
+        {
+          "year": 2015,
+          "value": 19.89999999999999
+        },
+        {
+          "year": 2016,
+          "value": 20.224999999999994
+        },
+        {
+          "year": 2017,
+          "value": 19.049999999999997
+        },
+        {
+          "year": 2018,
+          "value": 18.724999999999987
+        },
+        {
+          "year": 2019,
+          "value": 17.550000000000004
+        },
+        {
+          "year": 2023,
+          "value": 19.34999999999998
+        },
+        {
+          "year": 2024,
+          "value": 18.549999999999997
+        },
+        {
+          "year": 2025,
+          "value": 18.44999999999999
+        }
+      ]
+    },
+    {
+      "indicatorId": "ibge-state-labor-participation-gap",
+      "geographyType": "brazil-state",
+      "geographyCode": "32",
+      "geographyName": "Espírito Santo",
+      "points": [
+        {
+          "year": 2012,
+          "value": 22.825000000000003
+        },
+        {
+          "year": 2013,
+          "value": 22.974999999999994
+        },
+        {
+          "year": 2014,
+          "value": 22.125000000000007
+        },
+        {
+          "year": 2015,
+          "value": 22.275000000000006
+        },
+        {
+          "year": 2016,
+          "value": 21.6
+        },
+        {
+          "year": 2017,
+          "value": 20.67500000000001
+        },
+        {
+          "year": 2018,
+          "value": 19.875
+        },
+        {
+          "year": 2019,
+          "value": 19.6
+        },
+        {
+          "year": 2023,
+          "value": 20.150000000000006
+        },
+        {
+          "year": 2024,
+          "value": 19.799999999999997
+        },
+        {
+          "year": 2025,
+          "value": 21.1
+        }
+      ]
+    },
+    {
+      "indicatorId": "ibge-state-labor-participation-gap",
+      "geographyType": "brazil-state",
+      "geographyCode": "33",
+      "geographyName": "Rio de Janeiro",
+      "points": [
+        {
+          "year": 2012,
+          "value": 22.449999999999996
+        },
+        {
+          "year": 2013,
+          "value": 22.92500000000001
+        },
+        {
+          "year": 2014,
+          "value": 22.69999999999999
+        },
+        {
+          "year": 2015,
+          "value": 22.575000000000003
+        },
+        {
+          "year": 2016,
+          "value": 21.47500000000001
+        },
+        {
+          "year": 2017,
+          "value": 20.67500000000001
+        },
+        {
+          "year": 2018,
+          "value": 20.575000000000003
+        },
+        {
+          "year": 2019,
+          "value": 20.04999999999999
+        },
+        {
+          "year": 2023,
+          "value": 19.174999999999997
+        },
+        {
+          "year": 2024,
+          "value": 19.024999999999984
+        },
+        {
+          "year": 2025,
+          "value": 19.174999999999997
+        }
+      ]
+    },
+    {
+      "indicatorId": "ibge-state-labor-participation-gap",
+      "geographyType": "brazil-state",
+      "geographyCode": "35",
+      "geographyName": "São Paulo",
+      "points": [
+        {
+          "year": 2012,
+          "value": 20.624999999999993
+        },
+        {
+          "year": 2013,
+          "value": 20.375
+        },
+        {
+          "year": 2014,
+          "value": 19.97500000000001
+        },
+        {
+          "year": 2015,
+          "value": 19.150000000000006
+        },
+        {
+          "year": 2016,
+          "value": 18.6
+        },
+        {
+          "year": 2017,
+          "value": 17.674999999999997
+        },
+        {
+          "year": 2018,
+          "value": 17.374999999999993
+        },
+        {
+          "year": 2019,
+          "value": 17.30000000000001
+        },
+        {
+          "year": 2023,
+          "value": 16.724999999999994
+        },
+        {
+          "year": 2024,
+          "value": 17.225
+        },
+        {
+          "year": 2025,
+          "value": 16.900000000000006
+        }
+      ]
+    },
+    {
+      "indicatorId": "ibge-state-labor-participation-gap",
+      "geographyType": "brazil-state",
+      "geographyCode": "41",
+      "geographyName": "Paraná",
+      "points": [
+        {
+          "year": 2012,
+          "value": 21.424999999999997
+        },
+        {
+          "year": 2013,
+          "value": 21.050000000000004
+        },
+        {
+          "year": 2014,
+          "value": 21.25
+        },
+        {
+          "year": 2015,
+          "value": 21.450000000000017
+        },
+        {
+          "year": 2016,
+          "value": 20.624999999999993
+        },
+        {
+          "year": 2017,
+          "value": 20.374999999999993
+        },
+        {
+          "year": 2018,
+          "value": 19.525
+        },
+        {
+          "year": 2019,
+          "value": 19.275
+        },
+        {
+          "year": 2023,
+          "value": 18.875
+        },
+        {
+          "year": 2024,
+          "value": 18.700000000000003
+        },
+        {
+          "year": 2025,
+          "value": 17.94999999999999
+        }
+      ]
+    },
+    {
+      "indicatorId": "ibge-state-labor-participation-gap",
+      "geographyType": "brazil-state",
+      "geographyCode": "42",
+      "geographyName": "Santa Catarina",
+      "points": [
+        {
+          "year": 2012,
+          "value": 18.700000000000003
+        },
+        {
+          "year": 2013,
+          "value": 18.650000000000013
+        },
+        {
+          "year": 2014,
+          "value": 17.975
+        },
+        {
+          "year": 2015,
+          "value": 17.925000000000004
+        },
+        {
+          "year": 2016,
+          "value": 18.325000000000003
+        },
+        {
+          "year": 2017,
+          "value": 17.099999999999994
+        },
+        {
+          "year": 2018,
+          "value": 16.924999999999983
+        },
+        {
+          "year": 2019,
+          "value": 16.375000000000007
+        },
+        {
+          "year": 2023,
+          "value": 16.049999999999997
+        },
+        {
+          "year": 2024,
+          "value": 15.975000000000016
+        },
+        {
+          "year": 2025,
+          "value": 15.900000000000006
+        }
+      ]
+    },
+    {
+      "indicatorId": "ibge-state-labor-participation-gap",
+      "geographyType": "brazil-state",
+      "geographyCode": "43",
+      "geographyName": "Rio Grande do Sul",
+      "points": [
+        {
+          "year": 2012,
+          "value": 18.674999999999997
+        },
+        {
+          "year": 2013,
+          "value": 19.349999999999994
+        },
+        {
+          "year": 2014,
+          "value": 18.775000000000006
+        },
+        {
+          "year": 2015,
+          "value": 17.775000000000006
+        },
+        {
+          "year": 2016,
+          "value": 17.97500000000001
+        },
+        {
+          "year": 2017,
+          "value": 17.54999999999999
+        },
+        {
+          "year": 2018,
+          "value": 18.025000000000006
+        },
+        {
+          "year": 2019,
+          "value": 16.44999999999999
+        },
+        {
+          "year": 2023,
+          "value": 15.775000000000006
+        },
+        {
+          "year": 2024,
+          "value": 16.200000000000003
+        },
+        {
+          "year": 2025,
+          "value": 16.650000000000013
+        }
+      ]
+    },
+    {
+      "indicatorId": "ibge-state-labor-participation-gap",
+      "geographyType": "brazil-state",
+      "geographyCode": "50",
+      "geographyName": "Mato Grosso do Sul",
+      "points": [
+        {
+          "year": 2012,
+          "value": 23.375
+        },
+        {
+          "year": 2013,
+          "value": 25.375
+        },
+        {
+          "year": 2014,
+          "value": 23.44999999999999
+        },
+        {
+          "year": 2015,
+          "value": 22.724999999999994
+        },
+        {
+          "year": 2016,
+          "value": 20.57500000000001
+        },
+        {
+          "year": 2017,
+          "value": 21.650000000000006
+        },
+        {
+          "year": 2018,
+          "value": 20.89999999999999
+        },
+        {
+          "year": 2019,
+          "value": 18.750000000000007
+        },
+        {
+          "year": 2023,
+          "value": 19.849999999999987
+        },
+        {
+          "year": 2024,
+          "value": 18.174999999999997
+        },
+        {
+          "year": 2025,
+          "value": 18.199999999999996
+        }
+      ]
+    },
+    {
+      "indicatorId": "ibge-state-labor-participation-gap",
+      "geographyType": "brazil-state",
+      "geographyCode": "51",
+      "geographyName": "Mato Grosso",
+      "points": [
+        {
+          "year": 2012,
+          "value": 27.624999999999993
+        },
+        {
+          "year": 2013,
+          "value": 26.950000000000003
+        },
+        {
+          "year": 2014,
+          "value": 26.9
+        },
+        {
+          "year": 2015,
+          "value": 26.32500000000001
+        },
+        {
+          "year": 2016,
+          "value": 25.450000000000003
+        },
+        {
+          "year": 2017,
+          "value": 25.799999999999997
+        },
+        {
+          "year": 2018,
+          "value": 24.300000000000004
+        },
+        {
+          "year": 2019,
+          "value": 22.025
+        },
+        {
+          "year": 2023,
+          "value": 23.85000000000001
+        },
+        {
+          "year": 2024,
+          "value": 21.42499999999999
+        },
+        {
+          "year": 2025,
+          "value": 22.19999999999999
+        }
+      ]
+    },
+    {
+      "indicatorId": "ibge-state-labor-participation-gap",
+      "geographyType": "brazil-state",
+      "geographyCode": "52",
+      "geographyName": "Goiás",
+      "points": [
+        {
+          "year": 2012,
+          "value": 25.250000000000014
+        },
+        {
+          "year": 2013,
+          "value": 24.75
+        },
+        {
+          "year": 2014,
+          "value": 24.025000000000006
+        },
+        {
+          "year": 2015,
+          "value": 22.499999999999993
+        },
+        {
+          "year": 2016,
+          "value": 23.125
+        },
+        {
+          "year": 2017,
+          "value": 20.849999999999994
+        },
+        {
+          "year": 2018,
+          "value": 20.950000000000003
+        },
+        {
+          "year": 2019,
+          "value": 19.5
+        },
+        {
+          "year": 2023,
+          "value": 20.4
+        },
+        {
+          "year": 2024,
+          "value": 20.025
+        },
+        {
+          "year": 2025,
+          "value": 19.775000000000013
+        }
+      ]
+    },
+    {
+      "indicatorId": "ibge-state-labor-participation-gap",
+      "geographyType": "brazil-state",
+      "geographyCode": "53",
+      "geographyName": "Distrito Federal",
+      "points": [
+        {
+          "year": 2012,
+          "value": 16.599999999999994
+        },
+        {
+          "year": 2013,
+          "value": 15.500000000000014
+        },
+        {
+          "year": 2014,
+          "value": 16.525000000000006
+        },
+        {
+          "year": 2015,
+          "value": 18.57499999999999
+        },
+        {
+          "year": 2016,
+          "value": 16
+        },
+        {
+          "year": 2017,
+          "value": 16.175000000000004
+        },
+        {
+          "year": 2018,
+          "value": 14.725000000000001
+        },
+        {
+          "year": 2019,
+          "value": 14.750000000000014
+        },
+        {
+          "year": 2023,
+          "value": 14.700000000000003
+        },
+        {
+          "year": 2024,
+          "value": 15.550000000000004
+        },
+        {
+          "year": 2025,
+          "value": 14.82500000000001
+        }
+      ]
+    },
+    {
       "indicatorId": "ibge-pof-multidimensional-poverty",
       "geographyType": "brazil-state",
       "geographyCode": "11",
@@ -464741,6 +467571,438 @@
       "value": 4.96
     },
     {
+      "indicatorId": "ibge-state-female-labor-participation",
+      "geographyType": "brazil-state",
+      "geographyCode": "11",
+      "geographyName": "Rondônia",
+      "year": 2025,
+      "value": 45.525000000000006
+    },
+    {
+      "indicatorId": "ibge-state-female-labor-participation",
+      "geographyType": "brazil-state",
+      "geographyCode": "12",
+      "geographyName": "Acre",
+      "year": 2025,
+      "value": 41.925
+    },
+    {
+      "indicatorId": "ibge-state-female-labor-participation",
+      "geographyType": "brazil-state",
+      "geographyCode": "13",
+      "geographyName": "Amazonas",
+      "year": 2025,
+      "value": 51.55
+    },
+    {
+      "indicatorId": "ibge-state-female-labor-participation",
+      "geographyType": "brazil-state",
+      "geographyCode": "14",
+      "geographyName": "Roraima",
+      "year": 2025,
+      "value": 52.825
+    },
+    {
+      "indicatorId": "ibge-state-female-labor-participation",
+      "geographyType": "brazil-state",
+      "geographyCode": "15",
+      "geographyName": "Pará",
+      "year": 2025,
+      "value": 47
+    },
+    {
+      "indicatorId": "ibge-state-female-labor-participation",
+      "geographyType": "brazil-state",
+      "geographyCode": "16",
+      "geographyName": "Amapá",
+      "year": 2025,
+      "value": 49.175
+    },
+    {
+      "indicatorId": "ibge-state-female-labor-participation",
+      "geographyType": "brazil-state",
+      "geographyCode": "17",
+      "geographyName": "Tocantins",
+      "year": 2025,
+      "value": 55.5
+    },
+    {
+      "indicatorId": "ibge-state-female-labor-participation",
+      "geographyType": "brazil-state",
+      "geographyCode": "21",
+      "geographyName": "Maranhão",
+      "year": 2025,
+      "value": 41.525
+    },
+    {
+      "indicatorId": "ibge-state-female-labor-participation",
+      "geographyType": "brazil-state",
+      "geographyCode": "22",
+      "geographyName": "Piauí",
+      "year": 2025,
+      "value": 43.775000000000006
+    },
+    {
+      "indicatorId": "ibge-state-female-labor-participation",
+      "geographyType": "brazil-state",
+      "geographyCode": "23",
+      "geographyName": "Ceará",
+      "year": 2025,
+      "value": 42.2
+    },
+    {
+      "indicatorId": "ibge-state-female-labor-participation",
+      "geographyType": "brazil-state",
+      "geographyCode": "24",
+      "geographyName": "Rio Grande do Norte",
+      "year": 2025,
+      "value": 42.65
+    },
+    {
+      "indicatorId": "ibge-state-female-labor-participation",
+      "geographyType": "brazil-state",
+      "geographyCode": "25",
+      "geographyName": "Paraíba",
+      "year": 2025,
+      "value": 43.875
+    },
+    {
+      "indicatorId": "ibge-state-female-labor-participation",
+      "geographyType": "brazil-state",
+      "geographyCode": "26",
+      "geographyName": "Pernambuco",
+      "year": 2025,
+      "value": 43.824999999999996
+    },
+    {
+      "indicatorId": "ibge-state-female-labor-participation",
+      "geographyType": "brazil-state",
+      "geographyCode": "27",
+      "geographyName": "Alagoas",
+      "year": 2025,
+      "value": 41.625
+    },
+    {
+      "indicatorId": "ibge-state-female-labor-participation",
+      "geographyType": "brazil-state",
+      "geographyCode": "28",
+      "geographyName": "Sergipe",
+      "year": 2025,
+      "value": 45.574999999999996
+    },
+    {
+      "indicatorId": "ibge-state-female-labor-participation",
+      "geographyType": "brazil-state",
+      "geographyCode": "29",
+      "geographyName": "Bahia",
+      "year": 2025,
+      "value": 49.224999999999994
+    },
+    {
+      "indicatorId": "ibge-state-female-labor-participation",
+      "geographyType": "brazil-state",
+      "geographyCode": "31",
+      "geographyName": "Minas Gerais",
+      "year": 2025,
+      "value": 55.45
+    },
+    {
+      "indicatorId": "ibge-state-female-labor-participation",
+      "geographyType": "brazil-state",
+      "geographyCode": "32",
+      "geographyName": "Espírito Santo",
+      "year": 2025,
+      "value": 52.025
+    },
+    {
+      "indicatorId": "ibge-state-female-labor-participation",
+      "geographyType": "brazil-state",
+      "geographyCode": "33",
+      "geographyName": "Rio de Janeiro",
+      "year": 2025,
+      "value": 52.525000000000006
+    },
+    {
+      "indicatorId": "ibge-state-female-labor-participation",
+      "geographyType": "brazil-state",
+      "geographyCode": "35",
+      "geographyName": "São Paulo",
+      "year": 2025,
+      "value": 58.55
+    },
+    {
+      "indicatorId": "ibge-state-female-labor-participation",
+      "geographyType": "brazil-state",
+      "geographyCode": "41",
+      "geographyName": "Paraná",
+      "year": 2025,
+      "value": 57.525000000000006
+    },
+    {
+      "indicatorId": "ibge-state-female-labor-participation",
+      "geographyType": "brazil-state",
+      "geographyCode": "42",
+      "geographyName": "Santa Catarina",
+      "year": 2025,
+      "value": 60.025000000000006
+    },
+    {
+      "indicatorId": "ibge-state-female-labor-participation",
+      "geographyType": "brazil-state",
+      "geographyCode": "43",
+      "geographyName": "Rio Grande do Sul",
+      "year": 2025,
+      "value": 57.65
+    },
+    {
+      "indicatorId": "ibge-state-female-labor-participation",
+      "geographyType": "brazil-state",
+      "geographyCode": "50",
+      "geographyName": "Mato Grosso do Sul",
+      "year": 2025,
+      "value": 55.15
+    },
+    {
+      "indicatorId": "ibge-state-female-labor-participation",
+      "geographyType": "brazil-state",
+      "geographyCode": "51",
+      "geographyName": "Mato Grosso",
+      "year": 2025,
+      "value": 58.150000000000006
+    },
+    {
+      "indicatorId": "ibge-state-female-labor-participation",
+      "geographyType": "brazil-state",
+      "geographyCode": "52",
+      "geographyName": "Goiás",
+      "year": 2025,
+      "value": 57.24999999999999
+    },
+    {
+      "indicatorId": "ibge-state-female-labor-participation",
+      "geographyType": "brazil-state",
+      "geographyCode": "53",
+      "geographyName": "Distrito Federal",
+      "year": 2025,
+      "value": 60.12499999999999
+    },
+    {
+      "indicatorId": "ibge-state-labor-participation-gap",
+      "geographyType": "brazil-state",
+      "geographyCode": "11",
+      "geographyName": "Rondônia",
+      "year": 2025,
+      "value": 26.724999999999994
+    },
+    {
+      "indicatorId": "ibge-state-labor-participation-gap",
+      "geographyType": "brazil-state",
+      "geographyCode": "12",
+      "geographyName": "Acre",
+      "year": 2025,
+      "value": 22.674999999999997
+    },
+    {
+      "indicatorId": "ibge-state-labor-participation-gap",
+      "geographyType": "brazil-state",
+      "geographyCode": "13",
+      "geographyName": "Amazonas",
+      "year": 2025,
+      "value": 21.25
+    },
+    {
+      "indicatorId": "ibge-state-labor-participation-gap",
+      "geographyType": "brazil-state",
+      "geographyCode": "14",
+      "geographyName": "Roraima",
+      "year": 2025,
+      "value": 21.02499999999999
+    },
+    {
+      "indicatorId": "ibge-state-labor-participation-gap",
+      "geographyType": "brazil-state",
+      "geographyCode": "15",
+      "geographyName": "Pará",
+      "year": 2025,
+      "value": 26.450000000000003
+    },
+    {
+      "indicatorId": "ibge-state-labor-participation-gap",
+      "geographyType": "brazil-state",
+      "geographyCode": "16",
+      "geographyName": "Amapá",
+      "year": 2025,
+      "value": 21.10000000000001
+    },
+    {
+      "indicatorId": "ibge-state-labor-participation-gap",
+      "geographyType": "brazil-state",
+      "geographyCode": "17",
+      "geographyName": "Tocantins",
+      "year": 2025,
+      "value": 19.69999999999999
+    },
+    {
+      "indicatorId": "ibge-state-labor-participation-gap",
+      "geographyType": "brazil-state",
+      "geographyCode": "21",
+      "geographyName": "Maranhão",
+      "year": 2025,
+      "value": 21.799999999999997
+    },
+    {
+      "indicatorId": "ibge-state-labor-participation-gap",
+      "geographyType": "brazil-state",
+      "geographyCode": "22",
+      "geographyName": "Piauí",
+      "year": 2025,
+      "value": 20.82499999999999
+    },
+    {
+      "indicatorId": "ibge-state-labor-participation-gap",
+      "geographyType": "brazil-state",
+      "geographyCode": "23",
+      "geographyName": "Ceará",
+      "year": 2025,
+      "value": 20.474999999999994
+    },
+    {
+      "indicatorId": "ibge-state-labor-participation-gap",
+      "geographyType": "brazil-state",
+      "geographyCode": "24",
+      "geographyName": "Rio Grande do Norte",
+      "year": 2025,
+      "value": 21.624999999999993
+    },
+    {
+      "indicatorId": "ibge-state-labor-participation-gap",
+      "geographyType": "brazil-state",
+      "geographyCode": "25",
+      "geographyName": "Paraíba",
+      "year": 2025,
+      "value": 21.52499999999999
+    },
+    {
+      "indicatorId": "ibge-state-labor-participation-gap",
+      "geographyType": "brazil-state",
+      "geographyCode": "26",
+      "geographyName": "Pernambuco",
+      "year": 2025,
+      "value": 22.125000000000007
+    },
+    {
+      "indicatorId": "ibge-state-labor-participation-gap",
+      "geographyType": "brazil-state",
+      "geographyCode": "27",
+      "geographyName": "Alagoas",
+      "year": 2025,
+      "value": 21.775
+    },
+    {
+      "indicatorId": "ibge-state-labor-participation-gap",
+      "geographyType": "brazil-state",
+      "geographyCode": "28",
+      "geographyName": "Sergipe",
+      "year": 2025,
+      "value": 21.4
+    },
+    {
+      "indicatorId": "ibge-state-labor-participation-gap",
+      "geographyType": "brazil-state",
+      "geographyCode": "29",
+      "geographyName": "Bahia",
+      "year": 2025,
+      "value": 19.42500000000001
+    },
+    {
+      "indicatorId": "ibge-state-labor-participation-gap",
+      "geographyType": "brazil-state",
+      "geographyCode": "31",
+      "geographyName": "Minas Gerais",
+      "year": 2025,
+      "value": 18.44999999999999
+    },
+    {
+      "indicatorId": "ibge-state-labor-participation-gap",
+      "geographyType": "brazil-state",
+      "geographyCode": "32",
+      "geographyName": "Espírito Santo",
+      "year": 2025,
+      "value": 21.1
+    },
+    {
+      "indicatorId": "ibge-state-labor-participation-gap",
+      "geographyType": "brazil-state",
+      "geographyCode": "33",
+      "geographyName": "Rio de Janeiro",
+      "year": 2025,
+      "value": 19.174999999999997
+    },
+    {
+      "indicatorId": "ibge-state-labor-participation-gap",
+      "geographyType": "brazil-state",
+      "geographyCode": "35",
+      "geographyName": "São Paulo",
+      "year": 2025,
+      "value": 16.900000000000006
+    },
+    {
+      "indicatorId": "ibge-state-labor-participation-gap",
+      "geographyType": "brazil-state",
+      "geographyCode": "41",
+      "geographyName": "Paraná",
+      "year": 2025,
+      "value": 17.94999999999999
+    },
+    {
+      "indicatorId": "ibge-state-labor-participation-gap",
+      "geographyType": "brazil-state",
+      "geographyCode": "42",
+      "geographyName": "Santa Catarina",
+      "year": 2025,
+      "value": 15.900000000000006
+    },
+    {
+      "indicatorId": "ibge-state-labor-participation-gap",
+      "geographyType": "brazil-state",
+      "geographyCode": "43",
+      "geographyName": "Rio Grande do Sul",
+      "year": 2025,
+      "value": 16.650000000000013
+    },
+    {
+      "indicatorId": "ibge-state-labor-participation-gap",
+      "geographyType": "brazil-state",
+      "geographyCode": "50",
+      "geographyName": "Mato Grosso do Sul",
+      "year": 2025,
+      "value": 18.199999999999996
+    },
+    {
+      "indicatorId": "ibge-state-labor-participation-gap",
+      "geographyType": "brazil-state",
+      "geographyCode": "51",
+      "geographyName": "Mato Grosso",
+      "year": 2025,
+      "value": 22.19999999999999
+    },
+    {
+      "indicatorId": "ibge-state-labor-participation-gap",
+      "geographyType": "brazil-state",
+      "geographyCode": "52",
+      "geographyName": "Goiás",
+      "year": 2025,
+      "value": 19.775000000000013
+    },
+    {
+      "indicatorId": "ibge-state-labor-participation-gap",
+      "geographyType": "brazil-state",
+      "geographyCode": "53",
+      "geographyName": "Distrito Federal",
+      "year": 2025,
+      "value": 14.82500000000001
+    },
+    {
       "indicatorId": "ibge-pof-multidimensional-poverty",
       "geographyType": "brazil-state",
       "geographyCode": "11",
@@ -477677,6 +480939,340 @@
       ]
     },
     {
+      "indicatorId": "ibge-state-female-labor-participation",
+      "geographyType": "brazil-state",
+      "year": 2025,
+      "items": [
+        {
+          "indicatorId": "ibge-state-female-labor-participation",
+          "geographyType": "brazil-state",
+          "geographyCode": "53",
+          "geographyName": "Distrito Federal",
+          "year": 2025,
+          "value": 60.12499999999999
+        },
+        {
+          "indicatorId": "ibge-state-female-labor-participation",
+          "geographyType": "brazil-state",
+          "geographyCode": "42",
+          "geographyName": "Santa Catarina",
+          "year": 2025,
+          "value": 60.025000000000006
+        },
+        {
+          "indicatorId": "ibge-state-female-labor-participation",
+          "geographyType": "brazil-state",
+          "geographyCode": "35",
+          "geographyName": "São Paulo",
+          "year": 2025,
+          "value": 58.55
+        },
+        {
+          "indicatorId": "ibge-state-female-labor-participation",
+          "geographyType": "brazil-state",
+          "geographyCode": "51",
+          "geographyName": "Mato Grosso",
+          "year": 2025,
+          "value": 58.150000000000006
+        },
+        {
+          "indicatorId": "ibge-state-female-labor-participation",
+          "geographyType": "brazil-state",
+          "geographyCode": "43",
+          "geographyName": "Rio Grande do Sul",
+          "year": 2025,
+          "value": 57.65
+        },
+        {
+          "indicatorId": "ibge-state-female-labor-participation",
+          "geographyType": "brazil-state",
+          "geographyCode": "41",
+          "geographyName": "Paraná",
+          "year": 2025,
+          "value": 57.525000000000006
+        },
+        {
+          "indicatorId": "ibge-state-female-labor-participation",
+          "geographyType": "brazil-state",
+          "geographyCode": "52",
+          "geographyName": "Goiás",
+          "year": 2025,
+          "value": 57.24999999999999
+        },
+        {
+          "indicatorId": "ibge-state-female-labor-participation",
+          "geographyType": "brazil-state",
+          "geographyCode": "17",
+          "geographyName": "Tocantins",
+          "year": 2025,
+          "value": 55.5
+        },
+        {
+          "indicatorId": "ibge-state-female-labor-participation",
+          "geographyType": "brazil-state",
+          "geographyCode": "31",
+          "geographyName": "Minas Gerais",
+          "year": 2025,
+          "value": 55.45
+        },
+        {
+          "indicatorId": "ibge-state-female-labor-participation",
+          "geographyType": "brazil-state",
+          "geographyCode": "50",
+          "geographyName": "Mato Grosso do Sul",
+          "year": 2025,
+          "value": 55.15
+        },
+        {
+          "indicatorId": "ibge-state-female-labor-participation",
+          "geographyType": "brazil-state",
+          "geographyCode": "14",
+          "geographyName": "Roraima",
+          "year": 2025,
+          "value": 52.825
+        },
+        {
+          "indicatorId": "ibge-state-female-labor-participation",
+          "geographyType": "brazil-state",
+          "geographyCode": "33",
+          "geographyName": "Rio de Janeiro",
+          "year": 2025,
+          "value": 52.525000000000006
+        },
+        {
+          "indicatorId": "ibge-state-female-labor-participation",
+          "geographyType": "brazil-state",
+          "geographyCode": "32",
+          "geographyName": "Espírito Santo",
+          "year": 2025,
+          "value": 52.025
+        },
+        {
+          "indicatorId": "ibge-state-female-labor-participation",
+          "geographyType": "brazil-state",
+          "geographyCode": "13",
+          "geographyName": "Amazonas",
+          "year": 2025,
+          "value": 51.55
+        },
+        {
+          "indicatorId": "ibge-state-female-labor-participation",
+          "geographyType": "brazil-state",
+          "geographyCode": "29",
+          "geographyName": "Bahia",
+          "year": 2025,
+          "value": 49.224999999999994
+        },
+        {
+          "indicatorId": "ibge-state-female-labor-participation",
+          "geographyType": "brazil-state",
+          "geographyCode": "16",
+          "geographyName": "Amapá",
+          "year": 2025,
+          "value": 49.175
+        },
+        {
+          "indicatorId": "ibge-state-female-labor-participation",
+          "geographyType": "brazil-state",
+          "geographyCode": "15",
+          "geographyName": "Pará",
+          "year": 2025,
+          "value": 47
+        },
+        {
+          "indicatorId": "ibge-state-female-labor-participation",
+          "geographyType": "brazil-state",
+          "geographyCode": "28",
+          "geographyName": "Sergipe",
+          "year": 2025,
+          "value": 45.574999999999996
+        },
+        {
+          "indicatorId": "ibge-state-female-labor-participation",
+          "geographyType": "brazil-state",
+          "geographyCode": "11",
+          "geographyName": "Rondônia",
+          "year": 2025,
+          "value": 45.525000000000006
+        },
+        {
+          "indicatorId": "ibge-state-female-labor-participation",
+          "geographyType": "brazil-state",
+          "geographyCode": "25",
+          "geographyName": "Paraíba",
+          "year": 2025,
+          "value": 43.875
+        }
+      ]
+    },
+    {
+      "indicatorId": "ibge-state-labor-participation-gap",
+      "geographyType": "brazil-state",
+      "year": 2025,
+      "items": [
+        {
+          "indicatorId": "ibge-state-labor-participation-gap",
+          "geographyType": "brazil-state",
+          "geographyCode": "11",
+          "geographyName": "Rondônia",
+          "year": 2025,
+          "value": 26.724999999999994
+        },
+        {
+          "indicatorId": "ibge-state-labor-participation-gap",
+          "geographyType": "brazil-state",
+          "geographyCode": "15",
+          "geographyName": "Pará",
+          "year": 2025,
+          "value": 26.450000000000003
+        },
+        {
+          "indicatorId": "ibge-state-labor-participation-gap",
+          "geographyType": "brazil-state",
+          "geographyCode": "12",
+          "geographyName": "Acre",
+          "year": 2025,
+          "value": 22.674999999999997
+        },
+        {
+          "indicatorId": "ibge-state-labor-participation-gap",
+          "geographyType": "brazil-state",
+          "geographyCode": "51",
+          "geographyName": "Mato Grosso",
+          "year": 2025,
+          "value": 22.19999999999999
+        },
+        {
+          "indicatorId": "ibge-state-labor-participation-gap",
+          "geographyType": "brazil-state",
+          "geographyCode": "26",
+          "geographyName": "Pernambuco",
+          "year": 2025,
+          "value": 22.125000000000007
+        },
+        {
+          "indicatorId": "ibge-state-labor-participation-gap",
+          "geographyType": "brazil-state",
+          "geographyCode": "21",
+          "geographyName": "Maranhão",
+          "year": 2025,
+          "value": 21.799999999999997
+        },
+        {
+          "indicatorId": "ibge-state-labor-participation-gap",
+          "geographyType": "brazil-state",
+          "geographyCode": "27",
+          "geographyName": "Alagoas",
+          "year": 2025,
+          "value": 21.775
+        },
+        {
+          "indicatorId": "ibge-state-labor-participation-gap",
+          "geographyType": "brazil-state",
+          "geographyCode": "24",
+          "geographyName": "Rio Grande do Norte",
+          "year": 2025,
+          "value": 21.624999999999993
+        },
+        {
+          "indicatorId": "ibge-state-labor-participation-gap",
+          "geographyType": "brazil-state",
+          "geographyCode": "25",
+          "geographyName": "Paraíba",
+          "year": 2025,
+          "value": 21.52499999999999
+        },
+        {
+          "indicatorId": "ibge-state-labor-participation-gap",
+          "geographyType": "brazil-state",
+          "geographyCode": "28",
+          "geographyName": "Sergipe",
+          "year": 2025,
+          "value": 21.4
+        },
+        {
+          "indicatorId": "ibge-state-labor-participation-gap",
+          "geographyType": "brazil-state",
+          "geographyCode": "13",
+          "geographyName": "Amazonas",
+          "year": 2025,
+          "value": 21.25
+        },
+        {
+          "indicatorId": "ibge-state-labor-participation-gap",
+          "geographyType": "brazil-state",
+          "geographyCode": "16",
+          "geographyName": "Amapá",
+          "year": 2025,
+          "value": 21.10000000000001
+        },
+        {
+          "indicatorId": "ibge-state-labor-participation-gap",
+          "geographyType": "brazil-state",
+          "geographyCode": "32",
+          "geographyName": "Espírito Santo",
+          "year": 2025,
+          "value": 21.1
+        },
+        {
+          "indicatorId": "ibge-state-labor-participation-gap",
+          "geographyType": "brazil-state",
+          "geographyCode": "14",
+          "geographyName": "Roraima",
+          "year": 2025,
+          "value": 21.02499999999999
+        },
+        {
+          "indicatorId": "ibge-state-labor-participation-gap",
+          "geographyType": "brazil-state",
+          "geographyCode": "22",
+          "geographyName": "Piauí",
+          "year": 2025,
+          "value": 20.82499999999999
+        },
+        {
+          "indicatorId": "ibge-state-labor-participation-gap",
+          "geographyType": "brazil-state",
+          "geographyCode": "23",
+          "geographyName": "Ceará",
+          "year": 2025,
+          "value": 20.474999999999994
+        },
+        {
+          "indicatorId": "ibge-state-labor-participation-gap",
+          "geographyType": "brazil-state",
+          "geographyCode": "52",
+          "geographyName": "Goiás",
+          "year": 2025,
+          "value": 19.775000000000013
+        },
+        {
+          "indicatorId": "ibge-state-labor-participation-gap",
+          "geographyType": "brazil-state",
+          "geographyCode": "17",
+          "geographyName": "Tocantins",
+          "year": 2025,
+          "value": 19.69999999999999
+        },
+        {
+          "indicatorId": "ibge-state-labor-participation-gap",
+          "geographyType": "brazil-state",
+          "geographyCode": "29",
+          "geographyName": "Bahia",
+          "year": 2025,
+          "value": 19.42500000000001
+        },
+        {
+          "indicatorId": "ibge-state-labor-participation-gap",
+          "geographyType": "brazil-state",
+          "geographyCode": "33",
+          "geographyName": "Rio de Janeiro",
+          "year": 2025,
+          "value": 19.174999999999997
+        }
+      ]
+    },
+    {
       "indicatorId": "ibge-pof-multidimensional-poverty",
       "geographyType": "brazil-state",
       "year": 2018,
@@ -478355,6 +481951,7 @@
     "O MVP combina séries globais comparáveis por país com um primeiro recorte estadual do Brasil.",
     "O indicador estadual atual mede pessoas em domicílios com beneficiário do Bolsa Família, como proxy de vulnerabilidade social e pobreza.",
     "A renda per capita de até 1/4 do salário mínimo usa o Censo 2022 e é um indicador de baixa renda, não uma linha internacional de pobreza extrema.",
+    "As séries estaduais de participação na força de trabalho por sexo usam médias dos quatro trimestres disponíveis em cada ano da PNAD Contínua.",
     "A pobreza multidimensional estadual é uma estatística experimental da POF 2017-2018; ela combina privações não monetárias e não deve ser interpretada como série anual.",
     "O recorte de Regiões Geográficas Imediatas usa o Censo 2022 do IBGE e agrega municípios pela divisão territorial vigente.",
     "A arquitetura em conectores permite plugar novas tabelas do IBGE e novas fontes internacionais sem redesenhar o frontend."

@@ -409,6 +409,28 @@ const BRAZIL_STATE_VERY_LOW_INCOME_INDICATOR: Omit<Indicator, 'latestYear'> = {
   direction: 'higher-worse',
 }
 
+const BRAZIL_STATE_FEMALE_LABOR_PARTICIPATION_INDICATOR: Omit<Indicator, 'latestYear'> = {
+  id: 'ibge-state-female-labor-participation',
+  name: 'Participação feminina na força de trabalho',
+  themeId: 'gender-equality',
+  description: 'Taxa média anual de participação das mulheres de 14 anos ou mais na força de trabalho, calculada pela média dos quatro trimestres disponíveis da PNAD Contínua.',
+  unit: '%',
+  geographyType: 'brazil-state',
+  sourceId: SIDRA_SOURCE_ID,
+  direction: 'higher-better',
+}
+
+const BRAZIL_STATE_LABOR_PARTICIPATION_GAP_INDICATOR: Omit<Indicator, 'latestYear'> = {
+  id: 'ibge-state-labor-participation-gap',
+  name: 'Diferença de participação na força de trabalho',
+  themeId: 'gender-equality',
+  description: 'Diferença entre as taxas médias anuais de participação masculina e feminina na força de trabalho, em pontos percentuais. Valores maiores indicam maior desigualdade.',
+  unit: 'p.p.',
+  geographyType: 'brazil-state',
+  sourceId: SIDRA_SOURCE_ID,
+  direction: 'higher-worse',
+}
+
 const BRAZIL_IMMEDIATE_WATER_INDICATOR: Omit<Indicator, 'latestYear'> = {
   id: 'ibge-water-network-coverage',
   name: 'Domicílios com rede geral de água',
@@ -912,6 +934,56 @@ async function loadBrazilStateVeryLowIncomeIndicator() {
   return { indicator: { ...BRAZIL_STATE_VERY_LOW_INCOME_INDICATOR, latestYear: 2022 } satisfies Indicator, series }
 }
 
+type IbgeGenderLaborResponse = Array<{
+  resultados: Array<{
+    classificacoes: Array<{ categoria: Record<string, string> }>
+    series: Array<{ localidade: { id: string; nome: string }; serie: Record<string, string> }>
+  }>
+}>
+
+function calculateAnnualAverage(points: Record<string, string>) {
+  const valuesByYear = new Map<number, number[]>()
+  Object.entries(points).forEach(([period, rawValue]) => {
+    const year = Number(period.slice(0, 4))
+    const value = toNumber(rawValue)
+    if (Number.isFinite(year) && value !== null) valuesByYear.set(year, [...(valuesByYear.get(year) ?? []), value])
+  })
+  return Array.from(valuesByYear.entries())
+    .filter(([, values]) => values.length === 4)
+    .map(([year, values]) => ({ year, value: values.reduce((total, current) => total + current, 0) / values.length }))
+}
+
+async function loadBrazilStateGenderLaborIndicators() {
+  const response = await fetchJson<IbgeGenderLaborResponse>('https://servicodados.ibge.gov.br/api/v3/agregados/4093/periodos/all/variaveis/4096?localidades=N3%5Ball%5D&classificacao=2%5B4%2C5%5D')
+  const results = response[0]?.resultados ?? []
+  const maleResult = results.find((result) => Object.keys(result.classificacoes[0]?.categoria ?? {}).includes('4'))
+  const femaleResult = results.find((result) => Object.keys(result.classificacoes[0]?.categoria ?? {}).includes('5'))
+  if (!maleResult || !femaleResult) throw new Error('IBGE PNAD gender labor categories not found')
+
+  const maleByState = new Map(maleResult.series.map((entry) => [entry.localidade.id, calculateAnnualAverage(entry.serie)]))
+  const femaleSeries = femaleResult.series.flatMap((entry) => {
+    const points = calculateAnnualAverage(entry.serie)
+    return points.length ? [{ indicatorId: BRAZIL_STATE_FEMALE_LABOR_PARTICIPATION_INDICATOR.id, geographyType: 'brazil-state' as const, geographyCode: entry.localidade.id, geographyName: entry.localidade.nome, points }] : []
+  })
+  const gapSeries = femaleResult.series.flatMap((entry) => {
+    const maleByYear = new Map((maleByState.get(entry.localidade.id) ?? []).map((point) => [point.year, point.value]))
+    const points = calculateAnnualAverage(entry.serie).flatMap((point) => {
+      const maleValue = maleByYear.get(point.year)
+      return maleValue === undefined ? [] : [{ year: point.year, value: maleValue - point.value }]
+    })
+    return points.length ? [{ indicatorId: BRAZIL_STATE_LABOR_PARTICIPATION_GAP_INDICATOR.id, geographyType: 'brazil-state' as const, geographyCode: entry.localidade.id, geographyName: entry.localidade.nome, points }] : []
+  })
+  if (femaleSeries.length !== 27 || gapSeries.length !== 27) throw new Error('IBGE PNAD expected 27 state gender labor series')
+
+  const latestYear = Math.max(...femaleSeries.flatMap((entry) => entry.points.map((point) => point.year)))
+  return {
+    results: [
+      { indicator: { ...BRAZIL_STATE_FEMALE_LABOR_PARTICIPATION_INDICATOR, latestYear } satisfies Indicator, series: femaleSeries },
+      { indicator: { ...BRAZIL_STATE_LABOR_PARTICIPATION_GAP_INDICATOR, latestYear } satisfies Indicator, series: gapSeries },
+    ],
+  }
+}
+
 async function loadBrazilStatePofIndicator(indicator: Omit<Indicator, 'latestYear'>, tableFileName: string) {
   const [pofZipBuffer, states] = await Promise.all([
     fetchBuffer('https://ftp.ibge.gov.br/Orcamentos_Familiares/Evolucao_dos_Indicadores_nao_Monetarios_de_Pobreza_e_Qualidade_de_Vida_no_Brasil/tabelas_2017_2018_xls.zip'),
@@ -1102,11 +1174,12 @@ async function main() {
     loadNdGain(countriesByIso3),
     loadUnhcrIndicators(validCountryIso3),
   ])
-  const [brazilStates, brazilStateGini, brazilStateIncome, brazilStateVeryLowIncome, brazilStateMultidimensionalPoverty, brazilStateMultidimensionalVulnerability, immediateRegions, immediateSanitation] = await Promise.all([
+  const [brazilStates, brazilStateGini, brazilStateIncome, brazilStateVeryLowIncome, brazilStateGenderLabor, brazilStateMultidimensionalPoverty, brazilStateMultidimensionalVulnerability, immediateRegions, immediateSanitation] = await Promise.all([
     loadBrazilStateIndicator(),
     loadBrazilStateGiniIndicator(),
     loadBrazilStateIncomeIndicator(),
     loadBrazilStateVeryLowIncomeIndicator(),
+    loadBrazilStateGenderLaborIndicators(),
     loadBrazilStatePofIndicator(BRAZIL_STATE_MULTIDIMENSIONAL_POVERTY_INDICATOR, 'Tabela 6b.xlsx'),
     loadBrazilStatePofIndicator(BRAZIL_STATE_MULTIDIMENSIONAL_VULNERABILITY_INDICATOR, 'Tabela 5b.xlsx'),
     loadBrazilImmediateRegionCoverage(BRAZIL_IMMEDIATE_WATER_INDICATOR, '6803', '1821%5B72144%5D'),
@@ -1128,6 +1201,7 @@ async function main() {
     brazilStateGini.indicator,
     brazilStateIncome.indicator,
     brazilStateVeryLowIncome.indicator,
+    ...brazilStateGenderLabor.results.map((result) => result.indicator),
     brazilStateMultidimensionalPoverty.indicator,
     brazilStateMultidimensionalVulnerability.indicator,
     immediateRegions.indicator,
@@ -1142,6 +1216,7 @@ async function main() {
     ...brazilStateGini.series,
     ...brazilStateIncome.series,
     ...brazilStateVeryLowIncome.series,
+    ...brazilStateGenderLabor.results.flatMap((result) => result.series),
     ...brazilStateMultidimensionalPoverty.series,
     ...brazilStateMultidimensionalVulnerability.series,
     ...immediateRegions.series,
@@ -1184,6 +1259,7 @@ async function main() {
       'O MVP combina séries globais comparáveis por país com um primeiro recorte estadual do Brasil.',
       'O indicador estadual atual mede pessoas em domicílios com beneficiário do Bolsa Família, como proxy de vulnerabilidade social e pobreza.',
       'A renda per capita de até 1/4 do salário mínimo usa o Censo 2022 e é um indicador de baixa renda, não uma linha internacional de pobreza extrema.',
+      'As séries estaduais de participação na força de trabalho por sexo usam médias dos quatro trimestres disponíveis em cada ano da PNAD Contínua.',
       'A pobreza multidimensional estadual é uma estatística experimental da POF 2017-2018; ela combina privações não monetárias e não deve ser interpretada como série anual.',
       'O recorte de Regiões Geográficas Imediatas usa o Censo 2022 do IBGE e agrega municípios pela divisão territorial vigente.',
       'A arquitetura em conectores permite plugar novas tabelas do IBGE e novas fontes internacionais sem redesenhar o frontend.',
