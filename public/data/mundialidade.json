@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-09-16T14:54:46.051Z",
+  "generatedAt": "2026-09-16T15:11:06.272Z",
   "themes": [
     {
       "id": "hunger-water",
@@ -327,6 +327,17 @@
       "latestYear": 2025
     },
     {
+      "id": "ibge-pof-multidimensional-poverty",
+      "name": "Pessoas com pobreza multidimensional",
+      "themeId": "poverty-inequality",
+      "description": "Proporção de pessoas das famílias com algum grau de pobreza multidimensional não monetária, medida experimental da POF 2017-2018.",
+      "unit": "%",
+      "geographyType": "brazil-state",
+      "sourceId": "ibge-pof",
+      "direction": "higher-worse",
+      "latestYear": 2018
+    },
+    {
       "id": "ibge-water-network-coverage",
       "name": "Domicílios com rede geral de água",
       "themeId": "hunger-water",
@@ -381,6 +392,14 @@
       "methodologyUrl": "https://servicodados.ibge.gov.br/api/docs/agregados",
       "license": "Dados públicos do IBGE",
       "lastUpdated": "Dados públicos do IBGE"
+    },
+    {
+      "id": "ibge-pof",
+      "name": "IBGE Pesquisa de Orçamentos Familiares",
+      "url": "https://www.ibge.gov.br/estatisticas/sociais/educacao/24786-pof-2017-2018.html",
+      "methodologyUrl": "https://ftp.ibge.gov.br/Orcamentos_Familiares/Evolucao_dos_Indicadores_nao_Monetarios_de_Pobreza_e_Qualidade_de_Vida_no_Brasil/indice_de_tabelas.pdf",
+      "license": "Dados públicos do IBGE",
+      "lastUpdated": "2017-2018"
     },
     {
       "id": "natural-earth",
@@ -419910,6 +419929,330 @@
       ]
     },
     {
+      "indicatorId": "ibge-pof-multidimensional-poverty",
+      "geographyType": "brazil-state",
+      "geographyCode": "11",
+      "geographyName": "Rondônia",
+      "points": [
+        {
+          "year": 2018,
+          "value": 28.721347200000004
+        }
+      ]
+    },
+    {
+      "indicatorId": "ibge-pof-multidimensional-poverty",
+      "geographyType": "brazil-state",
+      "geographyCode": "12",
+      "geographyName": "Acre",
+      "points": [
+        {
+          "year": 2018,
+          "value": 48.39008313
+        }
+      ]
+    },
+    {
+      "indicatorId": "ibge-pof-multidimensional-poverty",
+      "geographyType": "brazil-state",
+      "geographyCode": "13",
+      "geographyName": "Amazonas",
+      "points": [
+        {
+          "year": 2018,
+          "value": 40.66832904
+        }
+      ]
+    },
+    {
+      "indicatorId": "ibge-pof-multidimensional-poverty",
+      "geographyType": "brazil-state",
+      "geographyCode": "14",
+      "geographyName": "Roraima",
+      "points": [
+        {
+          "year": 2018,
+          "value": 23.82394466
+        }
+      ]
+    },
+    {
+      "indicatorId": "ibge-pof-multidimensional-poverty",
+      "geographyType": "brazil-state",
+      "geographyCode": "15",
+      "geographyName": "Pará",
+      "points": [
+        {
+          "year": 2018,
+          "value": 51.98201453
+        }
+      ]
+    },
+    {
+      "indicatorId": "ibge-pof-multidimensional-poverty",
+      "geographyType": "brazil-state",
+      "geographyCode": "16",
+      "geographyName": "Amapá",
+      "points": [
+        {
+          "year": 2018,
+          "value": 43.73211077
+        }
+      ]
+    },
+    {
+      "indicatorId": "ibge-pof-multidimensional-poverty",
+      "geographyType": "brazil-state",
+      "geographyCode": "17",
+      "geographyName": "Tocantins",
+      "points": [
+        {
+          "year": 2018,
+          "value": 27.953168350000002
+        }
+      ]
+    },
+    {
+      "indicatorId": "ibge-pof-multidimensional-poverty",
+      "geographyType": "brazil-state",
+      "geographyCode": "21",
+      "geographyName": "Maranhão",
+      "points": [
+        {
+          "year": 2018,
+          "value": 58.11228242000001
+        }
+      ]
+    },
+    {
+      "indicatorId": "ibge-pof-multidimensional-poverty",
+      "geographyType": "brazil-state",
+      "geographyCode": "22",
+      "geographyName": "Piauí",
+      "points": [
+        {
+          "year": 2018,
+          "value": 39.14629506
+        }
+      ]
+    },
+    {
+      "indicatorId": "ibge-pof-multidimensional-poverty",
+      "geographyType": "brazil-state",
+      "geographyCode": "23",
+      "geographyName": "Ceará",
+      "points": [
+        {
+          "year": 2018,
+          "value": 30.93495925
+        }
+      ]
+    },
+    {
+      "indicatorId": "ibge-pof-multidimensional-poverty",
+      "geographyType": "brazil-state",
+      "geographyCode": "24",
+      "geographyName": "Rio Grande do Norte",
+      "points": [
+        {
+          "year": 2018,
+          "value": 36.59707117
+        }
+      ]
+    },
+    {
+      "indicatorId": "ibge-pof-multidimensional-poverty",
+      "geographyType": "brazil-state",
+      "geographyCode": "25",
+      "geographyName": "Paraíba",
+      "points": [
+        {
+          "year": 2018,
+          "value": 38.42310822
+        }
+      ]
+    },
+    {
+      "indicatorId": "ibge-pof-multidimensional-poverty",
+      "geographyType": "brazil-state",
+      "geographyCode": "26",
+      "geographyName": "Pernambuco",
+      "points": [
+        {
+          "year": 2018,
+          "value": 36.57007688
+        }
+      ]
+    },
+    {
+      "indicatorId": "ibge-pof-multidimensional-poverty",
+      "geographyType": "brazil-state",
+      "geographyCode": "27",
+      "geographyName": "Alagoas",
+      "points": [
+        {
+          "year": 2018,
+          "value": 43.62511047
+        }
+      ]
+    },
+    {
+      "indicatorId": "ibge-pof-multidimensional-poverty",
+      "geographyType": "brazil-state",
+      "geographyCode": "28",
+      "geographyName": "Sergipe",
+      "points": [
+        {
+          "year": 2018,
+          "value": 29.94968992
+        }
+      ]
+    },
+    {
+      "indicatorId": "ibge-pof-multidimensional-poverty",
+      "geographyType": "brazil-state",
+      "geographyCode": "29",
+      "geographyName": "Bahia",
+      "points": [
+        {
+          "year": 2018,
+          "value": 34.5951261
+        }
+      ]
+    },
+    {
+      "indicatorId": "ibge-pof-multidimensional-poverty",
+      "geographyType": "brazil-state",
+      "geographyCode": "31",
+      "geographyName": "Minas Gerais",
+      "points": [
+        {
+          "year": 2018,
+          "value": 14.30999265
+        }
+      ]
+    },
+    {
+      "indicatorId": "ibge-pof-multidimensional-poverty",
+      "geographyType": "brazil-state",
+      "geographyCode": "32",
+      "geographyName": "Espírito Santo",
+      "points": [
+        {
+          "year": 2018,
+          "value": 15.597638550000001
+        }
+      ]
+    },
+    {
+      "indicatorId": "ibge-pof-multidimensional-poverty",
+      "geographyType": "brazil-state",
+      "geographyCode": "33",
+      "geographyName": "Rio de Janeiro",
+      "points": [
+        {
+          "year": 2018,
+          "value": 19.01705468
+        }
+      ]
+    },
+    {
+      "indicatorId": "ibge-pof-multidimensional-poverty",
+      "geographyType": "brazil-state",
+      "geographyCode": "35",
+      "geographyName": "São Paulo",
+      "points": [
+        {
+          "year": 2018,
+          "value": 9.17374055
+        }
+      ]
+    },
+    {
+      "indicatorId": "ibge-pof-multidimensional-poverty",
+      "geographyType": "brazil-state",
+      "geographyCode": "41",
+      "geographyName": "Paraná",
+      "points": [
+        {
+          "year": 2018,
+          "value": 8.71689768
+        }
+      ]
+    },
+    {
+      "indicatorId": "ibge-pof-multidimensional-poverty",
+      "geographyType": "brazil-state",
+      "geographyCode": "42",
+      "geographyName": "Santa Catarina",
+      "points": [
+        {
+          "year": 2018,
+          "value": 5.0505819899999995
+        }
+      ]
+    },
+    {
+      "indicatorId": "ibge-pof-multidimensional-poverty",
+      "geographyType": "brazil-state",
+      "geographyCode": "43",
+      "geographyName": "Rio Grande do Sul",
+      "points": [
+        {
+          "year": 2018,
+          "value": 11.40818676
+        }
+      ]
+    },
+    {
+      "indicatorId": "ibge-pof-multidimensional-poverty",
+      "geographyType": "brazil-state",
+      "geographyCode": "50",
+      "geographyName": "Mato Grosso do Sul",
+      "points": [
+        {
+          "year": 2018,
+          "value": 17.50091605
+        }
+      ]
+    },
+    {
+      "indicatorId": "ibge-pof-multidimensional-poverty",
+      "geographyType": "brazil-state",
+      "geographyCode": "51",
+      "geographyName": "Mato Grosso",
+      "points": [
+        {
+          "year": 2018,
+          "value": 21.02811301
+        }
+      ]
+    },
+    {
+      "indicatorId": "ibge-pof-multidimensional-poverty",
+      "geographyType": "brazil-state",
+      "geographyCode": "52",
+      "geographyName": "Goiás",
+      "points": [
+        {
+          "year": 2018,
+          "value": 22.985123769999998
+        }
+      ]
+    },
+    {
+      "indicatorId": "ibge-pof-multidimensional-poverty",
+      "geographyType": "brazil-state",
+      "geographyCode": "53",
+      "geographyName": "Distrito Federal",
+      "points": [
+        {
+          "year": 2018,
+          "value": 14.89520915
+        }
+      ]
+    },
+    {
       "indicatorId": "ibge-water-network-coverage",
       "geographyType": "brazil-immediate-region",
       "geographyCode": "110005",
@@ -463512,6 +463855,222 @@
       "value": 4286
     },
     {
+      "indicatorId": "ibge-pof-multidimensional-poverty",
+      "geographyType": "brazil-state",
+      "geographyCode": "11",
+      "geographyName": "Rondônia",
+      "year": 2018,
+      "value": 28.721347200000004
+    },
+    {
+      "indicatorId": "ibge-pof-multidimensional-poverty",
+      "geographyType": "brazil-state",
+      "geographyCode": "12",
+      "geographyName": "Acre",
+      "year": 2018,
+      "value": 48.39008313
+    },
+    {
+      "indicatorId": "ibge-pof-multidimensional-poverty",
+      "geographyType": "brazil-state",
+      "geographyCode": "13",
+      "geographyName": "Amazonas",
+      "year": 2018,
+      "value": 40.66832904
+    },
+    {
+      "indicatorId": "ibge-pof-multidimensional-poverty",
+      "geographyType": "brazil-state",
+      "geographyCode": "14",
+      "geographyName": "Roraima",
+      "year": 2018,
+      "value": 23.82394466
+    },
+    {
+      "indicatorId": "ibge-pof-multidimensional-poverty",
+      "geographyType": "brazil-state",
+      "geographyCode": "15",
+      "geographyName": "Pará",
+      "year": 2018,
+      "value": 51.98201453
+    },
+    {
+      "indicatorId": "ibge-pof-multidimensional-poverty",
+      "geographyType": "brazil-state",
+      "geographyCode": "16",
+      "geographyName": "Amapá",
+      "year": 2018,
+      "value": 43.73211077
+    },
+    {
+      "indicatorId": "ibge-pof-multidimensional-poverty",
+      "geographyType": "brazil-state",
+      "geographyCode": "17",
+      "geographyName": "Tocantins",
+      "year": 2018,
+      "value": 27.953168350000002
+    },
+    {
+      "indicatorId": "ibge-pof-multidimensional-poverty",
+      "geographyType": "brazil-state",
+      "geographyCode": "21",
+      "geographyName": "Maranhão",
+      "year": 2018,
+      "value": 58.11228242000001
+    },
+    {
+      "indicatorId": "ibge-pof-multidimensional-poverty",
+      "geographyType": "brazil-state",
+      "geographyCode": "22",
+      "geographyName": "Piauí",
+      "year": 2018,
+      "value": 39.14629506
+    },
+    {
+      "indicatorId": "ibge-pof-multidimensional-poverty",
+      "geographyType": "brazil-state",
+      "geographyCode": "23",
+      "geographyName": "Ceará",
+      "year": 2018,
+      "value": 30.93495925
+    },
+    {
+      "indicatorId": "ibge-pof-multidimensional-poverty",
+      "geographyType": "brazil-state",
+      "geographyCode": "24",
+      "geographyName": "Rio Grande do Norte",
+      "year": 2018,
+      "value": 36.59707117
+    },
+    {
+      "indicatorId": "ibge-pof-multidimensional-poverty",
+      "geographyType": "brazil-state",
+      "geographyCode": "25",
+      "geographyName": "Paraíba",
+      "year": 2018,
+      "value": 38.42310822
+    },
+    {
+      "indicatorId": "ibge-pof-multidimensional-poverty",
+      "geographyType": "brazil-state",
+      "geographyCode": "26",
+      "geographyName": "Pernambuco",
+      "year": 2018,
+      "value": 36.57007688
+    },
+    {
+      "indicatorId": "ibge-pof-multidimensional-poverty",
+      "geographyType": "brazil-state",
+      "geographyCode": "27",
+      "geographyName": "Alagoas",
+      "year": 2018,
+      "value": 43.62511047
+    },
+    {
+      "indicatorId": "ibge-pof-multidimensional-poverty",
+      "geographyType": "brazil-state",
+      "geographyCode": "28",
+      "geographyName": "Sergipe",
+      "year": 2018,
+      "value": 29.94968992
+    },
+    {
+      "indicatorId": "ibge-pof-multidimensional-poverty",
+      "geographyType": "brazil-state",
+      "geographyCode": "29",
+      "geographyName": "Bahia",
+      "year": 2018,
+      "value": 34.5951261
+    },
+    {
+      "indicatorId": "ibge-pof-multidimensional-poverty",
+      "geographyType": "brazil-state",
+      "geographyCode": "31",
+      "geographyName": "Minas Gerais",
+      "year": 2018,
+      "value": 14.30999265
+    },
+    {
+      "indicatorId": "ibge-pof-multidimensional-poverty",
+      "geographyType": "brazil-state",
+      "geographyCode": "32",
+      "geographyName": "Espírito Santo",
+      "year": 2018,
+      "value": 15.597638550000001
+    },
+    {
+      "indicatorId": "ibge-pof-multidimensional-poverty",
+      "geographyType": "brazil-state",
+      "geographyCode": "33",
+      "geographyName": "Rio de Janeiro",
+      "year": 2018,
+      "value": 19.01705468
+    },
+    {
+      "indicatorId": "ibge-pof-multidimensional-poverty",
+      "geographyType": "brazil-state",
+      "geographyCode": "35",
+      "geographyName": "São Paulo",
+      "year": 2018,
+      "value": 9.17374055
+    },
+    {
+      "indicatorId": "ibge-pof-multidimensional-poverty",
+      "geographyType": "brazil-state",
+      "geographyCode": "41",
+      "geographyName": "Paraná",
+      "year": 2018,
+      "value": 8.71689768
+    },
+    {
+      "indicatorId": "ibge-pof-multidimensional-poverty",
+      "geographyType": "brazil-state",
+      "geographyCode": "42",
+      "geographyName": "Santa Catarina",
+      "year": 2018,
+      "value": 5.0505819899999995
+    },
+    {
+      "indicatorId": "ibge-pof-multidimensional-poverty",
+      "geographyType": "brazil-state",
+      "geographyCode": "43",
+      "geographyName": "Rio Grande do Sul",
+      "year": 2018,
+      "value": 11.40818676
+    },
+    {
+      "indicatorId": "ibge-pof-multidimensional-poverty",
+      "geographyType": "brazil-state",
+      "geographyCode": "50",
+      "geographyName": "Mato Grosso do Sul",
+      "year": 2018,
+      "value": 17.50091605
+    },
+    {
+      "indicatorId": "ibge-pof-multidimensional-poverty",
+      "geographyType": "brazil-state",
+      "geographyCode": "51",
+      "geographyName": "Mato Grosso",
+      "year": 2018,
+      "value": 21.02811301
+    },
+    {
+      "indicatorId": "ibge-pof-multidimensional-poverty",
+      "geographyType": "brazil-state",
+      "geographyCode": "52",
+      "geographyName": "Goiás",
+      "year": 2018,
+      "value": 22.985123769999998
+    },
+    {
+      "indicatorId": "ibge-pof-multidimensional-poverty",
+      "geographyType": "brazil-state",
+      "geographyCode": "53",
+      "geographyName": "Distrito Federal",
+      "year": 2018,
+      "value": 14.89520915
+    },
+    {
       "indicatorId": "ibge-water-network-coverage",
       "geographyType": "brazil-immediate-region",
       "geographyCode": "110005",
@@ -475849,6 +476408,173 @@
       ]
     },
     {
+      "indicatorId": "ibge-pof-multidimensional-poverty",
+      "geographyType": "brazil-state",
+      "year": 2018,
+      "items": [
+        {
+          "indicatorId": "ibge-pof-multidimensional-poverty",
+          "geographyType": "brazil-state",
+          "geographyCode": "21",
+          "geographyName": "Maranhão",
+          "year": 2018,
+          "value": 58.11228242000001
+        },
+        {
+          "indicatorId": "ibge-pof-multidimensional-poverty",
+          "geographyType": "brazil-state",
+          "geographyCode": "15",
+          "geographyName": "Pará",
+          "year": 2018,
+          "value": 51.98201453
+        },
+        {
+          "indicatorId": "ibge-pof-multidimensional-poverty",
+          "geographyType": "brazil-state",
+          "geographyCode": "12",
+          "geographyName": "Acre",
+          "year": 2018,
+          "value": 48.39008313
+        },
+        {
+          "indicatorId": "ibge-pof-multidimensional-poverty",
+          "geographyType": "brazil-state",
+          "geographyCode": "16",
+          "geographyName": "Amapá",
+          "year": 2018,
+          "value": 43.73211077
+        },
+        {
+          "indicatorId": "ibge-pof-multidimensional-poverty",
+          "geographyType": "brazil-state",
+          "geographyCode": "27",
+          "geographyName": "Alagoas",
+          "year": 2018,
+          "value": 43.62511047
+        },
+        {
+          "indicatorId": "ibge-pof-multidimensional-poverty",
+          "geographyType": "brazil-state",
+          "geographyCode": "13",
+          "geographyName": "Amazonas",
+          "year": 2018,
+          "value": 40.66832904
+        },
+        {
+          "indicatorId": "ibge-pof-multidimensional-poverty",
+          "geographyType": "brazil-state",
+          "geographyCode": "22",
+          "geographyName": "Piauí",
+          "year": 2018,
+          "value": 39.14629506
+        },
+        {
+          "indicatorId": "ibge-pof-multidimensional-poverty",
+          "geographyType": "brazil-state",
+          "geographyCode": "25",
+          "geographyName": "Paraíba",
+          "year": 2018,
+          "value": 38.42310822
+        },
+        {
+          "indicatorId": "ibge-pof-multidimensional-poverty",
+          "geographyType": "brazil-state",
+          "geographyCode": "24",
+          "geographyName": "Rio Grande do Norte",
+          "year": 2018,
+          "value": 36.59707117
+        },
+        {
+          "indicatorId": "ibge-pof-multidimensional-poverty",
+          "geographyType": "brazil-state",
+          "geographyCode": "26",
+          "geographyName": "Pernambuco",
+          "year": 2018,
+          "value": 36.57007688
+        },
+        {
+          "indicatorId": "ibge-pof-multidimensional-poverty",
+          "geographyType": "brazil-state",
+          "geographyCode": "29",
+          "geographyName": "Bahia",
+          "year": 2018,
+          "value": 34.5951261
+        },
+        {
+          "indicatorId": "ibge-pof-multidimensional-poverty",
+          "geographyType": "brazil-state",
+          "geographyCode": "23",
+          "geographyName": "Ceará",
+          "year": 2018,
+          "value": 30.93495925
+        },
+        {
+          "indicatorId": "ibge-pof-multidimensional-poverty",
+          "geographyType": "brazil-state",
+          "geographyCode": "28",
+          "geographyName": "Sergipe",
+          "year": 2018,
+          "value": 29.94968992
+        },
+        {
+          "indicatorId": "ibge-pof-multidimensional-poverty",
+          "geographyType": "brazil-state",
+          "geographyCode": "11",
+          "geographyName": "Rondônia",
+          "year": 2018,
+          "value": 28.721347200000004
+        },
+        {
+          "indicatorId": "ibge-pof-multidimensional-poverty",
+          "geographyType": "brazil-state",
+          "geographyCode": "17",
+          "geographyName": "Tocantins",
+          "year": 2018,
+          "value": 27.953168350000002
+        },
+        {
+          "indicatorId": "ibge-pof-multidimensional-poverty",
+          "geographyType": "brazil-state",
+          "geographyCode": "14",
+          "geographyName": "Roraima",
+          "year": 2018,
+          "value": 23.82394466
+        },
+        {
+          "indicatorId": "ibge-pof-multidimensional-poverty",
+          "geographyType": "brazil-state",
+          "geographyCode": "52",
+          "geographyName": "Goiás",
+          "year": 2018,
+          "value": 22.985123769999998
+        },
+        {
+          "indicatorId": "ibge-pof-multidimensional-poverty",
+          "geographyType": "brazil-state",
+          "geographyCode": "51",
+          "geographyName": "Mato Grosso",
+          "year": 2018,
+          "value": 21.02811301
+        },
+        {
+          "indicatorId": "ibge-pof-multidimensional-poverty",
+          "geographyType": "brazil-state",
+          "geographyCode": "33",
+          "geographyName": "Rio de Janeiro",
+          "year": 2018,
+          "value": 19.01705468
+        },
+        {
+          "indicatorId": "ibge-pof-multidimensional-poverty",
+          "geographyType": "brazil-state",
+          "geographyCode": "50",
+          "geographyName": "Mato Grosso do Sul",
+          "year": 2018,
+          "value": 17.50091605
+        }
+      ]
+    },
+    {
       "indicatorId": "ibge-water-network-coverage",
       "geographyType": "brazil-immediate-region",
       "year": 2022,
@@ -476192,6 +476918,7 @@
   "notes": [
     "O MVP combina séries globais comparáveis por país com um primeiro recorte estadual do Brasil.",
     "O indicador estadual atual mede pessoas em domicílios com beneficiário do Bolsa Família, como proxy de vulnerabilidade social e pobreza.",
+    "A pobreza multidimensional estadual é uma estatística experimental da POF 2017-2018; ela combina privações não monetárias e não deve ser interpretada como série anual.",
     "O recorte de Regiões Geográficas Imediatas usa o Censo 2022 do IBGE e agrega municípios pela divisão territorial vigente.",
     "A arquitetura em conectores permite plugar novas tabelas do IBGE e novas fontes internacionais sem redesenhar o frontend."
   ]

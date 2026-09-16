@@ -26,6 +26,7 @@ Mundialidade é um dashboard web open-source para acompanhar indicadores sociais
 - ND-GAIN Country Index: índice geral, vulnerabilidade e prontidão, com componentes de alimento, água, saúde e governança
 - UNHCR Refugee Data Finder
 - IBGE SIDRA
+- IBGE Pesquisa de Orçamentos Familiares (POF 2017-2018)
 - Natural Earth
 
 ### Indicadores iniciais de fome e sede

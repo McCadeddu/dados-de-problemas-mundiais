@@ -120,6 +120,7 @@ const WORLD_BANK_SOURCE_ID = 'world-bank'
 const ND_GAIN_SOURCE_ID = 'nd-gain'
 const UNHCR_SOURCE_ID = 'unhcr'
 const SIDRA_SOURCE_ID = 'ibge-sidra'
+const IBGE_POF_SOURCE_ID = 'ibge-pof'
 const NATURAL_EARTH_SOURCE_ID = 'natural-earth'
 const BRAZIL_STATE_CODE_BY_POSTAL: Record<string, string> = {
   AC: '12',
@@ -375,6 +376,17 @@ const BRAZIL_STATE_INCOME_INDICATOR: Omit<Indicator, 'latestYear'> = {
   direction: 'higher-better',
 }
 
+const BRAZIL_STATE_MULTIDIMENSIONAL_POVERTY_INDICATOR: Omit<Indicator, 'latestYear'> = {
+  id: 'ibge-pof-multidimensional-poverty',
+  name: 'Pessoas com pobreza multidimensional',
+  themeId: 'poverty-inequality',
+  description: 'Proporção de pessoas das famílias com algum grau de pobreza multidimensional não monetária, medida experimental da POF 2017-2018.',
+  unit: '%',
+  geographyType: 'brazil-state',
+  sourceId: IBGE_POF_SOURCE_ID,
+  direction: 'higher-worse',
+}
+
 const BRAZIL_IMMEDIATE_WATER_INDICATOR: Omit<Indicator, 'latestYear'> = {
   id: 'ibge-water-network-coverage',
   name: 'Domicílios com rede geral de água',
@@ -434,6 +446,49 @@ function parseCsv<T>(csv: string): T[] {
   }
 
   return parsed.data
+}
+
+function decodeXmlText(value: string) {
+  return value
+    .replace(/<[^>]+>/g, '')
+    .replace(/&amp;/g, '&')
+    .replace(/&lt;/g, '<')
+    .replace(/&gt;/g, '>')
+    .replace(/&quot;/g, '"')
+    .replace(/&apos;/g, "'")
+    .replace(/&#(\d+);/g, (_, code) => String.fromCodePoint(Number(code)))
+}
+
+function readPofMultidimensionalPovertyRows(workbookBuffer: Buffer) {
+  const workbook = new AdmZip(workbookBuffer)
+  const sharedStringsEntry = workbook.getEntry('xl/sharedStrings.xml')
+  const sheetEntry = workbook.getEntry('xl/worksheets/sheet1.xml')
+  if (!sharedStringsEntry || !sheetEntry) throw new Error('IBGE POF workbook structure is incomplete')
+
+  const sharedStrings = Array.from(sharedStringsEntry.getData().toString('utf-8').matchAll(/<si>([\s\S]*?)<\/si>/g), (match) => decodeXmlText(match[1]))
+  const rows: Array<{ name: string; value: number }> = []
+  const sheetXml = sheetEntry.getData().toString('utf-8')
+
+  // The official workbook uses a fixed table layout: state name in column A and poverty share in C.
+  for (const rowMatch of sheetXml.matchAll(/<row[^>]*>([\s\S]*?)<\/row>/g)) {
+    const cells = new Map<string, string>()
+    for (const cellMatch of rowMatch[1].matchAll(/<c\s+([^>]*)>([\s\S]*?)<\/c>/g)) {
+      const reference = cellMatch[1].match(/\br="([A-Z]+)\d+"/)?.[1]
+      const type = cellMatch[1].match(/\bt="([^"]+)"/)?.[1]
+      const rawValue = cellMatch[2].match(/<v>([\s\S]*?)<\/v>/)?.[1]
+      const inlineValue = cellMatch[2].match(/<is>([\s\S]*?)<\/is>/)?.[1]
+      if (!reference) continue
+      if (type === 's' && rawValue !== undefined) cells.set(reference, sharedStrings[Number(rawValue)] ?? '')
+      else if (inlineValue !== undefined) cells.set(reference, decodeXmlText(inlineValue))
+      else if (rawValue !== undefined) cells.set(reference, decodeXmlText(rawValue))
+    }
+
+    const name = cells.get('A')?.trim()
+    const value = toNumber(cells.get('C'))
+    if (name && value !== null && name !== 'Brasil') rows.push({ name, value })
+  }
+
+  return rows
 }
 
 function toNumber(value: string | number | null | undefined): number | null {
@@ -825,6 +880,42 @@ async function loadBrazilStateIncomeIndicator() {
   return { indicator: { ...BRAZIL_STATE_INCOME_INDICATOR, latestYear: Math.max(...series.flatMap((entry) => entry.points.map((point) => point.year))) } satisfies Indicator, series }
 }
 
+async function loadBrazilStateMultidimensionalPovertyIndicator() {
+  const [pofZipBuffer, states] = await Promise.all([
+    fetchBuffer('https://ftp.ibge.gov.br/Orcamentos_Familiares/Evolucao_dos_Indicadores_nao_Monetarios_de_Pobreza_e_Qualidade_de_Vida_no_Brasil/tabelas_2017_2018_xls.zip'),
+    fetchJson<Array<{ id: number; nome: string }>>('https://servicodados.ibge.gov.br/api/v1/localidades/estados'),
+  ])
+  const pofZip = new AdmZip(pofZipBuffer)
+  const tableEntry = pofZip.getEntries().find((entry) => entry.entryName === 'Tabela 6b.xlsx')
+  if (!tableEntry) throw new Error('IBGE POF Tabela 6b.xlsx not found')
+
+  const stateCodeByName = new Map(states.map((state) => [state.nome, String(state.id)]))
+  const series = readPofMultidimensionalPovertyRows(tableEntry.getData()).flatMap(({ name, value }) => {
+    const code = stateCodeByName.get(name)
+    return code ? [{
+      indicatorId: BRAZIL_STATE_MULTIDIMENSIONAL_POVERTY_INDICATOR.id,
+      geographyType: 'brazil-state' as const,
+      geographyCode: code,
+      geographyName: name,
+      points: [{ year: 2018, value }],
+    }] : []
+  })
+  if (series.length !== 27) throw new Error(`IBGE POF expected 27 states, received ${series.length}`)
+
+  return {
+    indicator: { ...BRAZIL_STATE_MULTIDIMENSIONAL_POVERTY_INDICATOR, latestYear: 2018 } satisfies Indicator,
+    source: {
+      id: IBGE_POF_SOURCE_ID,
+      name: 'IBGE Pesquisa de Orçamentos Familiares',
+      url: 'https://www.ibge.gov.br/estatisticas/sociais/educacao/24786-pof-2017-2018.html',
+      methodologyUrl: 'https://ftp.ibge.gov.br/Orcamentos_Familiares/Evolucao_dos_Indicadores_nao_Monetarios_de_Pobreza_e_Qualidade_de_Vida_no_Brasil/indice_de_tabelas.pdf',
+      license: 'Dados públicos do IBGE',
+      lastUpdated: '2017-2018',
+    } satisfies Source,
+    series,
+  }
+}
+
 type IbgeAggregateResponse = Array<{
   resultados: Array<{
     series: Array<{ localidade: { id: string; nome: string }; serie: Record<string, string> }>
@@ -979,10 +1070,11 @@ async function main() {
     loadNdGain(countriesByIso3),
     loadUnhcrIndicators(validCountryIso3),
   ])
-  const [brazilStates, brazilStateGini, brazilStateIncome, immediateRegions, immediateSanitation] = await Promise.all([
+  const [brazilStates, brazilStateGini, brazilStateIncome, brazilStateMultidimensionalPoverty, immediateRegions, immediateSanitation] = await Promise.all([
     loadBrazilStateIndicator(),
     loadBrazilStateGiniIndicator(),
     loadBrazilStateIncomeIndicator(),
+    loadBrazilStateMultidimensionalPovertyIndicator(),
     loadBrazilImmediateRegionCoverage(BRAZIL_IMMEDIATE_WATER_INDICATOR, '6803', '1821%5B72144%5D'),
     loadBrazilImmediateRegionCoverage(BRAZIL_IMMEDIATE_SANITATION_INDICATOR, '6805', '11558%5B46290%5D'),
   ])
@@ -1001,6 +1093,7 @@ async function main() {
     brazilStates.indicator,
     brazilStateGini.indicator,
     brazilStateIncome.indicator,
+    brazilStateMultidimensionalPoverty.indicator,
     immediateRegions.indicator,
     immediateSanitation.indicator,
   ]
@@ -1012,6 +1105,7 @@ async function main() {
     ...brazilStates.series,
     ...brazilStateGini.series,
     ...brazilStateIncome.series,
+    ...brazilStateMultidimensionalPoverty.series,
     ...immediateRegions.series,
     ...immediateSanitation.series,
   ]
@@ -1019,7 +1113,7 @@ async function main() {
   const rankings = buildRankings(indicators, latest)
 
   const sources = new Map<string, Source>()
-  for (const source of [...worldBankResults.map((result) => result.source), ...worldBankGapResults.map((result) => result.source), unhcr.source, ndGain.source, brazilStates.source]) {
+  for (const source of [...worldBankResults.map((result) => result.source), ...worldBankGapResults.map((result) => result.source), unhcr.source, ndGain.source, brazilStates.source, brazilStateMultidimensionalPoverty.source]) {
     sources.set(source.id, source)
   }
   sources.set(NATURAL_EARTH_SOURCE_ID, {
@@ -1051,6 +1145,7 @@ async function main() {
     notes: [
       'O MVP combina séries globais comparáveis por país com um primeiro recorte estadual do Brasil.',
       'O indicador estadual atual mede pessoas em domicílios com beneficiário do Bolsa Família, como proxy de vulnerabilidade social e pobreza.',
+      'A pobreza multidimensional estadual é uma estatística experimental da POF 2017-2018; ela combina privações não monetárias e não deve ser interpretada como série anual.',
       'O recorte de Regiões Geográficas Imediatas usa o Censo 2022 do IBGE e agrega municípios pela divisão territorial vigente.',
       'A arquitetura em conectores permite plugar novas tabelas do IBGE e novas fontes internacionais sem redesenhar o frontend.',
     ],
