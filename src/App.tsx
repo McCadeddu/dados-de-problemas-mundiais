@@ -62,6 +62,12 @@ function App() {
   const [comparisonStateCodes, setComparisonStateCodes] = useState(() => initialCodes('compararEstados', ['35', '29', '15']))
   const [comparisonImmediateRegionCodes, setComparisonImmediateRegionCodes] = useState(() => initialCodes('compararRegioes', ['350019', '350048', '350024']))
   const [copied, setCopied] = useState(false)
+  const [clockNow, setClockNow] = useState(() => Date.now())
+
+  useEffect(() => {
+    const intervalId = window.setInterval(() => setClockNow(Date.now()), 1000)
+    return () => window.clearInterval(intervalId)
+  }, [])
 
   useEffect(() => {
     const dataBaseUrl = import.meta.env.BASE_URL
@@ -156,6 +162,9 @@ function App() {
   }
 
   const summary = getMetricSummary(data)
+  const worldPopulation = data.worldPopulation
+    ? Math.round(data.worldPopulation.value + (data.worldPopulation.annualChange * ((clockNow - new Date(data.worldPopulation.referenceYear, 0, 1).getTime()) / (365.25 * 24 * 60 * 60 * 1000))))
+    : null
   const countryName = data.countries.find((country) => country.code === countryCode)?.name ?? countryCode
   const stateName = data.brazilStates.find((state) => state.code === stateCode)?.name ?? stateCode
   const activeIndicator = effectiveView === 'world' || effectiveView === 'country'
@@ -239,8 +248,11 @@ function App() {
           <article className="stat"><strong>{summary.states}</strong><span>estados brasileiros</span></article>
           <article className="stat"><strong>{data.indicators.length}</strong><span>indicadores ativos</span></article>
           <article className="stat"><strong>{new Date(data.generatedAt).toLocaleDateString('pt-BR')}</strong><span>gerado em</span></article>
+          {worldPopulation !== null && <article className="stat stat--population"><strong>{worldPopulation.toLocaleString('pt-BR')}</strong><span>estimativa da população mundial</span><small>Base {data.worldPopulation?.referenceYear} • atualização por segundo</small></article>}
         </div>
       </section>
+
+      {worldPopulation !== null && <p className="population-note">Contador estimado a partir da população mundial anual e da variação anual mais recente do World Bank; não representa uma contagem em tempo real.</p>}
 
       <section className="theme-picker" aria-label="Escolher problemática">
         <div className="theme-picker__intro"><span>Primeiro passo</span><h2>Escolha a problemática</h2><p>O panorama mundial abre com os indicadores disponíveis para o tema selecionado.</p></div>

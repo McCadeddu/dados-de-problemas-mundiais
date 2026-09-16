@@ -189,6 +189,26 @@ select {
   font-size: 1.6rem;
 }
 
+.stat--population {
+  grid-column: span 2;
+  background: rgba(8, 145, 178, 0.22);
+}
+
+.stat--population strong {
+  font-variant-numeric: tabular-nums;
+}
+
+.stat--population small {
+  margin-top: 0.25rem;
+  color: #bae6fd;
+}
+
+.population-note {
+  margin: -0.9rem 0 1.35rem;
+  color: #a8b8cc;
+  font-size: 0.82rem;
+}
+
 .panel {
   padding: 1.2rem;
   box-shadow: 0 16px 40px rgba(0, 0, 0, 0.2);

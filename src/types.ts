@@ -75,5 +75,11 @@ export type DashboardData = {
   series: Series[]
   latest: LatestValue[]
   rankings: Ranking[]
+  worldPopulation?: {
+    value: number
+    referenceYear: number
+    annualChange: number
+    sourceId: string
+  }
   notes: string[]
 }

@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-09-16T14:33:36.861Z",
+  "generatedAt": "2026-09-16T14:44:38.442Z",
   "themes": [
     {
       "id": "hunger-water",
@@ -322251,6 +322251,12 @@
       ]
     }
   ],
+  "worldPopulation": {
+    "value": 8215424893,
+    "referenceYear": 2025,
+    "annualChange": 74527370,
+    "sourceId": "world-bank"
+  },
   "notes": [
     "O MVP combina séries globais comparáveis por país com um primeiro recorte estadual do Brasil.",
     "O indicador estadual atual mede pessoas em domicílios com beneficiário do Bolsa Família, como proxy de vulnerabilidade social e pobreza.",

@@ -71,6 +71,7 @@ type DashboardData = {
   series: Series[]
   latest: LatestValue[]
   rankings: Ranking[]
+  worldPopulation?: { value: number; referenceYear: number; annualChange: number; sourceId: string }
   notes: string[]
 }
 
@@ -461,6 +462,17 @@ async function loadWorldBankCountries() {
   return rows
     .filter((country) => country.region.value !== 'Aggregates')
     .map((country) => ({ code: country.id.toUpperCase(), name: country.name }))
+}
+
+async function loadWorldPopulation() {
+  const [, rows] = await fetchJson<[{ lastupdated: string }, Array<{ date: string; value: number | null }>]>(
+    'https://api.worldbank.org/v2/country/WLD/indicator/SP.POP.TOTL?format=json&per_page=100',
+  )
+  const points = rows.filter((row) => row.value !== null).map((row) => ({ year: Number(row.date), value: row.value as number })).sort((a, b) => b.year - a.year)
+  const latest = points[0]
+  const previous = points[1]
+  if (!latest || !previous) throw new Error('World population series is incomplete')
+  return { value: latest.value, referenceYear: latest.year, annualChange: latest.value - previous.value, sourceId: WORLD_BANK_SOURCE_ID }
 }
 
 async function loadWorldBankIndicator(
@@ -906,9 +918,10 @@ async function main() {
   const countriesByIso3 = new Map(countries.map((country) => [country.code, country.name]))
   const validCountryIso3 = new Set(countries.map((country) => country.code))
 
-  const [worldBankResults, worldBankGapResults] = await Promise.all([
+  const [worldBankResults, worldBankGapResults, worldPopulation] = await Promise.all([
     Promise.all(WORLD_BANK_INDICATORS.map((indicator) => loadWorldBankIndicator(indicator, validCountryIso3))),
     Promise.all(WORLD_BANK_GAP_INDICATORS.map((indicator) => loadWorldBankGapIndicator(indicator, validCountryIso3))),
+    loadWorldPopulation(),
   ])
   const [ndGain, unhcr] = await Promise.all([
     loadNdGain(countriesByIso3),
@@ -982,6 +995,7 @@ async function main() {
     series,
     latest,
     rankings,
+    worldPopulation,
     notes: [
       'O MVP combina séries globais comparáveis por país com um primeiro recorte estadual do Brasil.',
       'O indicador estadual atual mede pessoas em domicílios com beneficiário do Bolsa Família, como proxy de vulnerabilidade social e pobreza.',
