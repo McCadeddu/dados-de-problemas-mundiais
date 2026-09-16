@@ -442,6 +442,15 @@ select {
   font-weight: 700;
 }
 
+.comparison-warning {
+  margin: 0 0 1rem;
+  padding: 0.75rem 0.9rem;
+  border-left: 3px solid #fbbf24;
+  border-radius: 0 10px 10px 0;
+  background: rgba(120, 53, 15, 0.2);
+  color: #fde68a;
+}
+
 .comparison-grid {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
