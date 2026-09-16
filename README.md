@@ -23,7 +23,7 @@ Mundialidade é um dashboard web open-source para acompanhar indicadores sociais
 ## Fontes principais
 
 - World Bank Open Data
-- ND-GAIN Country Index: índice geral, vulnerabilidade climática e prontidão para adaptação
+- ND-GAIN Country Index: índice geral, vulnerabilidade e prontidão, com componentes de alimento, água, saúde e governança
 - UNHCR Refugee Data Finder
 - IBGE SIDRA
 - Natural Earth

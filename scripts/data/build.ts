@@ -685,6 +685,34 @@ async function loadNdGain(countriesByIso3: Map<string, string>) {
       description: 'Capacidade econômica, de governança e social para transformar investimentos em ações de adaptação.',
       direction: 'higher-better' as const,
     },
+    {
+      id: 'nd-gain-food-vulnerability',
+      entryName: 'resources 2/vulnerability/food.csv',
+      name: 'Risco climático: alimentação',
+      description: 'Vulnerabilidade dos sistemas alimentares aos impactos das mudanças climáticas. Maior pontuação indica maior risco.',
+      direction: 'higher-worse' as const,
+    },
+    {
+      id: 'nd-gain-water-vulnerability',
+      entryName: 'resources 2/vulnerability/water.csv',
+      name: 'Risco climático: água',
+      description: 'Vulnerabilidade do setor de água aos impactos das mudanças climáticas. Maior pontuação indica maior risco.',
+      direction: 'higher-worse' as const,
+    },
+    {
+      id: 'nd-gain-health-vulnerability',
+      entryName: 'resources 2/vulnerability/health.csv',
+      name: 'Risco climático: saúde',
+      description: 'Vulnerabilidade da saúde humana aos impactos das mudanças climáticas. Maior pontuação indica maior risco.',
+      direction: 'higher-worse' as const,
+    },
+    {
+      id: 'nd-gain-governance-readiness',
+      entryName: 'resources 2/readiness/governance.csv',
+      name: 'Prontidão: governança',
+      description: 'Capacidade de governança para apoiar investimentos e respostas de adaptação climática.',
+      direction: 'higher-better' as const,
+    },
   ]
 
   const results = datasetDefinitions.map((definition) => {
