@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-09-16T15:29:53.075Z",
+  "generatedAt": "2026-09-16T15:32:22.526Z",
   "themes": [
     {
       "id": "hunger-water",
@@ -358,6 +358,17 @@
       "sourceId": "ibge-sidra",
       "direction": "higher-worse",
       "latestYear": 2025
+    },
+    {
+      "id": "ibge-state-gender-wage-gap",
+      "name": "Diferença salarial de gênero",
+      "themeId": "gender-equality",
+      "description": "Percentual pelo qual o rendimento médio mensal feminino de todos os trabalhos fica abaixo do masculino. Diferença bruta, sem ajuste por ocupação, jornada, escolaridade ou outros fatores.",
+      "unit": "%",
+      "geographyType": "brazil-state",
+      "sourceId": "ibge-sidra",
+      "direction": "higher-worse",
+      "latestYear": 2022
     },
     {
       "id": "ibge-pof-multidimensional-poverty",
@@ -423105,6 +423116,330 @@
       ]
     },
     {
+      "indicatorId": "ibge-state-gender-wage-gap",
+      "geographyType": "brazil-state",
+      "geographyCode": "11",
+      "geographyName": "Rondônia",
+      "points": [
+        {
+          "year": 2022,
+          "value": 17.353430058522488
+        }
+      ]
+    },
+    {
+      "indicatorId": "ibge-state-gender-wage-gap",
+      "geographyType": "brazil-state",
+      "geographyCode": "12",
+      "geographyName": "Acre",
+      "points": [
+        {
+          "year": 2022,
+          "value": 4.991524979467724
+        }
+      ]
+    },
+    {
+      "indicatorId": "ibge-state-gender-wage-gap",
+      "geographyType": "brazil-state",
+      "geographyCode": "13",
+      "geographyName": "Amazonas",
+      "points": [
+        {
+          "year": 2022,
+          "value": 11.51366261529178
+        }
+      ]
+    },
+    {
+      "indicatorId": "ibge-state-gender-wage-gap",
+      "geographyType": "brazil-state",
+      "geographyCode": "14",
+      "geographyName": "Roraima",
+      "points": [
+        {
+          "year": 2022,
+          "value": 5.486199373616668
+        }
+      ]
+    },
+    {
+      "indicatorId": "ibge-state-gender-wage-gap",
+      "geographyType": "brazil-state",
+      "geographyCode": "15",
+      "geographyName": "Pará",
+      "points": [
+        {
+          "year": 2022,
+          "value": 10.196370404839456
+        }
+      ]
+    },
+    {
+      "indicatorId": "ibge-state-gender-wage-gap",
+      "geographyType": "brazil-state",
+      "geographyCode": "16",
+      "geographyName": "Amapá",
+      "points": [
+        {
+          "year": 2022,
+          "value": 3.8793245063573956
+        }
+      ]
+    },
+    {
+      "indicatorId": "ibge-state-gender-wage-gap",
+      "geographyType": "brazil-state",
+      "geographyCode": "17",
+      "geographyName": "Tocantins",
+      "points": [
+        {
+          "year": 2022,
+          "value": 15.785230512229226
+        }
+      ]
+    },
+    {
+      "indicatorId": "ibge-state-gender-wage-gap",
+      "geographyType": "brazil-state",
+      "geographyCode": "21",
+      "geographyName": "Maranhão",
+      "points": [
+        {
+          "year": 2022,
+          "value": 9.217749551176286
+        }
+      ]
+    },
+    {
+      "indicatorId": "ibge-state-gender-wage-gap",
+      "geographyType": "brazil-state",
+      "geographyCode": "22",
+      "geographyName": "Piauí",
+      "points": [
+        {
+          "year": 2022,
+          "value": 9.133342763038248
+        }
+      ]
+    },
+    {
+      "indicatorId": "ibge-state-gender-wage-gap",
+      "geographyType": "brazil-state",
+      "geographyCode": "23",
+      "geographyName": "Ceará",
+      "points": [
+        {
+          "year": 2022,
+          "value": 9.512279488066424
+        }
+      ]
+    },
+    {
+      "indicatorId": "ibge-state-gender-wage-gap",
+      "geographyType": "brazil-state",
+      "geographyCode": "24",
+      "geographyName": "Rio Grande do Norte",
+      "points": [
+        {
+          "year": 2022,
+          "value": 13.22792197432174
+        }
+      ]
+    },
+    {
+      "indicatorId": "ibge-state-gender-wage-gap",
+      "geographyType": "brazil-state",
+      "geographyCode": "25",
+      "geographyName": "Paraíba",
+      "points": [
+        {
+          "year": 2022,
+          "value": 10.335474462047225
+        }
+      ]
+    },
+    {
+      "indicatorId": "ibge-state-gender-wage-gap",
+      "geographyType": "brazil-state",
+      "geographyCode": "26",
+      "geographyName": "Pernambuco",
+      "points": [
+        {
+          "year": 2022,
+          "value": 9.328023408459044
+        }
+      ]
+    },
+    {
+      "indicatorId": "ibge-state-gender-wage-gap",
+      "geographyType": "brazil-state",
+      "geographyCode": "27",
+      "geographyName": "Alagoas",
+      "points": [
+        {
+          "year": 2022,
+          "value": 8.425790095851186
+        }
+      ]
+    },
+    {
+      "indicatorId": "ibge-state-gender-wage-gap",
+      "geographyType": "brazil-state",
+      "geographyCode": "28",
+      "geographyName": "Sergipe",
+      "points": [
+        {
+          "year": 2022,
+          "value": 11.275465488561773
+        }
+      ]
+    },
+    {
+      "indicatorId": "ibge-state-gender-wage-gap",
+      "geographyType": "brazil-state",
+      "geographyCode": "29",
+      "geographyName": "Bahia",
+      "points": [
+        {
+          "year": 2022,
+          "value": 11.21886439257695
+        }
+      ]
+    },
+    {
+      "indicatorId": "ibge-state-gender-wage-gap",
+      "geographyType": "brazil-state",
+      "geographyCode": "31",
+      "geographyName": "Minas Gerais",
+      "points": [
+        {
+          "year": 2022,
+          "value": 23.38300339543249
+        }
+      ]
+    },
+    {
+      "indicatorId": "ibge-state-gender-wage-gap",
+      "geographyType": "brazil-state",
+      "geographyCode": "32",
+      "geographyName": "Espírito Santo",
+      "points": [
+        {
+          "year": 2022,
+          "value": 22.473230738582604
+        }
+      ]
+    },
+    {
+      "indicatorId": "ibge-state-gender-wage-gap",
+      "geographyType": "brazil-state",
+      "geographyCode": "33",
+      "geographyName": "Rio de Janeiro",
+      "points": [
+        {
+          "year": 2022,
+          "value": 21.231897768786293
+        }
+      ]
+    },
+    {
+      "indicatorId": "ibge-state-gender-wage-gap",
+      "geographyType": "brazil-state",
+      "geographyCode": "35",
+      "geographyName": "São Paulo",
+      "points": [
+        {
+          "year": 2022,
+          "value": 23.382383730397716
+        }
+      ]
+    },
+    {
+      "indicatorId": "ibge-state-gender-wage-gap",
+      "geographyType": "brazil-state",
+      "geographyCode": "41",
+      "geographyName": "Paraná",
+      "points": [
+        {
+          "year": 2022,
+          "value": 24.4578002870594
+        }
+      ]
+    },
+    {
+      "indicatorId": "ibge-state-gender-wage-gap",
+      "geographyType": "brazil-state",
+      "geographyCode": "42",
+      "geographyName": "Santa Catarina",
+      "points": [
+        {
+          "year": 2022,
+          "value": 25.07108632471919
+        }
+      ]
+    },
+    {
+      "indicatorId": "ibge-state-gender-wage-gap",
+      "geographyType": "brazil-state",
+      "geographyCode": "43",
+      "geographyName": "Rio Grande do Sul",
+      "points": [
+        {
+          "year": 2022,
+          "value": 23.16525502606106
+        }
+      ]
+    },
+    {
+      "indicatorId": "ibge-state-gender-wage-gap",
+      "geographyType": "brazil-state",
+      "geographyCode": "50",
+      "geographyName": "Mato Grosso do Sul",
+      "points": [
+        {
+          "year": 2022,
+          "value": 23.092077720590044
+        }
+      ]
+    },
+    {
+      "indicatorId": "ibge-state-gender-wage-gap",
+      "geographyType": "brazil-state",
+      "geographyCode": "51",
+      "geographyName": "Mato Grosso",
+      "points": [
+        {
+          "year": 2022,
+          "value": 23.911496534786426
+        }
+      ]
+    },
+    {
+      "indicatorId": "ibge-state-gender-wage-gap",
+      "geographyType": "brazil-state",
+      "geographyCode": "52",
+      "geographyName": "Goiás",
+      "points": [
+        {
+          "year": 2022,
+          "value": 23.558029908460842
+        }
+      ]
+    },
+    {
+      "indicatorId": "ibge-state-gender-wage-gap",
+      "geographyType": "brazil-state",
+      "geographyCode": "53",
+      "geographyName": "Distrito Federal",
+      "points": [
+        {
+          "year": 2022,
+          "value": 19.877196558580675
+        }
+      ]
+    },
+    {
       "indicatorId": "ibge-pof-multidimensional-poverty",
       "geographyType": "brazil-state",
       "geographyCode": "11",
@@ -468003,6 +468338,222 @@
       "value": 14.82500000000001
     },
     {
+      "indicatorId": "ibge-state-gender-wage-gap",
+      "geographyType": "brazil-state",
+      "geographyCode": "11",
+      "geographyName": "Rondônia",
+      "year": 2022,
+      "value": 17.353430058522488
+    },
+    {
+      "indicatorId": "ibge-state-gender-wage-gap",
+      "geographyType": "brazil-state",
+      "geographyCode": "12",
+      "geographyName": "Acre",
+      "year": 2022,
+      "value": 4.991524979467724
+    },
+    {
+      "indicatorId": "ibge-state-gender-wage-gap",
+      "geographyType": "brazil-state",
+      "geographyCode": "13",
+      "geographyName": "Amazonas",
+      "year": 2022,
+      "value": 11.51366261529178
+    },
+    {
+      "indicatorId": "ibge-state-gender-wage-gap",
+      "geographyType": "brazil-state",
+      "geographyCode": "14",
+      "geographyName": "Roraima",
+      "year": 2022,
+      "value": 5.486199373616668
+    },
+    {
+      "indicatorId": "ibge-state-gender-wage-gap",
+      "geographyType": "brazil-state",
+      "geographyCode": "15",
+      "geographyName": "Pará",
+      "year": 2022,
+      "value": 10.196370404839456
+    },
+    {
+      "indicatorId": "ibge-state-gender-wage-gap",
+      "geographyType": "brazil-state",
+      "geographyCode": "16",
+      "geographyName": "Amapá",
+      "year": 2022,
+      "value": 3.8793245063573956
+    },
+    {
+      "indicatorId": "ibge-state-gender-wage-gap",
+      "geographyType": "brazil-state",
+      "geographyCode": "17",
+      "geographyName": "Tocantins",
+      "year": 2022,
+      "value": 15.785230512229226
+    },
+    {
+      "indicatorId": "ibge-state-gender-wage-gap",
+      "geographyType": "brazil-state",
+      "geographyCode": "21",
+      "geographyName": "Maranhão",
+      "year": 2022,
+      "value": 9.217749551176286
+    },
+    {
+      "indicatorId": "ibge-state-gender-wage-gap",
+      "geographyType": "brazil-state",
+      "geographyCode": "22",
+      "geographyName": "Piauí",
+      "year": 2022,
+      "value": 9.133342763038248
+    },
+    {
+      "indicatorId": "ibge-state-gender-wage-gap",
+      "geographyType": "brazil-state",
+      "geographyCode": "23",
+      "geographyName": "Ceará",
+      "year": 2022,
+      "value": 9.512279488066424
+    },
+    {
+      "indicatorId": "ibge-state-gender-wage-gap",
+      "geographyType": "brazil-state",
+      "geographyCode": "24",
+      "geographyName": "Rio Grande do Norte",
+      "year": 2022,
+      "value": 13.22792197432174
+    },
+    {
+      "indicatorId": "ibge-state-gender-wage-gap",
+      "geographyType": "brazil-state",
+      "geographyCode": "25",
+      "geographyName": "Paraíba",
+      "year": 2022,
+      "value": 10.335474462047225
+    },
+    {
+      "indicatorId": "ibge-state-gender-wage-gap",
+      "geographyType": "brazil-state",
+      "geographyCode": "26",
+      "geographyName": "Pernambuco",
+      "year": 2022,
+      "value": 9.328023408459044
+    },
+    {
+      "indicatorId": "ibge-state-gender-wage-gap",
+      "geographyType": "brazil-state",
+      "geographyCode": "27",
+      "geographyName": "Alagoas",
+      "year": 2022,
+      "value": 8.425790095851186
+    },
+    {
+      "indicatorId": "ibge-state-gender-wage-gap",
+      "geographyType": "brazil-state",
+      "geographyCode": "28",
+      "geographyName": "Sergipe",
+      "year": 2022,
+      "value": 11.275465488561773
+    },
+    {
+      "indicatorId": "ibge-state-gender-wage-gap",
+      "geographyType": "brazil-state",
+      "geographyCode": "29",
+      "geographyName": "Bahia",
+      "year": 2022,
+      "value": 11.21886439257695
+    },
+    {
+      "indicatorId": "ibge-state-gender-wage-gap",
+      "geographyType": "brazil-state",
+      "geographyCode": "31",
+      "geographyName": "Minas Gerais",
+      "year": 2022,
+      "value": 23.38300339543249
+    },
+    {
+      "indicatorId": "ibge-state-gender-wage-gap",
+      "geographyType": "brazil-state",
+      "geographyCode": "32",
+      "geographyName": "Espírito Santo",
+      "year": 2022,
+      "value": 22.473230738582604
+    },
+    {
+      "indicatorId": "ibge-state-gender-wage-gap",
+      "geographyType": "brazil-state",
+      "geographyCode": "33",
+      "geographyName": "Rio de Janeiro",
+      "year": 2022,
+      "value": 21.231897768786293
+    },
+    {
+      "indicatorId": "ibge-state-gender-wage-gap",
+      "geographyType": "brazil-state",
+      "geographyCode": "35",
+      "geographyName": "São Paulo",
+      "year": 2022,
+      "value": 23.382383730397716
+    },
+    {
+      "indicatorId": "ibge-state-gender-wage-gap",
+      "geographyType": "brazil-state",
+      "geographyCode": "41",
+      "geographyName": "Paraná",
+      "year": 2022,
+      "value": 24.4578002870594
+    },
+    {
+      "indicatorId": "ibge-state-gender-wage-gap",
+      "geographyType": "brazil-state",
+      "geographyCode": "42",
+      "geographyName": "Santa Catarina",
+      "year": 2022,
+      "value": 25.07108632471919
+    },
+    {
+      "indicatorId": "ibge-state-gender-wage-gap",
+      "geographyType": "brazil-state",
+      "geographyCode": "43",
+      "geographyName": "Rio Grande do Sul",
+      "year": 2022,
+      "value": 23.16525502606106
+    },
+    {
+      "indicatorId": "ibge-state-gender-wage-gap",
+      "geographyType": "brazil-state",
+      "geographyCode": "50",
+      "geographyName": "Mato Grosso do Sul",
+      "year": 2022,
+      "value": 23.092077720590044
+    },
+    {
+      "indicatorId": "ibge-state-gender-wage-gap",
+      "geographyType": "brazil-state",
+      "geographyCode": "51",
+      "geographyName": "Mato Grosso",
+      "year": 2022,
+      "value": 23.911496534786426
+    },
+    {
+      "indicatorId": "ibge-state-gender-wage-gap",
+      "geographyType": "brazil-state",
+      "geographyCode": "52",
+      "geographyName": "Goiás",
+      "year": 2022,
+      "value": 23.558029908460842
+    },
+    {
+      "indicatorId": "ibge-state-gender-wage-gap",
+      "geographyType": "brazil-state",
+      "geographyCode": "53",
+      "geographyName": "Distrito Federal",
+      "year": 2022,
+      "value": 19.877196558580675
+    },
+    {
       "indicatorId": "ibge-pof-multidimensional-poverty",
       "geographyType": "brazil-state",
       "geographyCode": "11",
@@ -481273,6 +481824,173 @@
       ]
     },
     {
+      "indicatorId": "ibge-state-gender-wage-gap",
+      "geographyType": "brazil-state",
+      "year": 2022,
+      "items": [
+        {
+          "indicatorId": "ibge-state-gender-wage-gap",
+          "geographyType": "brazil-state",
+          "geographyCode": "42",
+          "geographyName": "Santa Catarina",
+          "year": 2022,
+          "value": 25.07108632471919
+        },
+        {
+          "indicatorId": "ibge-state-gender-wage-gap",
+          "geographyType": "brazil-state",
+          "geographyCode": "41",
+          "geographyName": "Paraná",
+          "year": 2022,
+          "value": 24.4578002870594
+        },
+        {
+          "indicatorId": "ibge-state-gender-wage-gap",
+          "geographyType": "brazil-state",
+          "geographyCode": "51",
+          "geographyName": "Mato Grosso",
+          "year": 2022,
+          "value": 23.911496534786426
+        },
+        {
+          "indicatorId": "ibge-state-gender-wage-gap",
+          "geographyType": "brazil-state",
+          "geographyCode": "52",
+          "geographyName": "Goiás",
+          "year": 2022,
+          "value": 23.558029908460842
+        },
+        {
+          "indicatorId": "ibge-state-gender-wage-gap",
+          "geographyType": "brazil-state",
+          "geographyCode": "31",
+          "geographyName": "Minas Gerais",
+          "year": 2022,
+          "value": 23.38300339543249
+        },
+        {
+          "indicatorId": "ibge-state-gender-wage-gap",
+          "geographyType": "brazil-state",
+          "geographyCode": "35",
+          "geographyName": "São Paulo",
+          "year": 2022,
+          "value": 23.382383730397716
+        },
+        {
+          "indicatorId": "ibge-state-gender-wage-gap",
+          "geographyType": "brazil-state",
+          "geographyCode": "43",
+          "geographyName": "Rio Grande do Sul",
+          "year": 2022,
+          "value": 23.16525502606106
+        },
+        {
+          "indicatorId": "ibge-state-gender-wage-gap",
+          "geographyType": "brazil-state",
+          "geographyCode": "50",
+          "geographyName": "Mato Grosso do Sul",
+          "year": 2022,
+          "value": 23.092077720590044
+        },
+        {
+          "indicatorId": "ibge-state-gender-wage-gap",
+          "geographyType": "brazil-state",
+          "geographyCode": "32",
+          "geographyName": "Espírito Santo",
+          "year": 2022,
+          "value": 22.473230738582604
+        },
+        {
+          "indicatorId": "ibge-state-gender-wage-gap",
+          "geographyType": "brazil-state",
+          "geographyCode": "33",
+          "geographyName": "Rio de Janeiro",
+          "year": 2022,
+          "value": 21.231897768786293
+        },
+        {
+          "indicatorId": "ibge-state-gender-wage-gap",
+          "geographyType": "brazil-state",
+          "geographyCode": "53",
+          "geographyName": "Distrito Federal",
+          "year": 2022,
+          "value": 19.877196558580675
+        },
+        {
+          "indicatorId": "ibge-state-gender-wage-gap",
+          "geographyType": "brazil-state",
+          "geographyCode": "11",
+          "geographyName": "Rondônia",
+          "year": 2022,
+          "value": 17.353430058522488
+        },
+        {
+          "indicatorId": "ibge-state-gender-wage-gap",
+          "geographyType": "brazil-state",
+          "geographyCode": "17",
+          "geographyName": "Tocantins",
+          "year": 2022,
+          "value": 15.785230512229226
+        },
+        {
+          "indicatorId": "ibge-state-gender-wage-gap",
+          "geographyType": "brazil-state",
+          "geographyCode": "24",
+          "geographyName": "Rio Grande do Norte",
+          "year": 2022,
+          "value": 13.22792197432174
+        },
+        {
+          "indicatorId": "ibge-state-gender-wage-gap",
+          "geographyType": "brazil-state",
+          "geographyCode": "13",
+          "geographyName": "Amazonas",
+          "year": 2022,
+          "value": 11.51366261529178
+        },
+        {
+          "indicatorId": "ibge-state-gender-wage-gap",
+          "geographyType": "brazil-state",
+          "geographyCode": "28",
+          "geographyName": "Sergipe",
+          "year": 2022,
+          "value": 11.275465488561773
+        },
+        {
+          "indicatorId": "ibge-state-gender-wage-gap",
+          "geographyType": "brazil-state",
+          "geographyCode": "29",
+          "geographyName": "Bahia",
+          "year": 2022,
+          "value": 11.21886439257695
+        },
+        {
+          "indicatorId": "ibge-state-gender-wage-gap",
+          "geographyType": "brazil-state",
+          "geographyCode": "25",
+          "geographyName": "Paraíba",
+          "year": 2022,
+          "value": 10.335474462047225
+        },
+        {
+          "indicatorId": "ibge-state-gender-wage-gap",
+          "geographyType": "brazil-state",
+          "geographyCode": "15",
+          "geographyName": "Pará",
+          "year": 2022,
+          "value": 10.196370404839456
+        },
+        {
+          "indicatorId": "ibge-state-gender-wage-gap",
+          "geographyType": "brazil-state",
+          "geographyCode": "23",
+          "geographyName": "Ceará",
+          "year": 2022,
+          "value": 9.512279488066424
+        }
+      ]
+    },
+    {
       "indicatorId": "ibge-pof-multidimensional-poverty",
       "geographyType": "brazil-state",
       "year": 2018,
@@ -481952,6 +482670,7 @@
     "O indicador estadual atual mede pessoas em domicílios com beneficiário do Bolsa Família, como proxy de vulnerabilidade social e pobreza.",
     "A renda per capita de até 1/4 do salário mínimo usa o Censo 2022 e é um indicador de baixa renda, não uma linha internacional de pobreza extrema.",
     "As séries estaduais de participação na força de trabalho por sexo usam médias dos quatro trimestres disponíveis em cada ano da PNAD Contínua.",
+    "A diferença salarial de gênero estadual compara rendimentos médios de homens e mulheres no Censo 2022 e não controla diferenças de ocupação, jornada ou escolaridade.",
     "A pobreza multidimensional estadual é uma estatística experimental da POF 2017-2018; ela combina privações não monetárias e não deve ser interpretada como série anual.",
     "O recorte de Regiões Geográficas Imediatas usa o Censo 2022 do IBGE e agrega municípios pela divisão territorial vigente.",
     "A arquitetura em conectores permite plugar novas tabelas do IBGE e novas fontes internacionais sem redesenhar o frontend."
