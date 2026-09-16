@@ -398,6 +398,17 @@ const BRAZIL_STATE_MULTIDIMENSIONAL_VULNERABILITY_INDICATOR: Omit<Indicator, 'la
   direction: 'higher-worse',
 }
 
+const BRAZIL_STATE_VERY_LOW_INCOME_INDICATOR: Omit<Indicator, 'latestYear'> = {
+  id: 'ibge-state-income-up-to-quarter-minimum-wage',
+  name: 'Renda per capita até 1/4 do salário mínimo',
+  themeId: 'poverty-inequality',
+  description: 'Moradores em domicílios particulares permanentes ocupados com rendimento nominal mensal domiciliar per capita de até 1/4 do salário mínimo. Não é equivalente a uma linha internacional de pobreza extrema.',
+  unit: '%',
+  geographyType: 'brazil-state',
+  sourceId: SIDRA_SOURCE_ID,
+  direction: 'higher-worse',
+}
+
 const BRAZIL_IMMEDIATE_WATER_INDICATOR: Omit<Indicator, 'latestYear'> = {
   id: 'ibge-water-network-coverage',
   name: 'Domicílios com rede geral de água',
@@ -891,6 +902,16 @@ async function loadBrazilStateIncomeIndicator() {
   return { indicator: { ...BRAZIL_STATE_INCOME_INDICATOR, latestYear: Math.max(...series.flatMap((entry) => entry.points.map((point) => point.year))) } satisfies Indicator, series }
 }
 
+async function loadBrazilStateVeryLowIncomeIndicator() {
+  const response = await fetchJson<IbgeAggregateResponse>('https://servicodados.ibge.gov.br/api/v3/agregados/10296/periodos/2022/variaveis/1013604?localidades=N3%5Ball%5D&classificacao=2%5B6794%5D%7C86%5B95251%5D%7C386%5B9681%5D')
+  const series = response[0]?.resultados[0]?.series.flatMap((entry) => {
+    const points = Object.entries(entry.serie).flatMap(([year, value]) => { const parsed = toNumber(value); return parsed === null ? [] : [{ year: Number(year), value: parsed }] })
+    return points.length ? [{ indicatorId: BRAZIL_STATE_VERY_LOW_INCOME_INDICATOR.id, geographyType: 'brazil-state' as const, geographyCode: entry.localidade.id, geographyName: entry.localidade.nome, points }] : []
+  }) ?? []
+  if (series.length !== 27) throw new Error(`IBGE Censo expected 27 states, received ${series.length}`)
+  return { indicator: { ...BRAZIL_STATE_VERY_LOW_INCOME_INDICATOR, latestYear: 2022 } satisfies Indicator, series }
+}
+
 async function loadBrazilStatePofIndicator(indicator: Omit<Indicator, 'latestYear'>, tableFileName: string) {
   const [pofZipBuffer, states] = await Promise.all([
     fetchBuffer('https://ftp.ibge.gov.br/Orcamentos_Familiares/Evolucao_dos_Indicadores_nao_Monetarios_de_Pobreza_e_Qualidade_de_Vida_no_Brasil/tabelas_2017_2018_xls.zip'),
@@ -1081,10 +1102,11 @@ async function main() {
     loadNdGain(countriesByIso3),
     loadUnhcrIndicators(validCountryIso3),
   ])
-  const [brazilStates, brazilStateGini, brazilStateIncome, brazilStateMultidimensionalPoverty, brazilStateMultidimensionalVulnerability, immediateRegions, immediateSanitation] = await Promise.all([
+  const [brazilStates, brazilStateGini, brazilStateIncome, brazilStateVeryLowIncome, brazilStateMultidimensionalPoverty, brazilStateMultidimensionalVulnerability, immediateRegions, immediateSanitation] = await Promise.all([
     loadBrazilStateIndicator(),
     loadBrazilStateGiniIndicator(),
     loadBrazilStateIncomeIndicator(),
+    loadBrazilStateVeryLowIncomeIndicator(),
     loadBrazilStatePofIndicator(BRAZIL_STATE_MULTIDIMENSIONAL_POVERTY_INDICATOR, 'Tabela 6b.xlsx'),
     loadBrazilStatePofIndicator(BRAZIL_STATE_MULTIDIMENSIONAL_VULNERABILITY_INDICATOR, 'Tabela 5b.xlsx'),
     loadBrazilImmediateRegionCoverage(BRAZIL_IMMEDIATE_WATER_INDICATOR, '6803', '1821%5B72144%5D'),
@@ -1105,6 +1127,7 @@ async function main() {
     brazilStates.indicator,
     brazilStateGini.indicator,
     brazilStateIncome.indicator,
+    brazilStateVeryLowIncome.indicator,
     brazilStateMultidimensionalPoverty.indicator,
     brazilStateMultidimensionalVulnerability.indicator,
     immediateRegions.indicator,
@@ -1118,6 +1141,7 @@ async function main() {
     ...brazilStates.series,
     ...brazilStateGini.series,
     ...brazilStateIncome.series,
+    ...brazilStateVeryLowIncome.series,
     ...brazilStateMultidimensionalPoverty.series,
     ...brazilStateMultidimensionalVulnerability.series,
     ...immediateRegions.series,
@@ -1159,6 +1183,7 @@ async function main() {
     notes: [
       'O MVP combina séries globais comparáveis por país com um primeiro recorte estadual do Brasil.',
       'O indicador estadual atual mede pessoas em domicílios com beneficiário do Bolsa Família, como proxy de vulnerabilidade social e pobreza.',
+      'A renda per capita de até 1/4 do salário mínimo usa o Censo 2022 e é um indicador de baixa renda, não uma linha internacional de pobreza extrema.',
       'A pobreza multidimensional estadual é uma estatística experimental da POF 2017-2018; ela combina privações não monetárias e não deve ser interpretada como série anual.',
       'O recorte de Regiões Geográficas Imediatas usa o Censo 2022 do IBGE e agrega municípios pela divisão territorial vigente.',
       'A arquitetura em conectores permite plugar novas tabelas do IBGE e novas fontes internacionais sem redesenhar o frontend.',
