@@ -34,6 +34,21 @@ export function getLatestByIndicator(
   )
 }
 
+export function getPopulationWeightedAverage(data: DashboardData, values: LatestValue[]) {
+  const populationByCountry = new Map(data.countryPopulation.map((entry) => [entry.geographyCode, entry.points]))
+  let weightedTotal = 0
+  let populationTotal = 0
+  let coverage = 0
+  for (const value of values) {
+    const population = populationByCountry.get(value.geographyCode)?.find((point) => point.year === value.year)?.value
+    if (!population || !Number.isFinite(population)) continue
+    weightedTotal += value.value * population
+    populationTotal += population
+    coverage += 1
+  }
+  return populationTotal > 0 ? { value: weightedTotal / populationTotal, coverage } : null
+}
+
 export function getRanking(data: DashboardData, indicatorId: string): Ranking | undefined {
   return data.rankings.find((ranking) => ranking.indicatorId === indicatorId)
 }

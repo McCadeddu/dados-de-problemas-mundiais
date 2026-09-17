@@ -18,6 +18,7 @@ import {
   getIndicatorsByTheme,
   getLatestByIndicator,
   getMetricSummary,
+  getPopulationWeightedAverage,
   getSafeThemeId,
   getSeriesForGeography,
   getTopRanked,
@@ -216,9 +217,7 @@ function App() {
     const country = data.countries.find((candidate) => candidate.code === item.geographyCode)
     return continent === 'Todos' || country?.continent === continent
   })
-  const continentAverage = continentValues.length
-    ? continentValues.reduce((total, item) => total + item.value, 0) / continentValues.length
-    : null
+  const continentAverage = getPopulationWeightedAverage(data, continentValues)
   const regionsForState = data.brazilImmediateRegions.filter((region) => region.stateCode === stateCode)
   const selectedImmediateRegion = data.brazilImmediateRegions.find(
     (region) => region.code === immediateRegionCode)
@@ -313,7 +312,7 @@ function App() {
           <section className="content-grid content-grid--world">
             <MapPanel title="Mapa mundial" subtitle={`${indicator.name} • clique para abrir a análise de um país`} geography={worldGeo} valueByCode={worldValueByCode} codeKeys={['ADM0_A3', 'ISO_A3', 'SOV_A3', 'gu_a3']} onSelect={(code) => { setCountryCode(code); setContinent(data.countries.find((country) => country.code === code)?.continent ?? 'Todos'); setView('country') }} selectedCode={countryCode} formatValue={(value) => formatValue(value, indicator.unit)} direction={indicator.direction} projectionKind="peters" />
             <article className="panel">
-              <div className="panel__header"><div><h3>{countryName || continent}</h3><p>{indicator.description}</p>{continentAverage !== null && <p className="context-metric">Média do recorte: {formatValue(continentAverage, indicator.unit)}</p>}</div><strong className="badge">{indicator.latestYear}</strong></div>
+              <div className="panel__header"><div><h3>{countryName || continent}</h3><p>{indicator.description}</p>{continentAverage && <p className="context-metric">Média do recorte, ponderada pela população: {formatValue(continentAverage.value, indicator.unit)} ({continentAverage.coverage} países)</p>}</div><strong className="badge">{indicator.latestYear}</strong></div>
               <div className="chart"><ResponsiveContainer width="100%" height={300}><LineChart data={selectedCountrySeries?.points ?? []}><CartesianGrid stroke="#334155" strokeDasharray="4 4" /><XAxis dataKey="year" stroke="#a8b8cc" /><YAxis stroke="#a8b8cc" /><Tooltip formatter={tooltipFormatter(indicator.unit)} /><Line type="monotone" dataKey="value" stroke="#2dd4bf" strokeWidth={3} dot={false} /></LineChart></ResponsiveContainer></div>
               <p className="meta">Fonte: <a href={activeSource?.url}>{activeSource?.name}</a> • Atualização conhecida: {activeSource?.lastUpdated}</p>
             </article>
@@ -321,7 +320,7 @@ function App() {
           <RankingPanel title={continent === 'Todos' ? 'Ranking global' : `Ranking: ${continent}`} description="10 países com os maiores valores para o indicador e recorte selecionados." ranking={worldRanking} unit={indicator.unit} direction={indicator.direction} color="#2563eb" tooltipFormatter={tooltipFormatter} />
           <TerritoryComparisonPanel
             title="Comparar continentes"
-            description="Média simples entre os países com dados disponíveis em cada continente; não é ponderada pela população."
+            description="Média ponderada pela população, usando apenas países com dados do indicador e população no mesmo ano."
             territories={continentTerritories}
             selectedCodes={comparisonContinentCodes}
             latestValues={comparisonContinentLatest}
@@ -528,14 +527,15 @@ function buildContinentLatestValues(data: DashboardData, indicatorId: string): L
   return data.continents.flatMap((continent) => {
     const countryCodes = new Set(data.countries.filter((country) => country.continent === continent).map((country) => country.code))
     const values = getLatestByIndicator(data, indicatorId, 'country').filter((item) => countryCodes.has(item.geographyCode))
-    if (!values.length) return []
+    const weightedAverage = getPopulationWeightedAverage(data, values)
+    if (!weightedAverage) return []
     return [{
       indicatorId,
       geographyType: 'country' as const,
       geographyCode: continent,
       geographyName: continent,
       year: Math.max(...values.map((item) => item.year)),
-      value: values.reduce((total, item) => total + item.value, 0) / values.length,
+      value: weightedAverage.value,
     }]
   })
 }
@@ -545,12 +545,19 @@ function buildContinentComparisonChartData(
   indicatorId: string,
   continents: Array<{ code: string }>,
 ) {
-  const valuesByContinent = new Map<string, Map<number, number[]>>()
+  const valuesByContinent = new Map<string, Map<number, LatestValue[]>>()
   continents.forEach(({ code: continent }) => {
     const countryCodes = new Set(data.countries.filter((country) => country.continent === continent).map((country) => country.code))
-    const valuesByYear = new Map<number, number[]>()
+    const valuesByYear = new Map<number, LatestValue[]>()
     data.series.filter((series) => series.indicatorId === indicatorId && countryCodes.has(series.geographyCode)).forEach((series) => {
-      series.points.forEach((point) => valuesByYear.set(point.year, [...(valuesByYear.get(point.year) ?? []), point.value]))
+      series.points.forEach((point) => valuesByYear.set(point.year, [...(valuesByYear.get(point.year) ?? []), {
+        indicatorId,
+        geographyType: 'country',
+        geographyCode: series.geographyCode,
+        geographyName: series.geographyName,
+        year: point.year,
+        value: point.value,
+      }]))
     })
     valuesByContinent.set(continent, valuesByYear)
   })
@@ -559,8 +566,8 @@ function buildContinentComparisonChartData(
   return [...years].sort((a, b) => a - b).map((year) => {
     const row: Record<string, number | string> = { year }
     valuesByContinent.forEach((values, continent) => {
-      const points = values.get(year) ?? []
-      if (points.length) row[continent] = points.reduce((total, value) => total + value, 0) / points.length
+      const weightedAverage = getPopulationWeightedAverage(data, values.get(year) ?? [])
+      if (weightedAverage) row[continent] = weightedAverage.value
     })
     return row
   })

@@ -75,6 +75,10 @@ export type DashboardData = {
   series: Series[]
   latest: LatestValue[]
   rankings: Ranking[]
+  countryPopulation: Array<{
+    geographyCode: string
+    points: DataPoint[]
+  }>
   worldPopulation?: {
     value: number
     referenceYear: number

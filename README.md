@@ -39,6 +39,13 @@ Mundialidade é um dashboard web open-source para acompanhar indicadores sociais
 As duas primeiras séries ampliam o recorte de fome e sede ao separar privação alimentar,
 acesso básico e serviço de água com critérios de disponibilidade e qualidade.
 
+### Comparação entre continentes
+
+As médias continentais usam ponderação pela população anual do World Bank. Um país só entra no
+cálculo quando há população e valor do indicador no mesmo ano; o painel informa a quantidade de
+países incluídos. Essa regra evita que países muito pequenos tenham o mesmo peso de populações
+muito maiores, mas não substitui análises por subgrupos ou distribuição interna.
+
 ### Indicadores iniciais de migração e crise humanitária
 
 - Refugiados por país de origem e refugiados acolhidos, da UNHCR.

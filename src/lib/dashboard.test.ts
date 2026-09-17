@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { formatValue, getMetricSummary, getSafeThemeId, getTopRanked } from './dashboard'
+import { formatValue, getMetricSummary, getPopulationWeightedAverage, getSafeThemeId, getTopRanked } from './dashboard'
 import type { DashboardData } from '../types'
 
 const fixture: DashboardData = {
@@ -39,12 +39,20 @@ const fixture: DashboardData = {
       ],
     },
   ],
+  countryPopulation: [
+    { geographyCode: 'BRA', points: [{ year: 2024, value: 100 }] },
+    { geographyCode: 'ARG', points: [{ year: 2024, value: 900 }] },
+  ],
   notes: [],
 }
 
 describe('dashboard helpers', () => {
   it('falls back to an available theme for an invalid shared link', () => {
     expect(getSafeThemeId({ ...fixture, themes: [{ id: 'hunger-water', name: 'Fome e sede', description: '' }] }, 'tema-removido')).toBe('hunger-water')
+  })
+
+  it('weights a geographic average by population from the same year', () => {
+    expect(getPopulationWeightedAverage(fixture, fixture.latest)).toEqual({ value: 19, coverage: 2 })
   })
 
   it('formats percentages', () => {
