@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { formatValue, getMetricSummary, getTopRanked } from './dashboard'
+import { formatValue, getMetricSummary, getSafeThemeId, getTopRanked } from './dashboard'
 import type { DashboardData } from '../types'
 
 const fixture: DashboardData = {
@@ -43,6 +43,10 @@ const fixture: DashboardData = {
 }
 
 describe('dashboard helpers', () => {
+  it('falls back to an available theme for an invalid shared link', () => {
+    expect(getSafeThemeId({ ...fixture, themes: [{ id: 'hunger-water', name: 'Fome e sede', description: '' }] }, 'tema-removido')).toBe('hunger-water')
+  })
+
   it('formats percentages', () => {
     expect(formatValue(12.34, '%')).toBe('12.3%')
   })

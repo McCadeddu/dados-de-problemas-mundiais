@@ -8,6 +8,12 @@ export function getIndicatorsByTheme(data: DashboardData, themeId: string) {
   return data.indicators.filter((indicator) => indicator.themeId === themeId)
 }
 
+export function getSafeThemeId(data: DashboardData, requestedThemeId: string) {
+  return data.themes.find((theme) => theme.id === requestedThemeId)?.id
+    ?? data.themes[0]?.id
+    ?? 'hunger-water'
+}
+
 export function getSeriesForGeography(
   data: DashboardData,
   indicatorId: string,

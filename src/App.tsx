@@ -18,6 +18,7 @@ import {
   getIndicatorsByTheme,
   getLatestByIndicator,
   getMetricSummary,
+  getSafeThemeId,
   getSeriesForGeography,
   getTopRanked,
 } from './lib/dashboard'
@@ -65,6 +66,7 @@ function App() {
   const [comparisonImmediateRegionCodes, setComparisonImmediateRegionCodes] = useState(() => initialCodes('compararRegioes', ['350019', '350048', '350024']))
   const [copied, setCopied] = useState(false)
   const [clockNow, setClockNow] = useState(() => Date.now())
+  const activeThemeId = data ? getSafeThemeId(data, themeId) : themeId
 
   useEffect(() => {
     const intervalId = window.setInterval(() => setClockNow(Date.now()), 1000)
@@ -105,7 +107,7 @@ function App() {
   useEffect(() => {
     const params = new URLSearchParams({
       visao: view,
-      tema: themeId,
+      tema: activeThemeId,
       indicador: selectedIndicatorId,
       continente: continent,
       pais: countryCode,
@@ -119,7 +121,7 @@ function App() {
       compararRegioes: comparisonImmediateRegionCodes.join(','),
     })
     window.history.replaceState(null, '', `${window.location.pathname}?${params.toString()}`)
-  }, [comparisonContinentCodes, comparisonCountryCodes, comparisonImmediateRegionCodes, comparisonStateCodes, continent, countryCode, immediateIndicatorId, immediateRegionCode, selectedIndicatorId, stateCode, stateIndicatorId, themeId, view])
+  }, [activeThemeId, comparisonContinentCodes, comparisonCountryCodes, comparisonImmediateRegionCodes, comparisonStateCodes, continent, countryCode, immediateIndicatorId, immediateRegionCode, selectedIndicatorId, stateCode, stateIndicatorId, view])
 
   const copyShareLink = async () => {
     try {
@@ -131,17 +133,17 @@ function App() {
     window.setTimeout(() => setCopied(false), 1800)
   }
 
-  const themeIndicators = data ? getIndicatorsByTheme(data, themeId).filter(
+  const themeIndicators = data ? getIndicatorsByTheme(data, activeThemeId).filter(
     (item) => item.geographyType === 'country',
   ) : []
   const indicatorId = themeIndicators.some((item) => item.id === selectedIndicatorId)
     ? selectedIndicatorId
     : data
-      ? getDefaultIndicator(data, themeId)?.id ?? ''
+      ? getDefaultIndicator(data, activeThemeId)?.id ?? ''
       : ''
   const indicator = data && indicatorId ? getIndicator(data, indicatorId) : undefined
   const brazilIndicators = data?.indicators.filter((item) => item.geographyType === 'brazil-state') ?? []
-  const stateThemeIndicators = brazilIndicators.filter((item) => item.themeId === themeId)
+  const stateThemeIndicators = brazilIndicators.filter((item) => item.themeId === activeThemeId)
   const brazilIndicator = stateThemeIndicators.find((item) => item.id === stateIndicatorId) ?? stateThemeIndicators[0] ?? brazilIndicators[0]
   const effectiveView = view === 'states' && stateThemeIndicators.length === 0 ? 'world' : view
   const immediateIndicators = data?.indicators.filter(
@@ -272,7 +274,7 @@ function App() {
       <section className="theme-picker" aria-label="Escolher problemática">
         <div className="theme-picker__intro"><span>Primeiro passo</span><h2>Escolha a problemática</h2><p>O panorama mundial abre com os indicadores disponíveis para o tema selecionado.</p></div>
         <div className="theme-picker__options">
-          {data.themes.map((theme) => <button key={theme.id} className={themeId === theme.id ? 'is-active' : ''} onClick={() => { setThemeId(theme.id); setSelectedIndicatorId(''); setView('world') }}><strong>{theme.name}</strong><span>{theme.description}</span></button>)}
+          {data.themes.map((theme) => <button key={theme.id} className={activeThemeId === theme.id ? 'is-active' : ''} onClick={() => { setThemeId(theme.id); setSelectedIndicatorId(''); setView('world') }}><strong>{theme.name}</strong><span>{theme.description}</span></button>)}
         </div>
       </section>
 
@@ -296,7 +298,7 @@ function App() {
       </nav>
 
       <p className="hierarchy" aria-label="Caminho de análise">
-        Problemática: <strong>{data.themes.find((theme) => theme.id === themeId)?.name}</strong>
+        Problemática: <strong>{data.themes.find((theme) => theme.id === activeThemeId)?.name}</strong>
         <span>›</span> {effectiveView === 'world' ? 'Mundo' : effectiveView === 'country' ? `Mundo › ${countryName}` : effectiveView === 'states' ? 'Brasil › Estados' : `Brasil › ${stateName} › Regiões Imediatas`}
       </p>
 
