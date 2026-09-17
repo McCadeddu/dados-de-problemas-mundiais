@@ -152,6 +152,7 @@ function App() {
   const immediateIndicators = data?.indicators.filter(
     (item) => item.geographyType === 'brazil-immediate-region',
   ) ?? []
+  const regionalSanitationIndicators = immediateIndicators.filter((item) => item.themeId === 'hunger-water')
   const immediateRegionIndicator = immediateIndicators.find((item) => item.id === immediateIndicatorId)
     ?? immediateIndicators[0]
   const selectedCountrySeries = data && indicator
@@ -270,6 +271,12 @@ function App() {
     immediateRegionIndicator.id,
     immediateRegionCode,
   )
+  const selectedRegionalSanitation = regionalSanitationIndicators.flatMap((item) => {
+    const latest = getLatestByIndicator(data, item.id, 'brazil-immediate-region').find(
+      (entry) => entry.geographyCode === immediateRegionCode,
+    )
+    return latest ? [{ indicator: item, value: latest.value, year: latest.year }] : []
+  })
   const comparisonStates = data.brazilStates.filter((state) => comparisonStateCodes.includes(state.code))
   const comparisonLatest = brazilLatest.filter((item) => comparisonStateCodes.includes(item.geographyCode))
   const comparisonChartData = buildComparisonChartData(data, brazilIndicator.id, comparisonStates)
@@ -464,6 +471,7 @@ function App() {
               <p className="meta">Fonte: <a href={activeSource?.url}>{activeSource?.name}</a> • Atualização conhecida: {activeSource?.lastUpdated}</p>
             </article>
           </section>
+          <section className="panel regional-snapshot"><div className="panel__header"><div><h3>Saneamento na região selecionada</h3><p>Leitura conjunta de água, esgotamento e coleta de lixo para {selectedImmediateRegion?.name ?? 'a região escolhida'}.</p></div><strong className="badge">Censo 2022</strong></div><div className="regional-snapshot__grid">{selectedRegionalSanitation.map(({ indicator: item, value, year }) => <article key={item.id}><span>{item.name}</span><strong>{formatValue(value, item.unit)}</strong><small>{year} • maior é melhor</small></article>)}</div></section>
           <RankingPanel title="Ranking entre Regiões Imediatas" description="20 regiões brasileiras para o indicador regional do IBGE." ranking={activeRanking} unit={immediateRegionIndicator.unit} direction={immediateRegionIndicator.direction} color="#8b5cf6" tooltipFormatter={tooltipFormatter} />
           <TerritoryComparisonPanel
             title="Comparar regiões imediatas"

@@ -244,6 +244,32 @@ select {
   font-size: 0.9rem;
 }
 
+.regional-snapshot__grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.75rem;
+}
+
+.regional-snapshot__grid article {
+  border: 1px solid #334155;
+  border-radius: 0.75rem;
+  padding: 1rem;
+  background: #172235;
+}
+
+.regional-snapshot__grid span,
+.regional-snapshot__grid small {
+  display: block;
+  color: #a8b8cc;
+}
+
+.regional-snapshot__grid strong {
+  display: block;
+  margin: 0.45rem 0;
+  color: #5eead4;
+  font-size: 1.5rem;
+}
+
 .hierarchy strong {
   color: #ccfbf1;
 }
