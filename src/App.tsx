@@ -203,6 +203,8 @@ function App() {
     : activeIndicator.geographyType === 'brazil-state'
       ? 'estados'
       : 'regiões imediatas'
+  const activeSeriesLoading = !data.series.some((entry) => entry.indicatorId === activeIndicator.id)
+    || ((effectiveView === 'world' || effectiveView === 'country') && data.countryPopulation.length === 0)
   const directionLabel = activeIndicator.direction === 'higher-worse'
     ? 'Valores maiores indicam maior pressão ou vulnerabilidade.'
     : 'Valores maiores indicam maior acesso, proteção ou capacidade.'
@@ -341,10 +343,11 @@ function App() {
         Problemática: <strong>{data.themes.find((theme) => theme.id === activeThemeId)?.name}</strong>
         <span>›</span> {effectiveView === 'world' ? 'Mundo' : effectiveView === 'country' ? `Mundo › ${countryName}` : effectiveView === 'states' ? 'Brasil › Estados' : `Brasil › ${stateName} › Regiões Imediatas`}
       </p>
+      {activeSeriesLoading && <p className="series-loading" role="status">Carregando série histórica e comparações para esta visualização...</p>}
+      {seriesLoadError && <p className="comparison-warning" role="alert">{seriesLoadError}</p>}
 
       {effectiveView === 'world' ? (
         <>
-          {seriesLoadError && <p className="comparison-warning">{seriesLoadError}</p>}
           <section className="panel controls controls--world">
             <label>Indicador<select value={indicatorId} onChange={(event) => setSelectedIndicatorId(event.target.value)}>{themeIndicators.map((item) => <option key={item.id} value={item.id}>{item.name}</option>)}</select></label>
             <label>Continente<select value={continent} onChange={(event) => { const nextContinent = event.target.value; const nextCountries = nextContinent === 'Todos' ? data.countries : data.countries.filter((country) => country.continent === nextContinent); setContinent(nextContinent); setCountryCode(nextCountries[0]?.code ?? ''); setComparisonCountryCodes(nextCountries.slice(0, 3).map((country) => country.code)) }}><option value="Todos">Mundo inteiro</option>{data.continents.map((item) => <option key={item} value={item}>{item}</option>)}</select></label>

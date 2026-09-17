@@ -238,6 +238,12 @@ select {
   font-size: 0.9rem;
 }
 
+.series-loading {
+  margin: 0 0 1rem;
+  color: #b9c7da;
+  font-size: 0.9rem;
+}
+
 .hierarchy strong {
   color: #ccfbf1;
 }
