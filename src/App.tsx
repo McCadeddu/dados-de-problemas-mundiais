@@ -328,6 +328,7 @@ function App() {
           {data.themes.map((theme) => <button key={theme.id} className={activeThemeId === theme.id ? 'is-active' : ''} onClick={() => { setThemeId(theme.id); setSelectedIndicatorId(''); setView('world') }}><strong>{theme.name}</strong><span>{theme.description}</span></button>)}
         </div>
       </section>
+      {activeThemeId === 'climate-vulnerability' && <section className="panel source-link-panel"><div><h3>Dados climáticos complementares</h3><p>O AdaptaBrasil MCTI disponibiliza dados abertos, indicadores e projeções por município. Esta fonte está em avaliação para futura agregação por estado.</p></div><a className="advance-button" href="https://www.gov.br/mcti/pt-br/acesso-a-informacao/dados-abertos/dados-abertos/arquivos/adapta-brasil/adaptabrasil" target="_blank" rel="noreferrer">Abrir dados AdaptaBrasil</a></section>}
 
       <nav className="view-switcher" aria-label="Escala de análise">
         <button className={effectiveView === 'world' ? 'is-active' : ''} onClick={() => setView('world')}>
