@@ -73,6 +73,7 @@ export function MapPanel({
     (step) => scaleMin + (scaleMax - scaleMin) * step,
   )
   const hoveredMetric = hoveredCode ? valueByCode.get(hoveredCode) : undefined
+  const interactionHint = 'Use Tab para navegar pelos territórios e Enter ou Espaço para selecionar.'
 
   return (
     <section className="panel">
@@ -83,7 +84,16 @@ export function MapPanel({
           {projectionKind === 'peters' && <p className="map__projection">Projeção Peters: áreas proporcionais.</p>}
         </div>
       </div>
-      <svg className="map" viewBox={`0 0 ${width} ${height}`} role="img" aria-label={title}>
+      <p className="map__instructions" id={`${title.replace(/\s+/g, '-').toLowerCase()}-instructions`}>
+        {interactionHint}
+      </p>
+      <svg
+        className="map"
+        viewBox={`0 0 ${width} ${height}`}
+        role="group"
+        aria-label={title}
+        aria-describedby={`${title.replace(/\s+/g, '-').toLowerCase()}-instructions`}
+      >
         {geography.features.map((feature, index) => {
           const properties = (feature.properties ?? {}) as Record<string, unknown>
           const code = resolveCode(properties, codeKeys)
@@ -97,6 +107,7 @@ export function MapPanel({
           const name =
             metric?.name ??
             (typeof properties.name === 'string' ? properties.name : `Área ${index + 1}`)
+          const label = metric ? `${name}: ${formatValue(metric.value)}` : `${name}: sem dado disponível`
 
           return (
             <path
@@ -112,12 +123,17 @@ export function MapPanel({
               onFocus={() => setHoveredCode(code)}
               onBlur={() => setHoveredCode(null)}
               onKeyDown={(event) => {
-                if (event.key === 'Enter' || event.key === ' ') onSelect(code)
+                if (event.key === 'Enter' || event.key === ' ') {
+                  event.preventDefault()
+                  onSelect(code)
+                }
               }}
               role="button"
+              aria-label={label}
+              aria-pressed={code === selectedCode}
               tabIndex={0}
             >
-              <title>{metric ? `${name}: ${metric.value.toFixed(1)}` : `${name}: sem dado`}</title>
+              <title>{label}</title>
             </path>
           )
         })}

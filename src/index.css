@@ -600,6 +600,12 @@ select {
   height: auto;
 }
 
+.map__instructions {
+  margin: 0.65rem 0;
+  color: #a8b8cc;
+  font-size: 0.82rem;
+}
+
 .map__feature {
   transition: opacity 120ms ease;
   cursor: pointer;
