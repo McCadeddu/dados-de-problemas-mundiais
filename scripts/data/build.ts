@@ -121,6 +121,7 @@ const ND_GAIN_SOURCE_ID = 'nd-gain'
 const UNHCR_SOURCE_ID = 'unhcr'
 const SIDRA_SOURCE_ID = 'ibge-sidra'
 const IBGE_POF_SOURCE_ID = 'ibge-pof'
+const INPE_QUEIMADAS_SOURCE_ID = 'inpe-queimadas'
 const NATURAL_EARTH_SOURCE_ID = 'natural-earth'
 const BRAZIL_STATE_CODE_BY_POSTAL: Record<string, string> = {
   AC: '12',
@@ -439,6 +440,17 @@ const BRAZIL_STATE_GENDER_WAGE_GAP_INDICATOR: Omit<Indicator, 'latestYear'> = {
   unit: '%',
   geographyType: 'brazil-state',
   sourceId: SIDRA_SOURCE_ID,
+  direction: 'higher-worse',
+}
+
+const BRAZIL_STATE_FIRE_HOTSPOTS_INDICATOR: Omit<Indicator, 'latestYear'> = {
+  id: 'inpe-state-fire-hotspots',
+  name: 'Focos ativos de fogo detectados',
+  themeId: 'climate-vulnerability',
+  description: 'Número anual de focos ativos detectados pelo satélite de referência do Programa Queimadas do INPE.',
+  unit: 'focos',
+  geographyType: 'brazil-state',
+  sourceId: INPE_QUEIMADAS_SOURCE_ID,
   direction: 'higher-worse',
 }
 
@@ -1073,6 +1085,61 @@ async function loadBrazilStateUnpaidCareGapIndicator() {
   }
 }
 
+function latestFireHotspotYear(directoryListing: string) {
+  const years = Array.from(directoryListing.matchAll(/focos_br_sp_ref_(\d{4})\.zip/g), (match) => Number(match[1]))
+  const latestYear = Math.max(...years)
+  if (!Number.isFinite(latestYear)) throw new Error('INPE fire hotspot archive year not found')
+  return latestYear
+}
+
+function countFireHotspots(zipBuffer: Buffer) {
+  const archive = new AdmZip(zipBuffer)
+  const csv = archive.getEntries().find((entry) => entry.entryName.endsWith('.csv'))
+  if (!csv) throw new Error('INPE fire hotspot CSV not found in archive')
+  const rows = csv.getData().toString('utf-8').trim().split(/\r?\n/)
+  return Math.max(rows.length - 1, 0)
+}
+
+async function loadBrazilStateFireHotspotsIndicator() {
+  const baseUrl = 'https://dataserver-coids.inpe.br/queimadas/queimadas/focos/csv/anual/EstadosBr_sat_ref'
+  const latestYear = latestFireHotspotYear(await fetchText(`${baseUrl}/SP/`))
+  const states = await fetchJson<Array<{ id: number; nome: string }>>('https://servicodados.ibge.gov.br/api/v1/localidades/estados')
+  const stateNameByCode = new Map(states.map((state) => [String(state.id), state.nome]))
+  const postalCodes = Object.keys(BRAZIL_STATE_CODE_BY_POSTAL)
+  const series: Series[] = []
+
+  for (let start = 0; start < postalCodes.length; start += 4) {
+    const batch = postalCodes.slice(start, start + 4)
+    const entries = await Promise.all(batch.map(async (postalCode) => {
+      const code = BRAZIL_STATE_CODE_BY_POSTAL[postalCode]
+      const fileName = `focos_br_${postalCode.toLowerCase()}_ref_${latestYear}.zip`
+      const total = countFireHotspots(await fetchBuffer(`${baseUrl}/${postalCode}/${fileName}`))
+      return {
+        indicatorId: BRAZIL_STATE_FIRE_HOTSPOTS_INDICATOR.id,
+        geographyType: 'brazil-state' as const,
+        geographyCode: code,
+        geographyName: stateNameByCode.get(code) ?? postalCode,
+        points: [{ year: latestYear, value: total }],
+      }
+    }))
+    series.push(...entries)
+  }
+
+  if (series.length !== 27) throw new Error(`INPE expected 27 state fire hotspot series, received ${series.length}`)
+  return {
+    indicator: { ...BRAZIL_STATE_FIRE_HOTSPOTS_INDICATOR, latestYear } satisfies Indicator,
+    source: {
+      id: INPE_QUEIMADAS_SOURCE_ID,
+      name: 'INPE Programa Queimadas',
+      url: 'https://www.terrabrasilis.dpi.inpe.br/queimadas/portal/pages/secao_downloads/dados-abertos/index.html',
+      methodologyUrl: 'https://www.terrabrasilis.dpi.inpe.br/queimadas/portal/pages/secao_informacoes/faq/',
+      license: 'Dados abertos para uso público',
+      lastUpdated: String(latestYear),
+    } satisfies Source,
+    series,
+  }
+}
+
 async function loadBrazilStatePofIndicator(indicator: Omit<Indicator, 'latestYear'>, tableFileName: string) {
   const [pofZipBuffer, states] = await Promise.all([
     fetchBuffer('https://ftp.ibge.gov.br/Orcamentos_Familiares/Evolucao_dos_Indicadores_nao_Monetarios_de_Pobreza_e_Qualidade_de_Vida_no_Brasil/tabelas_2017_2018_xls.zip'),
@@ -1263,7 +1330,7 @@ async function main() {
     loadNdGain(countriesByIso3),
     loadUnhcrIndicators(validCountryIso3),
   ])
-  const [brazilStates, brazilStateGini, brazilStateIncome, brazilStateVeryLowIncome, brazilStateGenderLabor, brazilStateGenderWageGap, brazilStateUnpaidCareGap, brazilStateMultidimensionalPoverty, brazilStateMultidimensionalVulnerability, immediateRegions, immediateSanitation] = await Promise.all([
+  const [brazilStates, brazilStateGini, brazilStateIncome, brazilStateVeryLowIncome, brazilStateGenderLabor, brazilStateGenderWageGap, brazilStateUnpaidCareGap, brazilStateFireHotspots, brazilStateMultidimensionalPoverty, brazilStateMultidimensionalVulnerability, immediateRegions, immediateSanitation] = await Promise.all([
     loadBrazilStateIndicator(),
     loadBrazilStateGiniIndicator(),
     loadBrazilStateIncomeIndicator(),
@@ -1271,6 +1338,7 @@ async function main() {
     loadBrazilStateGenderLaborIndicators(),
     loadBrazilStateGenderWageGapIndicator(),
     loadBrazilStateUnpaidCareGapIndicator(),
+    loadBrazilStateFireHotspotsIndicator(),
     loadBrazilStatePofIndicator(BRAZIL_STATE_MULTIDIMENSIONAL_POVERTY_INDICATOR, 'Tabela 6b.xlsx'),
     loadBrazilStatePofIndicator(BRAZIL_STATE_MULTIDIMENSIONAL_VULNERABILITY_INDICATOR, 'Tabela 5b.xlsx'),
     loadBrazilImmediateRegionCoverage(BRAZIL_IMMEDIATE_WATER_INDICATOR, '6803', '1821%5B72144%5D'),
@@ -1295,6 +1363,7 @@ async function main() {
     ...brazilStateGenderLabor.results.map((result) => result.indicator),
     brazilStateGenderWageGap.indicator,
     brazilStateUnpaidCareGap.indicator,
+    brazilStateFireHotspots.indicator,
     brazilStateMultidimensionalPoverty.indicator,
     brazilStateMultidimensionalVulnerability.indicator,
     immediateRegions.indicator,
@@ -1312,6 +1381,7 @@ async function main() {
     ...brazilStateGenderLabor.results.flatMap((result) => result.series),
     ...brazilStateGenderWageGap.series,
     ...brazilStateUnpaidCareGap.series,
+    ...brazilStateFireHotspots.series,
     ...brazilStateMultidimensionalPoverty.series,
     ...brazilStateMultidimensionalVulnerability.series,
     ...immediateRegions.series,
@@ -1321,7 +1391,7 @@ async function main() {
   const rankings = buildRankings(indicators, latest)
 
   const sources = new Map<string, Source>()
-  for (const source of [...worldBankResults.map((result) => result.source), ...worldBankGapResults.map((result) => result.source), unhcr.source, ndGain.source, brazilStates.source, brazilStateMultidimensionalPoverty.source]) {
+  for (const source of [...worldBankResults.map((result) => result.source), ...worldBankGapResults.map((result) => result.source), unhcr.source, ndGain.source, brazilStates.source, brazilStateFireHotspots.source, brazilStateMultidimensionalPoverty.source]) {
     sources.set(source.id, source)
   }
   sources.set(NATURAL_EARTH_SOURCE_ID, {
@@ -1357,6 +1427,7 @@ async function main() {
       'As séries estaduais de participação na força de trabalho por sexo usam médias dos quatro trimestres disponíveis em cada ano da PNAD Contínua.',
       'A diferença salarial de gênero estadual compara rendimentos médios de homens e mulheres no Censo 2022 e não controla diferenças de ocupação, jornada ou escolaridade.',
       'A diferença de cuidado não remunerado compara horas médias de mulheres e homens na PNAD Contínua anual; os anos sem divulgação não são interpolados.',
+      'Os focos ativos de fogo do INPE são detecções de satélite e não equivalem, isoladamente, ao número de incêndios ou à área queimada.',
       'A pobreza multidimensional estadual é uma estatística experimental da POF 2017-2018; ela combina privações não monetárias e não deve ser interpretada como série anual.',
       'O recorte de Regiões Geográficas Imediatas usa o Censo 2022 do IBGE e agrega municípios pela divisão territorial vigente.',
       'A arquitetura em conectores permite plugar novas tabelas do IBGE e novas fontes internacionais sem redesenhar o frontend.',

@@ -2,7 +2,7 @@
 
 ## Próxima etapa
 
-- ampliar indicadores estaduais de clima com fontes oficiais e cobertura claramente delimitada;
+- ampliar indicadores estaduais de clima com fontes oficiais e cobertura claramente delimitada, além dos focos ativos de fogo do INPE já incluídos;
 - adicionar dados de violência de gênero somente quando a licença, definição e cobertura por UF forem verificadas;
 - ampliar recortes do IBGE para regiões geográficas imediatas, sem confundir dados municipais e estaduais;
 - aprofundar fluxos de migração forçada por origem, acolhimento e tipo de deslocamento.
