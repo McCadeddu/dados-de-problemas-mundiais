@@ -1,4 +1,4 @@
-import type { DashboardData, Indicator, LatestValue, Ranking, Series } from '../types'
+import type { DashboardData, Indicator, LatestValue, Ranking, Series, ThemeId } from '../types'
 
 export function getIndicator(data: DashboardData, indicatorId: string) {
   return data.indicators.find((indicator) => indicator.id === indicatorId)
@@ -8,7 +8,7 @@ export function getIndicatorsByTheme(data: DashboardData, themeId: string) {
   return data.indicators.filter((indicator) => indicator.themeId === themeId)
 }
 
-export function getSafeThemeId(data: DashboardData, requestedThemeId: string) {
+export function getSafeThemeId(data: DashboardData, requestedThemeId: string): ThemeId {
   return data.themes.find((theme) => theme.id === requestedThemeId)?.id
     ?? data.themes[0]?.id
     ?? 'hunger-water'
