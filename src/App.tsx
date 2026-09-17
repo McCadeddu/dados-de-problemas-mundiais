@@ -11,6 +11,7 @@ import {
   YAxis,
 } from 'recharts'
 import { MapPanel } from './components/MapPanel'
+import { getThemeIdFromPath, getThemePath } from './lib/themeRoutes'
 import {
   formatValue,
   getDefaultIndicator,
@@ -54,7 +55,7 @@ function App() {
   const [brazilMapError, setBrazilMapError] = useState<string | null>(null)
   const [brazilMapLoadAttempt, setBrazilMapLoadAttempt] = useState(0)
   const [view, setView] = useState<ViewMode>(initialView)
-  const [themeId, setThemeId] = useState(() => initialValue('tema', 'hunger-water'))
+  const [themeId, setThemeId] = useState(() => getThemeIdFromPath(window.location.pathname) ?? initialValue('tema', 'hunger-water'))
   const [selectedIndicatorId, setSelectedIndicatorId] = useState(() => initialValue('indicador', ''))
   const [continent, setContinent] = useState(() => initialValue('continente', 'Todos'))
   const [countryCode, setCountryCode] = useState(() => initialValue('pais', 'BRA'))
@@ -122,7 +123,7 @@ function App() {
       compararEstados: comparisonStateCodes.join(','),
       compararRegioes: comparisonImmediateRegionCodes.join(','),
     })
-    window.history.replaceState(null, '', `${window.location.pathname}?${params.toString()}`)
+    window.history.replaceState(null, '', `${getThemePath(activeThemeId)}?${params.toString()}`)
   }, [activeThemeId, comparisonContinentCodes, comparisonCountryCodes, comparisonImmediateRegionCodes, comparisonStateCodes, continent, countryCode, immediateIndicatorId, immediateRegionCode, selectedIndicatorId, stateCode, stateIndicatorId, view])
 
   const copyShareLink = async () => {
@@ -172,6 +173,46 @@ function App() {
     item.geographyCode,
     { name: item.geographyName, value: item.value },
   ]))
+  const requiredIndicatorId = effectiveView === 'world' || effectiveView === 'country'
+    ? indicator?.id
+    : effectiveView === 'states'
+      ? brazilIndicator?.id
+      : immediateRegionIndicator?.id
+
+  useEffect(() => {
+    if (!data || !requiredIndicatorId) return
+    const hasSeries = data.series.some((entry) => entry.indicatorId === requiredIndicatorId)
+    const needsPopulation = effectiveView === 'world'
+    if (hasSeries && (!needsPopulation || data.countryPopulation.length > 0)) return
+
+    let cancelled = false
+    const dataBaseUrl = import.meta.env.BASE_URL
+    const requests: Array<Promise<Series[]>> = hasSeries
+      ? []
+      : [fetch(`${dataBaseUrl}data/series/${requiredIndicatorId}.json`).then((response) => {
+        if (!response.ok) throw new Error('Série indisponível')
+        return response.json() as Promise<Series[]>
+      })]
+    const populationRequest = needsPopulation && data.countryPopulation.length === 0
+      ? fetch(`${dataBaseUrl}data/series/country-population.json`).then((response) => {
+        if (!response.ok) throw new Error('População indisponível')
+        return response.json() as Promise<DashboardData['countryPopulation']>
+      })
+      : Promise.resolve(null)
+
+    Promise.all([Promise.all(requests), populationRequest]).then(([seriesResponses, countryPopulation]) => {
+      if (cancelled) return
+      setData((current) => current ? {
+        ...current,
+        series: seriesResponses.length ? [...current.series, ...seriesResponses.flat()] : current.series,
+        countryPopulation: countryPopulation ?? current.countryPopulation,
+      } : current)
+      setSeriesLoadError(null)
+    }).catch(() => {
+      if (!cancelled) setSeriesLoadError('Não foi possível carregar a série histórica desta visualização.')
+    })
+    return () => { cancelled = true }
+  }, [data, effectiveView, requiredIndicatorId])
 
   if (loadError) {
     return <main className="shell load-error"><h1>Falha ao abrir o painel</h1><p>{loadError}</p><button className="advance-button" onClick={() => { setLoadError(null); setLoadAttempt((attempt) => attempt + 1) }}>Tentar novamente</button></main>
@@ -246,45 +287,6 @@ function App() {
   )
   const comparisonImmediateChartData = buildComparisonChartData(data, immediateRegionIndicator.id, comparisonImmediateRegions)
 
-  useEffect(() => {
-    if (!data) return
-    const requiredIndicatorId = effectiveView === 'world' || effectiveView === 'country'
-      ? indicator.id
-      : effectiveView === 'states'
-        ? brazilIndicator.id
-        : immediateRegionIndicator.id
-    const hasSeries = data.series.some((entry) => entry.indicatorId === requiredIndicatorId)
-    const needsPopulation = effectiveView === 'world'
-    if (hasSeries && (!needsPopulation || data.countryPopulation.length > 0)) return
-
-    let cancelled = false
-    const dataBaseUrl = import.meta.env.BASE_URL
-    const requests: Array<Promise<Series[]>> = hasSeries
-      ? []
-      : [fetch(`${dataBaseUrl}data/series/${requiredIndicatorId}.json`).then((response) => {
-        if (!response.ok) throw new Error('Série indisponível')
-        return response.json() as Promise<Series[]>
-      })]
-    const populationRequest = needsPopulation && data.countryPopulation.length === 0
-      ? fetch(`${dataBaseUrl}data/series/country-population.json`).then((response) => {
-        if (!response.ok) throw new Error('População indisponível')
-        return response.json() as Promise<DashboardData['countryPopulation']>
-      })
-      : Promise.resolve(null)
-
-    Promise.all([Promise.all(requests), populationRequest]).then(([seriesResponses, countryPopulation]) => {
-      if (cancelled) return
-      setData((current) => current ? {
-        ...current,
-        series: seriesResponses.length ? [...current.series, ...seriesResponses.flat()] : current.series,
-        countryPopulation: countryPopulation ?? current.countryPopulation,
-      } : current)
-      setSeriesLoadError(null)
-    }).catch(() => {
-      if (!cancelled) setSeriesLoadError('Não foi possível carregar a série histórica desta visualização.')
-    })
-    return () => { cancelled = true }
-  }, [brazilIndicator.id, data, effectiveView, immediateRegionIndicator.id, indicator.id])
   const tooltipFormatter = (unit: string) => (value: unknown) => {
     if (Array.isArray(value)) return String(value[0] ?? '')
     return formatValue(Number(value ?? 0), unit)

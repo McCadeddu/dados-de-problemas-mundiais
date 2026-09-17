@@ -121,6 +121,7 @@ das comparações publicadas.
 ## O que o MVP entrega
 
 - dashboard responsivo
+- páginas temáticas diretas: `fome-e-sede`, `genero`, `pobreza`, `clima` e `migracao`
 - mapa mundial
 - mapa do Brasil
 - filtro por país
