@@ -515,6 +515,17 @@ const BRAZIL_IMMEDIATE_SANITATION_INDICATOR: Omit<Indicator, 'latestYear'> = {
   direction: 'higher-better',
 }
 
+const BRAZIL_IMMEDIATE_WASTE_COLLECTION_INDICATOR: Omit<Indicator, 'latestYear'> = {
+  id: 'ibge-waste-collection-coverage',
+  name: 'Domicílios com lixo coletado',
+  themeId: 'hunger-water',
+  description: 'Percentual de domicílios ocupados com lixo coletado no domicílio ou depositado em caçamba de serviço de limpeza.',
+  unit: '%',
+  geographyType: 'brazil-immediate-region',
+  sourceId: SIDRA_SOURCE_ID,
+  direction: 'higher-better',
+}
+
 async function ensureDirs() {
   await mkdir(PUBLIC_DATA_DIR, { recursive: true })
   await mkdir(PUBLIC_SERIES_DIR, { recursive: true })
@@ -1468,7 +1479,7 @@ async function main() {
     loadNdGain(countriesByIso3),
     loadUnhcrIndicators(validCountryIso3),
   ])
-  const [brazilStates, brazilStateGini, brazilStateIncome, brazilStateVeryLowIncome, brazilStateGenderLabor, brazilStateGenderWageGap, brazilStateUnpaidCareGap, brazilStateFireHotspots, brazilStateRecentFireHotspots, brazilStateMultidimensionalPoverty, brazilStateMultidimensionalVulnerability, immediateRegions, immediateSanitation] = await Promise.all([
+  const [brazilStates, brazilStateGini, brazilStateIncome, brazilStateVeryLowIncome, brazilStateGenderLabor, brazilStateGenderWageGap, brazilStateUnpaidCareGap, brazilStateFireHotspots, brazilStateRecentFireHotspots, brazilStateMultidimensionalPoverty, brazilStateMultidimensionalVulnerability, immediateRegions, immediateSanitation, immediateWasteCollection] = await Promise.all([
     loadBrazilStateIndicator(),
     loadBrazilStateGiniIndicator(),
     loadBrazilStateIncomeIndicator(),
@@ -1482,6 +1493,7 @@ async function main() {
     loadBrazilStatePofIndicator(BRAZIL_STATE_MULTIDIMENSIONAL_VULNERABILITY_INDICATOR, 'Tabela 5b.xlsx'),
     loadBrazilImmediateRegionCoverage(BRAZIL_IMMEDIATE_WATER_INDICATOR, '6803', '1821%5B72144%5D'),
     loadBrazilImmediateRegionCoverage(BRAZIL_IMMEDIATE_SANITATION_INDICATOR, '6805', '11558%5B46290%5D'),
+    loadBrazilImmediateRegionCoverage(BRAZIL_IMMEDIATE_WASTE_COLLECTION_INDICATOR, '6892', '67%5B2520%5D'),
   ])
 
   const continentByIso3 = await writeGeoJsonFiles()
@@ -1508,6 +1520,7 @@ async function main() {
     brazilStateMultidimensionalVulnerability.indicator,
     immediateRegions.indicator,
     immediateSanitation.indicator,
+    immediateWasteCollection.indicator,
   ]
   const series = [
     ...worldBankResults.flatMap((result) => result.series),
@@ -1527,6 +1540,7 @@ async function main() {
     ...brazilStateMultidimensionalVulnerability.series,
     ...immediateRegions.series,
     ...immediateSanitation.series,
+    ...immediateWasteCollection.series,
   ]
   const latest = buildLatest(series)
   const rankings = buildRankings(indicators, latest)
