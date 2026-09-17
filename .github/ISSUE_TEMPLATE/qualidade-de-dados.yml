@@ -1,0 +1,43 @@
+name: Reporte de qualidade de dados
+description: Informe um possível erro, ausência ou limitação na informação publicada.
+title: "dados: "
+labels: ["qualidade de dados"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Não publique dados pessoais. Relatos verificáveis ajudam a corrigir o painel
+        e a tornar as limitações metodológicas mais visíveis.
+  - type: input
+    id: dashboard-url
+    attributes:
+      label: Link da análise no painel
+      description: Use o botão "Copiar link desta análise" no Mundialidade, se possível.
+      placeholder: https://mccadeddu.github.io/dados-de-problemas-mundiais/?...
+  - type: input
+    id: indicator
+    attributes:
+      label: Indicador e território afetados
+      placeholder: Ex.: Focos ativos de fogo por 100 mil habitantes, Mato Grosso
+    validations:
+      required: true
+  - type: textarea
+    id: observed
+    attributes:
+      label: O que aparece no painel
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: O que deveria aparecer e evidência
+      description: Inclua fonte oficial, período de referência e cálculo, quando aplicável.
+    validations:
+      required: true
+  - type: textarea
+    id: impact
+    attributes:
+      label: Impacto ou limitação
+      description: Explique se é erro de valor, cobertura, unidade, comparação ou metodologia.
+    validations:
+      required: true

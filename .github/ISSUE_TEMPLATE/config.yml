@@ -1,0 +1,5 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Código de Conduta
+    url: https://github.com/McCadeddu/dados-de-problemas-mundiais/blob/main/CODE_OF_CONDUCT.md
+    about: Consulte as regras de convivência antes de abrir uma contribuição.

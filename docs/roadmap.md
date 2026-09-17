@@ -12,7 +12,7 @@
 - criar páginas temáticas compartilháveis para fome e água, gênero, pobreza, clima e migração;
 - carregar séries e visualizações sob demanda para reduzir ainda mais o primeiro acesso;
 - ampliar testes de conectores e de interface;
-- adicionar modelo de issue para sugestões de fonte e reporte de qualidade de dados.
+- manter modelos de issue para sugestões de fonte e reporte de qualidade de dados.
 
 ## Princípios de evolução
 

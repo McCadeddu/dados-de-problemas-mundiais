@@ -1,0 +1,58 @@
+name: Sugestão de fonte de dados
+description: Proponha uma fonte pública para ampliar um indicador ou território.
+title: "fonte: "
+labels: ["fonte de dados"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Obrigado por ajudar a ampliar o Mundialidade. Só integramos fontes públicas
+        cuja metodologia e condições de uso possam ser verificadas.
+  - type: dropdown
+    id: theme
+    attributes:
+      label: Problemática
+      options:
+        - Fome e sede
+        - Discriminação social e desigualdade de gênero
+        - Pobreza, riqueza e desigualdade
+        - Vulnerabilidade às mudanças climáticas
+        - Migração por sobrevivência e crises
+    validations:
+      required: true
+  - type: input
+    id: source-url
+    attributes:
+      label: Link oficial da fonte
+      placeholder: https://...
+    validations:
+      required: true
+  - type: input
+    id: license-url
+    attributes:
+      label: Link da licença ou das condições de reutilização
+      description: Não indique apenas que o dado é público; informe onde a reutilização é autorizada.
+      placeholder: https://...
+    validations:
+      required: true
+  - type: textarea
+    id: indicator
+    attributes:
+      label: Indicador e definição
+      description: Explique o que mede, unidade, direção e população ou evento coberto.
+    validations:
+      required: true
+  - type: textarea
+    id: coverage
+    attributes:
+      label: Cobertura territorial e temporal
+      description: Informe países, estados, regiões ou municípios disponíveis, período e frequência de atualização.
+    validations:
+      required: true
+  - type: textarea
+    id: methodology
+    attributes:
+      label: Metodologia e limitações conhecidas
+      description: Inclua o link da metodologia e riscos para comparações entre territórios.
+    validations:
+      required: true

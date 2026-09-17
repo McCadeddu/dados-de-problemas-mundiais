@@ -104,6 +104,13 @@ O GitHub Actions consulta as fontes públicas diariamente às 09:00 UTC (06:00 e
 O workflow só cria um commit quando o arquivo de dados gerado contém mudanças. A frequência de
 publicação de cada fonte continua sendo exibida no painel, pois muitos indicadores são anuais.
 
+## Contribuição e qualidade dos dados
+
+Use os formulários do GitHub para [sugerir uma fonte](.github/ISSUE_TEMPLATE/sugestao-de-fonte.yml)
+ou [reportar qualidade de dados](.github/ISSUE_TEMPLATE/qualidade-de-dados.yml). Cada sugestão deve
+informar a licença ou condições de reutilização, metodologia e cobertura, para preservar a transparência
+das comparações publicadas.
+
 ## O que o MVP entrega
 
 - dashboard responsivo
