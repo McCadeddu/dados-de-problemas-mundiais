@@ -128,6 +128,7 @@ const SIDRA_SOURCE_ID = 'ibge-sidra'
 const IBGE_POF_SOURCE_ID = 'ibge-pof'
 const INPE_QUEIMADAS_SOURCE_ID = 'inpe-queimadas'
 const INPE_IBGE_FIRE_RATE_SOURCE_ID = 'inpe-ibge-fire-rate'
+const SISMIGRA_SOURCE_ID = 'sismigra'
 const NATURAL_EARTH_SOURCE_ID = 'natural-earth'
 const BRAZIL_STATE_CODE_BY_POSTAL: Record<string, string> = {
   AC: '12',
@@ -479,6 +480,17 @@ const BRAZIL_STATE_RECENT_FIRE_HOTSPOTS_INDICATOR: Omit<Indicator, 'latestYear'>
   unit: 'focos',
   geographyType: 'brazil-state',
   sourceId: INPE_QUEIMADAS_SOURCE_ID,
+  direction: 'higher-worse',
+}
+
+const BRAZIL_STATE_ACTIVE_IMMIGRANTS_INDICATOR: Omit<Indicator, 'latestYear'> = {
+  id: 'sismigra-state-active-immigrants',
+  name: 'Registros ativos de imigrantes',
+  themeId: 'forced-migration',
+  description: 'Registros ativos de imigrantes no SISMIGRA por UF. Não representa todos os migrantes, refugiados ou deslocados forçados.',
+  unit: 'pessoas',
+  geographyType: 'brazil-state',
+  sourceId: SISMIGRA_SOURCE_ID,
   direction: 'higher-worse',
 }
 
@@ -1154,6 +1166,35 @@ function latestFireHotspotYear(directoryListing: string) {
   return latestYear
 }
 
+async function loadBrazilStateActiveImmigrantsIndicator() {
+  const baseUrl = 'https://servicos.dpf.gov.br/dadosabertos/SISMIGRA/REGISTROS_ATIVOS/2026'
+  const listing = await fetchText(`${baseUrl}/`)
+  const files = Array.from(listing.matchAll(/SISMIGRA_REGISTROS_ATIVOS_(\d{4})_(\d{2})\.csv/g), (match) => match[0]).sort()
+  const latestFile = files.at(-1)
+  if (!latestFile) throw new Error('SISMIGRA active records file not found')
+  const [, year, month] = latestFile.match(/_(\d{4})_(\d{2})\.csv$/) ?? []
+  const rows = parseCsv<{ UF: string; QTD: string }>(await fetchText(`${baseUrl}/${latestFile}`))
+  const totals = new Map<string, number>()
+  for (const row of rows) {
+    const code = BRAZIL_STATE_CODE_BY_POSTAL[row.UF?.trim()]
+    const quantity = Number(row.QTD)
+    if (code && Number.isFinite(quantity)) totals.set(code, (totals.get(code) ?? 0) + quantity)
+  }
+  const states = await fetchJson<Array<{ id: number; nome: string }>>('https://servicodados.ibge.gov.br/api/v1/localidades/estados')
+  const series = states.map((state) => ({
+    indicatorId: BRAZIL_STATE_ACTIVE_IMMIGRANTS_INDICATOR.id,
+    geographyType: 'brazil-state' as const,
+    geographyCode: String(state.id),
+    geographyName: state.nome,
+    points: [{ year: Number(year), value: totals.get(String(state.id)) ?? 0 }],
+  }))
+  return {
+    indicator: { ...BRAZIL_STATE_ACTIVE_IMMIGRANTS_INDICATOR, latestYear: Number(year) } satisfies Indicator,
+    series,
+    source: { id: SISMIGRA_SOURCE_ID, name: 'Polícia Federal SISMIGRA', url: `${baseUrl}/${latestFile}`, methodologyUrl: 'https://www.gov.br/mj/pt-br/assuntos/seus-direitos/migracoes/portal-de-imigracao-laboral/obmigra-1/microdados/sismigra/SISMIGRA', license: 'Dados abertos da Polícia Federal', lastUpdated: `${year}-${month}` } satisfies Source,
+  }
+}
+
 function countFireHotspots(zipBuffer: Buffer) {
   const archive = new AdmZip(zipBuffer)
   const csv = archive.getEntries().find((entry) => entry.entryName.endsWith('.csv'))
@@ -1401,6 +1442,16 @@ function buildLatest(series: Series[]) {
     .filter((entry): entry is LatestValue => entry !== null)
 }
 
+async function loadCachedIndicator(indicatorId: string) {
+  const dashboard = JSON.parse(await readFile(path.join(PUBLIC_DATA_DIR, 'mundialidade.json'), 'utf-8')) as DashboardData
+  const indicator = dashboard.indicators.find((entry) => entry.id === indicatorId)
+  if (!indicator) throw new Error(`Cached indicator ${indicatorId} is unavailable`)
+  const series = JSON.parse(await readFile(path.join(PUBLIC_SERIES_DIR, `${indicatorId}.json`), 'utf-8')) as Series[]
+  const source = dashboard.sources.find((entry) => entry.id === indicator.sourceId)
+  if (!source) throw new Error(`Cached source for ${indicatorId} is unavailable`)
+  return { indicator, series, source }
+}
+
 function buildRankings(indicators: Indicator[], latest: LatestValue[]): Ranking[] {
   return indicators.map((indicator) => ({
     indicatorId: indicator.id,
@@ -1479,7 +1530,19 @@ async function main() {
     loadNdGain(countriesByIso3),
     loadUnhcrIndicators(validCountryIso3),
   ])
-  const [brazilStates, brazilStateGini, brazilStateIncome, brazilStateVeryLowIncome, brazilStateGenderLabor, brazilStateGenderWageGap, brazilStateUnpaidCareGap, brazilStateFireHotspots, brazilStateRecentFireHotspots, brazilStateMultidimensionalPoverty, brazilStateMultidimensionalVulnerability, immediateRegions, immediateSanitation, immediateWasteCollection] = await Promise.all([
+  const fireHotspotsPromise = loadBrazilStateFireHotspotsIndicator().catch(async (error) => {
+    console.warn(`INPE annual fire update failed; reusing cached data: ${error instanceof Error ? error.message : String(error)}`)
+    const [annual, rate] = await Promise.all([
+      loadCachedIndicator(BRAZIL_STATE_FIRE_HOTSPOTS_INDICATOR.id),
+      loadCachedIndicator(BRAZIL_STATE_FIRE_HOTSPOTS_RATE_INDICATOR.id),
+    ])
+    return { results: [annual, rate], source: annual.source, rateSource: rate.source }
+  })
+  const recentFireHotspotsPromise = loadBrazilStateRecentFireHotspotsIndicator().catch(async (error) => {
+    console.warn(`INPE recent fire update failed; reusing cached data: ${error instanceof Error ? error.message : String(error)}`)
+    return loadCachedIndicator(BRAZIL_STATE_RECENT_FIRE_HOTSPOTS_INDICATOR.id)
+  })
+  const [brazilStates, brazilStateGini, brazilStateIncome, brazilStateVeryLowIncome, brazilStateGenderLabor, brazilStateGenderWageGap, brazilStateUnpaidCareGap, brazilStateFireHotspots, brazilStateRecentFireHotspots, brazilStateActiveImmigrants, brazilStateMultidimensionalPoverty, brazilStateMultidimensionalVulnerability, immediateRegions, immediateSanitation, immediateWasteCollection] = await Promise.all([
     loadBrazilStateIndicator(),
     loadBrazilStateGiniIndicator(),
     loadBrazilStateIncomeIndicator(),
@@ -1487,8 +1550,9 @@ async function main() {
     loadBrazilStateGenderLaborIndicators(),
     loadBrazilStateGenderWageGapIndicator(),
     loadBrazilStateUnpaidCareGapIndicator(),
-    loadBrazilStateFireHotspotsIndicator(),
-    loadBrazilStateRecentFireHotspotsIndicator(),
+    fireHotspotsPromise,
+    recentFireHotspotsPromise,
+    loadBrazilStateActiveImmigrantsIndicator(),
     loadBrazilStatePofIndicator(BRAZIL_STATE_MULTIDIMENSIONAL_POVERTY_INDICATOR, 'Tabela 6b.xlsx'),
     loadBrazilStatePofIndicator(BRAZIL_STATE_MULTIDIMENSIONAL_VULNERABILITY_INDICATOR, 'Tabela 5b.xlsx'),
     loadBrazilImmediateRegionCoverage(BRAZIL_IMMEDIATE_WATER_INDICATOR, '6803', '1821%5B72144%5D'),
@@ -1516,6 +1580,7 @@ async function main() {
     brazilStateUnpaidCareGap.indicator,
     ...brazilStateFireHotspots.results.map((result) => result.indicator),
     brazilStateRecentFireHotspots.indicator,
+    brazilStateActiveImmigrants.indicator,
     brazilStateMultidimensionalPoverty.indicator,
     brazilStateMultidimensionalVulnerability.indicator,
     immediateRegions.indicator,
@@ -1536,6 +1601,7 @@ async function main() {
     ...brazilStateUnpaidCareGap.series,
     ...brazilStateFireHotspots.results.flatMap((result) => result.series),
     ...brazilStateRecentFireHotspots.series,
+    ...brazilStateActiveImmigrants.series,
     ...brazilStateMultidimensionalPoverty.series,
     ...brazilStateMultidimensionalVulnerability.series,
     ...immediateRegions.series,
@@ -1546,7 +1612,7 @@ async function main() {
   const rankings = buildRankings(indicators, latest)
 
   const sources = new Map<string, Source>()
-  for (const source of [...worldBankResults.map((result) => result.source), ...worldBankGapResults.map((result) => result.source), unhcr.source, ndGain.source, brazilStates.source, brazilStateFireHotspots.source, brazilStateFireHotspots.rateSource, brazilStateRecentFireHotspots.source, brazilStateMultidimensionalPoverty.source]) {
+  for (const source of [...worldBankResults.map((result) => result.source), ...worldBankGapResults.map((result) => result.source), unhcr.source, ndGain.source, brazilStates.source, brazilStateFireHotspots.source, brazilStateFireHotspots.rateSource, brazilStateRecentFireHotspots.source, brazilStateActiveImmigrants.source, brazilStateMultidimensionalPoverty.source]) {
     sources.set(source.id, source)
   }
   sources.set(NATURAL_EARTH_SOURCE_ID, {
