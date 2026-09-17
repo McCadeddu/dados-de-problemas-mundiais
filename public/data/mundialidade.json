@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-09-16T15:32:22.526Z",
+  "generatedAt": "2026-09-17T14:09:07.554Z",
   "themes": [
     {
       "id": "hunger-water",
@@ -20906,26 +20906,6 @@
       "geographyName": "Afghanistan",
       "points": [
         {
-          "year": 2015,
-          "value": 45.1
-        },
-        {
-          "year": 2016,
-          "value": 49.6
-        },
-        {
-          "year": 2017,
-          "value": 54.3
-        },
-        {
-          "year": 2018,
-          "value": 57.6
-        },
-        {
-          "year": 2019,
-          "value": 63.1
-        },
-        {
           "year": 2020,
           "value": 70.1
         },
@@ -20949,26 +20929,6 @@
       "geographyCode": "ALB",
       "geographyName": "Albania",
       "points": [
-        {
-          "year": 2015,
-          "value": 38.8
-        },
-        {
-          "year": 2016,
-          "value": 39
-        },
-        {
-          "year": 2017,
-          "value": 38.6
-        },
-        {
-          "year": 2018,
-          "value": 37.1
-        },
-        {
-          "year": 2019,
-          "value": 33.8
-        },
         {
           "year": 2020,
           "value": 30.9
@@ -20994,26 +20954,6 @@
       "geographyName": "Algeria",
       "points": [
         {
-          "year": 2015,
-          "value": 22.9
-        },
-        {
-          "year": 2016,
-          "value": 21.5
-        },
-        {
-          "year": 2017,
-          "value": 19.8
-        },
-        {
-          "year": 2018,
-          "value": 17.6
-        },
-        {
-          "year": 2019,
-          "value": 17.6
-        },
-        {
           "year": 2020,
           "value": 19
         },
@@ -21037,10 +20977,6 @@
       "geographyCode": "AGO",
       "geographyName": "Angola",
       "points": [
-        {
-          "year": 2019,
-          "value": 73.5
-        },
         {
           "year": 2020,
           "value": 77.7
@@ -21078,26 +21014,6 @@
       "geographyName": "Argentina",
       "points": [
         {
-          "year": 2015,
-          "value": 19.2
-        },
-        {
-          "year": 2016,
-          "value": 25.9
-        },
-        {
-          "year": 2017,
-          "value": 32.3
-        },
-        {
-          "year": 2018,
-          "value": 35.8
-        },
-        {
-          "year": 2019,
-          "value": 35.8
-        },
-        {
           "year": 2020,
           "value": 36.9
         },
@@ -21121,18 +21037,6 @@
       "geographyCode": "ARM",
       "geographyName": "Armenia",
       "points": [
-        {
-          "year": 2017,
-          "value": 17.1
-        },
-        {
-          "year": 2018,
-          "value": 14.8
-        },
-        {
-          "year": 2019,
-          "value": 11.7
-        },
         {
           "year": 2020,
           "value": 8.3
@@ -21158,26 +21062,6 @@
       "geographyName": "Australia",
       "points": [
         {
-          "year": 2015,
-          "value": 10.8
-        },
-        {
-          "year": 2016,
-          "value": 11.8
-        },
-        {
-          "year": 2017,
-          "value": 12.7
-        },
-        {
-          "year": 2018,
-          "value": 13.3
-        },
-        {
-          "year": 2019,
-          "value": 12.3
-        },
-        {
           "year": 2020,
           "value": 11.9
         },
@@ -21202,26 +21086,6 @@
       "geographyName": "Austria",
       "points": [
         {
-          "year": 2015,
-          "value": 5.5
-        },
-        {
-          "year": 2016,
-          "value": 5.2
-        },
-        {
-          "year": 2017,
-          "value": 4.4
-        },
-        {
-          "year": 2018,
-          "value": 3.6
-        },
-        {
-          "year": 2019,
-          "value": 3
-        },
-        {
           "year": 2020,
           "value": 3.3
         },
@@ -21245,26 +21109,6 @@
       "geographyCode": "AZE",
       "geographyName": "Azerbaijan",
       "points": [
-        {
-          "year": 2015,
-          "value": 5.9
-        },
-        {
-          "year": 2016,
-          "value": 7.7
-        },
-        {
-          "year": 2017,
-          "value": 8.5
-        },
-        {
-          "year": 2018,
-          "value": 9.6
-        },
-        {
-          "year": 2019,
-          "value": 8.9
-        },
         {
           "year": 2020,
           "value": 9.5
@@ -21330,10 +21174,6 @@
       "geographyName": "Belarus",
       "points": [
         {
-          "year": 2019,
-          "value": 1.4
-        },
-        {
           "year": 2020,
           "value": 1.4
         },
@@ -21357,10 +21197,6 @@
       "geographyCode": "BEL",
       "geographyName": "Belgium",
       "points": [
-        {
-          "year": 2019,
-          "value": 3.7
-        },
         {
           "year": 2020,
           "value": 4.8
@@ -21386,10 +21222,6 @@
       "geographyName": "Belize",
       "points": [
         {
-          "year": 2019,
-          "value": 39
-        },
-        {
           "year": 2020,
           "value": 42.3
         },
@@ -21405,26 +21237,6 @@
       "geographyCode": "BEN",
       "geographyName": "Benin",
       "points": [
-        {
-          "year": 2015,
-          "value": 55
-        },
-        {
-          "year": 2016,
-          "value": 63.8
-        },
-        {
-          "year": 2017,
-          "value": 66.3
-        },
-        {
-          "year": 2018,
-          "value": 65.8
-        },
-        {
-          "year": 2019,
-          "value": 64
-        },
         {
           "year": 2020,
           "value": 61.9
@@ -21450,26 +21262,6 @@
       "geographyName": "Bosnia and Herzegovina",
       "points": [
         {
-          "year": 2015,
-          "value": 9.6
-        },
-        {
-          "year": 2016,
-          "value": 10.3
-        },
-        {
-          "year": 2017,
-          "value": 8.7
-        },
-        {
-          "year": 2018,
-          "value": 9.2
-        },
-        {
-          "year": 2019,
-          "value": 10
-        },
-        {
           "year": 2020,
           "value": 12.6
         },
@@ -21493,26 +21285,6 @@
       "geographyCode": "BWA",
       "geographyName": "Botswana",
       "points": [
-        {
-          "year": 2015,
-          "value": 46.4
-        },
-        {
-          "year": 2016,
-          "value": 51.3
-        },
-        {
-          "year": 2017,
-          "value": 53.4
-        },
-        {
-          "year": 2018,
-          "value": 53.1
-        },
-        {
-          "year": 2019,
-          "value": 54
-        },
         {
           "year": 2020,
           "value": 55.6
@@ -21538,26 +21310,6 @@
       "geographyName": "Brazil",
       "points": [
         {
-          "year": 2015,
-          "value": 13.3
-        },
-        {
-          "year": 2016,
-          "value": 15.6
-        },
-        {
-          "year": 2017,
-          "value": 15.5
-        },
-        {
-          "year": 2018,
-          "value": 14.2
-        },
-        {
-          "year": 2019,
-          "value": 15.8
-        },
-        {
           "year": 2020,
           "value": 19.4
         },
@@ -21582,26 +21334,6 @@
       "geographyName": "Bulgaria",
       "points": [
         {
-          "year": 2015,
-          "value": 14.9
-        },
-        {
-          "year": 2016,
-          "value": 13.6
-        },
-        {
-          "year": 2017,
-          "value": 12
-        },
-        {
-          "year": 2018,
-          "value": 12.5
-        },
-        {
-          "year": 2019,
-          "value": 13.2
-        },
-        {
           "year": 2020,
           "value": 15.5
         },
@@ -21625,18 +21357,6 @@
       "geographyCode": "BFA",
       "geographyName": "Burkina Faso",
       "points": [
-        {
-          "year": 2017,
-          "value": 38.9
-        },
-        {
-          "year": 2018,
-          "value": 39.1
-        },
-        {
-          "year": 2019,
-          "value": 39.5
-        },
         {
           "year": 2020,
           "value": 40.1
@@ -21678,18 +21398,6 @@
       "geographyName": "Cabo Verde",
       "points": [
         {
-          "year": 2017,
-          "value": 37.7
-        },
-        {
-          "year": 2018,
-          "value": 36.4
-        },
-        {
-          "year": 2019,
-          "value": 35.1
-        },
-        {
           "year": 2020,
           "value": 35.4
         },
@@ -21713,26 +21421,6 @@
       "geographyCode": "KHM",
       "geographyName": "Cambodia",
       "points": [
-        {
-          "year": 2015,
-          "value": 39.6
-        },
-        {
-          "year": 2016,
-          "value": 37.1
-        },
-        {
-          "year": 2017,
-          "value": 36.9
-        },
-        {
-          "year": 2018,
-          "value": 36.4
-        },
-        {
-          "year": 2019,
-          "value": 38.6
-        },
         {
           "year": 2020,
           "value": 41.9
@@ -21758,26 +21446,6 @@
       "geographyName": "Cameroon",
       "points": [
         {
-          "year": 2015,
-          "value": 49.9
-        },
-        {
-          "year": 2016,
-          "value": 55.3
-        },
-        {
-          "year": 2017,
-          "value": 58
-        },
-        {
-          "year": 2018,
-          "value": 57
-        },
-        {
-          "year": 2019,
-          "value": 56.4
-        },
-        {
           "year": 2020,
           "value": 56.5
         },
@@ -21801,26 +21469,6 @@
       "geographyCode": "CAN",
       "geographyName": "Canada",
       "points": [
-        {
-          "year": 2015,
-          "value": 5
-        },
-        {
-          "year": 2016,
-          "value": 5
-        },
-        {
-          "year": 2017,
-          "value": 5
-        },
-        {
-          "year": 2018,
-          "value": 5.1
-        },
-        {
-          "year": 2019,
-          "value": 5.8
-        },
         {
           "year": 2020,
           "value": 6.5
@@ -21866,26 +21514,6 @@
       "geographyName": "Chad",
       "points": [
         {
-          "year": 2015,
-          "value": 67.9
-        },
-        {
-          "year": 2016,
-          "value": 71.3
-        },
-        {
-          "year": 2017,
-          "value": 74.7
-        },
-        {
-          "year": 2018,
-          "value": 76.3
-        },
-        {
-          "year": 2019,
-          "value": 75.9
-        },
-        {
           "year": 2020,
           "value": 72.2
         },
@@ -21910,26 +21538,6 @@
       "geographyName": "Chile",
       "points": [
         {
-          "year": 2015,
-          "value": 10.8
-        },
-        {
-          "year": 2016,
-          "value": 12.2
-        },
-        {
-          "year": 2017,
-          "value": 13.7
-        },
-        {
-          "year": 2018,
-          "value": 15.3
-        },
-        {
-          "year": 2019,
-          "value": 17.3
-        },
-        {
           "year": 2020,
           "value": 17.4
         },
@@ -21953,26 +21561,6 @@
       "geographyCode": "COL",
       "geographyName": "Colombia",
       "points": [
-        {
-          "year": 2015,
-          "value": 19.9
-        },
-        {
-          "year": 2016,
-          "value": 22.3
-        },
-        {
-          "year": 2017,
-          "value": 24.9
-        },
-        {
-          "year": 2018,
-          "value": 26.5
-        },
-        {
-          "year": 2019,
-          "value": 28.5
-        },
         {
           "year": 2020,
           "value": 30.5
@@ -22022,10 +21610,6 @@
       "geographyName": "Congo, Dem. Rep.",
       "points": [
         {
-          "year": 2019,
-          "value": 69.2
-        },
-        {
           "year": 2020,
           "value": 72.3
         },
@@ -22049,26 +21633,6 @@
       "geographyCode": "CRI",
       "geographyName": "Costa Rica",
       "points": [
-        {
-          "year": 2015,
-          "value": 12.2
-        },
-        {
-          "year": 2016,
-          "value": 12.9
-        },
-        {
-          "year": 2017,
-          "value": 13.7
-        },
-        {
-          "year": 2018,
-          "value": 14.5
-        },
-        {
-          "year": 2019,
-          "value": 15.3
-        },
         {
           "year": 2020,
           "value": 15.9
@@ -22094,26 +21658,6 @@
       "geographyName": "Cote d'Ivoire",
       "points": [
         {
-          "year": 2015,
-          "value": 34.1
-        },
-        {
-          "year": 2016,
-          "value": 35.7
-        },
-        {
-          "year": 2017,
-          "value": 37
-        },
-        {
-          "year": 2018,
-          "value": 38.2
-        },
-        {
-          "year": 2019,
-          "value": 39.5
-        },
-        {
           "year": 2020,
           "value": 40.4
         },
@@ -22137,26 +21681,6 @@
       "geographyCode": "HRV",
       "geographyName": "Croatia",
       "points": [
-        {
-          "year": 2015,
-          "value": 6.5
-        },
-        {
-          "year": 2016,
-          "value": 6.9
-        },
-        {
-          "year": 2017,
-          "value": 7.8
-        },
-        {
-          "year": 2018,
-          "value": 10
-        },
-        {
-          "year": 2019,
-          "value": 11
-        },
         {
           "year": 2020,
           "value": 11.4
@@ -22194,26 +21718,6 @@
       "geographyName": "Czechia",
       "points": [
         {
-          "year": 2015,
-          "value": 5.8
-        },
-        {
-          "year": 2016,
-          "value": 5.1
-        },
-        {
-          "year": 2017,
-          "value": 3.9
-        },
-        {
-          "year": 2018,
-          "value": 3.8
-        },
-        {
-          "year": 2019,
-          "value": 4.2
-        },
-        {
           "year": 2020,
           "value": 5.8
         },
@@ -22237,26 +21741,6 @@
       "geographyCode": "DNK",
       "geographyName": "Denmark",
       "points": [
-        {
-          "year": 2015,
-          "value": 5.9
-        },
-        {
-          "year": 2016,
-          "value": 5.8
-        },
-        {
-          "year": 2017,
-          "value": 5.4
-        },
-        {
-          "year": 2018,
-          "value": 5.2
-        },
-        {
-          "year": 2019,
-          "value": 5
-        },
         {
           "year": 2020,
           "value": 5.5
@@ -22326,26 +21810,6 @@
       "geographyName": "Dominican Republic",
       "points": [
         {
-          "year": 2015,
-          "value": 54.2
-        },
-        {
-          "year": 2016,
-          "value": 54
-        },
-        {
-          "year": 2017,
-          "value": 54.4
-        },
-        {
-          "year": 2018,
-          "value": 52.6
-        },
-        {
-          "year": 2019,
-          "value": 55
-        },
-        {
           "year": 2020,
           "value": 53.1
         },
@@ -22369,26 +21833,6 @@
       "geographyCode": "ECU",
       "geographyName": "Ecuador",
       "points": [
-        {
-          "year": 2015,
-          "value": 20.7
-        },
-        {
-          "year": 2016,
-          "value": 23.3
-        },
-        {
-          "year": 2017,
-          "value": 26.2
-        },
-        {
-          "year": 2018,
-          "value": 29.2
-        },
-        {
-          "year": 2019,
-          "value": 32.7
-        },
         {
           "year": 2020,
           "value": 36.8
@@ -22414,26 +21858,6 @@
       "geographyName": "Egypt, Arab Rep.",
       "points": [
         {
-          "year": 2015,
-          "value": 27.8
-        },
-        {
-          "year": 2016,
-          "value": 29.9
-        },
-        {
-          "year": 2017,
-          "value": 33.1
-        },
-        {
-          "year": 2018,
-          "value": 31.2
-        },
-        {
-          "year": 2019,
-          "value": 27.8
-        },
-        {
           "year": 2020,
           "value": 27.3
         },
@@ -22458,26 +21882,6 @@
       "geographyName": "El Salvador",
       "points": [
         {
-          "year": 2015,
-          "value": 42.2
-        },
-        {
-          "year": 2016,
-          "value": 41.6
-        },
-        {
-          "year": 2017,
-          "value": 41.6
-        },
-        {
-          "year": 2018,
-          "value": 42.2
-        },
-        {
-          "year": 2019,
-          "value": 45.1
-        },
-        {
           "year": 2020,
           "value": 46.5
         },
@@ -22501,26 +21905,6 @@
       "geographyCode": "EST",
       "geographyName": "Estonia",
       "points": [
-        {
-          "year": 2015,
-          "value": 9.5
-        },
-        {
-          "year": 2016,
-          "value": 8.3
-        },
-        {
-          "year": 2017,
-          "value": 8.2
-        },
-        {
-          "year": 2018,
-          "value": 7.4
-        },
-        {
-          "year": 2019,
-          "value": 7.9
-        },
         {
           "year": 2020,
           "value": 7.9
@@ -22570,26 +21954,6 @@
       "geographyName": "Ethiopia",
       "points": [
         {
-          "year": 2015,
-          "value": 56.2
-        },
-        {
-          "year": 2016,
-          "value": 58.3
-        },
-        {
-          "year": 2017,
-          "value": 59.4
-        },
-        {
-          "year": 2018,
-          "value": 57.9
-        },
-        {
-          "year": 2019,
-          "value": 56.3
-        },
-        {
           "year": 2020,
           "value": 56.2
         },
@@ -22614,10 +21978,6 @@
       "geographyName": "Fiji",
       "points": [
         {
-          "year": 2019,
-          "value": 14.3
-        },
-        {
           "year": 2020,
           "value": 19.3
         },
@@ -22637,26 +21997,6 @@
       "geographyCode": "FIN",
       "geographyName": "Finland",
       "points": [
-        {
-          "year": 2015,
-          "value": 9.3
-        },
-        {
-          "year": 2016,
-          "value": 8.4
-        },
-        {
-          "year": 2017,
-          "value": 8.3
-        },
-        {
-          "year": 2018,
-          "value": 7.7
-        },
-        {
-          "year": 2019,
-          "value": 8
-        },
         {
           "year": 2020,
           "value": 8.8
@@ -22682,26 +22022,6 @@
       "geographyName": "France",
       "points": [
         {
-          "year": 2015,
-          "value": 6.8
-        },
-        {
-          "year": 2016,
-          "value": 6.3
-        },
-        {
-          "year": 2017,
-          "value": 6.3
-        },
-        {
-          "year": 2018,
-          "value": 6
-        },
-        {
-          "year": 2019,
-          "value": 5.8
-        },
-        {
           "year": 2020,
           "value": 5.9
         },
@@ -22725,22 +22045,6 @@
       "geographyCode": "GMB",
       "geographyName": "Gambia, The",
       "points": [
-        {
-          "year": 2016,
-          "value": 52.7
-        },
-        {
-          "year": 2017,
-          "value": 52.7
-        },
-        {
-          "year": 2018,
-          "value": 54.3
-        },
-        {
-          "year": 2019,
-          "value": 56
-        },
         {
           "year": 2020,
           "value": 58
@@ -22766,26 +22070,6 @@
       "geographyName": "Georgia",
       "points": [
         {
-          "year": 2015,
-          "value": 31.8
-        },
-        {
-          "year": 2016,
-          "value": 33.8
-        },
-        {
-          "year": 2017,
-          "value": 35.5
-        },
-        {
-          "year": 2018,
-          "value": 38.3
-        },
-        {
-          "year": 2019,
-          "value": 39.7
-        },
-        {
           "year": 2020,
           "value": 38.8
         },
@@ -22809,26 +22093,6 @@
       "geographyCode": "DEU",
       "geographyName": "Germany",
       "points": [
-        {
-          "year": 2015,
-          "value": 4.1
-        },
-        {
-          "year": 2016,
-          "value": 3.8
-        },
-        {
-          "year": 2017,
-          "value": 3.6
-        },
-        {
-          "year": 2018,
-          "value": 3.5
-        },
-        {
-          "year": 2019,
-          "value": 3.4
-        },
         {
           "year": 2020,
           "value": 3.5
@@ -22854,26 +22118,6 @@
       "geographyName": "Ghana",
       "points": [
         {
-          "year": 2015,
-          "value": 38.3
-        },
-        {
-          "year": 2016,
-          "value": 40.8
-        },
-        {
-          "year": 2017,
-          "value": 43.8
-        },
-        {
-          "year": 2018,
-          "value": 39.5
-        },
-        {
-          "year": 2019,
-          "value": 38.2
-        },
-        {
           "year": 2020,
           "value": 36.6
         },
@@ -22897,26 +22141,6 @@
       "geographyCode": "GRC",
       "geographyName": "Greece",
       "points": [
-        {
-          "year": 2015,
-          "value": 15.8
-        },
-        {
-          "year": 2016,
-          "value": 16.4
-        },
-        {
-          "year": 2017,
-          "value": 16.6
-        },
-        {
-          "year": 2018,
-          "value": 13.3
-        },
-        {
-          "year": 2019,
-          "value": 8.6
-        },
         {
           "year": 2020,
           "value": 6.8
@@ -22942,18 +22166,6 @@
       "geographyName": "Grenada",
       "points": [
         {
-          "year": 2017,
-          "value": 23.6
-        },
-        {
-          "year": 2018,
-          "value": 23.6
-        },
-        {
-          "year": 2019,
-          "value": 23.6
-        },
-        {
           "year": 2020,
           "value": 22.3
         },
@@ -22978,26 +22190,6 @@
       "geographyName": "Guatemala",
       "points": [
         {
-          "year": 2015,
-          "value": 42.7
-        },
-        {
-          "year": 2016,
-          "value": 44.2
-        },
-        {
-          "year": 2017,
-          "value": 43.5
-        },
-        {
-          "year": 2018,
-          "value": 45.2
-        },
-        {
-          "year": 2019,
-          "value": 49.6
-        },
-        {
           "year": 2020,
           "value": 55.8
         },
@@ -23021,18 +22213,6 @@
       "geographyCode": "GNB",
       "geographyName": "Guinea-Bissau",
       "points": [
-        {
-          "year": 2017,
-          "value": 61.7
-        },
-        {
-          "year": 2018,
-          "value": 61.8
-        },
-        {
-          "year": 2019,
-          "value": 62
-        },
         {
           "year": 2020,
           "value": 62.3
@@ -23074,10 +22254,6 @@
       "geographyName": "Haiti",
       "points": [
         {
-          "year": 2019,
-          "value": 82.7
-        },
-        {
           "year": 2020,
           "value": 82.5
         },
@@ -23101,26 +22277,6 @@
       "geographyCode": "HND",
       "geographyName": "Honduras",
       "points": [
-        {
-          "year": 2015,
-          "value": 41.6
-        },
-        {
-          "year": 2016,
-          "value": 41.4
-        },
-        {
-          "year": 2017,
-          "value": 41.1
-        },
-        {
-          "year": 2018,
-          "value": 40.9
-        },
-        {
-          "year": 2019,
-          "value": 45.6
-        },
         {
           "year": 2020,
           "value": 48.4
@@ -23146,26 +22302,6 @@
       "geographyName": "Hungary",
       "points": [
         {
-          "year": 2015,
-          "value": 11.3
-        },
-        {
-          "year": 2016,
-          "value": 9.4
-        },
-        {
-          "year": 2017,
-          "value": 8.8
-        },
-        {
-          "year": 2018,
-          "value": 6.9
-        },
-        {
-          "year": 2019,
-          "value": 8.6
-        },
-        {
           "year": 2020,
           "value": 10.6
         },
@@ -23189,26 +22325,6 @@
       "geographyCode": "ISL",
       "geographyName": "Iceland",
       "points": [
-        {
-          "year": 2015,
-          "value": 6.4
-        },
-        {
-          "year": 2016,
-          "value": 7.2
-        },
-        {
-          "year": 2017,
-          "value": 6.8
-        },
-        {
-          "year": 2018,
-          "value": 7.2
-        },
-        {
-          "year": 2019,
-          "value": 6.6
-        },
         {
           "year": 2020,
           "value": 6.3
@@ -23234,26 +22350,6 @@
       "geographyName": "Indonesia",
       "points": [
         {
-          "year": 2015,
-          "value": 6
-        },
-        {
-          "year": 2016,
-          "value": 7.3
-        },
-        {
-          "year": 2017,
-          "value": 7.6
-        },
-        {
-          "year": 2018,
-          "value": 7
-        },
-        {
-          "year": 2019,
-          "value": 5.8
-        },
-        {
           "year": 2020,
           "value": 5.1
         },
@@ -23277,26 +22373,6 @@
       "geographyCode": "IRN",
       "geographyName": "Iran, Islamic Rep.",
       "points": [
-        {
-          "year": 2015,
-          "value": 48
-        },
-        {
-          "year": 2016,
-          "value": 45.3
-        },
-        {
-          "year": 2017,
-          "value": 42.4
-        },
-        {
-          "year": 2018,
-          "value": 40.6
-        },
-        {
-          "year": 2019,
-          "value": 42.5
-        },
         {
           "year": 2020,
           "value": 42.4
@@ -23322,26 +22398,6 @@
       "geographyName": "Ireland",
       "points": [
         {
-          "year": 2015,
-          "value": 8.9
-        },
-        {
-          "year": 2016,
-          "value": 7.2
-        },
-        {
-          "year": 2017,
-          "value": 6.6
-        },
-        {
-          "year": 2018,
-          "value": 7.2
-        },
-        {
-          "year": 2019,
-          "value": 8.3
-        },
-        {
           "year": 2020,
           "value": 6.5
         },
@@ -23365,26 +22421,6 @@
       "geographyCode": "ISR",
       "geographyName": "Israel",
       "points": [
-        {
-          "year": 2015,
-          "value": 11.6
-        },
-        {
-          "year": 2016,
-          "value": 11.1
-        },
-        {
-          "year": 2017,
-          "value": 12.2
-        },
-        {
-          "year": 2018,
-          "value": 12.7
-        },
-        {
-          "year": 2019,
-          "value": 12.2
-        },
         {
           "year": 2020,
           "value": 9.7
@@ -23430,26 +22466,6 @@
       "geographyName": "Jamaica",
       "points": [
         {
-          "year": 2015,
-          "value": 48.3
-        },
-        {
-          "year": 2016,
-          "value": 47.4
-        },
-        {
-          "year": 2017,
-          "value": 46.9
-        },
-        {
-          "year": 2018,
-          "value": 45.8
-        },
-        {
-          "year": 2019,
-          "value": 48.4
-        },
-        {
           "year": 2020,
           "value": 50.3
         },
@@ -23473,26 +22489,6 @@
       "geographyCode": "JPN",
       "geographyName": "Japan",
       "points": [
-        {
-          "year": 2015,
-          "value": 2.6
-        },
-        {
-          "year": 2016,
-          "value": 2.7
-        },
-        {
-          "year": 2017,
-          "value": 3.2
-        },
-        {
-          "year": 2018,
-          "value": 3.2
-        },
-        {
-          "year": 2019,
-          "value": 3.4
-        },
         {
           "year": 2020,
           "value": 3.8
@@ -23518,18 +22514,6 @@
       "geographyName": "Kazakhstan",
       "points": [
         {
-          "year": 2017,
-          "value": 2.1
-        },
-        {
-          "year": 2018,
-          "value": 2.4
-        },
-        {
-          "year": 2019,
-          "value": 2.6
-        },
-        {
           "year": 2020,
           "value": 2.8
         },
@@ -23553,26 +22537,6 @@
       "geographyCode": "KEN",
       "geographyName": "Kenya",
       "points": [
-        {
-          "year": 2015,
-          "value": 50.7
-        },
-        {
-          "year": 2016,
-          "value": 54.8
-        },
-        {
-          "year": 2017,
-          "value": 60.9
-        },
-        {
-          "year": 2018,
-          "value": 64.4
-        },
-        {
-          "year": 2019,
-          "value": 67.7
-        },
         {
           "year": 2020,
           "value": 69.5
@@ -23598,14 +22562,6 @@
       "geographyName": "Kiribati",
       "points": [
         {
-          "year": 2018,
-          "value": 41
-        },
-        {
-          "year": 2019,
-          "value": 41
-        },
-        {
           "year": 2020,
           "value": 41
         },
@@ -23629,26 +22585,6 @@
       "geographyCode": "KOR",
       "geographyName": "Korea, Rep.",
       "points": [
-        {
-          "year": 2015,
-          "value": 4.8
-        },
-        {
-          "year": 2016,
-          "value": 5
-        },
-        {
-          "year": 2017,
-          "value": 5.4
-        },
-        {
-          "year": 2018,
-          "value": 5.2
-        },
-        {
-          "year": 2019,
-          "value": 5.1
-        },
         {
           "year": 2020,
           "value": 5.3
@@ -23674,26 +22610,6 @@
       "geographyName": "Kuwait",
       "points": [
         {
-          "year": 2015,
-          "value": 12.6
-        },
-        {
-          "year": 2016,
-          "value": 12.4
-        },
-        {
-          "year": 2017,
-          "value": 12.3
-        },
-        {
-          "year": 2018,
-          "value": 12.3
-        },
-        {
-          "year": 2019,
-          "value": 12.3
-        },
-        {
           "year": 2020,
           "value": 12.2
         },
@@ -23718,18 +22634,6 @@
       "geographyName": "Kyrgyz Republic",
       "points": [
         {
-          "year": 2017,
-          "value": 6.3
-        },
-        {
-          "year": 2018,
-          "value": 6.3
-        },
-        {
-          "year": 2019,
-          "value": 6.4
-        },
-        {
           "year": 2020,
           "value": 6.6
         },
@@ -23749,10 +22653,6 @@
       "geographyCode": "LAO",
       "geographyName": "Lao PDR",
       "points": [
-        {
-          "year": 2019,
-          "value": 29.4
-        },
         {
           "year": 2020,
           "value": 31.8
@@ -23778,26 +22678,6 @@
       "geographyName": "Latvia",
       "points": [
         {
-          "year": 2015,
-          "value": 9.9
-        },
-        {
-          "year": 2016,
-          "value": 9.5
-        },
-        {
-          "year": 2017,
-          "value": 9.4
-        },
-        {
-          "year": 2018,
-          "value": 9.5
-        },
-        {
-          "year": 2019,
-          "value": 10.2
-        },
-        {
           "year": 2020,
           "value": 9.4
         },
@@ -23821,14 +22701,6 @@
       "geographyCode": "LBN",
       "geographyName": "Lebanon",
       "points": [
-        {
-          "year": 2018,
-          "value": 14.7
-        },
-        {
-          "year": 2019,
-          "value": 21.1
-        },
         {
           "year": 2020,
           "value": 29.1
@@ -23854,14 +22726,6 @@
       "geographyName": "Lesotho",
       "points": [
         {
-          "year": 2018,
-          "value": 49.7
-        },
-        {
-          "year": 2019,
-          "value": 50.6
-        },
-        {
           "year": 2020,
           "value": 52.3
         },
@@ -23885,22 +22749,6 @@
       "geographyCode": "LBR",
       "geographyName": "Liberia",
       "points": [
-        {
-          "year": 2015,
-          "value": 79.7
-        },
-        {
-          "year": 2016,
-          "value": 80.7
-        },
-        {
-          "year": 2017,
-          "value": 81
-        },
-        {
-          "year": 2019,
-          "value": 80.6
-        },
         {
           "year": 2020,
           "value": 80.6
@@ -23926,26 +22774,6 @@
       "geographyName": "Libya",
       "points": [
         {
-          "year": 2015,
-          "value": 29.1
-        },
-        {
-          "year": 2016,
-          "value": 30.9
-        },
-        {
-          "year": 2017,
-          "value": 33.2
-        },
-        {
-          "year": 2018,
-          "value": 35.7
-        },
-        {
-          "year": 2019,
-          "value": 37.4
-        },
-        {
           "year": 2020,
           "value": 39.4
         },
@@ -23969,26 +22797,6 @@
       "geographyCode": "LTU",
       "geographyName": "Lithuania",
       "points": [
-        {
-          "year": 2015,
-          "value": 15.3
-        },
-        {
-          "year": 2016,
-          "value": 13.3
-        },
-        {
-          "year": 2017,
-          "value": 12.3
-        },
-        {
-          "year": 2018,
-          "value": 10.7
-        },
-        {
-          "year": 2019,
-          "value": 11.3
-        },
         {
           "year": 2020,
           "value": 9.8
@@ -24014,26 +22822,6 @@
       "geographyName": "Luxembourg",
       "points": [
         {
-          "year": 2015,
-          "value": 4.7
-        },
-        {
-          "year": 2016,
-          "value": 4
-        },
-        {
-          "year": 2017,
-          "value": 3.3
-        },
-        {
-          "year": 2018,
-          "value": 3.3
-        },
-        {
-          "year": 2019,
-          "value": 3.1
-        },
-        {
           "year": 2020,
           "value": 2.8
         },
@@ -24057,14 +22845,6 @@
       "geographyCode": "MDG",
       "geographyName": "Madagascar",
       "points": [
-        {
-          "year": 2018,
-          "value": 58
-        },
-        {
-          "year": 2019,
-          "value": 59.6
-        },
         {
           "year": 2020,
           "value": 61.1
@@ -24090,26 +22870,6 @@
       "geographyName": "Malawi",
       "points": [
         {
-          "year": 2015,
-          "value": 78.1
-        },
-        {
-          "year": 2016,
-          "value": 79.2
-        },
-        {
-          "year": 2017,
-          "value": 80.3
-        },
-        {
-          "year": 2018,
-          "value": 78.8
-        },
-        {
-          "year": 2019,
-          "value": 79.9
-        },
-        {
           "year": 2020,
           "value": 81.3
         },
@@ -24133,26 +22893,6 @@
       "geographyCode": "MYS",
       "geographyName": "Malaysia",
       "points": [
-        {
-          "year": 2015,
-          "value": 17.4
-        },
-        {
-          "year": 2016,
-          "value": 15.1
-        },
-        {
-          "year": 2017,
-          "value": 15.1
-        },
-        {
-          "year": 2018,
-          "value": 15.1
-        },
-        {
-          "year": 2019,
-          "value": 14.9
-        },
         {
           "year": 2020,
           "value": 15.4
@@ -24178,10 +22918,6 @@
       "geographyName": "Maldives",
       "points": [
         {
-          "year": 2019,
-          "value": 13.4
-        },
-        {
           "year": 2020,
           "value": 13.4
         },
@@ -24201,18 +22937,6 @@
       "geographyCode": "MLI",
       "geographyName": "Mali",
       "points": [
-        {
-          "year": 2017,
-          "value": 25.9
-        },
-        {
-          "year": 2018,
-          "value": 25.2
-        },
-        {
-          "year": 2019,
-          "value": 23.9
-        },
         {
           "year": 2020,
           "value": 21.9
@@ -24238,26 +22962,6 @@
       "geographyName": "Malta",
       "points": [
         {
-          "year": 2015,
-          "value": 5.8
-        },
-        {
-          "year": 2016,
-          "value": 5.6
-        },
-        {
-          "year": 2017,
-          "value": 5
-        },
-        {
-          "year": 2018,
-          "value": 4.3
-        },
-        {
-          "year": 2019,
-          "value": 4.4
-        },
-        {
           "year": 2020,
           "value": 5.2
         },
@@ -24281,26 +22985,6 @@
       "geographyCode": "MRT",
       "geographyName": "Mauritania",
       "points": [
-        {
-          "year": 2015,
-          "value": 26.3
-        },
-        {
-          "year": 2016,
-          "value": 29.2
-        },
-        {
-          "year": 2017,
-          "value": 32.3
-        },
-        {
-          "year": 2018,
-          "value": 35.9
-        },
-        {
-          "year": 2019,
-          "value": 41.2
-        },
         {
           "year": 2020,
           "value": 45.3
@@ -24326,26 +23010,6 @@
       "geographyName": "Mauritius",
       "points": [
         {
-          "year": 2015,
-          "value": 13
-        },
-        {
-          "year": 2016,
-          "value": 16.6
-        },
-        {
-          "year": 2017,
-          "value": 18.5
-        },
-        {
-          "year": 2018,
-          "value": 20.7
-        },
-        {
-          "year": 2019,
-          "value": 24.2
-        },
-        {
           "year": 2020,
           "value": 28.2
         },
@@ -24369,26 +23033,6 @@
       "geographyCode": "MEX",
       "geographyName": "Mexico",
       "points": [
-        {
-          "year": 2015,
-          "value": 24.9
-        },
-        {
-          "year": 2016,
-          "value": 23.6
-        },
-        {
-          "year": 2017,
-          "value": 23
-        },
-        {
-          "year": 2018,
-          "value": 23.8
-        },
-        {
-          "year": 2019,
-          "value": 25.3
-        },
         {
           "year": 2020,
           "value": 25.5
@@ -24414,26 +23058,6 @@
       "geographyName": "Moldova",
       "points": [
         {
-          "year": 2015,
-          "value": 19.3
-        },
-        {
-          "year": 2016,
-          "value": 20.9
-        },
-        {
-          "year": 2017,
-          "value": 24.6
-        },
-        {
-          "year": 2018,
-          "value": 27.5
-        },
-        {
-          "year": 2019,
-          "value": 27.2
-        },
-        {
           "year": 2020,
           "value": 24.9
         },
@@ -24457,10 +23081,6 @@
       "geographyCode": "MNG",
       "geographyName": "Mongolia",
       "points": [
-        {
-          "year": 2019,
-          "value": 6.8
-        },
         {
           "year": 2020,
           "value": 6.2
@@ -24486,26 +23106,6 @@
       "geographyName": "Montenegro",
       "points": [
         {
-          "year": 2015,
-          "value": 12.6
-        },
-        {
-          "year": 2016,
-          "value": 11.3
-        },
-        {
-          "year": 2017,
-          "value": 12
-        },
-        {
-          "year": 2018,
-          "value": 12.9
-        },
-        {
-          "year": 2019,
-          "value": 13.5
-        },
-        {
           "year": 2020,
           "value": 14
         },
@@ -24530,10 +23130,6 @@
       "geographyName": "Myanmar",
       "points": [
         {
-          "year": 2019,
-          "value": 22.2
-        },
-        {
           "year": 2020,
           "value": 25.5
         },
@@ -24557,26 +23153,6 @@
       "geographyCode": "NAM",
       "geographyName": "Namibia",
       "points": [
-        {
-          "year": 2015,
-          "value": 53.2
-        },
-        {
-          "year": 2016,
-          "value": 54.3
-        },
-        {
-          "year": 2017,
-          "value": 55.3
-        },
-        {
-          "year": 2018,
-          "value": 56.5
-        },
-        {
-          "year": 2019,
-          "value": 57.6
-        },
         {
           "year": 2020,
           "value": 57.9
@@ -24622,26 +23198,6 @@
       "geographyName": "Nepal",
       "points": [
         {
-          "year": 2015,
-          "value": 29.5
-        },
-        {
-          "year": 2016,
-          "value": 31.2
-        },
-        {
-          "year": 2017,
-          "value": 31.6
-        },
-        {
-          "year": 2018,
-          "value": 33.8
-        },
-        {
-          "year": 2019,
-          "value": 36.4
-        },
-        {
           "year": 2020,
           "value": 37.8
         },
@@ -24665,26 +23221,6 @@
       "geographyCode": "NLD",
       "geographyName": "Netherlands",
       "points": [
-        {
-          "year": 2015,
-          "value": 5.7
-        },
-        {
-          "year": 2016,
-          "value": 5.5
-        },
-        {
-          "year": 2017,
-          "value": 5.1
-        },
-        {
-          "year": 2018,
-          "value": 5.1
-        },
-        {
-          "year": 2019,
-          "value": 4.6
-        },
         {
           "year": 2020,
           "value": 4.4
@@ -24710,26 +23246,6 @@
       "geographyName": "New Zealand",
       "points": [
         {
-          "year": 2015,
-          "value": 10
-        },
-        {
-          "year": 2016,
-          "value": 11.3
-        },
-        {
-          "year": 2017,
-          "value": 13.3
-        },
-        {
-          "year": 2018,
-          "value": 13.9
-        },
-        {
-          "year": 2019,
-          "value": 14
-        },
-        {
           "year": 2020,
           "value": 14.5
         },
@@ -24753,18 +23269,6 @@
       "geographyCode": "NER",
       "geographyName": "Niger",
       "points": [
-        {
-          "year": 2017,
-          "value": 50
-        },
-        {
-          "year": 2018,
-          "value": 50
-        },
-        {
-          "year": 2019,
-          "value": 50.1
-        },
         {
           "year": 2020,
           "value": 50.2
@@ -24790,26 +23294,6 @@
       "geographyName": "Nigeria",
       "points": [
         {
-          "year": 2015,
-          "value": 34.7
-        },
-        {
-          "year": 2016,
-          "value": 38.7
-        },
-        {
-          "year": 2017,
-          "value": 42.8
-        },
-        {
-          "year": 2018,
-          "value": 47.1
-        },
-        {
-          "year": 2019,
-          "value": 53.5
-        },
-        {
           "year": 2020,
           "value": 62.9
         },
@@ -24833,26 +23317,6 @@
       "geographyCode": "MKD",
       "geographyName": "North Macedonia",
       "points": [
-        {
-          "year": 2015,
-          "value": 15.2
-        },
-        {
-          "year": 2016,
-          "value": 13.7
-        },
-        {
-          "year": 2017,
-          "value": 14.3
-        },
-        {
-          "year": 2018,
-          "value": 14.4
-        },
-        {
-          "year": 2019,
-          "value": 17.7
-        },
         {
           "year": 2020,
           "value": 20.9
@@ -24878,26 +23342,6 @@
       "geographyName": "Norway",
       "points": [
         {
-          "year": 2015,
-          "value": 4.8
-        },
-        {
-          "year": 2016,
-          "value": 5
-        },
-        {
-          "year": 2017,
-          "value": 4.8
-        },
-        {
-          "year": 2018,
-          "value": 4.8
-        },
-        {
-          "year": 2019,
-          "value": 4.1
-        },
-        {
           "year": 2020,
           "value": 4.3
         },
@@ -24921,26 +23365,6 @@
       "geographyCode": "PAK",
       "geographyName": "Pakistan",
       "points": [
-        {
-          "year": 2015,
-          "value": 14.1
-        },
-        {
-          "year": 2016,
-          "value": 12.1
-        },
-        {
-          "year": 2017,
-          "value": 12.8
-        },
-        {
-          "year": 2018,
-          "value": 14.2
-        },
-        {
-          "year": 2019,
-          "value": 24.3
-        },
         {
           "year": 2020,
           "value": 32.6
@@ -24978,49 +23402,9 @@
     {
       "indicatorId": "wb-moderate-severe-food-insecurity",
       "geographyType": "country",
-      "geographyCode": "PNG",
-      "geographyName": "Papua New Guinea",
-      "points": [
-        {
-          "year": 2017,
-          "value": 57.3
-        },
-        {
-          "year": 2018,
-          "value": 57.3
-        },
-        {
-          "year": 2019,
-          "value": 57.3
-        }
-      ]
-    },
-    {
-      "indicatorId": "wb-moderate-severe-food-insecurity",
-      "geographyType": "country",
       "geographyCode": "PRY",
       "geographyName": "Paraguay",
       "points": [
-        {
-          "year": 2015,
-          "value": 8.3
-        },
-        {
-          "year": 2016,
-          "value": 10.6
-        },
-        {
-          "year": 2017,
-          "value": 15.6
-        },
-        {
-          "year": 2018,
-          "value": 21.3
-        },
-        {
-          "year": 2019,
-          "value": 24
-        },
         {
           "year": 2020,
           "value": 25.3
@@ -25041,26 +23425,6 @@
       "geographyCode": "PER",
       "geographyName": "Peru",
       "points": [
-        {
-          "year": 2015,
-          "value": 30.4
-        },
-        {
-          "year": 2016,
-          "value": 34.8
-        },
-        {
-          "year": 2017,
-          "value": 35
-        },
-        {
-          "year": 2018,
-          "value": 35.7
-        },
-        {
-          "year": 2019,
-          "value": 36.9
-        },
         {
           "year": 2020,
           "value": 38.9
@@ -25086,14 +23450,6 @@
       "geographyName": "Philippines",
       "points": [
         {
-          "year": 2018,
-          "value": 41.2
-        },
-        {
-          "year": 2019,
-          "value": 42.7
-        },
-        {
           "year": 2020,
           "value": 40.1
         },
@@ -25117,26 +23473,6 @@
       "geographyCode": "POL",
       "geographyName": "Poland",
       "points": [
-        {
-          "year": 2015,
-          "value": 8.9
-        },
-        {
-          "year": 2016,
-          "value": 6.3
-        },
-        {
-          "year": 2017,
-          "value": 5.3
-        },
-        {
-          "year": 2018,
-          "value": 4.3
-        },
-        {
-          "year": 2019,
-          "value": 5.8
-        },
         {
           "year": 2020,
           "value": 7.4
@@ -25162,26 +23498,6 @@
       "geographyName": "Portugal",
       "points": [
         {
-          "year": 2015,
-          "value": 14.7
-        },
-        {
-          "year": 2016,
-          "value": 13.2
-        },
-        {
-          "year": 2017,
-          "value": 11.6
-        },
-        {
-          "year": 2018,
-          "value": 10.7
-        },
-        {
-          "year": 2019,
-          "value": 11.5
-        },
-        {
           "year": 2020,
           "value": 11.6
         },
@@ -25205,26 +23521,6 @@
       "geographyCode": "ROU",
       "geographyName": "Romania",
       "points": [
-        {
-          "year": 2015,
-          "value": 19.3
-        },
-        {
-          "year": 2016,
-          "value": 16.6
-        },
-        {
-          "year": 2017,
-          "value": 14.7
-        },
-        {
-          "year": 2018,
-          "value": 14.5
-        },
-        {
-          "year": 2019,
-          "value": 13.9
-        },
         {
           "year": 2020,
           "value": 13.4
@@ -25250,26 +23546,6 @@
       "geographyName": "Russian Federation",
       "points": [
         {
-          "year": 2015,
-          "value": 8.2
-        },
-        {
-          "year": 2016,
-          "value": 8.9
-        },
-        {
-          "year": 2017,
-          "value": 7.9
-        },
-        {
-          "year": 2018,
-          "value": 7.1
-        },
-        {
-          "year": 2019,
-          "value": 6
-        },
-        {
           "year": 2020,
           "value": 5.5
         },
@@ -25293,18 +23569,6 @@
       "geographyCode": "WSM",
       "geographyName": "Samoa",
       "points": [
-        {
-          "year": 2017,
-          "value": 23.6
-        },
-        {
-          "year": 2018,
-          "value": 23.2
-        },
-        {
-          "year": 2019,
-          "value": 22.5
-        },
         {
           "year": 2020,
           "value": 21.4
@@ -25350,26 +23614,6 @@
       "geographyName": "Senegal",
       "points": [
         {
-          "year": 2015,
-          "value": 39
-        },
-        {
-          "year": 2016,
-          "value": 37.1
-        },
-        {
-          "year": 2017,
-          "value": 35.8
-        },
-        {
-          "year": 2018,
-          "value": 35.1
-        },
-        {
-          "year": 2019,
-          "value": 33.3
-        },
-        {
           "year": 2020,
           "value": 31.6
         },
@@ -25394,26 +23638,6 @@
       "geographyName": "Serbia",
       "points": [
         {
-          "year": 2015,
-          "value": 11.4
-        },
-        {
-          "year": 2016,
-          "value": 12.8
-        },
-        {
-          "year": 2017,
-          "value": 12.5
-        },
-        {
-          "year": 2018,
-          "value": 12.5
-        },
-        {
-          "year": 2019,
-          "value": 12
-        },
-        {
           "year": 2020,
           "value": 14.1
         },
@@ -25434,49 +23658,9 @@
     {
       "indicatorId": "wb-moderate-severe-food-insecurity",
       "geographyType": "country",
-      "geographyCode": "SYC",
-      "geographyName": "Seychelles",
-      "points": [
-        {
-          "year": 2015,
-          "value": 14.3
-        },
-        {
-          "year": 2016,
-          "value": 14.3
-        },
-        {
-          "year": 2017,
-          "value": 14.3
-        }
-      ]
-    },
-    {
-      "indicatorId": "wb-moderate-severe-food-insecurity",
-      "geographyType": "country",
       "geographyCode": "SLE",
       "geographyName": "Sierra Leone",
       "points": [
-        {
-          "year": 2015,
-          "value": 75.8
-        },
-        {
-          "year": 2016,
-          "value": 81.5
-        },
-        {
-          "year": 2017,
-          "value": 83
-        },
-        {
-          "year": 2018,
-          "value": 83
-        },
-        {
-          "year": 2019,
-          "value": 85.3
-        },
         {
           "year": 2020,
           "value": 86.7
@@ -25502,26 +23686,6 @@
       "geographyName": "Singapore",
       "points": [
         {
-          "year": 2015,
-          "value": 2.9
-        },
-        {
-          "year": 2016,
-          "value": 3.1
-        },
-        {
-          "year": 2017,
-          "value": 4.1
-        },
-        {
-          "year": 2018,
-          "value": 4.7
-        },
-        {
-          "year": 2019,
-          "value": 4.5
-        },
-        {
           "year": 2020,
           "value": 4.6
         },
@@ -25546,26 +23710,6 @@
       "geographyName": "Slovak Republic",
       "points": [
         {
-          "year": 2015,
-          "value": 6.2
-        },
-        {
-          "year": 2016,
-          "value": 5.3
-        },
-        {
-          "year": 2017,
-          "value": 5
-        },
-        {
-          "year": 2018,
-          "value": 5
-        },
-        {
-          "year": 2019,
-          "value": 6
-        },
-        {
           "year": 2020,
           "value": 7.7
         },
@@ -25589,26 +23733,6 @@
       "geographyCode": "SVN",
       "geographyName": "Slovenia",
       "points": [
-        {
-          "year": 2015,
-          "value": 12.3
-        },
-        {
-          "year": 2016,
-          "value": 11.8
-        },
-        {
-          "year": 2017,
-          "value": 11.2
-        },
-        {
-          "year": 2018,
-          "value": 10.2
-        },
-        {
-          "year": 2019,
-          "value": 8.2
-        },
         {
           "year": 2020,
           "value": 7.4
@@ -25646,14 +23770,6 @@
       "geographyName": "South Africa",
       "points": [
         {
-          "year": 2018,
-          "value": 17.4
-        },
-        {
-          "year": 2019,
-          "value": 18.2
-        },
-        {
           "year": 2020,
           "value": 19
         },
@@ -25677,18 +23793,6 @@
       "geographyCode": "SSD",
       "geographyName": "South Sudan",
       "points": [
-        {
-          "year": 2017,
-          "value": 85.1
-        },
-        {
-          "year": 2018,
-          "value": 84.9
-        },
-        {
-          "year": 2019,
-          "value": 85.7
-        },
         {
           "year": 2020,
           "value": 86.4
@@ -25714,26 +23818,6 @@
       "geographyName": "Spain",
       "points": [
         {
-          "year": 2015,
-          "value": 7.1
-        },
-        {
-          "year": 2016,
-          "value": 7.5
-        },
-        {
-          "year": 2017,
-          "value": 7.5
-        },
-        {
-          "year": 2018,
-          "value": 8.6
-        },
-        {
-          "year": 2019,
-          "value": 8.8
-        },
-        {
           "year": 2020,
           "value": 8.6
         },
@@ -25757,26 +23841,6 @@
       "geographyCode": "LKA",
       "geographyName": "Sri Lanka",
       "points": [
-        {
-          "year": 2015,
-          "value": 5.9
-        },
-        {
-          "year": 2016,
-          "value": 5.8
-        },
-        {
-          "year": 2017,
-          "value": 6.5
-        },
-        {
-          "year": 2018,
-          "value": 7.6
-        },
-        {
-          "year": 2019,
-          "value": 8.9
-        },
         {
           "year": 2020,
           "value": 10
@@ -25802,56 +23866,8 @@
       "geographyName": "St. Kitts and Nevis",
       "points": [
         {
-          "year": 2018,
-          "value": 21.1
-        },
-        {
-          "year": 2019,
-          "value": 21.1
-        },
-        {
           "year": 2020,
           "value": 21.1
-        }
-      ]
-    },
-    {
-      "indicatorId": "wb-moderate-severe-food-insecurity",
-      "geographyType": "country",
-      "geographyCode": "LCA",
-      "geographyName": "St. Lucia",
-      "points": [
-        {
-          "year": 2015,
-          "value": 22.2
-        },
-        {
-          "year": 2016,
-          "value": 22.2
-        },
-        {
-          "year": 2017,
-          "value": 22.2
-        }
-      ]
-    },
-    {
-      "indicatorId": "wb-moderate-severe-food-insecurity",
-      "geographyType": "country",
-      "geographyCode": "VCT",
-      "geographyName": "St. Vincent and the Grenadines",
-      "points": [
-        {
-          "year": 2017,
-          "value": 33.3
-        },
-        {
-          "year": 2018,
-          "value": 33.3
-        },
-        {
-          "year": 2019,
-          "value": 33.3
         }
       ]
     },
@@ -25882,26 +23898,6 @@
       "geographyName": "Sweden",
       "points": [
         {
-          "year": 2015,
-          "value": 4.5
-        },
-        {
-          "year": 2016,
-          "value": 5.3
-        },
-        {
-          "year": 2017,
-          "value": 5.4
-        },
-        {
-          "year": 2018,
-          "value": 5.7
-        },
-        {
-          "year": 2019,
-          "value": 5.3
-        },
-        {
           "year": 2020,
           "value": 5.3
         },
@@ -25925,26 +23921,6 @@
       "geographyCode": "CHE",
       "geographyName": "Switzerland",
       "points": [
-        {
-          "year": 2015,
-          "value": 4.8
-        },
-        {
-          "year": 2016,
-          "value": 4.2
-        },
-        {
-          "year": 2017,
-          "value": 3.1
-        },
-        {
-          "year": 2018,
-          "value": 2.6
-        },
-        {
-          "year": 2019,
-          "value": 2
-        },
         {
           "year": 2020,
           "value": 2.2
@@ -25970,26 +23946,6 @@
       "geographyName": "Tajikistan",
       "points": [
         {
-          "year": 2015,
-          "value": 19.1
-        },
-        {
-          "year": 2016,
-          "value": 24.5
-        },
-        {
-          "year": 2017,
-          "value": 29.6
-        },
-        {
-          "year": 2018,
-          "value": 28.8
-        },
-        {
-          "year": 2019,
-          "value": 28.7
-        },
-        {
           "year": 2020,
           "value": 30.2
         },
@@ -26013,26 +23969,6 @@
       "geographyCode": "TZA",
       "geographyName": "Tanzania",
       "points": [
-        {
-          "year": 2015,
-          "value": 48.8
-        },
-        {
-          "year": 2016,
-          "value": 55
-        },
-        {
-          "year": 2017,
-          "value": 56.6
-        },
-        {
-          "year": 2018,
-          "value": 56.1
-        },
-        {
-          "year": 2019,
-          "value": 56.3
-        },
         {
           "year": 2020,
           "value": 57.6
@@ -26058,14 +23994,6 @@
       "geographyName": "Thailand",
       "points": [
         {
-          "year": 2018,
-          "value": 4.7
-        },
-        {
-          "year": 2019,
-          "value": 5.4
-        },
-        {
           "year": 2020,
           "value": 6.4
         },
@@ -26090,10 +24018,6 @@
       "geographyName": "Timor-Leste",
       "points": [
         {
-          "year": 2019,
-          "value": 53.7
-        },
-        {
           "year": 2020,
           "value": 53.7
         },
@@ -26109,26 +24033,6 @@
       "geographyCode": "TGO",
       "geographyName": "Togo",
       "points": [
-        {
-          "year": 2015,
-          "value": 60.4
-        },
-        {
-          "year": 2016,
-          "value": 62.2
-        },
-        {
-          "year": 2017,
-          "value": 61.7
-        },
-        {
-          "year": 2018,
-          "value": 59.6
-        },
-        {
-          "year": 2019,
-          "value": 56.3
-        },
         {
           "year": 2020,
           "value": 54.7
@@ -26153,10 +24057,6 @@
       "geographyCode": "TON",
       "geographyName": "Tonga",
       "points": [
-        {
-          "year": 2019,
-          "value": 23.2
-        },
         {
           "year": 2020,
           "value": 20.4
@@ -26194,26 +24094,6 @@
       "geographyName": "Tunisia",
       "points": [
         {
-          "year": 2015,
-          "value": 18.2
-        },
-        {
-          "year": 2016,
-          "value": 19.4
-        },
-        {
-          "year": 2017,
-          "value": 20
-        },
-        {
-          "year": 2018,
-          "value": 22.1
-        },
-        {
-          "year": 2019,
-          "value": 25
-        },
-        {
           "year": 2020,
           "value": 28
         },
@@ -26238,26 +24118,6 @@
       "geographyName": "Uganda",
       "points": [
         {
-          "year": 2015,
-          "value": 66.3
-        },
-        {
-          "year": 2016,
-          "value": 71.3
-        },
-        {
-          "year": 2017,
-          "value": 76
-        },
-        {
-          "year": 2018,
-          "value": 75
-        },
-        {
-          "year": 2019,
-          "value": 73.1
-        },
-        {
           "year": 2020,
           "value": 69.8
         },
@@ -26281,26 +24141,6 @@
       "geographyCode": "UKR",
       "geographyName": "Ukraine",
       "points": [
-        {
-          "year": 2015,
-          "value": 19.8
-        },
-        {
-          "year": 2016,
-          "value": 22.3
-        },
-        {
-          "year": 2017,
-          "value": 21.5
-        },
-        {
-          "year": 2018,
-          "value": 18.3
-        },
-        {
-          "year": 2019,
-          "value": 19.9
-        },
         {
           "year": 2020,
           "value": 22.7
@@ -26338,26 +24178,6 @@
       "geographyName": "United Kingdom",
       "points": [
         {
-          "year": 2015,
-          "value": 6.3
-        },
-        {
-          "year": 2016,
-          "value": 6.1
-        },
-        {
-          "year": 2017,
-          "value": 5.6
-        },
-        {
-          "year": 2018,
-          "value": 4.9
-        },
-        {
-          "year": 2019,
-          "value": 3.9
-        },
-        {
           "year": 2020,
           "value": 3.5
         },
@@ -26381,26 +24201,6 @@
       "geographyCode": "USA",
       "geographyName": "United States",
       "points": [
-        {
-          "year": 2015,
-          "value": 10.5
-        },
-        {
-          "year": 2016,
-          "value": 9.8
-        },
-        {
-          "year": 2017,
-          "value": 8.9
-        },
-        {
-          "year": 2018,
-          "value": 8.4
-        },
-        {
-          "year": 2019,
-          "value": 8.2
-        },
         {
           "year": 2020,
           "value": 8
@@ -26426,14 +24226,6 @@
       "geographyName": "Uruguay",
       "points": [
         {
-          "year": 2018,
-          "value": 13.3
-        },
-        {
-          "year": 2019,
-          "value": 14
-        },
-        {
           "year": 2020,
           "value": 14.1
         },
@@ -26457,26 +24249,6 @@
       "geographyCode": "UZB",
       "geographyName": "Uzbekistan",
       "points": [
-        {
-          "year": 2015,
-          "value": 11.2
-        },
-        {
-          "year": 2016,
-          "value": 13.4
-        },
-        {
-          "year": 2017,
-          "value": 14.9
-        },
-        {
-          "year": 2018,
-          "value": 17.2
-        },
-        {
-          "year": 2019,
-          "value": 19.7
-        },
         {
           "year": 2020,
           "value": 23.6
@@ -26502,14 +24274,6 @@
       "geographyName": "Vanuatu",
       "points": [
         {
-          "year": 2018,
-          "value": 23.3
-        },
-        {
-          "year": 2019,
-          "value": 23.3
-        },
-        {
           "year": 2020,
           "value": 23.3
         }
@@ -26521,18 +24285,6 @@
       "geographyCode": "VNM",
       "geographyName": "Viet Nam",
       "points": [
-        {
-          "year": 2017,
-          "value": 6.2
-        },
-        {
-          "year": 2018,
-          "value": 6.2
-        },
-        {
-          "year": 2019,
-          "value": 6.5
-        },
         {
           "year": 2020,
           "value": 7.6
@@ -26558,18 +24310,6 @@
       "geographyName": "West Bank and Gaza",
       "points": [
         {
-          "year": 2017,
-          "value": 26.3
-        },
-        {
-          "year": 2018,
-          "value": 26.8
-        },
-        {
-          "year": 2019,
-          "value": 27.8
-        },
-        {
           "year": 2020,
           "value": 28.4
         },
@@ -26593,26 +24333,6 @@
       "geographyCode": "YEM",
       "geographyName": "Yemen, Rep.",
       "points": [
-        {
-          "year": 2015,
-          "value": 45.7
-        },
-        {
-          "year": 2016,
-          "value": 49.6
-        },
-        {
-          "year": 2017,
-          "value": 46.6
-        },
-        {
-          "year": 2018,
-          "value": 46
-        },
-        {
-          "year": 2019,
-          "value": 49.4
-        },
         {
           "year": 2020,
           "value": 58.5
@@ -26638,26 +24358,6 @@
       "geographyName": "Zambia",
       "points": [
         {
-          "year": 2015,
-          "value": 51.2
-        },
-        {
-          "year": 2016,
-          "value": 52.4
-        },
-        {
-          "year": 2017,
-          "value": 52
-        },
-        {
-          "year": 2018,
-          "value": 54.2
-        },
-        {
-          "year": 2019,
-          "value": 52.5
-        },
-        {
           "year": 2020,
           "value": 51.8
         },
@@ -26681,26 +24381,6 @@
       "geographyCode": "ZWE",
       "geographyName": "Zimbabwe",
       "points": [
-        {
-          "year": 2015,
-          "value": 64.7
-        },
-        {
-          "year": 2016,
-          "value": 66.7
-        },
-        {
-          "year": 2017,
-          "value": 67
-        },
-        {
-          "year": 2018,
-          "value": 66.7
-        },
-        {
-          "year": 2019,
-          "value": 69.8
-        },
         {
           "year": 2020,
           "value": 73
@@ -438548,14 +436228,6 @@
     {
       "indicatorId": "wb-moderate-severe-food-insecurity",
       "geographyType": "country",
-      "geographyCode": "PNG",
-      "geographyName": "Papua New Guinea",
-      "year": 2019,
-      "value": 57.3
-    },
-    {
-      "indicatorId": "wb-moderate-severe-food-insecurity",
-      "geographyType": "country",
       "geographyCode": "PRY",
       "geographyName": "Paraguay",
       "year": 2022,
@@ -438644,14 +436316,6 @@
     {
       "indicatorId": "wb-moderate-severe-food-insecurity",
       "geographyType": "country",
-      "geographyCode": "SYC",
-      "geographyName": "Seychelles",
-      "year": 2017,
-      "value": 14.3
-    },
-    {
-      "indicatorId": "wb-moderate-severe-food-insecurity",
-      "geographyType": "country",
       "geographyCode": "SLE",
       "geographyName": "Sierra Leone",
       "year": 2023,
@@ -438728,22 +436392,6 @@
       "geographyName": "St. Kitts and Nevis",
       "year": 2020,
       "value": 21.1
-    },
-    {
-      "indicatorId": "wb-moderate-severe-food-insecurity",
-      "geographyType": "country",
-      "geographyCode": "LCA",
-      "geographyName": "St. Lucia",
-      "year": 2017,
-      "value": 22.2
-    },
-    {
-      "indicatorId": "wb-moderate-severe-food-insecurity",
-      "geographyType": "country",
-      "geographyCode": "VCT",
-      "geographyName": "St. Vincent and the Grenadines",
-      "year": 2019,
-      "value": 33.3
     },
     {
       "indicatorId": "wb-moderate-severe-food-insecurity",
