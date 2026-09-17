@@ -1235,10 +1235,10 @@ async function writeGeoJsonFiles() {
     }),
   }
 
-  await writeFile(path.join(PUBLIC_DATA_DIR, 'geo', 'world.geojson'), worldGeoJson)
+  await writeFile(path.join(PUBLIC_DATA_DIR, 'geo', 'world.geojson'), JSON.stringify(world))
   await writeFile(
     path.join(PUBLIC_DATA_DIR, 'geo', 'brazil-states.geojson'),
-    JSON.stringify(brazilStates, null, 2),
+    JSON.stringify(brazilStates),
   )
 
   return new Map(world.features.map((feature) => [
@@ -1373,7 +1373,7 @@ async function main() {
 
   await writeFile(
     outputPath,
-    JSON.stringify(data, null, 2),
+    JSON.stringify(data),
   )
 }
 

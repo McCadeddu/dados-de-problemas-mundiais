@@ -410,6 +410,17 @@ select {
   font-size: 0.86rem;
 }
 
+.map-loading {
+  display: grid;
+  align-content: center;
+  min-height: 420px;
+}
+
+.map-loading h3,
+.map-loading p {
+  margin: 0 0 0.65rem;
+}
+
 .comparison-controls {
   display: grid;
   grid-template-columns: minmax(190px, 0.4fr) 1fr;

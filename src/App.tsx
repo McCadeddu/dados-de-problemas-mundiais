@@ -48,6 +48,8 @@ function App() {
   const [loadAttempt, setLoadAttempt] = useState(0)
   const [worldGeo, setWorldGeo] = useState<GeoJson | null>(null)
   const [brazilGeo, setBrazilGeo] = useState<GeoJson | null>(null)
+  const [brazilMapError, setBrazilMapError] = useState<string | null>(null)
+  const [brazilMapLoadAttempt, setBrazilMapLoadAttempt] = useState(0)
   const [view, setView] = useState<ViewMode>(initialView)
   const [themeId, setThemeId] = useState(() => initialValue('tema', 'hunger-water'))
   const [selectedIndicatorId, setSelectedIndicatorId] = useState(() => initialValue('indicador', ''))
@@ -79,13 +81,26 @@ function App() {
     Promise.all([
       loadJson<DashboardData>(`${dataBaseUrl}data/mundialidade.json`),
       loadJson<GeoJson>(`${dataBaseUrl}data/geo/world.geojson`),
-      loadJson<GeoJson>(`${dataBaseUrl}data/geo/brazil-states.geojson`),
-    ]).then(([dashboardData, world, brazil]) => {
+    ]).then(([dashboardData, world]) => {
       setData(dashboardData)
       setWorldGeo(world)
-      setBrazilGeo(brazil)
     }).catch(() => setLoadError('Não foi possível carregar os dados do painel. Verifique a conexão e tente novamente.'))
   }, [loadAttempt])
+
+  useEffect(() => {
+    if (!data || brazilGeo || view !== 'states') return
+    const dataBaseUrl = import.meta.env.BASE_URL
+    fetch(`${dataBaseUrl}data/geo/brazil-states.geojson`)
+      .then((response) => {
+        if (!response.ok) throw new Error('Mapa indisponível')
+        return response.json() as Promise<GeoJson>
+      })
+      .then((brazil) => {
+        setBrazilGeo(brazil)
+        setBrazilMapError(null)
+      })
+      .catch(() => setBrazilMapError('Não foi possível carregar o mapa dos estados.'))
+  }, [brazilGeo, brazilMapLoadAttempt, data, view])
 
   useEffect(() => {
     const params = new URLSearchParams({
@@ -157,7 +172,7 @@ function App() {
   if (loadError) {
     return <main className="shell load-error"><h1>Falha ao abrir o painel</h1><p>{loadError}</p><button className="advance-button" onClick={() => { setLoadError(null); setLoadAttempt((attempt) => attempt + 1) }}>Tentar novamente</button></main>
   }
-  if (!data || !worldGeo || !brazilGeo || !indicator || !brazilIndicator || !immediateRegionIndicator) {
+  if (!data || !worldGeo || !indicator || !brazilIndicator || !immediateRegionIndicator) {
     return <main className="shell"><p>Carregando painel e séries...</p></main>
   }
 
@@ -360,7 +375,9 @@ function App() {
             <p className="controls__context">Indicador estadual selecionado: <strong>{brazilIndicator.name}</strong>. Novas tabelas do IBGE podem ser adicionadas pelo conector de dados.</p>
           </section>
           <section className="content-grid content-grid--states">
-            <MapPanel title="Mapa dos estados brasileiros" subtitle={`${brazilIndicator.name} • clique para selecionar uma UF`} geography={brazilGeo} valueByCode={brazilValueByCode} codeKeys={['sidra_code', 'iso_3166_2', 'postal']} onSelect={setStateCode} selectedCode={stateCode} formatValue={(value) => formatValue(value, brazilIndicator.unit)} direction={brazilIndicator.direction} />
+            {brazilGeo
+              ? <MapPanel title="Mapa dos estados brasileiros" subtitle={`${brazilIndicator.name} • clique para selecionar uma UF`} geography={brazilGeo} valueByCode={brazilValueByCode} codeKeys={['sidra_code', 'iso_3166_2', 'postal']} onSelect={setStateCode} selectedCode={stateCode} formatValue={(value) => formatValue(value, brazilIndicator.unit)} direction={brazilIndicator.direction} />
+              : <article className="panel map-loading"><h3>Carregando mapa dos estados</h3><p>{brazilMapError ?? 'O painel principal continua disponível enquanto o mapa detalhado é preparado.'}</p>{brazilMapError && <button className="advance-button" onClick={() => { setBrazilMapError(null); setBrazilMapLoadAttempt((attempt) => attempt + 1) }}>Tentar novamente</button>}</article>}
             <article className="panel">
               <div className="panel__header"><div><h3>{stateName}</h3><p>{brazilIndicator.description}</p></div><strong className="badge">{brazilIndicator.latestYear}</strong></div>
               <div className="chart"><ResponsiveContainer width="100%" height={300}><LineChart data={selectedStateSeries?.points ?? []}><CartesianGrid stroke="#334155" strokeDasharray="4 4" /><XAxis dataKey="year" stroke="#a8b8cc" /><YAxis stroke="#a8b8cc" /><Tooltip formatter={tooltipFormatter(brazilIndicator.unit)} /><Line type="monotone" dataKey="value" stroke="#fbbf24" strokeWidth={3} dot={false} /></LineChart></ResponsiveContainer></div>
