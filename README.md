@@ -64,7 +64,7 @@ Uma série mundial de diferença salarial comparável continua prevista para uma
 - Renda per capita até 1/4 do salário mínimo: Censo 2022.
 - Participação feminina, diferença de participação e diferença de cuidado não remunerado: PNAD Contínua.
 - Diferença salarial de gênero: Censo 2022, diferença bruta de rendimentos médios.
-- Focos ativos de fogo detectados: Programa Queimadas do INPE, total anual por UF do satélite de referência.
+- Focos ativos de fogo detectados: Programa Queimadas do INPE, total anual por UF do satélite de referência e janela recente de sete dias.
 
 Cada indicador informa seu período e suas limitações metodológicas no próprio painel.
 Focos ativos detectados não são equivalentes ao número de incêndios nem à área queimada.

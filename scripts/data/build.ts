@@ -454,6 +454,17 @@ const BRAZIL_STATE_FIRE_HOTSPOTS_INDICATOR: Omit<Indicator, 'latestYear'> = {
   direction: 'higher-worse',
 }
 
+const BRAZIL_STATE_RECENT_FIRE_HOTSPOTS_INDICATOR: Omit<Indicator, 'latestYear'> = {
+  id: 'inpe-state-fire-hotspots-last-7-days',
+  name: 'Focos ativos de fogo nos últimos 7 dias',
+  themeId: 'climate-vulnerability',
+  description: 'Detecções de focos ativos acumuladas nos sete arquivos diários mais recentes do Programa Queimadas do INPE.',
+  unit: 'focos',
+  geographyType: 'brazil-state',
+  sourceId: INPE_QUEIMADAS_SOURCE_ID,
+  direction: 'higher-worse',
+}
+
 const BRAZIL_STATE_UNPAID_CARE_GAP_INDICATOR: Omit<Indicator, 'latestYear'> = {
   id: 'ibge-state-unpaid-care-gap',
   name: 'Diferença de horas de cuidado não remunerado',
@@ -1140,6 +1151,54 @@ async function loadBrazilStateFireHotspotsIndicator() {
   }
 }
 
+function latestDailyFireHotspotFiles(directoryListing: string) {
+  const files = Array.from(new Set(
+    Array.from(directoryListing.matchAll(/focos_diario_br_(\d{8})\.csv/g), (match) => match[0]),
+  )).sort().slice(-7)
+  if (files.length < 7) throw new Error(`INPE expected seven daily fire hotspot files, received ${files.length}`)
+  return files
+}
+
+async function loadBrazilStateRecentFireHotspotsIndicator() {
+  const baseUrl = 'https://dataserver-coids.inpe.br/queimadas/queimadas/focos/csv/diario/Brasil'
+  const files = latestDailyFireHotspotFiles(await fetchText(`${baseUrl}/`))
+  const states = await fetchJson<Array<{ id: number; nome: string }>>('https://servicodados.ibge.gov.br/api/v1/localidades/estados')
+  const stateNameByCode = new Map(states.map((state) => [String(state.id), state.nome]))
+  const counts = new Map(states.map((state) => [String(state.id), 0]))
+  const dailyRows = await Promise.all(files.map((fileName) => fetchText(`${baseUrl}/${fileName}`)))
+
+  for (const content of dailyRows) {
+    for (const row of parseCsv<Record<string, string>>(content)) {
+      const stateCode = row.estado_id?.trim()
+      if (stateCode && counts.has(stateCode)) counts.set(stateCode, (counts.get(stateCode) ?? 0) + 1)
+    }
+  }
+
+  const latestDate = files.at(-1)?.match(/(\d{4})(\d{2})(\d{2})/)?.slice(1).join('-')
+  if (!latestDate) throw new Error('INPE latest daily fire hotspot date not found')
+  const latestYear = Number(latestDate.slice(0, 4))
+  const series = Array.from(counts, ([geographyCode, value]) => ({
+    indicatorId: BRAZIL_STATE_RECENT_FIRE_HOTSPOTS_INDICATOR.id,
+    geographyType: 'brazil-state' as const,
+    geographyCode,
+    geographyName: stateNameByCode.get(geographyCode) ?? geographyCode,
+    points: [{ year: latestYear, value }],
+  }))
+
+  return {
+    indicator: { ...BRAZIL_STATE_RECENT_FIRE_HOTSPOTS_INDICATOR, latestYear } satisfies Indicator,
+    source: {
+      id: INPE_QUEIMADAS_SOURCE_ID,
+      name: 'INPE Programa Queimadas',
+      url: 'https://www.terrabrasilis.dpi.inpe.br/queimadas/portal/pages/secao_downloads/dados-abertos/index.html',
+      methodologyUrl: 'https://www.terrabrasilis.dpi.inpe.br/queimadas/portal/pages/secao_informacoes/faq/',
+      license: 'Dados abertos para uso público',
+      lastUpdated: latestDate,
+    } satisfies Source,
+    series,
+  }
+}
+
 async function loadBrazilStatePofIndicator(indicator: Omit<Indicator, 'latestYear'>, tableFileName: string) {
   const [pofZipBuffer, states] = await Promise.all([
     fetchBuffer('https://ftp.ibge.gov.br/Orcamentos_Familiares/Evolucao_dos_Indicadores_nao_Monetarios_de_Pobreza_e_Qualidade_de_Vida_no_Brasil/tabelas_2017_2018_xls.zip'),
@@ -1330,7 +1389,7 @@ async function main() {
     loadNdGain(countriesByIso3),
     loadUnhcrIndicators(validCountryIso3),
   ])
-  const [brazilStates, brazilStateGini, brazilStateIncome, brazilStateVeryLowIncome, brazilStateGenderLabor, brazilStateGenderWageGap, brazilStateUnpaidCareGap, brazilStateFireHotspots, brazilStateMultidimensionalPoverty, brazilStateMultidimensionalVulnerability, immediateRegions, immediateSanitation] = await Promise.all([
+  const [brazilStates, brazilStateGini, brazilStateIncome, brazilStateVeryLowIncome, brazilStateGenderLabor, brazilStateGenderWageGap, brazilStateUnpaidCareGap, brazilStateFireHotspots, brazilStateRecentFireHotspots, brazilStateMultidimensionalPoverty, brazilStateMultidimensionalVulnerability, immediateRegions, immediateSanitation] = await Promise.all([
     loadBrazilStateIndicator(),
     loadBrazilStateGiniIndicator(),
     loadBrazilStateIncomeIndicator(),
@@ -1339,6 +1398,7 @@ async function main() {
     loadBrazilStateGenderWageGapIndicator(),
     loadBrazilStateUnpaidCareGapIndicator(),
     loadBrazilStateFireHotspotsIndicator(),
+    loadBrazilStateRecentFireHotspotsIndicator(),
     loadBrazilStatePofIndicator(BRAZIL_STATE_MULTIDIMENSIONAL_POVERTY_INDICATOR, 'Tabela 6b.xlsx'),
     loadBrazilStatePofIndicator(BRAZIL_STATE_MULTIDIMENSIONAL_VULNERABILITY_INDICATOR, 'Tabela 5b.xlsx'),
     loadBrazilImmediateRegionCoverage(BRAZIL_IMMEDIATE_WATER_INDICATOR, '6803', '1821%5B72144%5D'),
@@ -1364,6 +1424,7 @@ async function main() {
     brazilStateGenderWageGap.indicator,
     brazilStateUnpaidCareGap.indicator,
     brazilStateFireHotspots.indicator,
+    brazilStateRecentFireHotspots.indicator,
     brazilStateMultidimensionalPoverty.indicator,
     brazilStateMultidimensionalVulnerability.indicator,
     immediateRegions.indicator,
@@ -1382,6 +1443,7 @@ async function main() {
     ...brazilStateGenderWageGap.series,
     ...brazilStateUnpaidCareGap.series,
     ...brazilStateFireHotspots.series,
+    ...brazilStateRecentFireHotspots.series,
     ...brazilStateMultidimensionalPoverty.series,
     ...brazilStateMultidimensionalVulnerability.series,
     ...immediateRegions.series,
@@ -1391,7 +1453,7 @@ async function main() {
   const rankings = buildRankings(indicators, latest)
 
   const sources = new Map<string, Source>()
-  for (const source of [...worldBankResults.map((result) => result.source), ...worldBankGapResults.map((result) => result.source), unhcr.source, ndGain.source, brazilStates.source, brazilStateFireHotspots.source, brazilStateMultidimensionalPoverty.source]) {
+  for (const source of [...worldBankResults.map((result) => result.source), ...worldBankGapResults.map((result) => result.source), unhcr.source, ndGain.source, brazilStates.source, brazilStateFireHotspots.source, brazilStateRecentFireHotspots.source, brazilStateMultidimensionalPoverty.source]) {
     sources.set(source.id, source)
   }
   sources.set(NATURAL_EARTH_SOURCE_ID, {
@@ -1428,6 +1490,7 @@ async function main() {
       'A diferença salarial de gênero estadual compara rendimentos médios de homens e mulheres no Censo 2022 e não controla diferenças de ocupação, jornada ou escolaridade.',
       'A diferença de cuidado não remunerado compara horas médias de mulheres e homens na PNAD Contínua anual; os anos sem divulgação não são interpolados.',
       'Os focos ativos de fogo do INPE são detecções de satélite e não equivalem, isoladamente, ao número de incêndios ou à área queimada.',
+      'O indicador de sete dias soma todos os registros presentes nos arquivos diários do INPE e serve para leitura recente, não para comparação com o total anual do satélite de referência.',
       'A pobreza multidimensional estadual é uma estatística experimental da POF 2017-2018; ela combina privações não monetárias e não deve ser interpretada como série anual.',
       'O recorte de Regiões Geográficas Imediatas usa o Censo 2022 do IBGE e agrega municípios pela divisão territorial vigente.',
       'A arquitetura em conectores permite plugar novas tabelas do IBGE e novas fontes internacionais sem redesenhar o frontend.',
