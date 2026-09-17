@@ -23,7 +23,7 @@ import {
   getSeriesForGeography,
   getTopRanked,
 } from './lib/dashboard'
-import type { DashboardData, LatestValue } from './types'
+import type { DashboardData, LatestValue, Series } from './types'
 
 type GeoJson = GeoJSON.FeatureCollection
 type ViewMode = 'world' | 'country' | 'states' | 'regions'
@@ -48,6 +48,7 @@ function App() {
   const [data, setData] = useState<DashboardData | null>(null)
   const [loadError, setLoadError] = useState<string | null>(null)
   const [loadAttempt, setLoadAttempt] = useState(0)
+  const [seriesLoadError, setSeriesLoadError] = useState<string | null>(null)
   const [worldGeo, setWorldGeo] = useState<GeoJson | null>(null)
   const [brazilGeo, setBrazilGeo] = useState<GeoJson | null>(null)
   const [brazilMapError, setBrazilMapError] = useState<string | null>(null)
@@ -242,6 +243,46 @@ function App() {
     (item) => comparisonImmediateRegionCodes.includes(item.geographyCode),
   )
   const comparisonImmediateChartData = buildComparisonChartData(data, immediateRegionIndicator.id, comparisonImmediateRegions)
+
+  useEffect(() => {
+    if (!data) return
+    const requiredIndicatorId = effectiveView === 'world' || effectiveView === 'country'
+      ? indicator.id
+      : effectiveView === 'states'
+        ? brazilIndicator.id
+        : immediateRegionIndicator.id
+    const hasSeries = data.series.some((entry) => entry.indicatorId === requiredIndicatorId)
+    const needsPopulation = effectiveView === 'world'
+    if (hasSeries && (!needsPopulation || data.countryPopulation.length > 0)) return
+
+    let cancelled = false
+    const dataBaseUrl = import.meta.env.BASE_URL
+    const requests: Array<Promise<Series[]>> = hasSeries
+      ? []
+      : [fetch(`${dataBaseUrl}data/series/${requiredIndicatorId}.json`).then((response) => {
+        if (!response.ok) throw new Error('Série indisponível')
+        return response.json() as Promise<Series[]>
+      })]
+    const populationRequest = needsPopulation && data.countryPopulation.length === 0
+      ? fetch(`${dataBaseUrl}data/series/country-population.json`).then((response) => {
+        if (!response.ok) throw new Error('População indisponível')
+        return response.json() as Promise<DashboardData['countryPopulation']>
+      })
+      : Promise.resolve(null)
+
+    Promise.all([Promise.all(requests), populationRequest]).then(([seriesResponses, countryPopulation]) => {
+      if (cancelled) return
+      setData((current) => current ? {
+        ...current,
+        series: seriesResponses.length ? [...current.series, ...seriesResponses.flat()] : current.series,
+        countryPopulation: countryPopulation ?? current.countryPopulation,
+      } : current)
+      setSeriesLoadError(null)
+    }).catch(() => {
+      if (!cancelled) setSeriesLoadError('Não foi possível carregar a série histórica desta visualização.')
+    })
+    return () => { cancelled = true }
+  }, [brazilIndicator.id, data, effectiveView, immediateRegionIndicator.id, indicator.id])
   const tooltipFormatter = (unit: string) => (value: unknown) => {
     if (Array.isArray(value)) return String(value[0] ?? '')
     return formatValue(Number(value ?? 0), unit)
@@ -303,6 +344,7 @@ function App() {
 
       {effectiveView === 'world' ? (
         <>
+          {seriesLoadError && <p className="comparison-warning">{seriesLoadError}</p>}
           <section className="panel controls controls--world">
             <label>Indicador<select value={indicatorId} onChange={(event) => setSelectedIndicatorId(event.target.value)}>{themeIndicators.map((item) => <option key={item.id} value={item.id}>{item.name}</option>)}</select></label>
             <label>Continente<select value={continent} onChange={(event) => { const nextContinent = event.target.value; const nextCountries = nextContinent === 'Todos' ? data.countries : data.countries.filter((country) => country.continent === nextContinent); setContinent(nextContinent); setCountryCode(nextCountries[0]?.code ?? ''); setComparisonCountryCodes(nextCountries.slice(0, 3).map((country) => country.code)) }}><option value="Todos">Mundo inteiro</option>{data.continents.map((item) => <option key={item} value={item}>{item}</option>)}</select></label>

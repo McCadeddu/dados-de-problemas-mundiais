@@ -90,6 +90,7 @@ type WorldBankGapIndicatorConfig = Omit<Indicator, 'latestYear'> & {
 
 const ROOT = process.cwd()
 const PUBLIC_DATA_DIR = path.join(ROOT, 'public', 'data')
+const PUBLIC_SERIES_DIR = path.join(PUBLIC_DATA_DIR, 'series')
 const RAW_DIR = path.join(ROOT, 'data', 'raw')
 
 const THEMES: DashboardData['themes'] = [
@@ -516,6 +517,7 @@ const BRAZIL_IMMEDIATE_SANITATION_INDICATOR: Omit<Indicator, 'latestYear'> = {
 
 async function ensureDirs() {
   await mkdir(PUBLIC_DATA_DIR, { recursive: true })
+  await mkdir(PUBLIC_SERIES_DIR, { recursive: true })
   await mkdir(path.join(PUBLIC_DATA_DIR, 'geo'), { recursive: true })
   await mkdir(RAW_DIR, { recursive: true })
 }
@@ -1576,17 +1578,29 @@ async function main() {
     ],
   }
 
+  await Promise.all(indicators.map((indicator) => writeFile(
+    path.join(PUBLIC_SERIES_DIR, `${indicator.id}.json`),
+    JSON.stringify(series.filter((entry) => entry.indicatorId === indicator.id)),
+  )))
+  await writeFile(path.join(PUBLIC_SERIES_DIR, 'country-population.json'), JSON.stringify(populationData.countryPopulation))
+
+  const initialData = {
+    ...data,
+    series: [],
+    countryPopulation: [],
+  }
+
   const outputPath = path.join(PUBLIC_DATA_DIR, 'mundialidade.json')
   const previous = await readFile(outputPath, 'utf-8').then((content) => JSON.parse(content) as DashboardData).catch(() => null)
   if (previous) {
     const previousComparable = { ...previous, generatedAt: '' }
-    const nextComparable = { ...data, generatedAt: '' }
-    if (JSON.stringify(previousComparable) === JSON.stringify(nextComparable)) data.generatedAt = previous.generatedAt
+    const nextComparable = { ...initialData, generatedAt: '' }
+    if (JSON.stringify(previousComparable) === JSON.stringify(nextComparable)) initialData.generatedAt = previous.generatedAt
   }
 
   await writeFile(
     outputPath,
-    JSON.stringify(data),
+    JSON.stringify(initialData),
   )
 }
 
