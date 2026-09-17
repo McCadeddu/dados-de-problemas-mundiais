@@ -442,6 +442,17 @@ const BRAZIL_STATE_GENDER_WAGE_GAP_INDICATOR: Omit<Indicator, 'latestYear'> = {
   direction: 'higher-worse',
 }
 
+const BRAZIL_STATE_UNPAID_CARE_GAP_INDICATOR: Omit<Indicator, 'latestYear'> = {
+  id: 'ibge-state-unpaid-care-gap',
+  name: 'Diferença de horas de cuidado não remunerado',
+  themeId: 'gender-equality',
+  description: 'Diferença entre mulheres e homens na média de horas dedicadas a afazeres domésticos e/ou cuidado de pessoas. Valores maiores indicam maior sobrecarga feminina.',
+  unit: 'horas',
+  geographyType: 'brazil-state',
+  sourceId: SIDRA_SOURCE_ID,
+  direction: 'higher-worse',
+}
+
 const BRAZIL_IMMEDIATE_WATER_INDICATOR: Omit<Indicator, 'latestYear'> = {
   id: 'ibge-water-network-coverage',
   name: 'Domicílios com rede geral de água',
@@ -471,15 +482,25 @@ async function ensureDirs() {
 }
 
 async function fetchWithRetry(url: string, accept = '*/*') {
+  let lastError: unknown
   for (let attempt = 0; attempt < 3; attempt += 1) {
-    const response = await fetch(url, { headers: { Accept: accept, 'User-Agent': 'Mundialidade-open-source-dashboard/1.0' } })
+    let response: Response
+    try {
+      response = await fetch(url, { headers: { Accept: accept, 'User-Agent': 'Mundialidade-open-source-dashboard/1.0' } })
+    } catch (error) {
+      lastError = error
+      if (attempt < 2) await new Promise((resolve) => setTimeout(resolve, 1000 * (attempt + 1)))
+      continue
+    }
+
     if (response.ok) return response
-    if (![403, 429, 500, 502, 503, 504].includes(response.status) || attempt === 2) {
+    if (![403, 429, 500, 502, 503, 504].includes(response.status)) {
       throw new Error(`Fetch failed for ${url}: ${response.status}`)
     }
-    await new Promise((resolve) => setTimeout(resolve, 1000 * (attempt + 1)))
+    lastError = new Error(`Fetch failed for ${url}: ${response.status}`)
+    if (attempt < 2) await new Promise((resolve) => setTimeout(resolve, 1000 * (attempt + 1)))
   }
-  throw new Error(`Fetch failed for ${url}`)
+  throw lastError instanceof Error ? lastError : new Error(`Fetch failed for ${url}`)
 }
 
 async function fetchJson<T>(url: string): Promise<T> {
@@ -1022,6 +1043,36 @@ async function loadBrazilStateGenderWageGapIndicator() {
   return { indicator: { ...BRAZIL_STATE_GENDER_WAGE_GAP_INDICATOR, latestYear: 2022 } satisfies Indicator, series }
 }
 
+async function loadBrazilStateUnpaidCareGapIndicator() {
+  const response = await fetchJson<IbgeGenderLaborResponse>('https://servicodados.ibge.gov.br/api/v3/agregados/7013/periodos/all/variaveis/10192?localidades=N3%5Ball%5D&classificacao=2%5B4%2C5%5D%7C12085%5B100543%5D')
+  const results = response[0]?.resultados ?? []
+  const maleResult = results.find((result) => Object.keys(result.classificacoes[0]?.categoria ?? {}).includes('4'))
+  const femaleResult = results.find((result) => Object.keys(result.classificacoes[0]?.categoria ?? {}).includes('5'))
+  if (!maleResult || !femaleResult) throw new Error('IBGE PNAD unpaid care categories not found')
+
+  const maleHoursByState = new Map(maleResult.series.map((entry) => [
+    entry.localidade.id,
+    new Map(Object.entries(entry.serie).flatMap(([year, value]) => {
+      const parsed = toNumber(value)
+      return parsed === null ? [] : [[Number(year), parsed] as const]
+    })),
+  ]))
+  const series = femaleResult.series.flatMap((entry) => {
+    const maleHoursByYear = maleHoursByState.get(entry.localidade.id)
+    const points = Object.entries(entry.serie).flatMap(([year, value]) => {
+      const femaleHours = toNumber(value)
+      const maleHours = maleHoursByYear?.get(Number(year))
+      return femaleHours === null || maleHours === undefined ? [] : [{ year: Number(year), value: femaleHours - maleHours }]
+    })
+    return points.length ? [{ indicatorId: BRAZIL_STATE_UNPAID_CARE_GAP_INDICATOR.id, geographyType: 'brazil-state' as const, geographyCode: entry.localidade.id, geographyName: entry.localidade.nome, points: sortPoints(points) }] : []
+  })
+  if (series.length !== 27) throw new Error(`IBGE PNAD expected 27 state unpaid care gaps, received ${series.length}`)
+  return {
+    indicator: { ...BRAZIL_STATE_UNPAID_CARE_GAP_INDICATOR, latestYear: Math.max(...series.flatMap((entry) => entry.points.map((point) => point.year))) } satisfies Indicator,
+    series,
+  }
+}
+
 async function loadBrazilStatePofIndicator(indicator: Omit<Indicator, 'latestYear'>, tableFileName: string) {
   const [pofZipBuffer, states] = await Promise.all([
     fetchBuffer('https://ftp.ibge.gov.br/Orcamentos_Familiares/Evolucao_dos_Indicadores_nao_Monetarios_de_Pobreza_e_Qualidade_de_Vida_no_Brasil/tabelas_2017_2018_xls.zip'),
@@ -1212,13 +1263,14 @@ async function main() {
     loadNdGain(countriesByIso3),
     loadUnhcrIndicators(validCountryIso3),
   ])
-  const [brazilStates, brazilStateGini, brazilStateIncome, brazilStateVeryLowIncome, brazilStateGenderLabor, brazilStateGenderWageGap, brazilStateMultidimensionalPoverty, brazilStateMultidimensionalVulnerability, immediateRegions, immediateSanitation] = await Promise.all([
+  const [brazilStates, brazilStateGini, brazilStateIncome, brazilStateVeryLowIncome, brazilStateGenderLabor, brazilStateGenderWageGap, brazilStateUnpaidCareGap, brazilStateMultidimensionalPoverty, brazilStateMultidimensionalVulnerability, immediateRegions, immediateSanitation] = await Promise.all([
     loadBrazilStateIndicator(),
     loadBrazilStateGiniIndicator(),
     loadBrazilStateIncomeIndicator(),
     loadBrazilStateVeryLowIncomeIndicator(),
     loadBrazilStateGenderLaborIndicators(),
     loadBrazilStateGenderWageGapIndicator(),
+    loadBrazilStateUnpaidCareGapIndicator(),
     loadBrazilStatePofIndicator(BRAZIL_STATE_MULTIDIMENSIONAL_POVERTY_INDICATOR, 'Tabela 6b.xlsx'),
     loadBrazilStatePofIndicator(BRAZIL_STATE_MULTIDIMENSIONAL_VULNERABILITY_INDICATOR, 'Tabela 5b.xlsx'),
     loadBrazilImmediateRegionCoverage(BRAZIL_IMMEDIATE_WATER_INDICATOR, '6803', '1821%5B72144%5D'),
@@ -1242,6 +1294,7 @@ async function main() {
     brazilStateVeryLowIncome.indicator,
     ...brazilStateGenderLabor.results.map((result) => result.indicator),
     brazilStateGenderWageGap.indicator,
+    brazilStateUnpaidCareGap.indicator,
     brazilStateMultidimensionalPoverty.indicator,
     brazilStateMultidimensionalVulnerability.indicator,
     immediateRegions.indicator,
@@ -1258,6 +1311,7 @@ async function main() {
     ...brazilStateVeryLowIncome.series,
     ...brazilStateGenderLabor.results.flatMap((result) => result.series),
     ...brazilStateGenderWageGap.series,
+    ...brazilStateUnpaidCareGap.series,
     ...brazilStateMultidimensionalPoverty.series,
     ...brazilStateMultidimensionalVulnerability.series,
     ...immediateRegions.series,
@@ -1302,6 +1356,7 @@ async function main() {
       'A renda per capita de até 1/4 do salário mínimo usa o Censo 2022 e é um indicador de baixa renda, não uma linha internacional de pobreza extrema.',
       'As séries estaduais de participação na força de trabalho por sexo usam médias dos quatro trimestres disponíveis em cada ano da PNAD Contínua.',
       'A diferença salarial de gênero estadual compara rendimentos médios de homens e mulheres no Censo 2022 e não controla diferenças de ocupação, jornada ou escolaridade.',
+      'A diferença de cuidado não remunerado compara horas médias de mulheres e homens na PNAD Contínua anual; os anos sem divulgação não são interpolados.',
       'A pobreza multidimensional estadual é uma estatística experimental da POF 2017-2018; ela combina privações não monetárias e não deve ser interpretada como série anual.',
       'O recorte de Regiões Geográficas Imediatas usa o Censo 2022 do IBGE e agrega municípios pela divisão territorial vigente.',
       'A arquitetura em conectores permite plugar novas tabelas do IBGE e novas fontes internacionais sem redesenhar o frontend.',
