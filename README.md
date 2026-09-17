@@ -19,6 +19,7 @@ Mundialidade é um dashboard web open-source para acompanhar indicadores sociais
 - `public/data/`: artefatos gerados consumidos pelo frontend.
 - `src/`: dashboard responsivo, mapas, gráficos e filtros.
 - `docs/architecture.md`: visão da arquitetura e plano de evolução.
+- `docs/roadmap.md`: prioridades públicas de evolução.
 
 ## Fontes principais
 
@@ -56,6 +57,15 @@ eles não representam, sozinhos, o total global de deslocamento interno.
 As diferenças são apresentadas em pontos percentuais. A cobertura de cuidado e violência é menor
 e possui anos de referência diferentes entre países; o painel informa o ano mais recente de cada série.
 Uma série mundial de diferença salarial comparável continua prevista para uma fonte específica.
+
+### Indicadores estaduais do Brasil
+
+- Pobreza multidimensional e vulnerabilidade multidimensional: POF 2017-2018, estatísticas experimentais do IBGE.
+- Renda per capita até 1/4 do salário mínimo: Censo 2022.
+- Participação feminina, diferença de participação e diferença de cuidado não remunerado: PNAD Contínua.
+- Diferença salarial de gênero: Censo 2022, diferença bruta de rendimentos médios.
+
+Cada indicador informa seu período e suas limitações metodológicas no próprio painel.
 
 ## Licenças e redistribuição
 
@@ -106,8 +116,15 @@ publicação de cada fonte continua sendo exibida no painel, pois muitos indicad
 
 ## Limites atuais do MVP
 
-- o recorte estadual brasileiro ainda está concentrado em um indicador de vulnerabilidade social do IBGE/SIDRA
-- a arquitetura já está pronta para receber novos conectores estaduais de água, gênero, clima e migração
+- o recorte estadual brasileiro ainda não cobre todos os temas, especialmente clima e migração;
+- pobreza multidimensional, cuidado não remunerado e diferença salarial têm períodos de referência distintos e não devem ser comparados como uma série anual única;
+- a arquitetura está pronta para receber conectores estaduais e regionais adicionais.
+
+## Comunidade
+
+- [Como contribuir](CONTRIBUTING.md)
+- [Código de Conduta](CODE_OF_CONDUCT.md)
+- [Roadmap](docs/roadmap.md)
 
 ## Estrutura do projeto
 
