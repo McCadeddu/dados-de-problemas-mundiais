@@ -383,8 +383,6 @@ function App() {
           <button className="share-button" onClick={() => void copyShareLink()}>{copied ? 'Link copiado' : 'Copiar link desta análise'}</button>
         </div>
       </header>
-      {activeThemeId === 'climate-vulnerability' && <section className="panel source-link-panel"><div><h3>Dados climáticos complementares</h3><p>Como usar: 1. abra o catálogo oficial; 2. baixe um arquivo CSV; 3. selecione-o abaixo; 4. confira as colunas e os avisos; 5. envie o arquivo validado para integração por estado.</p></div><div><a className="advance-button" href="https://www.gov.br/mcti/pt-br/acesso-a-informacao/dados-abertos/dados-abertos/arquivos/adapta-brasil/adaptabrasil" target="_blank" rel="noreferrer">Baixar CSV do AdaptaBrasil</a><label className="csv-upload">Carregar CSV para pré-visualizar<input type="file" accept=".csv,text/csv" onChange={(event) => void previewAdaptCsv(event.target.files?.[0])} /></label></div>{adaptCsvPreview && <div className="csv-preview"><strong>{adaptCsvPreview.name}</strong><p>{adaptCsvPreview.rows.toLocaleString('pt-BR')} linhas de dados. Colunas: {adaptCsvPreview.headers.join(' | ')}</p><p>{adaptCsvPreview.missing.length ? `Atenção: não identifiquei ${adaptCsvPreview.missing.join(', ')}.` : 'Estrutura territorial básica identificada para avaliação.'}</p><code>{adaptCsvPreview.sample.join('\n')}</code></div>}</section>}
-
       <nav className="view-switcher" aria-label="Escala de análise">
         <button className={effectiveView === 'world' ? 'is-active' : ''} onClick={() => setView('world')}>
           1. Mundo
@@ -420,6 +418,7 @@ function App() {
           {activeThemeId === 'hunger-water' && <HungerWaterPanel values={themeGlobalSnapshot} />}
           {activeThemeId === 'gender-equality' && <GenderPanel values={themeGlobalSnapshot} />}
           {activeThemeId === 'poverty-inequality' && <PovertyPanel values={themeGlobalSnapshot} />}
+          {activeThemeId === 'climate-vulnerability' && <ClimatePanel values={themeGlobalSnapshot} />}
           <section className="panel world-next-step" aria-label="Próximo passo da análise mundial">
             <div><span>Próximo passo</span><h3>Escolha um país para detalhar</h3><p>A análise nacional abre somente depois da leitura mundial. Você também pode comparar países no mesmo indicador.</p></div>
             <div className="world-next-step__actions"><label>País<select value={countryCode} onChange={(event) => setCountryCode(event.target.value)}>{filteredCountries.map((country) => <option key={country.code} value={country.code}>{country.name}</option>)}</select></label><button className="advance-button" onClick={() => setView('country')}>Abrir {countryName}</button><button className="text-button" onClick={() => document.getElementById('comparar-paises')?.scrollIntoView({ behavior: 'smooth', block: 'start' })}>Comparar países</button></div>
@@ -493,6 +492,7 @@ function App() {
             <label>Indicador estadual<select value={brazilIndicator.id} onChange={(event) => setStateIndicatorId(event.target.value)}>{stateThemeIndicators.map((item) => <option key={item.id} value={item.id}>{item.name}</option>)}</select></label>
             <p className="controls__context">Indicador estadual selecionado: <strong>{brazilIndicator.name}</strong>. Novas tabelas do IBGE podem ser adicionadas pelo conector de dados.</p>
           </section>
+          {activeThemeId === 'climate-vulnerability' && <section className="panel source-link-panel"><div><h3>Dados climáticos complementares para o Brasil</h3><p>Como usar: 1. abra o catálogo oficial; 2. baixe um arquivo CSV; 3. selecione-o abaixo; 4. confira as colunas e os avisos; 5. envie o arquivo validado para integração por estado.</p></div><div><a className="advance-button" href="https://www.gov.br/mcti/pt-br/acesso-a-informacao/dados-abertos/dados-abertos/arquivos/adapta-brasil/adaptabrasil" target="_blank" rel="noreferrer">Baixar CSV do AdaptaBrasil</a><label className="csv-upload">Carregar CSV para pré-visualizar<input type="file" accept=".csv,text/csv" onChange={(event) => void previewAdaptCsv(event.target.files?.[0])} /></label></div>{adaptCsvPreview && <div className="csv-preview"><strong>{adaptCsvPreview.name}</strong><p>{adaptCsvPreview.rows.toLocaleString('pt-BR')} linhas de dados. Colunas: {adaptCsvPreview.headers.join(' | ')}</p><p>{adaptCsvPreview.missing.length ? `Atenção: não identifiquei ${adaptCsvPreview.missing.join(', ')}.` : 'Estrutura territorial básica identificada para avaliação.'}</p><code>{adaptCsvPreview.sample.join('\n')}</code></div>}</section>}
           {brazilIndicator.id === 'sismigra-state-active-immigrants' && <section className="panel migration-context"><strong>Como interpretar</strong><p>Este mapa soma registros ativos de imigrantes por UF no SISMIGRA/Polícia Federal. Ele não estima todos os migrantes residentes, refugiados, solicitantes de asilo ou pessoas deslocadas à força.</p></section>}
           <section className="content-grid content-grid--states">
             {brazilGeo
@@ -607,6 +607,13 @@ function PovertyPanel({ values }: { values: GlobalThemeValue[] }) {
   return <section className="panel poverty-panel">
     <div className="panel__header"><div><h3>Pobreza e desigualdade no mundo</h3><p>Médias ponderadas pela população para duas dimensões complementares: privação monetária e concentração de renda.</p></div><strong className="badge">Visão global</strong></div>
     {values.length > 0 ? <div className="poverty-panel__grid">{values.map(({ indicator, value, year, coverage }) => <article key={indicator.id}><span>{indicator.name}</span><strong>{formatValue(value, indicator.unit)}</strong><small>{year} · {coverage} países · {indicator.id === 'wb-gini' ? 'maior concentração de renda' : 'população abaixo da linha internacional'}</small></article>)}</div> : <p className="comparison-warning">Carregando população para calcular as médias mundiais.</p>}
+  </section>
+}
+
+function ClimatePanel({ values }: { values: GlobalThemeValue[] }) {
+  return <section className="panel climate-panel">
+    <div className="panel__header"><div><h3>Vulnerabilidade climática no mundo</h3><p>Médias ponderadas pela população dos componentes ND-GAIN: exposição e sensibilidade, capacidade de adaptação e prontidão para responder.</p></div><strong className="badge">Visão global</strong></div>
+    {values.length > 0 ? <div className="climate-panel__grid">{values.map(({ indicator, value, year, coverage }) => <article key={indicator.id} className={indicator.direction === 'higher-worse' ? 'is-risk' : 'is-readiness'}><span>{indicator.name}</span><strong>{formatValue(value, indicator.unit)}</strong><small>{year} · {coverage} países · {indicator.direction === 'higher-worse' ? 'maior risco' : 'maior capacidade'}</small></article>)}</div> : <p className="comparison-warning">Carregando população para calcular as médias mundiais.</p>}
   </section>
 }
 
