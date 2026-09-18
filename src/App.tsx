@@ -24,7 +24,7 @@ import {
   getSeriesForGeography,
   getTopRanked,
 } from './lib/dashboard'
-import type { DashboardData, LatestValue, Series } from './types'
+import type { DashboardData, LatestValue, MigrationFlow, Series } from './types'
 
 type GeoJson = GeoJSON.FeatureCollection
 type ViewMode = 'landing' | 'world' | 'country' | 'states' | 'regions'
@@ -51,6 +51,8 @@ function App() {
   const [loadError, setLoadError] = useState<string | null>(null)
   const [loadAttempt, setLoadAttempt] = useState(0)
   const [seriesLoadError, setSeriesLoadError] = useState<string | null>(null)
+  const [migrationFlows, setMigrationFlows] = useState<MigrationFlow[] | null>(null)
+  const [migrationFlowsError, setMigrationFlowsError] = useState<string | null>(null)
   const [adaptCsvPreview, setAdaptCsvPreview] = useState<{ name: string; headers: string[]; rows: number; sample: string[]; missing: string[] } | null>(null)
   const [worldGeo, setWorldGeo] = useState<GeoJson | null>(null)
   const [brazilGeo, setBrazilGeo] = useState<GeoJson | null>(null)
@@ -245,6 +247,17 @@ function App() {
     return () => { cancelled = true }
   }, [data, effectiveView, requiredIndicatorId])
 
+  useEffect(() => {
+    if (!data || activeThemeId !== 'forced-migration' || migrationFlows) return
+    fetch(`${import.meta.env.BASE_URL}data/flows/unhcr-refugee-flows.json`)
+      .then((response) => {
+        if (!response.ok) throw new Error('Fluxos indisponíveis')
+        return response.json() as Promise<MigrationFlow[]>
+      })
+      .then((flows) => { setMigrationFlows(flows); setMigrationFlowsError(null) })
+      .catch(() => setMigrationFlowsError('Não foi possível carregar os corredores de refúgio.'))
+  }, [activeThemeId, data, migrationFlows])
+
   if (loadError) {
     return <main className="shell load-error"><h1>Falha ao abrir o painel</h1><p>{loadError}</p><button className="advance-button" onClick={() => { setLoadError(null); setLoadAttempt((attempt) => attempt + 1) }}>Tentar novamente</button></main>
   }
@@ -401,6 +414,7 @@ function App() {
             <div><span>Próximo passo</span><h3>Como você quer continuar?</h3><p>Abra um país para analisar seus dados ou confronte países no mesmo indicador.</p></div>
             <div className="world-next-step__actions"><button className="advance-button" onClick={() => setView('country')}>Analisar {countryName}</button><button className="text-button" onClick={() => document.getElementById('comparar-paises')?.scrollIntoView({ behavior: 'smooth', block: 'start' })}>Comparar países</button></div>
           </section>
+          {activeThemeId === 'forced-migration' && <MigrationFlowsPanel flows={migrationFlows} error={migrationFlowsError} />}
 
           <section className="content-grid content-grid--world">
             <MapPanel title="Mapa mundial" subtitle={`${indicator.name} • clique para abrir a análise de um país`} geography={worldGeo} valueByCode={worldValueByCode} codeKeys={['ADM0_A3', 'ISO_A3', 'SOV_A3', 'gu_a3']} onSelect={(code) => { setCountryCode(code); setContinent(data.countries.find((country) => country.code === code)?.continent ?? 'Todos'); setView('country') }} selectedCode={countryCode} formatValue={(value) => formatValue(value, indicator.unit)} direction={indicator.direction} projectionKind="peters" />
@@ -551,6 +565,16 @@ type RankingPanelProps = {
   direction: 'higher-better' | 'higher-worse' | 'neutral'
   color: string
   tooltipFormatter: (unit: string) => (value: unknown) => string
+}
+
+function MigrationFlowsPanel({ flows, error }: { flows: MigrationFlow[] | null; error: string | null }) {
+  return <section className="panel migration-flows">
+    <div className="panel__header"><div><h3>Principais corredores de refúgio</h3><p>Origem → país de acolhimento, segundo o estoque de pessoas refugiadas no fim de 2025.</p></div><strong className="badge">UNHCR</strong></div>
+    {error && <p className="comparison-warning">{error}</p>}
+    {!flows && !error && <p className="series-loading" role="status">Carregando corredores de refúgio...</p>}
+    {flows && <ol className="migration-flows__list">{flows.slice(0, 12).map((flow) => <li key={`${flow.originCode}-${flow.asylumCode}`}><span>{flow.originName} <b>→</b> {flow.asylumName}</span><strong>{formatValue(flow.value, 'pessoas')}</strong></li>)}</ol>}
+    <p className="meta">Os valores representam pessoas refugiadas ou em situação semelhante registradas no país de acolhimento no final do ano. Não equivalem ao número de viagens realizadas naquele ano.</p>
+  </section>
 }
 
 function RankingPanel({ title, description, ranking, unit, direction, color, tooltipFormatter }: RankingPanelProps) {

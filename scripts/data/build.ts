@@ -92,6 +92,7 @@ type WorldBankGapIndicatorConfig = Omit<Indicator, 'latestYear'> & {
 const ROOT = process.cwd()
 const PUBLIC_DATA_DIR = path.join(ROOT, 'public', 'data')
 const PUBLIC_SERIES_DIR = path.join(PUBLIC_DATA_DIR, 'series')
+const PUBLIC_FLOWS_DIR = path.join(PUBLIC_DATA_DIR, 'flows')
 const RAW_DIR = path.join(ROOT, 'data', 'raw')
 
 const THEMES: DashboardData['themes'] = [
@@ -542,6 +543,7 @@ const BRAZIL_IMMEDIATE_WASTE_COLLECTION_INDICATOR: Omit<Indicator, 'latestYear'>
 async function ensureDirs() {
   await mkdir(PUBLIC_DATA_DIR, { recursive: true })
   await mkdir(PUBLIC_SERIES_DIR, { recursive: true })
+  await mkdir(PUBLIC_FLOWS_DIR, { recursive: true })
   await mkdir(path.join(PUBLIC_DATA_DIR, 'geo'), { recursive: true })
   await mkdir(RAW_DIR, { recursive: true })
 }
@@ -825,6 +827,30 @@ type UnhcrPopulationRow = {
 }
 
 type UnhcrPopulationResponse = { items: UnhcrPopulationRow[] }
+
+type MigrationFlow = {
+  originCode: string
+  originName: string
+  asylumCode: string
+  asylumName: string
+  value: number
+  year: number
+}
+
+async function loadUnhcrRefugeeFlows(validCountryIso3: Set<string>): Promise<MigrationFlow[]> {
+  const response = await fetchJson<UnhcrPopulationResponse>(
+    'https://api.unhcr.org/population/v1/population/?limit=10000&yearFrom=2025&yearTo=2025&coo_all=true&coa_all=true&cf_type=ISO',
+  )
+
+  return response.items.flatMap((row) => {
+    const originCode = row.coo_iso?.toUpperCase()
+    const asylumCode = row.coa_iso?.toUpperCase()
+    const value = toNumber(row.refugees)
+    if (!originCode || !asylumCode || originCode === asylumCode || !row.coo_name || !row.coa_name
+      || !validCountryIso3.has(originCode) || !validCountryIso3.has(asylumCode) || !Number.isFinite(row.year) || !value) return []
+    return [{ originCode, originName: row.coo_name, asylumCode, asylumName: row.coa_name, value, year: row.year }]
+  }).sort((a, b) => b.value - a.value).slice(0, 40)
+}
 
 async function loadUnhcrIndicators(validCountryIso3: Set<string>) {
   const [originResponse, asylumResponse] = await Promise.all([
@@ -1527,9 +1553,10 @@ async function main() {
     Promise.all(WORLD_BANK_GAP_INDICATORS.map((indicator) => loadWorldBankGapIndicator(indicator, validCountryIso3))),
     loadWorldPopulation(validCountryIso3),
   ])
-  const [ndGain, unhcr] = await Promise.all([
+  const [ndGain, unhcr, migrationFlows] = await Promise.all([
     loadNdGain(countriesByIso3),
     loadUnhcrIndicators(validCountryIso3),
+    loadUnhcrRefugeeFlows(validCountryIso3),
   ])
   const fireHotspotsPromise = withCachedFallback(loadBrazilStateFireHotspotsIndicator, async () => {
     const [annual, rate] = await Promise.all([
@@ -1660,6 +1687,7 @@ async function main() {
     JSON.stringify(series.filter((entry) => entry.indicatorId === indicator.id)),
   )))
   await writeFile(path.join(PUBLIC_SERIES_DIR, 'country-population.json'), JSON.stringify(populationData.countryPopulation))
+  await writeFile(path.join(PUBLIC_FLOWS_DIR, 'unhcr-refugee-flows.json'), JSON.stringify(migrationFlows))
 
   const initialData = {
     ...data,

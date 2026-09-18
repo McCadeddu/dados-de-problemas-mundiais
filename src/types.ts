@@ -56,6 +56,15 @@ export type LatestValue = {
   value: number
 }
 
+export type MigrationFlow = {
+  originCode: string
+  originName: string
+  asylumCode: string
+  asylumName: string
+  value: number
+  year: number
+}
+
 export type Ranking = {
   indicatorId: string
   geographyType: GeographyType
