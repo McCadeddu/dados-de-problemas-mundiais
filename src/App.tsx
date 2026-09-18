@@ -209,6 +209,12 @@ function App() {
       return latest ? [{ indicator: item, value: latest.value, year: latest.year }] : []
     })
     : []
+  const povertySnapshot = data && activeThemeId === 'poverty-inequality'
+    ? themeIndicators.flatMap((item) => {
+      const latest = getLatestByIndicator(data, item.id, 'country').find((entry) => entry.geographyCode === countryCode)
+      return latest ? [{ indicator: item, value: latest.value, year: latest.year }] : []
+    })
+    : []
 
   const worldValueByCode = new Map(countryLatest.map((item) => [
     item.geographyCode,
@@ -426,6 +432,7 @@ function App() {
           </section>
           {activeThemeId === 'hunger-water' && <HungerWaterPanel countryName={countryName} values={hungerWaterSnapshot} />}
           {activeThemeId === 'gender-equality' && <GenderPanel countryName={countryName} values={genderSnapshot} />}
+          {activeThemeId === 'poverty-inequality' && <PovertyPanel countryName={countryName} values={povertySnapshot} />}
           <section className="panel world-next-step" aria-label="Próximo passo da análise mundial">
             <div><span>Próximo passo</span><h3>Como você quer continuar?</h3><p>Abra um país para analisar seus dados ou confronte países no mesmo indicador.</p></div>
             <div className="world-next-step__actions"><button className="advance-button" onClick={() => setView('country')}>Analisar {countryName}</button><button className="text-button" onClick={() => document.getElementById('comparar-paises')?.scrollIntoView({ behavior: 'smooth', block: 'start' })}>Comparar países</button></div>
@@ -604,6 +611,13 @@ function GenderPanel({ countryName, values }: { countryName: string; values: Arr
   return <section className="panel gender-panel">
     <div className="panel__header"><div><h3>Igualdade de gênero em {countryName}</h3><p>Representação, trabalho, violência e cuidado não remunerado em uma leitura única, sem combinar unidades distintas.</p></div><strong className="badge">Visão temática</strong></div>
     {values.length > 0 ? <div className="gender-panel__grid">{values.map(({ indicator, value, year }) => <article key={indicator.id} className={indicator.direction === 'higher-worse' ? 'is-pressure' : 'is-access'}><span>{indicator.name}</span><strong>{formatValue(value, indicator.unit)}</strong><small>{year} · {indicator.direction === 'higher-worse' ? 'lacuna ou violência' : 'participação ou representação'}</small></article>)}</div> : <p className="comparison-warning">Não há valores recentes suficientes para compor a leitura conjunta de {countryName}.</p>}
+  </section>
+}
+
+function PovertyPanel({ countryName, values }: { countryName: string; values: Array<{ indicator: DashboardData['indicators'][number]; value: number; year: number }> }) {
+  return <section className="panel poverty-panel">
+    <div className="panel__header"><div><h3>Pobreza e desigualdade em {countryName}</h3><p>Uma medida de privação monetária e uma medida de concentração de renda: elas devem ser lidas em conjunto, não somadas.</p></div><strong className="badge">Visão temática</strong></div>
+    {values.length > 0 ? <div className="poverty-panel__grid">{values.map(({ indicator, value, year }) => <article key={indicator.id}><span>{indicator.name}</span><strong>{formatValue(value, indicator.unit)}</strong><small>{year} · {indicator.id === 'wb-gini' ? 'maior concentração de renda' : 'população abaixo da linha internacional'}</small></article>)}</div> : <p className="comparison-warning">Não há valores recentes suficientes para compor a leitura conjunta de {countryName}.</p>}
   </section>
 }
 

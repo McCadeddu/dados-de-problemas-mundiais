@@ -610,6 +610,41 @@ select {
   color: #5eead4;
 }
 
+.poverty-panel {
+  margin-bottom: 1.5rem;
+}
+
+.poverty-panel__grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.75rem;
+}
+
+.poverty-panel__grid article {
+  padding: 1rem;
+  border: 1px solid rgba(251, 191, 36, 0.3);
+  border-radius: 14px;
+  background: rgba(120, 53, 15, 0.24);
+}
+
+.poverty-panel__grid span,
+.poverty-panel__grid small {
+  display: block;
+  color: #d9d5c5;
+}
+
+.poverty-panel__grid small {
+  margin-top: 0.3rem;
+  font-size: 0.82rem;
+}
+
+.poverty-panel__grid strong {
+  display: block;
+  margin: 0.5rem 0 0;
+  color: #fcd34d;
+  font-size: 1.7rem;
+}
+
 .country-next-step--empty {
   grid-template-columns: 1fr;
   border-color: rgba(148, 163, 184, 0.3);
@@ -1147,6 +1182,10 @@ select {
   }
 
   .gender-panel__grid {
+    grid-template-columns: 1fr;
+  }
+
+  .poverty-panel__grid {
     grid-template-columns: 1fr;
   }
 
