@@ -875,6 +875,12 @@ select {
   text-transform: uppercase;
 }
 
+.work-migration-comparison__actions {
+  display: grid;
+  justify-items: end;
+  gap: 0.55rem;
+}
+
 .work-migration-comparison__summary {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
@@ -1518,6 +1524,10 @@ select {
 
   .work-migration-comparison__summary {
     grid-template-columns: 1fr;
+  }
+
+  .work-migration-comparison__actions {
+    justify-items: start;
   }
 
   .hero {

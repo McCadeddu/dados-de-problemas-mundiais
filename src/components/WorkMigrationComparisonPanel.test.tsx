@@ -19,6 +19,7 @@ describe('WorkMigrationComparisonPanel', () => {
     render(<WorkMigrationComparisonPanel data={data} />)
     expect(screen.getByText('2')).toBeInTheDocument()
     expect(screen.getByText('País A')).toBeInTheDocument()
+    expect(screen.getByRole('button', { name: 'Baixar CSV alinhado' })).toBeEnabled()
     expect(screen.getByText(/não deve ser lida como efeito/)).toBeInTheDocument()
   })
 })
