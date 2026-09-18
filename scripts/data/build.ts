@@ -10,6 +10,8 @@ type ThemeId =
   | 'poverty-inequality'
   | 'climate-vulnerability'
   | 'forced-migration'
+  | 'illiteracy'
+  | 'decent-work'
 
 type GeographyType = 'country' | 'brazil-state' | 'brazil-immediate-region'
 

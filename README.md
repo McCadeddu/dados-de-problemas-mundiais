@@ -1,6 +1,11 @@
 # Mundialidade
 
-Mundialidade é um dashboard web open-source para acompanhar indicadores sociais e ambientais globais e do Brasil, com foco em fome, água, gênero, desigualdade, vulnerabilidade climática e migração forçada.
+Mundialidade é um dashboard web open-source para acompanhar indicadores sociais e ambientais globais e do Brasil, com foco em fome, água, gênero, desigualdade, vulnerabilidade climática, migração forçada, analfabetismo e trabalho.
+
+As páginas de [analfabetismo e trabalho](docs/analfabetismo-trabalho.md) incluem
+mapas e séries mundiais UNESCO/UIS e OIT, dados estaduais do IBGE e explicação
+sobre trabalho forçado. A contribuição previdenciária está disponível por UF
+brasileira; a estimativa de trabalho forçado é global, referente a 2021.
 
 ## Stack
 

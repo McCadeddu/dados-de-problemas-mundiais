@@ -6,6 +6,8 @@ export const THEME_ROUTE_BY_ID: Record<ThemeId, string> = {
   'poverty-inequality': 'pobreza',
   'climate-vulnerability': 'clima',
   'forced-migration': 'migracao',
+  illiteracy: 'analfabetismo',
+  'decent-work': 'trabalho',
 }
 
 export function getThemeIdFromPath(pathname: string): ThemeId | undefined {

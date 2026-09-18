@@ -12,6 +12,7 @@ import {
 } from 'recharts'
 import { MapPanel } from './components/MapPanel'
 import { NationalDataPanel } from './components/NationalDataPanel'
+import { EducationWorkPanel } from './components/EducationWorkPanel'
 import { getThemeIdFromPath, getThemePath } from './lib/themeRoutes'
 import {
   formatValue,
@@ -343,7 +344,8 @@ function App() {
     const country = data.countries.find((candidate) => candidate.code === item.geographyCode)
     return continent === 'Todos' || country?.continent === continent
   })
-  const continentAverage = getPopulationWeightedAverage(data, continentValues)
+  const supportsPopulationAverage = activeThemeId !== 'illiteracy' && activeThemeId !== 'decent-work'
+  const continentAverage = supportsPopulationAverage ? getPopulationWeightedAverage(data, continentValues) : null
   const regionsForState = data.brazilImmediateRegions.filter((region) => region.stateCode === stateCode)
   const selectedImmediateRegion = data.brazilImmediateRegions.find(
     (region) => region.code === immediateRegionCode)
@@ -428,6 +430,7 @@ function App() {
           {activeThemeId === 'gender-equality' && <GenderPanel values={themeGlobalSnapshot} />}
           {activeThemeId === 'poverty-inequality' && <PovertyPanel values={themeGlobalSnapshot} />}
           {activeThemeId === 'climate-vulnerability' && <ClimatePanel values={themeGlobalSnapshot} />}
+          <EducationWorkPanel themeId={activeThemeId} />
           <GlobalInsightPanel indicator={indicator} continent={continent} average={continentAverage} coverage={countryLatest.length} leadingValue={worldRanking[0]} />
           {activeThemeId === 'forced-migration' && <MigrationFlowsPanel flows={migrationFlows} error={migrationFlowsError} />}
 
@@ -435,12 +438,12 @@ function App() {
             <MapPanel title="Mapa mundial" subtitle={`${indicator.name} • clique para destacar um país e escolhê-lo no fim da página`} geography={worldGeo} valueByCode={worldValueByCode} codeKeys={['ADM0_A3', 'ISO_A3', 'SOV_A3', 'gu_a3']} onSelect={(code) => { setCountryCode(code); setCountryQuery('') }} selectedCode={countryCode} formatValue={(value) => formatValue(value, indicator.unit)} direction={indicator.direction} projectionKind="peters" />
             <article className="panel">
               <div className="panel__header"><div><h3>{continent === 'Todos' ? 'Panorama mundial' : `Panorama: ${continent}`}</h3><p>{indicator.description}</p>{continentAverage && <p className="context-metric">Média do recorte, ponderada pela população: {formatValue(continentAverage.value, indicator.unit)} ({continentAverage.coverage} países)</p>}</div><strong className="badge">{indicator.latestYear}</strong></div>
-              <div className="world-summary"><strong>{countryLatest.length}</strong><span>países com último dado disponível</span><p>Use o mapa, o ranking e a comparação continental para observar diferenças no recorte antes de escolher um país.</p></div>
+              <div className="world-summary"><strong>{countryLatest.length}</strong><span>países com último dado disponível</span><p>Use o mapa, o ranking e as comparações disponíveis para observar diferenças antes de escolher um país.</p></div>
               <p className="meta">Fonte: <a href={activeSource?.url}>{activeSource?.name}</a> • Atualização conhecida: {activeSource?.lastUpdated}</p>
             </article>
           </section>
           <RankingPanel title={continent === 'Todos' ? 'Ranking global' : `Ranking: ${continent}`} description="10 países com os maiores valores para o indicador e recorte selecionados." ranking={worldRanking} unit={indicator.unit} direction={indicator.direction} color="#2563eb" tooltipFormatter={tooltipFormatter} />
-          <TerritoryComparisonPanel
+          {supportsPopulationAverage && <TerritoryComparisonPanel
             title="Comparar continentes"
             description="Média ponderada pela população, usando apenas países com dados do indicador e população no mesmo ano."
             territories={continentTerritories}
@@ -453,7 +456,7 @@ function App() {
             onAdd={(code) => setComparisonContinentCodes((current) => addToComparison(current, code))}
             onRemove={(code) => setComparisonContinentCodes((current) => removeFromComparison(current, code))}
             tooltipFormatter={tooltipFormatter}
-          />
+          />}
           <TerritoryComparisonPanel
             sectionId="comparar-paises"
             title="Comparar países"
@@ -647,10 +650,12 @@ function GlobalInsightPanel({ indicator, continent, average, coverage, leadingVa
     'poverty-inequality': 'Pobreza e desigualdade são complementares: redução de uma não implica redução automática da outra.',
     'climate-vulnerability': 'Risco e prontidão apontam dimensões diferentes da adaptação climática; leia os dois componentes juntos.',
     'forced-migration': 'Os totais descrevem populações registradas; os corredores de refúgio complementam a leitura de origem e acolhimento.',
+    illiteracy: 'As faixas de 15+ e de 15–24 anos têm denominadores diferentes. Não some as taxas nem confunda alfabetização básica com aprendizagem funcional.',
+    'decent-work': 'Desemprego usa a força de trabalho como denominador. Ausência de contribuição, informalidade e trabalho forçado são fenômenos distintos.',
   }
   return <section className="panel global-insight" aria-live="polite">
     <div className="panel__header"><div><span>Assistente de leitura</span><h3>O que os dados mostram agora</h3></div><strong className="badge">Atualiza com os filtros</strong></div>
-    <p>No recorte <strong>{scope}</strong>, o indicador <strong>{indicator.name}</strong> mede {meaning}. {average ? `A média ponderada pela população é ${formatValue(average.value, indicator.unit)}, com ${average.coverage} países no cálculo.` : 'A média ponderada está sendo calculada.'}</p>
+    <p>No recorte <strong>{scope}</strong>, o indicador <strong>{indicator.name}</strong> mede {meaning}. {indicator.themeId === 'illiteracy' || indicator.themeId === 'decent-work' ? 'Não calculamos uma média mundial ou continental com a população total: seriam necessários os denominadores de idade ou força de trabalho de cada indicador.' : average ? `A média ponderada pela população é ${formatValue(average.value, indicator.unit)}, com ${average.coverage} países no cálculo.` : 'A média ponderada está sendo calculada.'}</p>
     {leadingValue && <p>O maior valor disponível no recorte é de <strong>{leadingValue.geographyName}</strong>: {formatValue(leadingValue.value, indicator.unit)}. Isso não significa automaticamente melhor ou pior sem considerar o sentido do indicador.</p>}
     <p>{themeFocus[indicator.themeId]} Há {coverage} países com último dado disponível; os anos podem variar entre territórios.</p>
     <small>Interpretação automatizada por regras transparentes do painel; não é uma resposta de modelo de IA e não envia seus dados a serviços externos.</small>

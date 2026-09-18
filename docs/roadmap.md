@@ -2,6 +2,9 @@
 
 ## Próxima etapa
 
+- ampliar a cobertura de contribuição previdenciária fora do Brasil e pesquisar dados oficiais de trabalho forçado, preservando a diferença entre prevalência e registros de fiscalização;
+- avaliar posteriormente a comparação entre trabalho e migração, com períodos, territórios e populações compatíveis;
+
 - revisar as 38 entradas ainda pendentes no catálogo nacional e confirmar os endereços importados do diretório da ONU;
 - priorizar séries oficiais de cuidado não remunerado e violência de gênero, com definições compatíveis;
 - ampliar os conectores nacionais além da primeira série de pobreza relativa Eurostat, preservando a origem de cada observação;

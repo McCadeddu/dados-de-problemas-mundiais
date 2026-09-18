@@ -1,4 +1,4 @@
-import { readFile, writeFile, rename } from 'node:fs/promises'
+import { readFile, writeFile } from 'node:fs/promises'
 import type { DashboardData, NationalData, NationalSource } from '../../src/types.js'
 import { parsePoverty, POVERTY_URL, type JsonStat } from './eurostat.js'
 
@@ -30,8 +30,9 @@ try {
   console.warn(`Eurostat indisponível; mantendo coleta de ${poverty.fetchedAt}: ${String(error)}`)
 }
 const result: NationalData = { generatedAt: new Date().toISOString(), registry, poverty }
-await writeFile(`${outputPath}.tmp`, JSON.stringify(result))
-await rename(`${outputPath}.tmp`, outputPath)
+// Match the other static artifacts: Vite can hold the destination open on Windows,
+// preventing replacement by rename. Publication happens only after the build passes.
+await writeFile(outputPath, JSON.stringify(result))
 
 const globalIndicators = dashboard.indicators.filter((indicator) => indicator.geographyType === 'country')
 const coverage = dashboard.countries.map((country) => ({

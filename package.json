@@ -4,7 +4,8 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "data:build": "tsx scripts/data/build.ts && npm run data:national",
+    "data:build": "tsx scripts/data/build.ts && npm run data:education-work && npm run data:national",
+    "data:education-work": "tsx scripts/data/build-education-work.ts",
     "data:national": "tsx scripts/data/build-national.ts",
     "dev": "vite",
     "prebuild": "npm run data:build",

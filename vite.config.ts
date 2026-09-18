@@ -14,6 +14,8 @@ export default defineConfig({
         pobreza: path.resolve(__dirname, 'pobreza/index.html'),
         clima: path.resolve(__dirname, 'clima/index.html'),
         migracao: path.resolve(__dirname, 'migracao/index.html'),
+        analfabetismo: path.resolve(__dirname, 'analfabetismo/index.html'),
+        trabalho: path.resolve(__dirname, 'trabalho/index.html'),
       },
       output: {
         manualChunks: (id) => {

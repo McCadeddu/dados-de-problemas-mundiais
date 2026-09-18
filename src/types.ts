@@ -4,6 +4,8 @@ export type ThemeId =
   | 'poverty-inequality'
   | 'climate-vulnerability'
   | 'forced-migration'
+  | 'illiteracy'
+  | 'decent-work'
 
 export type NationalSource = {
   countryCode: string
