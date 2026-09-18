@@ -20,6 +20,7 @@ import {
   getLatestByIndicator,
   getMetricSummary,
   getPopulationWeightedAverage,
+  getRanking,
   getSafeThemeId,
   getSeriesForGeography,
   getTopRanked,
@@ -276,10 +277,10 @@ function App() {
   const filteredCountries = continent === 'Todos'
     ? data.countries
     : data.countries.filter((country) => country.continent === continent)
-  const worldRanking = activeRanking.filter((item) => {
+  const worldRanking = (getRanking(data, indicator.id)?.items ?? []).filter((item) => {
     const country = data.countries.find((candidate) => candidate.code === item.geographyCode)
     return continent === 'Todos' || country?.continent === continent
-  })
+  }).slice(0, 10)
   const continentValues = countryLatest.filter((item) => {
     const country = data.countries.find((candidate) => candidate.code === item.geographyCode)
     return continent === 'Todos' || country?.continent === continent
