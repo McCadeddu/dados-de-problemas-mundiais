@@ -50,7 +50,7 @@ function App() {
   const [loadError, setLoadError] = useState<string | null>(null)
   const [loadAttempt, setLoadAttempt] = useState(0)
   const [seriesLoadError, setSeriesLoadError] = useState<string | null>(null)
-  const [adaptCsvPreview, setAdaptCsvPreview] = useState<{ name: string; headers: string[]; rows: number; sample: string[] } | null>(null)
+  const [adaptCsvPreview, setAdaptCsvPreview] = useState<{ name: string; headers: string[]; rows: number; sample: string[]; missing: string[] } | null>(null)
   const [worldGeo, setWorldGeo] = useState<GeoJson | null>(null)
   const [brazilGeo, setBrazilGeo] = useState<GeoJson | null>(null)
   const [brazilMapError, setBrazilMapError] = useState<string | null>(null)
@@ -141,11 +141,19 @@ function App() {
     if (!file) return
     const lines = (await file.text()).split(/\r?\n/).filter(Boolean)
     const separator = lines[0]?.includes(';') ? ';' : ','
+    const headers = (lines[0] ?? '').split(separator).map((value) => value.trim())
+    const normalizedHeaders = headers.map((header) => header.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, ''))
+    const missing = [
+      ['UF ou estado', /\b(uf|estado|sigla_uf)\b/],
+      ['município ou código IBGE', /(municip|codigo.*ibge|cod.*mun)/],
+      ['valor do indicador', /(valor|indice|risco|vulnerab|exposicao)/],
+    ].flatMap(([label, pattern]) => pattern instanceof RegExp && normalizedHeaders.some((header) => pattern.test(header)) ? [] : [label])
     setAdaptCsvPreview({
       name: file.name,
-      headers: (lines[0] ?? '').split(separator).map((value) => value.trim()),
+      headers,
       rows: Math.max(lines.length - 1, 0),
       sample: lines.slice(1, 4),
+      missing,
     })
   }
 
@@ -341,7 +349,7 @@ function App() {
           {data.themes.map((theme) => <button key={theme.id} className={activeThemeId === theme.id ? 'is-active' : ''} onClick={() => { setThemeId(theme.id); setSelectedIndicatorId(''); setView('world') }}><strong>{theme.name}</strong><span>{theme.description}</span></button>)}
         </div>
       </section>
-      {activeThemeId === 'climate-vulnerability' && <section className="panel source-link-panel"><div><h3>Dados climáticos complementares</h3><p>Baixe um CSV oficial do AdaptaBrasil MCTI para análise. A integração por estado será feita após validar colunas, cenário e metodologia do arquivo.</p></div><div><a className="advance-button" href="https://www.gov.br/mcti/pt-br/acesso-a-informacao/dados-abertos/dados-abertos/arquivos/adapta-brasil/adaptabrasil" target="_blank" rel="noreferrer">Baixar CSV do AdaptaBrasil</a><label className="csv-upload">Carregar CSV para pré-visualizar<input type="file" accept=".csv,text/csv" onChange={(event) => void previewAdaptCsv(event.target.files?.[0])} /></label></div>{adaptCsvPreview && <div className="csv-preview"><strong>{adaptCsvPreview.name}</strong><p>{adaptCsvPreview.rows.toLocaleString('pt-BR')} linhas de dados. Colunas: {adaptCsvPreview.headers.join(' | ')}</p><code>{adaptCsvPreview.sample.join('\n')}</code></div>}</section>}
+      {activeThemeId === 'climate-vulnerability' && <section className="panel source-link-panel"><div><h3>Dados climáticos complementares</h3><p>Baixe um CSV oficial do AdaptaBrasil MCTI para análise. A integração por estado será feita após validar colunas, cenário e metodologia do arquivo.</p></div><div><a className="advance-button" href="https://www.gov.br/mcti/pt-br/acesso-a-informacao/dados-abertos/dados-abertos/arquivos/adapta-brasil/adaptabrasil" target="_blank" rel="noreferrer">Baixar CSV do AdaptaBrasil</a><label className="csv-upload">Carregar CSV para pré-visualizar<input type="file" accept=".csv,text/csv" onChange={(event) => void previewAdaptCsv(event.target.files?.[0])} /></label></div>{adaptCsvPreview && <div className="csv-preview"><strong>{adaptCsvPreview.name}</strong><p>{adaptCsvPreview.rows.toLocaleString('pt-BR')} linhas de dados. Colunas: {adaptCsvPreview.headers.join(' | ')}</p><p>{adaptCsvPreview.missing.length ? `Atenção: não identifiquei ${adaptCsvPreview.missing.join(', ')}.` : 'Estrutura territorial básica identificada para avaliação.'}</p><code>{adaptCsvPreview.sample.join('\n')}</code></div>}</section>}
 
       <nav className="view-switcher" aria-label="Escala de análise">
         <button className={effectiveView === 'world' ? 'is-active' : ''} onClick={() => setView('world')}>
