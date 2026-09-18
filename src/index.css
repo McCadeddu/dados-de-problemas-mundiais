@@ -868,6 +868,9 @@ select {
 }
 
 @media (max-width: 560px) {
+  .regional-snapshot__grid {
+    grid-template-columns: 1fr;
+  }
   .shell {
     width: min(100% - 1rem, 1400px);
     padding-top: 0.75rem;
