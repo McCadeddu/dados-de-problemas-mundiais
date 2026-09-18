@@ -52,7 +52,24 @@ describe('dashboard helpers', () => {
   })
 
   it('weights a geographic average by population from the same year', () => {
-    expect(getPopulationWeightedAverage(fixture, fixture.latest)).toEqual({ value: 19, coverage: 2 })
+    expect(getPopulationWeightedAverage(fixture, fixture.latest)).toEqual({ value: 19, coverage: 2, firstYear: 2024, lastYear: 2024 })
+  })
+
+  it('reports only the years of countries included in the calculation', () => {
+    const data = { ...fixture, countryPopulation: [
+      { geographyCode: 'BRA', points: [{ year: 2020, value: 100 }] },
+      { geographyCode: 'ARG', points: [{ year: 2024, value: 900 }] },
+    ] }
+    const values = [
+      { ...fixture.latest[0], year: 2020 },
+      fixture.latest[1],
+      { ...fixture.latest[0], geographyCode: 'XXX', year: 2025 },
+    ]
+    expect(getPopulationWeightedAverage(data, values)).toEqual({ value: 19, coverage: 2, firstYear: 2020, lastYear: 2024 })
+  })
+
+  it('returns no estimate when no matching population is available', () => {
+    expect(getPopulationWeightedAverage({ ...fixture, countryPopulation: [] }, fixture.latest)).toBeNull()
   })
 
   it('formats percentages', () => {

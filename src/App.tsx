@@ -202,7 +202,7 @@ function App() {
     const latest = getLatestByIndicator(data, item.id, 'country')
     const average = getPopulationWeightedAverage(data, latest)
     if (!average || latest.length === 0) return []
-    return [{ indicator: item, value: average.value, year: Math.max(...latest.map((entry) => entry.year)), coverage: average.coverage }]
+    return [{ indicator: item, value: average.value, year: average.firstYear === average.lastYear ? String(average.lastYear) : String(average.firstYear) + '–' + String(average.lastYear), coverage: average.coverage }]
   }) : []
 
   const worldValueByCode = new Map(countryLatest.map((item) => [
@@ -596,7 +596,7 @@ function MigrationFlowsPanel({ flows, error }: { flows: MigrationFlow[] | null; 
   </section>
 }
 
-type GlobalThemeValue = { indicator: DashboardData['indicators'][number]; value: number; year: number; coverage: number }
+type GlobalThemeValue = { indicator: DashboardData['indicators'][number]; value: number; year: string; coverage: number }
 
 function HungerWaterPanel({ values }: { values: GlobalThemeValue[] }) {
   return <section className="panel hunger-water-panel">

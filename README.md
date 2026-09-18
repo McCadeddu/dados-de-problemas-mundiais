@@ -98,6 +98,16 @@ npm run dev
 
 ## Scripts
 
+A coleta automática roda diariamente às 09:00 UTC (06:00 em Brasília). Após
+uma execução bem-sucedida de `Refresh Data` na branch `main`, o workflow
+`Deploy GitHub Pages` publica os arquivos atualizados. A coleta e a publicação
+validam o projeto antes de prosseguir. Falhas de coleta não acionam publicação.
+
+Os resumos mundiais mostram o intervalo dos anos efetivamente usados na média;
+os países podem ter anos de referência diferentes. A ponderação utiliza a
+população do mesmo ano de cada observação e não equivale a uma estatística
+mundial oficial publicada pela fonte.
+
 ```bash
 npm run data:build
 npm run dev

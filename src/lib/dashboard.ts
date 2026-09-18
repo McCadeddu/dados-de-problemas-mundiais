@@ -39,14 +39,21 @@ export function getPopulationWeightedAverage(data: DashboardData, values: Latest
   let weightedTotal = 0
   let populationTotal = 0
   let coverage = 0
+  const years: number[] = []
   for (const value of values) {
     const population = populationByCountry.get(value.geographyCode)?.find((point) => point.year === value.year)?.value
-    if (!population || !Number.isFinite(population)) continue
+    if (!population || population < 0 || !Number.isFinite(population) || !Number.isFinite(value.value)) continue
     weightedTotal += value.value * population
     populationTotal += population
     coverage += 1
+    years.push(value.year)
   }
-  return populationTotal > 0 ? { value: weightedTotal / populationTotal, coverage } : null
+  return populationTotal > 0 ? {
+    value: weightedTotal / populationTotal,
+    coverage,
+    firstYear: Math.min(...years),
+    lastYear: Math.max(...years),
+  } : null
 }
 
 export function getRanking(data: DashboardData, indicatorId: string): Ranking | undefined {
