@@ -452,6 +452,7 @@ function App() {
             <label>Indicador estadual<select value={brazilIndicator.id} onChange={(event) => setStateIndicatorId(event.target.value)}>{stateThemeIndicators.map((item) => <option key={item.id} value={item.id}>{item.name}</option>)}</select></label>
             <p className="controls__context">Indicador estadual selecionado: <strong>{brazilIndicator.name}</strong>. Novas tabelas do IBGE podem ser adicionadas pelo conector de dados.</p>
           </section>
+          {brazilIndicator.id === 'sismigra-state-active-immigrants' && <section className="panel migration-context"><strong>Como interpretar</strong><p>Este mapa soma registros ativos de imigrantes por UF no SISMIGRA/Polícia Federal. Ele não estima todos os migrantes residentes, refugiados, solicitantes de asilo ou pessoas deslocadas à força.</p></section>}
           <section className="content-grid content-grid--states">
             {brazilGeo
               ? <MapPanel title="Mapa dos estados brasileiros" subtitle={`${brazilIndicator.name} • clique para selecionar uma UF`} geography={brazilGeo} valueByCode={brazilValueByCode} codeKeys={['sidra_code', 'iso_3166_2', 'postal']} onSelect={setStateCode} selectedCode={stateCode} formatValue={(value) => formatValue(value, brazilIndicator.unit)} direction={brazilIndicator.direction} />
