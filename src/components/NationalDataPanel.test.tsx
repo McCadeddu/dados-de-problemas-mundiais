@@ -29,6 +29,12 @@ describe('NationalDataPanel', () => {
     expect(screen.queryByText('Risco de pobreza relativa — EU-SILC')).not.toBeInTheDocument()
     expect(screen.getByText(/Ainda não há uma série nacional complementar/)).toBeInTheDocument()
   })
+  it('shows the next integration step for a priority country', async () => {
+    const priorityPayload = { ...payload, registry: [{ ...payload.registry[0], countryCode: 'MEX', countryName: 'Mexico', institution: 'INEGI', status: 'documented' as const }] }
+    vi.stubGlobal('fetch', vi.fn().mockResolvedValue({ ok: true, json: async () => priorityPayload }))
+    render(<NationalDataPanel countryCode="MEX" themeId="decent-work" dashboard={dashboard} />)
+    expect(await screen.findByText(/Selecionar uma série INEGI/)).toBeInTheDocument()
+  })
   it('recovers from a loading failure on retry', async () => {
     const fetchMock = vi.fn().mockRejectedValueOnce(new Error('offline'))
       .mockResolvedValueOnce({ ok: true, json: async () => payload })

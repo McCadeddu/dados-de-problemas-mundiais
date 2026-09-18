@@ -9,6 +9,15 @@ const statusLabels = {
   pending: 'Instituição ainda em pesquisa',
 }
 
+const priorityNextSteps: Record<string, string> = {
+  MEX: 'Selecionar uma série INEGI e validar token, unidade e recorte estadual.',
+  PRT: 'Avaliar ligação direta ao INE para trabalho e educação; a pobreza relativa já está integrada via EU-SILC.',
+  ITA: 'Validar o serviço SDMX do Istat antes de adicionar novas séries nacionais.',
+  AUS: 'Escolher um conjunto da Data API da ABS e validar licença e denominador.',
+  ZAF: 'Priorizar uma pesquisa domiciliar da Statistics South Africa compatível com trabalho e migração.',
+  IND: 'Identificar uma série oficial estável no MoSPI/eSankhyiki antes de automatizar a coleta.',
+}
+
 export function NationalDataPanel({ countryCode, themeId, dashboard }: {
   countryCode: string; themeId: string; dashboard: DashboardData
 }) {
@@ -46,6 +55,7 @@ export function NationalDataPanel({ countryCode, themeId, dashboard }: {
           <p>{statusLabels[source?.status ?? 'pending']}</p>
           {source?.url && <a href={source.url} target="_blank" rel="noreferrer">Abrir endereço da instituição</a>}
           {source && <p className="meta"><a href={source.evidenceUrl} target="_blank" rel="noreferrer">Referência da pesquisa</a> · Consulta em {source.checkedAt.split('-').reverse().join('/')}</p>}
+          {priorityNextSteps[countryCode] && <p className="national-data__next-step"><strong>Próximo passo do lote prioritário:</strong> {priorityNextSteps[countryCode]}</p>}
           <p>Uma instituição localizada não significa que todos os seus dados estejam integrados. A disponibilidade e as condições de reutilização são verificadas por conjunto.</p>
         </div>
         {latest && data && series ? <article className="national-data__indicator">
