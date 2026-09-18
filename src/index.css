@@ -418,9 +418,12 @@ select {
   align-items: end;
 }
 
-.controls--world,
 .controls--country {
   grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.controls--world {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
 }
 
 .controls--regions {
@@ -501,6 +504,44 @@ select {
   flex-wrap: wrap;
   gap: 0.7rem;
   align-items: center;
+}
+
+.world-next-step__actions label {
+  display: grid;
+  gap: 0.3rem;
+  color: #b9c9db;
+  font-size: 0.84rem;
+}
+
+.world-next-step__actions select {
+  min-width: 13rem;
+  padding: 0.6rem 0.7rem;
+  border: 1px solid #475569;
+  border-radius: 10px;
+  background: #0f1e31;
+  color: #f8fafc;
+}
+
+.world-summary {
+  display: grid;
+  align-content: center;
+  min-height: 300px;
+}
+
+.world-summary strong {
+  color: #67e8f9;
+  font-size: clamp(3rem, 7vw, 5rem);
+  line-height: 1;
+}
+
+.world-summary span {
+  color: #dbeafe;
+  font-size: 1.1rem;
+}
+
+.world-summary p {
+  max-width: 42ch;
+  color: #a8b8cc;
 }
 
 .migration-flows {

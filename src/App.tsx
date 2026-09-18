@@ -197,24 +197,12 @@ function App() {
   const brazilLatest = data && brazilIndicator
     ? getLatestByIndicator(data, brazilIndicator.id, 'brazil-state')
       : []
-  const hungerWaterSnapshot = data && activeThemeId === 'hunger-water'
-    ? themeIndicators.flatMap((item) => {
-      const latest = getLatestByIndicator(data, item.id, 'country').find((entry) => entry.geographyCode === countryCode)
-      return latest ? [{ indicator: item, value: latest.value, year: latest.year }] : []
-    })
-    : []
-  const genderSnapshot = data && activeThemeId === 'gender-equality'
-    ? themeIndicators.flatMap((item) => {
-      const latest = getLatestByIndicator(data, item.id, 'country').find((entry) => entry.geographyCode === countryCode)
-      return latest ? [{ indicator: item, value: latest.value, year: latest.year }] : []
-    })
-    : []
-  const povertySnapshot = data && activeThemeId === 'poverty-inequality'
-    ? themeIndicators.flatMap((item) => {
-      const latest = getLatestByIndicator(data, item.id, 'country').find((entry) => entry.geographyCode === countryCode)
-      return latest ? [{ indicator: item, value: latest.value, year: latest.year }] : []
-    })
-    : []
+  const themeGlobalSnapshot = data ? themeIndicators.flatMap((item) => {
+    const latest = getLatestByIndicator(data, item.id, 'country')
+    const average = getPopulationWeightedAverage(data, latest)
+    if (!average || latest.length === 0) return []
+    return [{ indicator: item, value: average.value, year: Math.max(...latest.map((entry) => entry.year)), coverage: average.coverage }]
+  }) : []
 
   const worldValueByCode = new Map(countryLatest.map((item) => [
     item.geographyCode,
@@ -428,22 +416,21 @@ function App() {
           <section className="panel controls controls--world">
             <label>Indicador<select value={indicatorId} onChange={(event) => setSelectedIndicatorId(event.target.value)}>{themeIndicators.map((item) => <option key={item.id} value={item.id}>{item.name}</option>)}</select></label>
             <label>Continente<select value={continent} onChange={(event) => { const nextContinent = event.target.value; const nextCountries = nextContinent === 'Todos' ? data.countries : data.countries.filter((country) => country.continent === nextContinent); setContinent(nextContinent); setCountryCode(nextCountries[0]?.code ?? ''); setComparisonCountryCodes(nextCountries.slice(0, 3).map((country) => country.code)) }}><option value="Todos">Mundo inteiro</option>{data.continents.map((item) => <option key={item} value={item}>{item}</option>)}</select></label>
-            <label>País<select value={countryCode} onChange={(event) => setCountryCode(event.target.value)}>{filteredCountries.map((country) => <option key={country.code} value={country.code}>{country.name}</option>)}</select></label>
           </section>
-          {activeThemeId === 'hunger-water' && <HungerWaterPanel countryName={countryName} values={hungerWaterSnapshot} />}
-          {activeThemeId === 'gender-equality' && <GenderPanel countryName={countryName} values={genderSnapshot} />}
-          {activeThemeId === 'poverty-inequality' && <PovertyPanel countryName={countryName} values={povertySnapshot} />}
+          {activeThemeId === 'hunger-water' && <HungerWaterPanel values={themeGlobalSnapshot} />}
+          {activeThemeId === 'gender-equality' && <GenderPanel values={themeGlobalSnapshot} />}
+          {activeThemeId === 'poverty-inequality' && <PovertyPanel values={themeGlobalSnapshot} />}
           <section className="panel world-next-step" aria-label="Próximo passo da análise mundial">
-            <div><span>Próximo passo</span><h3>Como você quer continuar?</h3><p>Abra um país para analisar seus dados ou confronte países no mesmo indicador.</p></div>
-            <div className="world-next-step__actions"><button className="advance-button" onClick={() => setView('country')}>Analisar {countryName}</button><button className="text-button" onClick={() => document.getElementById('comparar-paises')?.scrollIntoView({ behavior: 'smooth', block: 'start' })}>Comparar países</button></div>
+            <div><span>Próximo passo</span><h3>Escolha um país para detalhar</h3><p>A análise nacional abre somente depois da leitura mundial. Você também pode comparar países no mesmo indicador.</p></div>
+            <div className="world-next-step__actions"><label>País<select value={countryCode} onChange={(event) => setCountryCode(event.target.value)}>{filteredCountries.map((country) => <option key={country.code} value={country.code}>{country.name}</option>)}</select></label><button className="advance-button" onClick={() => setView('country')}>Abrir {countryName}</button><button className="text-button" onClick={() => document.getElementById('comparar-paises')?.scrollIntoView({ behavior: 'smooth', block: 'start' })}>Comparar países</button></div>
           </section>
           {activeThemeId === 'forced-migration' && <MigrationFlowsPanel flows={migrationFlows} error={migrationFlowsError} />}
 
           <section className="content-grid content-grid--world">
-            <MapPanel title="Mapa mundial" subtitle={`${indicator.name} • clique para abrir a análise de um país`} geography={worldGeo} valueByCode={worldValueByCode} codeKeys={['ADM0_A3', 'ISO_A3', 'SOV_A3', 'gu_a3']} onSelect={(code) => { setCountryCode(code); setContinent(data.countries.find((country) => country.code === code)?.continent ?? 'Todos'); setView('country') }} selectedCode={countryCode} formatValue={(value) => formatValue(value, indicator.unit)} direction={indicator.direction} projectionKind="peters" />
+            <MapPanel title="Mapa mundial" subtitle={`${indicator.name} • clique em um país para abrir a análise nacional`} geography={worldGeo} valueByCode={worldValueByCode} codeKeys={['ADM0_A3', 'ISO_A3', 'SOV_A3', 'gu_a3']} onSelect={(code) => { setCountryCode(code); setContinent(data.countries.find((country) => country.code === code)?.continent ?? 'Todos'); setView('country') }} formatValue={(value) => formatValue(value, indicator.unit)} direction={indicator.direction} projectionKind="peters" />
             <article className="panel">
-              <div className="panel__header"><div><h3>{countryName || continent}</h3><p>{indicator.description}</p>{continentAverage && <p className="context-metric">Média do recorte, ponderada pela população: {formatValue(continentAverage.value, indicator.unit)} ({continentAverage.coverage} países)</p>}</div><strong className="badge">{indicator.latestYear}</strong></div>
-              <div className="chart"><ResponsiveContainer width="100%" height={300}><LineChart data={selectedCountrySeries?.points ?? []}><CartesianGrid stroke="#334155" strokeDasharray="4 4" /><XAxis dataKey="year" stroke="#a8b8cc" /><YAxis stroke="#a8b8cc" /><Tooltip formatter={tooltipFormatter(indicator.unit)} /><Line type="monotone" dataKey="value" stroke="#2dd4bf" strokeWidth={3} dot={false} /></LineChart></ResponsiveContainer></div>
+              <div className="panel__header"><div><h3>{continent === 'Todos' ? 'Panorama mundial' : `Panorama: ${continent}`}</h3><p>{indicator.description}</p>{continentAverage && <p className="context-metric">Média do recorte, ponderada pela população: {formatValue(continentAverage.value, indicator.unit)} ({continentAverage.coverage} países)</p>}</div><strong className="badge">{indicator.latestYear}</strong></div>
+              <div className="world-summary"><strong>{countryLatest.length}</strong><span>países com último dado disponível</span><p>Use o mapa, o ranking e a comparação continental para observar diferenças no recorte antes de escolher um país.</p></div>
               <p className="meta">Fonte: <a href={activeSource?.url}>{activeSource?.name}</a> • Atualização conhecida: {activeSource?.lastUpdated}</p>
             </article>
           </section>
@@ -600,24 +587,26 @@ function MigrationFlowsPanel({ flows, error }: { flows: MigrationFlow[] | null; 
   </section>
 }
 
-function HungerWaterPanel({ countryName, values }: { countryName: string; values: Array<{ indicator: DashboardData['indicators'][number]; value: number; year: number }> }) {
+type GlobalThemeValue = { indicator: DashboardData['indicators'][number]; value: number; year: number; coverage: number }
+
+function HungerWaterPanel({ values }: { values: GlobalThemeValue[] }) {
   return <section className="panel hunger-water-panel">
-    <div className="panel__header"><div><h3>Alimento e água em {countryName}</h3><p>Leitura conjunta de insegurança alimentar e acesso à água para o país selecionado.</p></div><strong className="badge">Visão temática</strong></div>
-    {values.length > 0 ? <div className="hunger-water-panel__grid">{values.map(({ indicator, value, year }) => <article key={indicator.id}><span>{indicator.name}</span><strong>{formatValue(value, indicator.unit)}</strong><small>{year} · {indicator.direction === 'higher-worse' ? 'maior pressão' : 'maior acesso'}</small></article>)}</div> : <p className="comparison-warning">Não há valores recentes suficientes para compor a leitura conjunta de {countryName}.</p>}
+    <div className="panel__header"><div><h3>Alimento e água no mundo</h3><p>Médias ponderadas pela população nos países com dados disponíveis; não representam a situação de um país específico.</p></div><strong className="badge">Visão global</strong></div>
+    {values.length > 0 ? <div className="hunger-water-panel__grid">{values.map(({ indicator, value, year, coverage }) => <article key={indicator.id}><span>{indicator.name}</span><strong>{formatValue(value, indicator.unit)}</strong><small>{year} · {coverage} países · {indicator.direction === 'higher-worse' ? 'maior pressão' : 'maior acesso'}</small></article>)}</div> : <p className="comparison-warning">Carregando população para calcular as médias mundiais.</p>}
   </section>
 }
 
-function GenderPanel({ countryName, values }: { countryName: string; values: Array<{ indicator: DashboardData['indicators'][number]; value: number; year: number }> }) {
+function GenderPanel({ values }: { values: GlobalThemeValue[] }) {
   return <section className="panel gender-panel">
-    <div className="panel__header"><div><h3>Igualdade de gênero em {countryName}</h3><p>Representação, trabalho, violência e cuidado não remunerado em uma leitura única, sem combinar unidades distintas.</p></div><strong className="badge">Visão temática</strong></div>
-    {values.length > 0 ? <div className="gender-panel__grid">{values.map(({ indicator, value, year }) => <article key={indicator.id} className={indicator.direction === 'higher-worse' ? 'is-pressure' : 'is-access'}><span>{indicator.name}</span><strong>{formatValue(value, indicator.unit)}</strong><small>{year} · {indicator.direction === 'higher-worse' ? 'lacuna ou violência' : 'participação ou representação'}</small></article>)}</div> : <p className="comparison-warning">Não há valores recentes suficientes para compor a leitura conjunta de {countryName}.</p>}
+    <div className="panel__header"><div><h3>Igualdade de gênero no mundo</h3><p>Médias ponderadas pela população para contextualizar representação, trabalho, violência e cuidado, sem combinar unidades distintas.</p></div><strong className="badge">Visão global</strong></div>
+    {values.length > 0 ? <div className="gender-panel__grid">{values.map(({ indicator, value, year, coverage }) => <article key={indicator.id} className={indicator.direction === 'higher-worse' ? 'is-pressure' : 'is-access'}><span>{indicator.name}</span><strong>{formatValue(value, indicator.unit)}</strong><small>{year} · {coverage} países · {indicator.direction === 'higher-worse' ? 'lacuna ou violência' : 'participação ou representação'}</small></article>)}</div> : <p className="comparison-warning">Carregando população para calcular as médias mundiais.</p>}
   </section>
 }
 
-function PovertyPanel({ countryName, values }: { countryName: string; values: Array<{ indicator: DashboardData['indicators'][number]; value: number; year: number }> }) {
+function PovertyPanel({ values }: { values: GlobalThemeValue[] }) {
   return <section className="panel poverty-panel">
-    <div className="panel__header"><div><h3>Pobreza e desigualdade em {countryName}</h3><p>Uma medida de privação monetária e uma medida de concentração de renda: elas devem ser lidas em conjunto, não somadas.</p></div><strong className="badge">Visão temática</strong></div>
-    {values.length > 0 ? <div className="poverty-panel__grid">{values.map(({ indicator, value, year }) => <article key={indicator.id}><span>{indicator.name}</span><strong>{formatValue(value, indicator.unit)}</strong><small>{year} · {indicator.id === 'wb-gini' ? 'maior concentração de renda' : 'população abaixo da linha internacional'}</small></article>)}</div> : <p className="comparison-warning">Não há valores recentes suficientes para compor a leitura conjunta de {countryName}.</p>}
+    <div className="panel__header"><div><h3>Pobreza e desigualdade no mundo</h3><p>Médias ponderadas pela população para duas dimensões complementares: privação monetária e concentração de renda.</p></div><strong className="badge">Visão global</strong></div>
+    {values.length > 0 ? <div className="poverty-panel__grid">{values.map(({ indicator, value, year, coverage }) => <article key={indicator.id}><span>{indicator.name}</span><strong>{formatValue(value, indicator.unit)}</strong><small>{year} · {coverage} países · {indicator.id === 'wb-gini' ? 'maior concentração de renda' : 'população abaixo da linha internacional'}</small></article>)}</div> : <p className="comparison-warning">Carregando população para calcular as médias mundiais.</p>}
   </section>
 }
 
