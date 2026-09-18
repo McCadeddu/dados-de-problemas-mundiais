@@ -18,7 +18,6 @@ import {
   getIndicator,
   getIndicatorsByTheme,
   getLatestByIndicator,
-  getMetricSummary,
   getPopulationWeightedAverage,
   getRanking,
   getSafeThemeId,
@@ -28,13 +27,14 @@ import {
 import type { DashboardData, LatestValue, Series } from './types'
 
 type GeoJson = GeoJSON.FeatureCollection
-type ViewMode = 'world' | 'country' | 'states' | 'regions'
+type ViewMode = 'landing' | 'world' | 'country' | 'states' | 'regions'
 
 const initialParams = new URLSearchParams(window.location.search)
 
 function initialView(): ViewMode {
   const value = initialParams.get('visao')
-  return value === 'country' || value === 'states' || value === 'regions' || value === 'world' ? value : 'world'
+  if (value === 'country' || value === 'states' || value === 'regions' || value === 'world') return value
+  return getThemeIdFromPath(window.location.pathname) ? 'world' : 'landing'
 }
 
 function initialValue(key: string, fallback: string) {
@@ -125,7 +125,10 @@ function App() {
       compararEstados: comparisonStateCodes.join(','),
       compararRegioes: comparisonImmediateRegionCodes.join(','),
     })
-    window.history.replaceState(null, '', `${getThemePath(data ? getSafeThemeId(data, themeId) : 'hunger-water')}?${params.toString()}`)
+    const path = view === 'landing'
+      ? import.meta.env.BASE_URL
+      : `${getThemePath(data ? getSafeThemeId(data, themeId) : 'hunger-water')}?${params.toString()}`
+    window.history.replaceState(null, '', path)
   }, [activeThemeId, comparisonContinentCodes, comparisonCountryCodes, comparisonImmediateRegionCodes, comparisonStateCodes, continent, countryCode, data, immediateIndicatorId, immediateRegionCode, selectedIndicatorId, stateCode, stateIndicatorId, themeId, view])
 
   const copyShareLink = async () => {
@@ -249,7 +252,26 @@ function App() {
     return <main className="shell"><p>Carregando painel e séries...</p></main>
   }
 
-  const summary = getMetricSummary(data)
+  if (view === 'landing') {
+    return (
+      <main className="shell landing-shell">
+        <section className="landing" aria-labelledby="landing-title">
+          <span className="eyebrow">Mundialidade</span>
+          <h1 id="landing-title">Qual problemática você quer analisar?</h1>
+          <p>Escolha um tema para abrir seu panorama mundial.</p>
+          <div className="landing__themes" aria-label="Problemáticas disponíveis">
+            {data.themes.map((theme) => (
+              <button key={theme.id} onClick={() => { setThemeId(theme.id); setSelectedIndicatorId(''); setView('world') }}>
+                <strong>{theme.name}</strong>
+                <span>{theme.description}</span>
+              </button>
+            ))}
+          </div>
+        </section>
+      </main>
+    )
+  }
+
   const worldPopulation = data.worldPopulation
     ? Math.round(data.worldPopulation.value + (data.worldPopulation.annualChange * ((clockNow - new Date(data.worldPopulation.referenceYear, 0, 1).getTime()) / (365.25 * 24 * 60 * 60 * 1000))))
     : null
@@ -330,33 +352,16 @@ function App() {
 
   return (
     <main className="shell">
-      <section className="hero">
+      <header className="analysis-header">
         <div>
-          <span className="eyebrow">Dashboard open-source socioambiental</span>
-          <h1>{import.meta.env.VITE_APP_TITLE ?? 'Mundialidade'}</h1>
-          <p className="lead">
-            Indicadores públicos para acompanhar desafios socioambientais em duas escalas:
-            comparações entre países e leitura detalhada dos estados brasileiros.
-          </p>
+          <button className="text-button" onClick={() => setView('landing')}>Escolher outra problemática</button>
+          <p><strong>{data.themes.find((theme) => theme.id === activeThemeId)?.name}</strong> · análise territorial progressiva</p>
+        </div>
+        <div className="analysis-header__actions">
+          {worldPopulation !== null && <span className="population-chip" title="Estimativa calculada a partir da variação anual mais recente do World Bank">População mundial estimada: {worldPopulation.toLocaleString('pt-BR')}</span>}
           <button className="share-button" onClick={() => void copyShareLink()}>{copied ? 'Link copiado' : 'Copiar link desta análise'}</button>
         </div>
-        <div className="hero__grid">
-          <article className="stat"><strong>{summary.countries}</strong><span>países comparáveis</span></article>
-          <article className="stat"><strong>{summary.states}</strong><span>estados brasileiros</span></article>
-          <article className="stat"><strong>{data.indicators.length}</strong><span>indicadores ativos</span></article>
-          <article className="stat"><strong>{new Date(data.generatedAt).toLocaleDateString('pt-BR')}</strong><span>gerado em</span></article>
-          {worldPopulation !== null && <article className="stat stat--population"><strong>{worldPopulation.toLocaleString('pt-BR')}</strong><span>estimativa da população mundial</span><small>Base {data.worldPopulation?.referenceYear} • atualização por segundo</small></article>}
-        </div>
-      </section>
-
-      {worldPopulation !== null && <p className="population-note">Contador estimado a partir da população mundial anual e da variação anual mais recente do World Bank; não representa uma contagem em tempo real.</p>}
-
-      <section className="theme-picker" aria-label="Escolher problemática">
-        <div className="theme-picker__intro"><span>Primeiro passo</span><h2>Escolha a problemática</h2><p>O panorama mundial abre com os indicadores disponíveis para o tema selecionado.</p></div>
-        <div className="theme-picker__options">
-          {data.themes.map((theme) => <button key={theme.id} className={activeThemeId === theme.id ? 'is-active' : ''} onClick={() => { setThemeId(theme.id); setSelectedIndicatorId(''); setView('world') }}><strong>{theme.name}</strong><span>{theme.description}</span></button>)}
-        </div>
-      </section>
+      </header>
       {activeThemeId === 'climate-vulnerability' && <section className="panel source-link-panel"><div><h3>Dados climáticos complementares</h3><p>Como usar: 1. abra o catálogo oficial; 2. baixe um arquivo CSV; 3. selecione-o abaixo; 4. confira as colunas e os avisos; 5. envie o arquivo validado para integração por estado.</p></div><div><a className="advance-button" href="https://www.gov.br/mcti/pt-br/acesso-a-informacao/dados-abertos/dados-abertos/arquivos/adapta-brasil/adaptabrasil" target="_blank" rel="noreferrer">Baixar CSV do AdaptaBrasil</a><label className="csv-upload">Carregar CSV para pré-visualizar<input type="file" accept=".csv,text/csv" onChange={(event) => void previewAdaptCsv(event.target.files?.[0])} /></label></div>{adaptCsvPreview && <div className="csv-preview"><strong>{adaptCsvPreview.name}</strong><p>{adaptCsvPreview.rows.toLocaleString('pt-BR')} linhas de dados. Colunas: {adaptCsvPreview.headers.join(' | ')}</p><p>{adaptCsvPreview.missing.length ? `Atenção: não identifiquei ${adaptCsvPreview.missing.join(', ')}.` : 'Estrutura territorial básica identificada para avaliação.'}</p><code>{adaptCsvPreview.sample.join('\n')}</code></div>}</section>}
 
       <nav className="view-switcher" aria-label="Escala de análise">
@@ -365,12 +370,12 @@ function App() {
           <span>Panorama, continentes e comparação entre países</span>
         </button>
         <button className={view === 'country' ? 'is-active' : ''} onClick={() => setView('country')}>
-          2. País
-          <span>{countryName}: leitura nacional e passagem ao detalhe</span>
+          2. País escolhido
+          <span>{countryName}: dados nacionais e subdivisões disponíveis</span>
         </button>
         <button className={effectiveView === 'states' ? 'is-active' : ''} onClick={() => setView('states')} disabled={stateThemeIndicators.length === 0} title={stateThemeIndicators.length === 0 ? 'Ainda não há indicador estadual para esta problemática.' : undefined}>
-          3. Brasil: estados
-          <span>Comparar unidades federativas equivalentes</span>
+          3. Brasil: estados federados
+          <span>Comparar unidades federativas brasileiras</span>
         </button>
         <button className={view === 'regions' ? 'is-active' : ''} onClick={() => setView('regions')} disabled={regionalThemeIndicators.length === 0} title={regionalThemeIndicators.length === 0 ? 'Ainda não há indicador regional para esta problemática.' : undefined}>
           4. Regiões IBGE
@@ -439,7 +444,7 @@ function App() {
             <label>País<select value={countryCode} onChange={(event) => setCountryCode(event.target.value)}>{filteredCountries.map((country) => <option key={country.code} value={country.code}>{country.name}</option>)}</select></label>
           </section>
           <section className="content-grid content-grid--states">
-            <article className="panel country-callout"><span>Leitura nacional</span><h3>{countryName}</h3><p>{data.countries.find((country) => country.code === countryCode)?.continent ?? 'Continente não identificado'} • {indicator.name}</p><button className="text-button" onClick={() => setView('world')}>Voltar ao panorama mundial</button></article>
+            <article className="panel country-callout"><span>Análise do país</span><h3>{countryName}</h3><p>{data.countries.find((country) => country.code === countryCode)?.continent ?? 'Continente não identificado'} • {indicator.name}</p><button className="text-button" onClick={() => setView('world')}>Voltar ao panorama mundial</button></article>
             <article className="panel">
               <div className="panel__header"><div><h3>Evolução de {countryName}</h3><p>{indicator.description}</p></div><strong className="badge">{indicator.latestYear}</strong></div>
               <div className="chart"><ResponsiveContainer width="100%" height={300}><LineChart data={selectedCountrySeries?.points ?? []}><CartesianGrid stroke="#334155" strokeDasharray="4 4" /><XAxis dataKey="year" stroke="#a8b8cc" /><YAxis stroke="#a8b8cc" /><Tooltip formatter={tooltipFormatter(indicator.unit)} /><Line type="monotone" dataKey="value" stroke="#2dd4bf" strokeWidth={3} dot={false} /></LineChart></ResponsiveContainer></div>
@@ -447,9 +452,9 @@ function App() {
             </article>
           </section>
           {countryCode === 'BRA' ? (
-            <section className="panel country-next-step"><div><span>Próximo nível disponível</span><h3>Subdivisões brasileiras</h3><p>Compare unidades federativas e, quando houver dados compatíveis com a problemática, Regiões Geográficas Imediatas do IBGE.</p></div><div><button className="advance-button" onClick={() => setView('states')} disabled={stateThemeIndicators.length === 0}>Ver estados brasileiros</button><button className="text-button" onClick={() => setView('regions')} disabled={regionalThemeIndicators.length === 0}>Ir para regiões imediatas</button></div></section>
+            <section className="panel country-next-step"><div><span>Próximo nível disponível</span><h3>Subdivisões do Brasil</h3><p>Compare estados federados e, quando houver dados compatíveis com a problemática, Regiões Geográficas Imediatas do IBGE.</p></div><div><button className="advance-button" onClick={() => setView('states')} disabled={stateThemeIndicators.length === 0}>Ver estados federados</button><button className="text-button" onClick={() => setView('regions')} disabled={regionalThemeIndicators.length === 0}>Ver regiões imediatas</button></div></section>
           ) : (
-            <section className="panel country-next-step country-next-step--empty"><div><span>Detalhe territorial</span><h3>Sem série subnacional comparável neste MVP</h3><p>O programa não compara países a estados ou províncias. Novos conectores serão adicionados quando houver fonte pública, licença clara e unidades equivalentes.</p></div></section>
+            <section className="panel country-next-step country-next-step--empty"><div><span>Detalhe territorial</span><h3>Sem subdivisões comparáveis neste país por enquanto</h3><p>O programa só abre estados, províncias ou regiões quando houver fonte pública, licença clara e unidades equivalentes. O Brasil é o primeiro recorte subnacional disponível.</p></div></section>
           )}
         </>
       ) : effectiveView === 'states' ? (
