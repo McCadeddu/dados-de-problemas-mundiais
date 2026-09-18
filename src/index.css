@@ -570,6 +570,46 @@ select {
   font-size: 1.45rem;
 }
 
+.gender-panel {
+  margin-bottom: 1.5rem;
+}
+
+.gender-panel__grid {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 0.75rem;
+}
+
+.gender-panel__grid article {
+  padding: 0.9rem;
+  border: 1px solid rgba(244, 114, 182, 0.28);
+  border-radius: 14px;
+  background: rgba(80, 7, 36, 0.26);
+}
+
+.gender-panel__grid article.is-access {
+  border-color: rgba(45, 212, 191, 0.28);
+  background: rgba(6, 78, 59, 0.25);
+}
+
+.gender-panel__grid span,
+.gender-panel__grid small {
+  display: block;
+  color: #cbd5e1;
+  font-size: 0.8rem;
+}
+
+.gender-panel__grid strong {
+  display: block;
+  margin: 0.45rem 0;
+  color: #f9a8d4;
+  font-size: 1.4rem;
+}
+
+.gender-panel__grid .is-access strong {
+  color: #5eead4;
+}
+
 .country-next-step--empty {
   grid-template-columns: 1fr;
   border-color: rgba(148, 163, 184, 0.3);
@@ -949,6 +989,10 @@ select {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
+  .gender-panel__grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
   .analysis-header {
     align-items: flex-start;
     flex-direction: column;
@@ -1099,6 +1143,10 @@ select {
   }
 
   .hunger-water-panel__grid {
+    grid-template-columns: 1fr;
+  }
+
+  .gender-panel__grid {
     grid-template-columns: 1fr;
   }
 

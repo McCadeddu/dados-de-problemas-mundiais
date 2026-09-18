@@ -203,6 +203,12 @@ function App() {
       return latest ? [{ indicator: item, value: latest.value, year: latest.year }] : []
     })
     : []
+  const genderSnapshot = data && activeThemeId === 'gender-equality'
+    ? themeIndicators.flatMap((item) => {
+      const latest = getLatestByIndicator(data, item.id, 'country').find((entry) => entry.geographyCode === countryCode)
+      return latest ? [{ indicator: item, value: latest.value, year: latest.year }] : []
+    })
+    : []
 
   const worldValueByCode = new Map(countryLatest.map((item) => [
     item.geographyCode,
@@ -419,6 +425,7 @@ function App() {
             <label>País<select value={countryCode} onChange={(event) => setCountryCode(event.target.value)}>{filteredCountries.map((country) => <option key={country.code} value={country.code}>{country.name}</option>)}</select></label>
           </section>
           {activeThemeId === 'hunger-water' && <HungerWaterPanel countryName={countryName} values={hungerWaterSnapshot} />}
+          {activeThemeId === 'gender-equality' && <GenderPanel countryName={countryName} values={genderSnapshot} />}
           <section className="panel world-next-step" aria-label="Próximo passo da análise mundial">
             <div><span>Próximo passo</span><h3>Como você quer continuar?</h3><p>Abra um país para analisar seus dados ou confronte países no mesmo indicador.</p></div>
             <div className="world-next-step__actions"><button className="advance-button" onClick={() => setView('country')}>Analisar {countryName}</button><button className="text-button" onClick={() => document.getElementById('comparar-paises')?.scrollIntoView({ behavior: 'smooth', block: 'start' })}>Comparar países</button></div>
@@ -590,6 +597,13 @@ function HungerWaterPanel({ countryName, values }: { countryName: string; values
   return <section className="panel hunger-water-panel">
     <div className="panel__header"><div><h3>Alimento e água em {countryName}</h3><p>Leitura conjunta de insegurança alimentar e acesso à água para o país selecionado.</p></div><strong className="badge">Visão temática</strong></div>
     {values.length > 0 ? <div className="hunger-water-panel__grid">{values.map(({ indicator, value, year }) => <article key={indicator.id}><span>{indicator.name}</span><strong>{formatValue(value, indicator.unit)}</strong><small>{year} · {indicator.direction === 'higher-worse' ? 'maior pressão' : 'maior acesso'}</small></article>)}</div> : <p className="comparison-warning">Não há valores recentes suficientes para compor a leitura conjunta de {countryName}.</p>}
+  </section>
+}
+
+function GenderPanel({ countryName, values }: { countryName: string; values: Array<{ indicator: DashboardData['indicators'][number]; value: number; year: number }> }) {
+  return <section className="panel gender-panel">
+    <div className="panel__header"><div><h3>Igualdade de gênero em {countryName}</h3><p>Representação, trabalho, violência e cuidado não remunerado em uma leitura única, sem combinar unidades distintas.</p></div><strong className="badge">Visão temática</strong></div>
+    {values.length > 0 ? <div className="gender-panel__grid">{values.map(({ indicator, value, year }) => <article key={indicator.id} className={indicator.direction === 'higher-worse' ? 'is-pressure' : 'is-access'}><span>{indicator.name}</span><strong>{formatValue(value, indicator.unit)}</strong><small>{year} · {indicator.direction === 'higher-worse' ? 'lacuna ou violência' : 'participação ou representação'}</small></article>)}</div> : <p className="comparison-warning">Não há valores recentes suficientes para compor a leitura conjunta de {countryName}.</p>}
   </section>
 }
 
