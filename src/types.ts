@@ -5,6 +5,31 @@ export type ThemeId =
   | 'climate-vulnerability'
   | 'forced-migration'
 
+export type NationalSource = {
+  countryCode: string
+  countryName: string
+  institution: string | null
+  url: string | null
+  evidenceUrl: string
+  status: 'directory-listed' | 'documented' | 'existing-connector' | 'pending'
+  checkedAt: string
+}
+
+export type NationalData = {
+  generatedAt: string
+  registry: NationalSource[]
+  poverty: {
+    fetchedAt: string
+    sourceUpdatedAt: string
+    cached: boolean
+    sourceUrl: string
+    methodologyUrl: string
+    licenseUrl: string
+    requestUrl: string
+    series: Array<{ countryCode: string; points: Array<{ year: number; value: number; status?: string }> }>
+  }
+}
+
 export type GeographyType = 'country' | 'brazil-state' | 'brazil-immediate-region'
 
 export type Theme = {

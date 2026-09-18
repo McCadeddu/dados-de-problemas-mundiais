@@ -2,12 +2,18 @@
 
 ## Próxima etapa
 
+- revisar as 38 entradas ainda pendentes no catálogo nacional e confirmar os endereços importados do diretório da ONU;
+- priorizar séries oficiais de cuidado não remunerado e violência de gênero, com definições compatíveis;
+- ampliar os conectores nacionais além da primeira série de pobreza relativa Eurostat, preservando a origem de cada observação;
+
 - ampliar indicadores estaduais de clima com fontes oficiais e cobertura claramente delimitada, além dos focos ativos de fogo do INPE já incluídos;
 - adicionar dados de violência de gênero somente quando a licença, definição e cobertura por UF forem verificadas;
 - ampliar recortes do IBGE para regiões geográficas imediatas, sem confundir dados municipais e estaduais;
 - aprofundar fluxos de migração forçada por origem, acolhimento e tipo de deslocamento.
 
 ## Produto e qualidade
+
+- entregue em 18/09/2026: catálogo com 217 entradas territoriais, diagnóstico de cobertura e complemento de pobreza relativa para 30 países, com atualização diária e testes;
 
 - criar páginas temáticas compartilháveis para fome e água, gênero, pobreza, clima e migração;
 - carregar séries e visualizações sob demanda para reduzir ainda mais o primeiro acesso;

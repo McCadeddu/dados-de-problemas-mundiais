@@ -29,6 +29,20 @@ Mundialidade é um dashboard web open-source para acompanhar indicadores sociais
 - IBGE SIDRA
 - IBGE Pesquisa de Orçamentos Familiares (POF 2017-2018)
 - Natural Earth
+- Eurostat EU-SILC: complemento nacional de pobreza relativa em países europeus
+
+## Fontes oficiais nacionais
+
+O detalhe de cada país inclui um catálogo de instituições e o status da pesquisa.
+Em pobreza, 30 países têm séries complementares Eurostat de 2015 em diante,
+conforme disponibilidade. A pobreza relativa nacional não substitui a linha
+internacional usada no mapa mundial. Consulte o [levantamento e a operação dos
+conectores nacionais](docs/fontes-nacionais.md).
+
+`npm run data:national` atualiza esse complemento; também é executado pela coleta
+completa. Uma falha no Eurostat mantém a última coleta disponível, com aviso no
+painel. Os dados obedecem às condições de reutilização do Eurostat; a licença do
+código do projeto não substitui as licenças das fontes.
 
 ### Indicadores iniciais de fome e sede
 

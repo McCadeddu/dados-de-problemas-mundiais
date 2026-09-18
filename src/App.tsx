@@ -11,6 +11,7 @@ import {
   YAxis,
 } from 'recharts'
 import { MapPanel } from './components/MapPanel'
+import { NationalDataPanel } from './components/NationalDataPanel'
 import { getThemeIdFromPath, getThemePath } from './lib/themeRoutes'
 import {
   formatValue,
@@ -488,6 +489,7 @@ function App() {
               <p className="meta">Fonte: <a href={activeSource?.url}>{activeSource?.name}</a> • Atualização conhecida: {activeSource?.lastUpdated}</p>
             </article>
           </section>
+          <NationalDataPanel countryCode={countryCode} themeId={activeThemeId} dashboard={data} />
           {countryCode === 'BRA' ? (
             <section className="panel country-next-step"><div><span>Próximo nível disponível</span><h3>Subdivisões do Brasil</h3><p>Compare estados federados e, quando houver dados compatíveis com a problemática, Regiões Geográficas Imediatas do IBGE.</p></div><div><button className="advance-button" onClick={() => setView('states')} disabled={stateThemeIndicators.length === 0}>Ver estados federados</button><button className="text-button" onClick={() => setView('regions')} disabled={regionalThemeIndicators.length === 0}>Ver regiões imediatas</button></div></section>
           ) : (

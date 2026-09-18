@@ -4,7 +4,8 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "data:build": "tsx scripts/data/build.ts",
+    "data:build": "tsx scripts/data/build.ts && npm run data:national",
+    "data:national": "tsx scripts/data/build-national.ts",
     "dev": "vite",
     "prebuild": "npm run data:build",
     "build": "tsc -b && vite build",

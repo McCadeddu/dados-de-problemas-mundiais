@@ -1323,3 +1323,13 @@ select {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 }
+/* Country-specific official sources and supplementary series. */
+.national-data__source { padding: 1rem; border: 1px solid #64748b; border-radius: 12px; }
+.national-data__indicator { margin-top: 1.5rem; }
+.national-data__value { font-size: 2rem; font-weight: 700; color: #2dd4bf; }
+.national-data__value small { font-size: 1rem; font-weight: 400; color: inherit; }
+.national-data summary { cursor: pointer; padding: .8rem 0; }
+.national-data__table { overflow-x: auto; }
+.national-data table { width: 100%; border-collapse: collapse; }
+.national-data th, .national-data td { text-align: left; padding: .65rem; border-bottom: 1px solid #64748b; }
+.national-data caption { text-align: left; padding: .65rem; }
