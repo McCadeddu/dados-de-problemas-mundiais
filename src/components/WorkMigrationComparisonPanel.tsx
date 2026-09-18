@@ -1,81 +1,82 @@
-import { useState } from 'react'
+import { useMemo, useState } from 'react'
 import type { DashboardData } from '../types'
+import { alignedRowsCsv, alignWorkMigration, migrationMeasures, pearson, type MigrationMeasure } from '../lib/workMigration'
 
-type AlignedRow = {
-  countryCode: string
-  countryName: string
-  year: number
-  unemployment: number
-  vulnerableEmployment: number
-  migrationPerThousand: number
-  migrationCount: number
-}
+export function WorkMigrationComparisonPanel({ data, continent = 'Todos', loadError = null }: {
+  data: DashboardData; continent?: string; loadError?: string | null
+}) {
+  const [measure, setMeasure] = useState<MigrationMeasure>('refugees')
+  const [selectedYear, setSelectedYear] = useState('latest')
+  const migration = migrationMeasures[measure]
+  const aligned = useMemo(() => alignWorkMigration(data, migration.id), [data, migration.id])
+  const years = [...new Set(aligned.map((row) => row.year))].sort((a, b) => b - a)
+  const year = selectedYear === 'latest' ? years[0] : Number(selectedYear)
+  const rows = aligned.filter((row) => row.year === year && (continent === 'Todos' || row.continent === continent))
+    .sort((a, b) => b.migrationPerThousand - a.migrationPerThousand || a.countryCode.localeCompare(b.countryCode))
+  const countries = data.countries.filter((country) => continent === 'Todos' || country.continent === continent)
+  const included = new Set(rows.map((row) => row.countryCode))
+  const excluded = countries.filter((country) => !included.has(country.code))
+  const ready = ['ilo-unemployment', 'ilo-vulnerable-employment', migration.id]
+    .every((id) => data.series.some((series) => series.indicatorId === id)) && data.countryPopulation.length > 0
+  const rUnemployment = pearson(rows, 'unemployment')
+  const rVulnerable = pearson(rows, 'vulnerableEmployment')
+  const formatR = (value: number | null) => value === null ? 'Não calculável' : value.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })
+  const format = (value: number) => value.toLocaleString('pt-BR', { minimumFractionDigits: 1, maximumFractionDigits: 1 })
+  const sourceIds = ['ilo-unemployment', 'ilo-vulnerable-employment', migration.id]
+    .map((id) => data.indicators.find((indicator) => indicator.id === id)?.sourceId)
+  // Population is distributed with the World Bank series in this dataset.
+  const sources = data.sources.filter((source) => [...sourceIds, 'world-bank'].includes(source.id))
 
-function pointMap(series: { points?: Array<{ year: number; value: number }> } | undefined) {
-  return new Map((series?.points ?? []).map((point) => [point.year, point.value]))
-}
-
-function correlation(rows: AlignedRow[], left: (row: AlignedRow) => number, right: (row: AlignedRow) => number) {
-  if (rows.length < 3) return null
-  const x = rows.map(left)
-  const y = rows.map(right)
-  const meanX = x.reduce((sum, value) => sum + value, 0) / x.length
-  const meanY = y.reduce((sum, value) => sum + value, 0) / y.length
-  const numerator = x.reduce((sum, value, index) => sum + ((value - meanX) * (y[index] - meanY)), 0)
-  const denominator = Math.sqrt(x.reduce((sum, value) => sum + ((value - meanX) ** 2), 0) * y.reduce((sum, value) => sum + ((value - meanY) ** 2), 0))
-  return denominator === 0 ? null : numerator / denominator
-}
-
-function downloadAlignedRows(rows: AlignedRow[], migrationLabel: string) {
-  const escape = (value: string | number) => `"${String(value).replaceAll('"', '""')}"`
-  const output = [
-    `codigo_pais,pais,ano,desemprego_pct,emprego_vulneravel_pct,${migrationLabel}_por_1000,${migrationLabel}`,
-    ...rows.map((row) => [row.countryCode, row.countryName, row.year, row.unemployment, row.vulnerableEmployment, row.migrationPerThousand, row.migrationCount].map(escape).join(',')),
-  ].join('\n')
-  const blob = new Blob([`\ufeff${output}`], { type: 'text/csv;charset=utf-8' })
-  const url = URL.createObjectURL(blob)
-  const anchor = document.createElement('a')
-  anchor.href = url
-  anchor.download = 'trabalho-migracao-pais-ano-alinhado.csv'
-  anchor.click()
-  URL.revokeObjectURL(url)
-}
-
-export function WorkMigrationComparisonPanel({ data }: { data: DashboardData }) {
-  const [migrationMeasure, setMigrationMeasure] = useState<'refugees' | 'asylum' | 'stock'>('refugees')
-  const unemployment = new Map(data.series.filter((series) => series.indicatorId === 'ilo-unemployment').map((series) => [series.geographyCode, pointMap(series)]))
-  const vulnerable = new Map(data.series.filter((series) => series.indicatorId === 'ilo-vulnerable-employment').map((series) => [series.geographyCode, pointMap(series)]))
-  const migrationLabel = migrationMeasure === 'refugees' ? 'refugiados_acolhidos' : migrationMeasure === 'asylum' ? 'solicitantes_asilo_acolhidos' : 'estoque_migrante'
-  const migrationTitle = migrationMeasure === 'refugees' ? 'Refugiados acolhidos' : migrationMeasure === 'asylum' ? 'Solicitantes de asilo acolhidos' : 'Estoque internacional de migrantes'
-  const migrationSeriesId = migrationMeasure === 'refugees' ? 'unhcr-refugees-hosted' : migrationMeasure === 'asylum' ? 'unhcr-asylum-seekers-hosted' : 'wb-migrant-stock'
-  const migrationSeries = new Map(data.series.filter((series) => series.indicatorId === migrationSeriesId).map((series) => [series.geographyCode, pointMap(series)]))
-  const population = new Map(data.countryPopulation.map((series) => [series.geographyCode, pointMap(series)]))
-  const rows: AlignedRow[] = []
-  for (const country of data.countries) {
-    const unemploymentPoints = unemployment.get(country.code)
-    const vulnerablePoints = vulnerable.get(country.code)
-    const migrationPoints = migrationSeries.get(country.code)
-    const populationPoints = population.get(country.code)
-    if (!unemploymentPoints || !vulnerablePoints || !migrationPoints || !populationPoints) continue
-    for (const year of unemploymentPoints.keys()) {
-      const unemploymentValue = unemploymentPoints.get(year)
-      const vulnerableValue = vulnerablePoints.get(year)
-      const migrationValue = migrationPoints.get(year)
-      const populationValue = populationPoints.get(year)
-      if (unemploymentValue === undefined || vulnerableValue === undefined || migrationValue === undefined || !populationValue) continue
-      rows.push({ countryCode: country.code, countryName: country.name, year, unemployment: unemploymentValue, vulnerableEmployment: vulnerableValue, migrationPerThousand: (migrationValue / populationValue) * 1000, migrationCount: migrationValue })
-    }
+  function download() {
+    const blob = new Blob([alignedRowsCsv(rows, migration.id, data.generatedAt)], { type: 'text/csv;charset=utf-8' })
+    const url = URL.createObjectURL(blob)
+    const anchor = document.createElement('a')
+    anchor.href = url
+    anchor.download = `trabalho-migracao-${measure}-${year}-${continent}.csv`
+    anchor.click()
+    window.setTimeout(() => URL.revokeObjectURL(url), 1000)
   }
-  const latestByCountry = [...new Map(rows.map((row) => [row.countryCode, row])).values()].sort((a, b) => b.migrationPerThousand - a.migrationPerThousand).slice(0, 12)
-  const unemploymentCorrelation = correlation(rows, (row) => row.unemployment, (row) => row.migrationPerThousand)
-  const vulnerableCorrelation = correlation(rows, (row) => row.vulnerableEmployment, (row) => row.migrationPerThousand)
-  const formatCorrelation = (value: number | null) => value === null ? 'indisponível' : value.toFixed(2)
+
   return <section className="panel work-migration-comparison" aria-label="Comparação descritiva entre trabalho e migração">
-    <div className="panel__header"><div><span>Teste descritivo</span><h3>Trabalho e migração no mesmo recorte</h3><p>O indicador migratório é normalizado por mil habitantes; trabalho e migração só entram quando país, ano e população estão alinhados.</p></div><div className="work-migration-comparison__actions"><label>Medida migratória<select value={migrationMeasure} onChange={(event) => setMigrationMeasure(event.target.value as 'refugees' | 'asylum' | 'stock')}><option value="refugees">Refugiados acolhidos</option><option value="asylum">Solicitantes de asilo acolhidos</option><option value="stock">Estoque internacional de migrantes</option></select></label><strong className="badge">Sem causalidade</strong><button className="export-button" onClick={() => downloadAlignedRows(rows, migrationLabel)} disabled={!rows.length}>Baixar CSV alinhado</button></div></div>
-    {rows.length ? <>
-      <div className="work-migration-comparison__summary"><article><span>Observações alinhadas</span><strong>{rows.length.toLocaleString('pt-BR')}</strong><small>país–ano</small></article><article><span>Correlação descritiva</span><strong>{formatCorrelation(unemploymentCorrelation)}</strong><small>desemprego × {migrationTitle.toLowerCase()}/1.000</small></article><article><span>Correlação descritiva</span><strong>{formatCorrelation(vulnerableCorrelation)}</strong><small>emprego vulnerável × {migrationTitle.toLowerCase()}/1.000</small></article></div>
-      <div className="work-migration-comparison__table"><table><caption>Doze países com maior taxa de {migrationTitle.toLowerCase()} no último ano alinhado</caption><thead><tr><th>País</th><th>Ano</th><th>Desemprego</th><th>Emprego vulnerável</th><th>{migrationTitle}/1.000</th></tr></thead><tbody>{latestByCountry.map((row) => <tr key={row.countryCode}><th scope="row">{row.countryName}</th><td>{row.year}</td><td>{row.unemployment.toFixed(1)}%</td><td>{row.vulnerableEmployment.toFixed(1)}%</td><td>{row.migrationPerThousand.toFixed(1)}</td></tr>)}</tbody></table></div>
-      <p className="meta">A correlação resume associação linear no recorte alinhado. Ela não controla conflito, renda, políticas de acolhida, composição etária ou causalidade reversa; não deve ser lida como efeito do desemprego sobre a migração.</p>
-    </> : <p className="comparison-warning">Carregando as três séries de trabalho, migração e população para encontrar observações alinhadas.</p>}
+    <div className="panel__header">
+      <div><span>Comparação anual</span><h3>Trabalho e migração no mesmo recorte</h3>
+        <p>Uma observação por país ou território, no ano escolhido. A taxa migratória usa a população desse mesmo ano.</p>
+        <p>Continente: <strong>{continent === 'Todos' ? 'Mundo inteiro' : continent}</strong>. Use o filtro de continente no início da página para alterar este recorte.</p>
+      </div>
+      <div className="work-migration-comparison__actions">
+        <label>Medida migratória<select value={measure} onChange={(event) => { setMeasure(event.target.value as MigrationMeasure); setSelectedYear('latest') }}>
+          {Object.entries(migrationMeasures).map(([key, item]) => <option key={key} value={key}>{item.title}</option>)}
+        </select></label>
+        <label>Ano comum<select value={selectedYear} disabled={!years.length} onChange={(event) => setSelectedYear(event.target.value)}>
+          <option value="latest">Mais recente disponível{years.length > 0 ? ` (${years[0]})` : ''}</option>
+          {years.map((value) => <option key={value} value={value}>{value}</option>)}
+        </select></label>
+        <strong className="badge">Sem causalidade</strong>
+        <button className="export-button" onClick={download} disabled={!ready || !rows.length}>Baixar CSV alinhado</button>
+      </div>
+    </div>
+    {!ready ? <p role={loadError ? 'alert' : 'status'}>{loadError ? 'Não foi possível carregar as séries necessárias à comparação. Recarregue a página para tentar novamente.' : 'Carregando séries de trabalho, migração e população…'}</p> : <>
+      <p className="comparison-warning">{rows.length} de {countries.length} países e territórios incluídos{year !== undefined ? ` em ${year}` : ''}; {excluded.length} excluídos por falta de pelo menos uma observação válida no mesmo ano. Ausência não é zero.</p>
+      {excluded.length > 0 && <details><summary>Ver países e territórios excluídos ({excluded.length})</summary><p>{excluded.map((country) => country.name).join('; ')}.</p><p>É necessário ter as duas taxas de trabalho, o estoque migratório e uma população positiva no ano selecionado.</p></details>}
+      {rows.length > 0 ? <>
+        <div className="work-migration-comparison__summary">
+          <article><span>Amostra do recorte</span><strong>{rows.length.toLocaleString('pt-BR')}</strong><small>países e territórios · {year}</small></article>
+          <article><span>Pearson r — desemprego</span><strong>{formatR(rUnemployment)}</strong><small>desemprego × {migration.title.toLowerCase()}/1.000</small></article>
+          <article><span>Pearson r — emprego vulnerável</span><strong>{formatR(rVulnerable)}</strong><small>emprego vulnerável × {migration.title.toLowerCase()}/1.000</small></article>
+        </div>
+        {(rUnemployment === null || rVulnerable === null) && <p className="meta">A correlação exige pelo menos três países ou territórios e variação nas duas medidas.</p>}
+        <details open={rows.length <= 12}><summary>Ver tabela completa ({rows.length} países e territórios)</summary>
+          <div className="work-migration-comparison__table"><table>
+            <caption>{migration.title} por mil habitantes · {year} · todos os registros usados nos cálculos e no CSV</caption>
+            <thead><tr><th scope="col">País / território</th><th scope="col">Ano</th><th scope="col">Desemprego</th><th scope="col">Emprego vulnerável</th><th scope="col">{migration.title}/1.000</th></tr></thead>
+            <tbody>{rows.map((row) => <tr key={row.countryCode}><th scope="row">{row.countryName}</th><td>{row.year}</td><td>{format(row.unemployment)}%</td><td>{format(row.vulnerableEmployment)}%</td><td>{format(row.migrationPerThousand)}</td></tr>)}</tbody>
+          </table></div>
+        </details>
+        <p className="meta">CSV: valores sem arredondamento, população usada no denominador, código do indicador migratório e data do arquivo de dados.</p>
+      </> : <p>Sem observações compatíveis neste recorte. Escolha outro ano ou continente.</p>}
+      <p className="meta">Pearson r descreve associação linear entre países neste ano, com peso igual por território. O resultado depende da cobertura e de valores extremos; não é um efeito causal nem uma relação entre indivíduos. Não controla conflito, renda, composição etária ou políticas de acolhida e não deve ser lido como efeito da migração sobre o desemprego ou do desemprego sobre a migração.</p>
+      <p className="meta">O alinhamento anual não torna idênticas as populações de referência: as taxas de trabalho usam força de trabalho ou ocupados; o estoque migratório usa população total. Refugiados, solicitantes de asilo e estoque migrante podem se sobrepor e não devem ser somados.</p>
+      {sources.length > 0 && <p className="meta">Fontes: {sources.map((source, index) => <span key={source.id}>{index > 0 && ' · '}<a href={source.url} target="_blank" rel="noreferrer">{source.name}</a></span>)}.</p>}
+    </>}
   </section>
 }

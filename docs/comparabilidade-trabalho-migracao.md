@@ -14,11 +14,37 @@ alinhar país, ano, população de referência e qualidade da fonte.
 | Refugiados e solicitantes de asilo | Pessoas sob proteção internacional ou em pedido de proteção | Estoque no fim do ano, por origem e acolhida | Separar de fluxos, migrantes econômicos e deslocados internos. |
 | Estoque de migrantes | Pessoas residentes em país diferente do país de nascimento | Estoque internacional harmonizado; Banco Mundial/ONU; ano da estimativa | Não equivale a refugiados, solicitantes de asilo nem a entradas no período. |
 
-O painel já executa um primeiro teste descritivo com observações país–ano
-alinhadas: desemprego e emprego vulnerável são confrontados com refugiados ou
-solicitantes de asilo acolhidos por mil habitantes, usando população do mesmo
-ano. Ele mostra o número de observações, uma correlação linear descritiva, os
-doze países com maior taxa no último ano alinhado e permite baixar o recorte em
-CSV. Correlação, diferença de médias ou regressão podem descrever associação;
-não identificam causalidade sem desenho de pesquisa, variáveis de controle e
-hipóteses temporais explícitas.
+## Comparação anual reproduzível
+
+Desemprego e emprego vulnerável são confrontados com uma das três medidas:
+refugiados acolhidos, solicitantes de asilo acolhidos ou estoque internacional
+de migrantes. Cada contagem é dividida pela população do mesmo país e ano e
+multiplicada por mil. Não há interpolação nem substituição por um ano vizinho.
+
+O seletor de ano usa, por padrão, o último ano com pelo menos uma observação
+completa na base mundial da medida selecionada. O filtro de continente da
+página também se aplica à comparação. Um continente sem observações nesse ano
+recebe uma mensagem de ausência; não há recuo silencioso para outro ano.
+Ao trocar a medida migratória, o seletor volta ao último ano disponível dela.
+
+Cada país ou território entra uma única vez, no ano selecionado. Pearson r é
+calculado sem ponderação, com a mesma amostra nas duas associações. A tabela
+completa e o CSV usam exatamente essa amostra; a antiga correlação que reunia
+vários anos foi removida. Países sem uma das quatro medidas válidas são listados
+como excluídos. Zero publicado é preservado; população não positiva, valores
+não finitos, taxas de trabalho fora de 0–100% e contagens negativas são excluídos.
+
+Com menos de três observações ou sem variação em uma das duas medidas, o painel
+informa que a correlação não pode ser calculada. Isso é diferente de r = 0.
+O resultado não fornece significância estatística, relação individual ou efeito
+causal. Países pequenos recebem o mesmo peso que grandes; cobertura, valores
+extremos e fatores como renda, conflito e políticas podem alterar a associação.
+Alinhar o ano não torna idênticas as populações de referência ou as datas de
+medição dentro desse ano. As categorias migratórias podem se sobrepor e não são
+somadas.
+
+O CSV inclui todos os países do recorte, valores sem arredondamento, população
+usada no denominador, código do indicador migratório e data de geração do
+arquivo de dados. O nome identifica medida, ano e continente. As fontes são
+mostradas no painel; carregamento, falha e ausência de dados têm mensagens
+distintas.

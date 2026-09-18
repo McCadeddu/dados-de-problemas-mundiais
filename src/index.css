@@ -889,6 +889,7 @@ select {
 }
 
 .work-migration-comparison__actions select {
+  max-width: 100%;
   min-width: 13rem;
   padding: 0.45rem 0.55rem;
   border: 1px solid rgba(148, 163, 184, 0.32);
@@ -927,6 +928,16 @@ select {
 
 .work-migration-comparison__table {
   overflow-x: auto;
+  max-height: 32rem;
+}
+
+.work-migration-comparison details { margin: 0.8rem 0; }
+.work-migration-comparison summary { cursor: pointer; padding: 0.5rem 0; }
+
+@media (max-width: 700px) {
+  .work-migration-comparison .panel__header { flex-direction: column; }
+  .work-migration-comparison__actions { width: 100%; justify-items: stretch; }
+  .work-migration-comparison__actions select { width: 100%; min-width: 0; }
 }
 
 .work-migration-comparison table {

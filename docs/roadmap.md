@@ -5,8 +5,8 @@
 - consolidar a camada de qualidade no painel: denominador, período observado,
   cobertura territorial e distinção entre ausência e zero;
 - ampliar a cobertura de contribuição previdenciária fora do Brasil e pesquisar dados oficiais de trabalho forçado, preservando a diferença entre prevalência e registros de fiscalização;
-- ampliar o teste descritivo trabalho–migração com estoque migrante, mantendo
-  períodos, territórios e populações compatíveis;
+- integrar séries nacionais dos seis países prioritários, ainda pendentes além
+  do complemento EU-SILC de Portugal e Itália;
 
 - revisar as 38 entradas ainda pendentes no catálogo nacional e confirmar os endereços importados do diretório da ONU;
 - priorizar séries oficiais de cuidado não remunerado e violência de gênero, com definições compatíveis;
@@ -18,6 +18,10 @@
 - aprofundar fluxos de migração forçada por origem, acolhimento e tipo de deslocamento.
 
 ## Produto e qualidade
+
+- comparação trabalho–migração: três medidas migratórias, ano comum selecionável,
+  filtro de continente, lista de exclusões e exportação da mesma amostra usada
+  nas correlações; testes de cálculo, ausência de dados e exportação;
 
 - entregue em 18/09/2026: catálogo com 217 entradas territoriais, diagnóstico de cobertura e complemento de pobreza relativa para 30 países, com atualização diária e testes;
 

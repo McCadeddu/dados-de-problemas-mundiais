@@ -439,7 +439,7 @@ function App() {
           <EducationWorkPanel themeId={activeThemeId} />
           <NarrativeSynthesisPanel themeId={activeThemeId} />
           {(activeThemeId === 'decent-work' || activeThemeId === 'forced-migration') && <ComparabilityMatrixPanel />}
-          {(activeThemeId === 'decent-work' || activeThemeId === 'forced-migration') && <WorkMigrationComparisonPanel data={data} />}
+          {(activeThemeId === 'decent-work' || activeThemeId === 'forced-migration') && <WorkMigrationComparisonPanel data={data} continent={continent} loadError={seriesLoadError} />}
           <GlobalInsightPanel indicator={indicator} continent={continent} average={continentAverage} coverage={countryLatest.length} leadingValue={worldRanking[0]} />
           {activeThemeId === 'forced-migration' && <MigrationFlowsPanel flows={migrationFlows} error={migrationFlowsError} />}
 

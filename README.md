@@ -68,6 +68,11 @@ muito maiores, mas não substitui análises por subgrupos ou distribuição inte
 
 ### Indicadores iniciais de migração e crise humanitária
 
+O painel trabalho–migração compara um ano comum por vez e acompanha o filtro
+de continente. Mostra a amostra e os países excluídos; tabela e CSV usam os mesmos
+registros dos cálculos. A correlação é descritiva, com peso igual por território,
+e não estima causalidade. Consulte a [metodologia](docs/comparabilidade-trabalho-migracao.md).
+
 - Refugiados por país de origem e refugiados acolhidos, da UNHCR.
 - Solicitantes de asilo acolhidos, da UNHCR.
 - Deslocados internos por conflito ou violência acompanhados pela UNHCR.
