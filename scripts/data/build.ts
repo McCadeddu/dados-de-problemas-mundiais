@@ -2,6 +2,7 @@ import AdmZip from 'adm-zip'
 import { mkdir, readFile, writeFile } from 'node:fs/promises'
 import path from 'node:path'
 import Papa from 'papaparse'
+import { withCachedFallback } from './resilience.js'
 
 type ThemeId =
   | 'hunger-water'
@@ -1530,18 +1531,14 @@ async function main() {
     loadNdGain(countriesByIso3),
     loadUnhcrIndicators(validCountryIso3),
   ])
-  const fireHotspotsPromise = loadBrazilStateFireHotspotsIndicator().catch(async (error) => {
-    console.warn(`INPE annual fire update failed; reusing cached data: ${error instanceof Error ? error.message : String(error)}`)
+  const fireHotspotsPromise = withCachedFallback(loadBrazilStateFireHotspotsIndicator, async () => {
     const [annual, rate] = await Promise.all([
       loadCachedIndicator(BRAZIL_STATE_FIRE_HOTSPOTS_INDICATOR.id),
       loadCachedIndicator(BRAZIL_STATE_FIRE_HOTSPOTS_RATE_INDICATOR.id),
     ])
     return { results: [annual, rate], source: annual.source, rateSource: rate.source }
-  })
-  const recentFireHotspotsPromise = loadBrazilStateRecentFireHotspotsIndicator().catch(async (error) => {
-    console.warn(`INPE recent fire update failed; reusing cached data: ${error instanceof Error ? error.message : String(error)}`)
-    return loadCachedIndicator(BRAZIL_STATE_RECENT_FIRE_HOTSPOTS_INDICATOR.id)
-  })
+  }, console.warn, 'INPE annual fire')
+  const recentFireHotspotsPromise = withCachedFallback(loadBrazilStateRecentFireHotspotsIndicator, () => loadCachedIndicator(BRAZIL_STATE_RECENT_FIRE_HOTSPOTS_INDICATOR.id), console.warn, 'INPE recent fire')
   const [brazilStates, brazilStateGini, brazilStateIncome, brazilStateVeryLowIncome, brazilStateGenderLabor, brazilStateGenderWageGap, brazilStateUnpaidCareGap, brazilStateFireHotspots, brazilStateRecentFireHotspots, brazilStateActiveImmigrants, brazilStateMultidimensionalPoverty, brazilStateMultidimensionalVulnerability, immediateRegions, immediateSanitation, immediateWasteCollection] = await Promise.all([
     loadBrazilStateIndicator(),
     loadBrazilStateGiniIndicator(),
