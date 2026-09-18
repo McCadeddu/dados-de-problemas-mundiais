@@ -397,6 +397,10 @@ function App() {
             <label>Continente<select value={continent} onChange={(event) => { const nextContinent = event.target.value; const nextCountries = nextContinent === 'Todos' ? data.countries : data.countries.filter((country) => country.continent === nextContinent); setContinent(nextContinent); setCountryCode(nextCountries[0]?.code ?? ''); setComparisonCountryCodes(nextCountries.slice(0, 3).map((country) => country.code)) }}><option value="Todos">Mundo inteiro</option>{data.continents.map((item) => <option key={item} value={item}>{item}</option>)}</select></label>
             <label>País<select value={countryCode} onChange={(event) => setCountryCode(event.target.value)}>{filteredCountries.map((country) => <option key={country.code} value={country.code}>{country.name}</option>)}</select></label>
           </section>
+          <section className="panel world-next-step" aria-label="Próximo passo da análise mundial">
+            <div><span>Próximo passo</span><h3>Como você quer continuar?</h3><p>Abra um país para analisar seus dados ou confronte países no mesmo indicador.</p></div>
+            <div className="world-next-step__actions"><button className="advance-button" onClick={() => setView('country')}>Analisar {countryName}</button><button className="text-button" onClick={() => document.getElementById('comparar-paises')?.scrollIntoView({ behavior: 'smooth', block: 'start' })}>Comparar países</button></div>
+          </section>
 
           <section className="content-grid content-grid--world">
             <MapPanel title="Mapa mundial" subtitle={`${indicator.name} • clique para abrir a análise de um país`} geography={worldGeo} valueByCode={worldValueByCode} codeKeys={['ADM0_A3', 'ISO_A3', 'SOV_A3', 'gu_a3']} onSelect={(code) => { setCountryCode(code); setContinent(data.countries.find((country) => country.code === code)?.continent ?? 'Todos'); setView('country') }} selectedCode={countryCode} formatValue={(value) => formatValue(value, indicator.unit)} direction={indicator.direction} projectionKind="peters" />
@@ -422,6 +426,7 @@ function App() {
             tooltipFormatter={tooltipFormatter}
           />
           <TerritoryComparisonPanel
+            sectionId="comparar-paises"
             title="Comparar países"
             description="Selecione de 2 a 5 países do recorte atual para confrontar séries históricas e o último valor disponível."
             territories={filteredCountries}
@@ -570,6 +575,7 @@ function exportRankingCsv(title: string, ranking: DashboardData['latest'], unit:
 }
 
 type TerritoryComparisonPanelProps = {
+  sectionId?: string
   title: string
   description: string
   territories: Array<{ code: string; name: string }>
@@ -666,11 +672,11 @@ function buildContinentComparisonChartData(
   })
 }
 
-function TerritoryComparisonPanel({ title, description, territories, selectedCodes, latestValues, chartData, unit, color, territoryLabel, onAdd, onRemove, tooltipFormatter }: TerritoryComparisonPanelProps) {
+function TerritoryComparisonPanel({ sectionId, title, description, territories, selectedCodes, latestValues, chartData, unit, color, territoryLabel, onAdd, onRemove, tooltipFormatter }: TerritoryComparisonPanelProps) {
   const selectedTerritories = territories.filter((territory) => selectedCodes.includes(territory.code))
   const latestByCode = new Map(latestValues.map((item) => [item.geographyCode, item]))
   const territoriesWithoutData = selectedTerritories.filter((territory) => !latestByCode.has(territory.code))
-  return <section className="panel comparison-panel">
+  return <section id={sectionId} className="panel comparison-panel">
     <div className="panel__header"><div><h3>{title}</h3><p>{description}</p></div></div>
     <div className="comparison-controls">
       <select aria-label={`Adicionar ${territoryLabel} à comparação`} defaultValue="" onChange={(event) => { onAdd(event.target.value); event.target.value = '' }}>

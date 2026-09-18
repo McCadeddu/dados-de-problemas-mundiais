@@ -436,7 +436,8 @@ select {
 }
 
 .country-callout,
-.country-next-step {
+.country-next-step,
+.world-next-step {
   display: grid;
   align-content: center;
   gap: 0.65rem;
@@ -445,7 +446,8 @@ select {
 }
 
 .country-callout span,
-.country-next-step span {
+.country-next-step span,
+.world-next-step span {
   color: #67e8f9;
   font-size: 0.8rem;
   letter-spacing: 0.1em;
@@ -453,13 +455,15 @@ select {
 }
 
 .country-callout h3,
-.country-next-step h3 {
+.country-next-step h3,
+.world-next-step h3 {
   margin: 0;
   font-size: 2rem;
 }
 
 .country-callout p,
-.country-next-step p {
+.country-next-step p,
+.world-next-step p {
   margin: 0;
   color: #a8b8cc;
 }
@@ -472,6 +476,22 @@ select {
 }
 
 .country-next-step > div:last-child {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.7rem;
+  align-items: center;
+}
+
+.world-next-step {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  min-height: 0;
+  margin-bottom: 1.5rem;
+  padding: 1.35rem;
+}
+
+.world-next-step__actions {
   display: flex;
   flex-wrap: wrap;
   gap: 0.7rem;
@@ -828,6 +848,11 @@ select {
   .comparison-grid,
   .country-next-step {
     grid-template-columns: 1fr;
+  }
+
+  .world-next-step {
+    align-items: flex-start;
+    flex-direction: column;
   }
 }
 
