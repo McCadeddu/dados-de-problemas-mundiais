@@ -539,6 +539,37 @@ select {
   white-space: nowrap;
 }
 
+.hunger-water-panel {
+  margin-bottom: 1.5rem;
+}
+
+.hunger-water-panel__grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 0.75rem;
+}
+
+.hunger-water-panel__grid article {
+  padding: 0.9rem;
+  border: 1px solid rgba(56, 189, 248, 0.25);
+  border-radius: 14px;
+  background: rgba(8, 47, 73, 0.42);
+}
+
+.hunger-water-panel__grid span,
+.hunger-water-panel__grid small {
+  display: block;
+  color: #b9c9db;
+  font-size: 0.82rem;
+}
+
+.hunger-water-panel__grid strong {
+  display: block;
+  margin: 0.45rem 0;
+  color: #67e8f9;
+  font-size: 1.45rem;
+}
+
 .country-next-step--empty {
   grid-template-columns: 1fr;
   border-color: rgba(148, 163, 184, 0.3);
@@ -914,6 +945,10 @@ select {
     grid-template-columns: 1fr;
   }
 
+  .hunger-water-panel__grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
   .analysis-header {
     align-items: flex-start;
     flex-direction: column;
@@ -1061,6 +1096,10 @@ select {
 
   .landing {
     border-radius: 20px;
+  }
+
+  .hunger-water-panel__grid {
+    grid-template-columns: 1fr;
   }
 
   .hero {

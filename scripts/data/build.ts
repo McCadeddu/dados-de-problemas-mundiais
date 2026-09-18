@@ -507,6 +507,17 @@ const BRAZIL_STATE_UNPAID_CARE_GAP_INDICATOR: Omit<Indicator, 'latestYear'> = {
   direction: 'higher-worse',
 }
 
+const BRAZIL_STATE_WATER_NETWORK_INDICATOR: Omit<Indicator, 'latestYear'> = {
+  id: 'ibge-state-water-network-coverage',
+  name: 'Domicílios com rede geral de água',
+  themeId: 'hunger-water',
+  description: 'Percentual de domicílios ocupados com ligação à rede geral usada como forma principal de abastecimento, segundo o Censo 2022.',
+  unit: '%',
+  geographyType: 'brazil-state',
+  sourceId: SIDRA_SOURCE_ID,
+  direction: 'higher-better',
+}
+
 const BRAZIL_IMMEDIATE_WATER_INDICATOR: Omit<Indicator, 'latestYear'> = {
   id: 'ibge-water-network-coverage',
   name: 'Domicílios com rede geral de água',
@@ -1399,6 +1410,31 @@ type IbgeAggregateResponse = Array<{
   }>
 }>
 
+async function loadBrazilStateCoverage(
+  indicator: Omit<Indicator, 'latestYear'>,
+  table: string,
+  classification: string,
+) {
+  const [totalResponse, networkResponse] = await Promise.all([
+    fetchJson<IbgeAggregateResponse>(`https://servicodados.ibge.gov.br/api/v3/agregados/${table}/periodos/2022/variaveis/381?localidades=N3%5Ball%5D`),
+    fetchJson<IbgeAggregateResponse>(`https://servicodados.ibge.gov.br/api/v3/agregados/${table}/periodos/2022/variaveis/381?localidades=N3%5Ball%5D&classificacao=${classification}`),
+  ])
+  const totals = new Map(totalResponse[0]?.resultados[0]?.series.map((entry) => [entry.localidade.id, entry]))
+  const series = (networkResponse[0]?.resultados[0]?.series ?? []).flatMap((entry) => {
+    const total = Number(totals.get(entry.localidade.id)?.serie['2022'])
+    const network = Number(entry.serie['2022'])
+    if (!Number.isFinite(total) || total <= 0 || !Number.isFinite(network)) return []
+    return [{
+      indicatorId: indicator.id,
+      geographyType: 'brazil-state' as const,
+      geographyCode: entry.localidade.id,
+      geographyName: entry.localidade.nome,
+      points: [{ year: 2022, value: (network / total) * 100 }],
+    }]
+  })
+  return { indicator: { ...indicator, latestYear: 2022 } satisfies Indicator, series }
+}
+
 async function loadBrazilImmediateRegionCoverage(
   indicator: Omit<Indicator, 'latestYear'>,
   table: string,
@@ -1566,7 +1602,7 @@ async function main() {
     return { results: [annual, rate], source: annual.source, rateSource: rate.source }
   }, console.warn, 'INPE annual fire')
   const recentFireHotspotsPromise = withCachedFallback(loadBrazilStateRecentFireHotspotsIndicator, () => loadCachedIndicator(BRAZIL_STATE_RECENT_FIRE_HOTSPOTS_INDICATOR.id), console.warn, 'INPE recent fire')
-  const [brazilStates, brazilStateGini, brazilStateIncome, brazilStateVeryLowIncome, brazilStateGenderLabor, brazilStateGenderWageGap, brazilStateUnpaidCareGap, brazilStateFireHotspots, brazilStateRecentFireHotspots, brazilStateActiveImmigrants, brazilStateMultidimensionalPoverty, brazilStateMultidimensionalVulnerability, immediateRegions, immediateSanitation, immediateWasteCollection] = await Promise.all([
+  const [brazilStates, brazilStateGini, brazilStateIncome, brazilStateVeryLowIncome, brazilStateGenderLabor, brazilStateGenderWageGap, brazilStateUnpaidCareGap, brazilStateWaterNetwork, brazilStateFireHotspots, brazilStateRecentFireHotspots, brazilStateActiveImmigrants, brazilStateMultidimensionalPoverty, brazilStateMultidimensionalVulnerability, immediateRegions, immediateSanitation, immediateWasteCollection] = await Promise.all([
     loadBrazilStateIndicator(),
     loadBrazilStateGiniIndicator(),
     loadBrazilStateIncomeIndicator(),
@@ -1574,6 +1610,7 @@ async function main() {
     loadBrazilStateGenderLaborIndicators(),
     loadBrazilStateGenderWageGapIndicator(),
     loadBrazilStateUnpaidCareGapIndicator(),
+    loadBrazilStateCoverage(BRAZIL_STATE_WATER_NETWORK_INDICATOR, '6803', '1821%5B72144%5D'),
     fireHotspotsPromise,
     recentFireHotspotsPromise,
     loadBrazilStateActiveImmigrantsIndicator(),
@@ -1602,6 +1639,7 @@ async function main() {
     ...brazilStateGenderLabor.results.map((result) => result.indicator),
     brazilStateGenderWageGap.indicator,
     brazilStateUnpaidCareGap.indicator,
+    brazilStateWaterNetwork.indicator,
     ...brazilStateFireHotspots.results.map((result) => result.indicator),
     brazilStateRecentFireHotspots.indicator,
     brazilStateActiveImmigrants.indicator,
@@ -1623,6 +1661,7 @@ async function main() {
     ...brazilStateGenderLabor.results.flatMap((result) => result.series),
     ...brazilStateGenderWageGap.series,
     ...brazilStateUnpaidCareGap.series,
+    ...brazilStateWaterNetwork.series,
     ...brazilStateFireHotspots.results.flatMap((result) => result.series),
     ...brazilStateRecentFireHotspots.series,
     ...brazilStateActiveImmigrants.series,
