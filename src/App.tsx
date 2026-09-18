@@ -125,7 +125,7 @@ function App() {
       compararRegioes: comparisonImmediateRegionCodes.join(','),
     })
     window.history.replaceState(null, '', `${getThemePath(data ? getSafeThemeId(data, themeId) : 'hunger-water')}?${params.toString()}`)
-  }, [comparisonContinentCodes, comparisonCountryCodes, comparisonImmediateRegionCodes, comparisonStateCodes, continent, countryCode, data, immediateIndicatorId, immediateRegionCode, selectedIndicatorId, stateCode, stateIndicatorId, themeId, view])
+  }, [activeThemeId, comparisonContinentCodes, comparisonCountryCodes, comparisonImmediateRegionCodes, comparisonStateCodes, continent, countryCode, data, immediateIndicatorId, immediateRegionCode, selectedIndicatorId, stateCode, stateIndicatorId, themeId, view])
 
   const copyShareLink = async () => {
     try {
