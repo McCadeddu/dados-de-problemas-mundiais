@@ -1,5 +1,5 @@
 import { describe, expect, it, vi } from 'vitest'
-import { withCachedFallback } from './resilience'
+import { withCachedFallback } from './resilience.js'
 
 describe('withCachedFallback', () => {
   it('keeps fresh data when the source is available', async () => {
