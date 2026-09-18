@@ -468,6 +468,11 @@ select {
   color: #a8b8cc;
 }
 
+.country-callout .country-callout__rank {
+  color: #ccfbf1;
+  font-size: 0.9rem;
+}
+
 .country-next-step {
   grid-template-columns: 1fr auto;
   min-height: 0;

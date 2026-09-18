@@ -322,6 +322,8 @@ function App() {
     const country = data.countries.find((candidate) => candidate.code === item.geographyCode)
     return continent === 'Todos' || country?.continent === continent
   }).slice(0, 10)
+  const globalRanking = getRanking(data, indicator.id)?.items ?? []
+  const countryGlobalRank = globalRanking.findIndex((item) => item.geographyCode === countryCode) + 1
   const continentValues = countryLatest.filter((item) => {
     const country = data.countries.find((candidate) => candidate.code === item.geographyCode)
     return continent === 'Todos' || country?.continent === continent
@@ -463,7 +465,7 @@ function App() {
             <label>País<select value={countryCode} onChange={(event) => setCountryCode(event.target.value)}>{filteredCountries.map((country) => <option key={country.code} value={country.code}>{country.name}</option>)}</select></label>
           </section>
           <section className="content-grid content-grid--states">
-            <article className="panel country-callout"><span>Análise do país</span><h3>{countryName}</h3><p>{data.countries.find((country) => country.code === countryCode)?.continent ?? 'Continente não identificado'} • {indicator.name}</p><button className="text-button" onClick={() => setView('world')}>Voltar ao panorama mundial</button></article>
+            <article className="panel country-callout"><span>Análise do país</span><h3>{countryName}</h3><p>{data.countries.find((country) => country.code === countryCode)?.continent ?? 'Continente não identificado'} • {indicator.name}</p>{countryGlobalRank > 0 && <p className="country-callout__rank">Posição por valor no recorte mundial: {countryGlobalRank} de {globalRanking.length} países com dados.</p>}<button className="text-button" onClick={() => { if (countryCode === 'BRA') { setContinent('Todos'); setComparisonCountryCodes((current) => ['BRA', ...current.filter((code) => code !== 'BRA')].slice(0, 5)) }; setView('world') }}>{countryCode === 'BRA' ? 'Comparar Brasil com outros países' : 'Voltar ao panorama mundial'}</button></article>
             <article className="panel">
               <div className="panel__header"><div><h3>Evolução de {countryName}</h3><p>{indicator.description}</p></div><strong className="badge">{indicator.latestYear}</strong></div>
               <div className="chart"><ResponsiveContainer width="100%" height={300}><LineChart data={selectedCountrySeries?.points ?? []}><CartesianGrid stroke="#334155" strokeDasharray="4 4" /><XAxis dataKey="year" stroke="#a8b8cc" /><YAxis stroke="#a8b8cc" /><Tooltip formatter={tooltipFormatter(indicator.unit)} /><Line type="monotone" dataKey="value" stroke="#2dd4bf" strokeWidth={3} dot={false} /></LineChart></ResponsiveContainer></div>
