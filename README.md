@@ -111,6 +111,10 @@ O GitHub Actions consulta as fontes públicas diariamente às 09:00 UTC (06:00 e
 O workflow só cria um commit quando o arquivo de dados gerado contém mudanças. A frequência de
 publicação de cada fonte continua sendo exibida no painel, pois muitos indicadores são anuais.
 
+## CSV do AdaptaBrasil
+
+No tema `Vulnerabilidade às mudanças climáticas`, use o botão de download para abrir o catálogo oficial. Baixe um CSV, volte ao painel e selecione `Carregar CSV para pré-visualizar`. A prévia é local ao navegador e mostra colunas, linhas e campos territoriais necessários. Após validar UF ou município, valor e cenário/período, o arquivo pode ser incorporado ao gerador para agregação por estado.
+
 ## Contribuição e qualidade dos dados
 
 Use os formulários do GitHub para [sugerir uma fonte](.github/ISSUE_TEMPLATE/sugestao-de-fonte.yml)
