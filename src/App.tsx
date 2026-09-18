@@ -428,14 +428,10 @@ function App() {
           {activeThemeId === 'poverty-inequality' && <PovertyPanel values={themeGlobalSnapshot} />}
           {activeThemeId === 'climate-vulnerability' && <ClimatePanel values={themeGlobalSnapshot} />}
           <GlobalInsightPanel indicator={indicator} continent={continent} average={continentAverage} coverage={countryLatest.length} leadingValue={worldRanking[0]} />
-          <section className="panel world-next-step" aria-label="Próximo passo da análise mundial">
-            <div><span>Próximo passo</span><h3>Escolha um país para detalhar</h3><p>A análise nacional abre somente depois da leitura mundial. Você também pode comparar países no mesmo indicador.</p></div>
-            <div className="world-next-step__actions"><label>Pesquisar país<input value={countryQuery} onChange={(event) => setCountryQuery(event.target.value)} placeholder="Digite um nome" /></label><label>Estado soberano / país<select value={countryCode} onChange={(event) => setCountryCode(event.target.value)}>{countryChoiceOptions.map((country) => <option key={country.code} value={country.code}>{country.name}</option>)}</select></label><button className="advance-button" onClick={() => setView('country')}>Abrir {countryName}</button><button className="text-button" onClick={() => document.getElementById('comparar-paises')?.scrollIntoView({ behavior: 'smooth', block: 'start' })}>Comparar países</button></div>
-          </section>
           {activeThemeId === 'forced-migration' && <MigrationFlowsPanel flows={migrationFlows} error={migrationFlowsError} />}
 
           <section className="content-grid content-grid--world">
-            <MapPanel title="Mapa mundial" subtitle={`${indicator.name} • clique em um país para abrir a análise nacional`} geography={worldGeo} valueByCode={worldValueByCode} codeKeys={['ADM0_A3', 'ISO_A3', 'SOV_A3', 'gu_a3']} onSelect={(code) => { setCountryCode(code); setContinent(data.countries.find((country) => country.code === code)?.continent ?? 'Todos'); setView('country') }} formatValue={(value) => formatValue(value, indicator.unit)} direction={indicator.direction} projectionKind="peters" />
+            <MapPanel title="Mapa mundial" subtitle={`${indicator.name} • clique para destacar um país e escolhê-lo no fim da página`} geography={worldGeo} valueByCode={worldValueByCode} codeKeys={['ADM0_A3', 'ISO_A3', 'SOV_A3', 'gu_a3']} onSelect={(code) => { setCountryCode(code); setCountryQuery('') }} selectedCode={countryCode} formatValue={(value) => formatValue(value, indicator.unit)} direction={indicator.direction} projectionKind="peters" />
             <article className="panel">
               <div className="panel__header"><div><h3>{continent === 'Todos' ? 'Panorama mundial' : `Panorama: ${continent}`}</h3><p>{indicator.description}</p>{continentAverage && <p className="context-metric">Média do recorte, ponderada pela população: {formatValue(continentAverage.value, indicator.unit)} ({continentAverage.coverage} países)</p>}</div><strong className="badge">{indicator.latestYear}</strong></div>
               <div className="world-summary"><strong>{countryLatest.length}</strong><span>países com último dado disponível</span><p>Use o mapa, o ranking e a comparação continental para observar diferenças no recorte antes de escolher um país.</p></div>
@@ -472,6 +468,10 @@ function App() {
             onRemove={(code) => setComparisonCountryCodes((current) => removeFromComparison(current, code))}
             tooltipFormatter={tooltipFormatter}
           />
+          <section className="panel world-next-step" aria-label="Escolher país depois da análise mundial">
+            <div><span>Próximo passo</span><h3>Escolha um país para detalhar</h3><p>Você concluiu a leitura mundial. Agora pode abrir os dados de um Estado soberano/país e, quando houver cobertura, suas subdivisões.</p></div>
+            <div className="world-next-step__actions"><label>Pesquisar país<input value={countryQuery} onChange={(event) => setCountryQuery(event.target.value)} placeholder="Digite um nome" /></label><label>Estado soberano / país<select value={countryCode} onChange={(event) => setCountryCode(event.target.value)}>{countryChoiceOptions.map((country) => <option key={country.code} value={country.code}>{country.name}</option>)}</select></label><button className="advance-button" onClick={() => setView('country')}>Abrir {countryName}</button></div>
+          </section>
         </>
       ) : effectiveView === 'country' ? (
         <>
