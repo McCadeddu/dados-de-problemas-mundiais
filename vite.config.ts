@@ -16,9 +16,9 @@ export default defineConfig({
         migracao: path.resolve(__dirname, 'migracao/index.html'),
       },
       output: {
-        manualChunks: {
-          charts: ['recharts'],
-          maps: ['d3-geo', 'd3-scale'],
+        manualChunks: (id) => {
+          if (id.includes('node_modules/recharts')) return 'charts'
+          if (id.includes('node_modules/d3-geo') || id.includes('node_modules/d3-scale')) return 'maps'
         },
       },
     },
