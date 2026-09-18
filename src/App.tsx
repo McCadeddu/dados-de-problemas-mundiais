@@ -13,6 +13,8 @@ import {
 import { MapPanel } from './components/MapPanel'
 import { NationalDataPanel } from './components/NationalDataPanel'
 import { EducationWorkPanel } from './components/EducationWorkPanel'
+import { NarrativeSynthesisPanel } from './components/NarrativeSynthesisPanel'
+import { ComparabilityMatrixPanel } from './components/ComparabilityMatrixPanel'
 import { getThemeIdFromPath, getThemePath } from './lib/themeRoutes'
 import {
   formatValue,
@@ -431,6 +433,8 @@ function App() {
           {activeThemeId === 'poverty-inequality' && <PovertyPanel values={themeGlobalSnapshot} />}
           {activeThemeId === 'climate-vulnerability' && <ClimatePanel values={themeGlobalSnapshot} />}
           <EducationWorkPanel themeId={activeThemeId} />
+          <NarrativeSynthesisPanel themeId={activeThemeId} />
+          {(activeThemeId === 'decent-work' || activeThemeId === 'forced-migration') && <ComparabilityMatrixPanel />}
           <GlobalInsightPanel indicator={indicator} continent={continent} average={continentAverage} coverage={countryLatest.length} leadingValue={worldRanking[0]} />
           {activeThemeId === 'forced-migration' && <MigrationFlowsPanel flows={migrationFlows} error={migrationFlowsError} />}
 

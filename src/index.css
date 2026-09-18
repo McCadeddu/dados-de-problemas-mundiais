@@ -741,6 +741,83 @@ select {
   background: linear-gradient(135deg, rgba(8, 47, 73, 0.82), rgba(15, 30, 49, 0.88));
 }
 
+.narrative-synthesis {
+  margin-bottom: 1.5rem;
+  border-color: rgba(96, 165, 250, 0.28);
+}
+
+.narrative-synthesis .panel__header span,
+.comparability-matrix .panel__header span {
+  color: #93c5fd;
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.narrative-synthesis__grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.8rem;
+}
+
+.narrative-synthesis__grid article {
+  padding: 0.9rem;
+  border: 1px solid rgba(96, 165, 250, 0.23);
+  border-radius: 14px;
+  background: rgba(15, 30, 49, 0.58);
+}
+
+.narrative-synthesis__grid h4 {
+  margin: 0 0 0.45rem;
+  color: #dbeafe;
+  font-size: 0.95rem;
+}
+
+.narrative-synthesis__grid p {
+  margin: 0;
+  color: #cbd5e1;
+}
+
+.comparability-matrix {
+  margin-bottom: 1.5rem;
+  border-color: rgba(251, 191, 36, 0.3);
+}
+
+.comparability-matrix__table {
+  overflow-x: auto;
+}
+
+.comparability-matrix table {
+  width: 100%;
+  min-width: 900px;
+  border-collapse: collapse;
+}
+
+.comparability-matrix caption {
+  padding: 0.3rem 0 0.7rem;
+  color: #cbd5e1;
+  text-align: left;
+}
+
+.comparability-matrix th,
+.comparability-matrix td {
+  padding: 0.7rem;
+  border-bottom: 1px solid rgba(148, 163, 184, 0.2);
+  vertical-align: top;
+  text-align: left;
+}
+
+.comparability-matrix th {
+  color: #fde68a;
+  font-size: 0.84rem;
+}
+
+.comparability-matrix td {
+  color: #cbd5e1;
+  font-size: 0.88rem;
+}
+
 .global-insight .panel__header span {
   color: #5eead4;
   font-size: 0.78rem;
@@ -1311,6 +1388,10 @@ select {
   }
 
   .climate-panel__grid {
+    grid-template-columns: 1fr;
+  }
+
+  .narrative-synthesis__grid {
     grid-template-columns: 1fr;
   }
 

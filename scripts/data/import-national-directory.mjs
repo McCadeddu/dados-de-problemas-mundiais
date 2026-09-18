@@ -26,6 +26,7 @@ const english = new Intl.DisplayNames(['en'], { type: 'region' })
 const overrides = {
   BRA: ['IBGE', 'https://www.ibge.gov.br/', 'https://servicodados.ibge.gov.br/api/docs/agregados', 'existing-connector'],
   MEX: ['INEGI', 'https://www.inegi.org.mx/', 'https://www.inegi.org.mx/servicios/api_indicadores.html', 'documented'],
+  PRT: ['Instituto Nacional de Estatística', 'https://www.ine.pt/', 'https://www.ine.pt/xportal/xmain?xpid=INE&xpgid=ine_main', 'documented'],
   ITA: ['Istat', 'https://www.istat.it/', 'https://esploradati.istat.it/SDMXWS/swagger/index.html?urls.primaryName=v2', 'documented'],
   AUS: ['Australian Bureau of Statistics', 'https://www.abs.gov.au/', 'https://www.abs.gov.au/statistics/application-programming-interfaces-apis/data-api-user-guide', 'documented'],
   KEN: ['Kenya National Bureau of Statistics', 'https://www.knbs.or.ke/', 'https://www.knbs.or.ke/county-statistical-abstracts/', 'documented'],

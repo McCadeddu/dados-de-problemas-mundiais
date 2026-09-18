@@ -13,8 +13,8 @@ O levantamento inicial foi seguido pela primeira integração descrita abaixo.
   pareamento aproximado. Endereços da ONU podem estar desatualizados e não foram
   todos visitados individualmente. Uma entrada pendente não significa que o país
   não tenha instituto de estatística.
-- Sete entradas têm documentação consultada: Brasil (conector existente), México,
-  Itália, Austrália, Quênia, África do Sul e Índia. O catálogo de instituições não
+- Oito entradas têm documentação consultada: Brasil (conector existente), México,
+  Portugal, Itália, Austrália, Quênia, África do Sul e Índia. O catálogo de instituições não
   autoriza automaticamente reutilizar os dados de cada portal.
 - Novo conector Eurostat `ilc_li02`: pobreza relativa abaixo de 60% da mediana
   nacional da renda equivalente disponível, após transferências, população total.
@@ -37,6 +37,21 @@ O levantamento inicial foi seguido pela primeira integração descrita abaixo.
 e, portanto, a rotina diária já existente. Artefatos publicados:
 `public/data/national-data.json` e `public/data/country-coverage.json`.
 
+### Lote prioritário desta etapa
+
+| País | Fonte oficial catalogada | Dado nacional complementar integrado | Próximo passo seguro |
+| --- | --- | --- | --- |
+| México | INEGI, API de indicadores | Ainda não | Selecionar série e validar token, unidade e recorte estadual. |
+| Portugal | INE; EU-SILC via Eurostat | Pobreza relativa 2015–2025 | Avaliar ligação direta ao INE para trabalho e educação. |
+| Itália | Istat; EU-SILC via Eurostat | Pobreza relativa 2015–2025 | Validar SDMX nacional antes de adicionar novas séries. |
+| Austrália | Australian Bureau of Statistics | Ainda não | Escolher conjunto da Data API e validar licença e denominador. |
+| África do Sul | Statistics South Africa | Ainda não | Priorizar pesquisa domiciliar compatível com trabalho e migração. |
+| Índia | MoSPI/eSankhyiki | Ainda não | Identificar série oficial estável antes de automatizar a coleta. |
+
+“Ainda não” significa que a fonte foi identificada, mas nenhum valor nacional
+foi importado por este conector. O painel mantém essa distinção para não
+apresentar uma fonte catalogada como se fosse uma integração concluída.
+
 `node scripts/data/import-national-directory.mjs` atualiza os candidatos a partir
 da ONU e do Banco Mundial; revisar o diff antes de aceitar novas associações.
 Essa importação é manutenção explícita, não roda automaticamente na coleta diária.
@@ -56,6 +71,7 @@ certifica atualidade ou qualidade e não soma territórios a Estados soberanos.
 | --- | --- | --- |
 | Brasil | [IBGE](https://servicodados.ibge.gov.br/api/docs/agregados) | Conector já presente no projeto para dados estaduais e regionais. |
 | México | [INEGI](https://www.inegi.org.mx/servicios/api_indicadores.html) | API de indicadores nacionais, estaduais e municipais; documentação inclui token. |
+| Portugal | [Instituto Nacional de Estatística](https://www.ine.pt/) | Portal oficial de estatísticas; os conjuntos devem ser selecionados por conceito e período antes de integração. |
 | Itália | [Istat](https://esploradati.istat.it/SDMXWS/swagger/index.html?urls.primaryName=v2) | Interface documentada de serviços SDMX; selecionar conjuntos e recortes antes de integrar. |
 | Austrália | [ABS](https://www.abs.gov.au/statistics/application-programming-interfaces-apis/data-api-user-guide) | API de estatísticas econômicas, sociais e censitárias. Recortes variam por conjunto. |
 | Quênia | [KNBS](https://www.knbs.or.ke/county-statistical-abstracts/) | Compilações oficiais demográficas, sociais, econômicas e ambientais por condado. Não foi validada uma API. |

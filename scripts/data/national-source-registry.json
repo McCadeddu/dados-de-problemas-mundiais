@@ -1416,9 +1416,9 @@
     "countryCode": "PRT",
     "countryName": "Portugal",
     "institution": "Instituto Nacional de Estatística",
-    "url": "http://www.ine.pt/",
-    "evidenceUrl": "https://unstats.un.org/home/nso_sites/",
-    "status": "directory-listed",
+    "url": "https://www.ine.pt/",
+    "evidenceUrl": "https://www.ine.pt/xportal/xmain?xpid=INE&xpgid=ine_main",
+    "status": "documented",
     "checkedAt": "2026-09-18"
   },
   {
