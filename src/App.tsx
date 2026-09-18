@@ -16,6 +16,7 @@ import { EducationWorkPanel } from './components/EducationWorkPanel'
 import { NarrativeSynthesisPanel } from './components/NarrativeSynthesisPanel'
 import { ComparabilityMatrixPanel } from './components/ComparabilityMatrixPanel'
 import { DataQualityPanel } from './components/DataQualityPanel'
+import { WorkMigrationComparisonPanel } from './components/WorkMigrationComparisonPanel'
 import { getThemeIdFromPath, getThemePath } from './lib/themeRoutes'
 import {
   formatValue,
@@ -226,18 +227,20 @@ function App() {
 
   useEffect(() => {
     if (!data || !requiredIndicatorId) return
-    const hasSeries = data.series.some((entry) => entry.indicatorId === requiredIndicatorId)
+    const comparisonIds = activeThemeId === 'decent-work' || activeThemeId === 'forced-migration'
+      ? ['ilo-unemployment', 'ilo-vulnerable-employment', 'unhcr-refugees-hosted']
+      : []
+    const requiredIds = [...new Set([requiredIndicatorId, ...comparisonIds])]
+    const missingIds = requiredIds.filter((id) => !data.series.some((entry) => entry.indicatorId === id))
     const needsPopulation = effectiveView === 'world'
-    if (hasSeries && (!needsPopulation || data.countryPopulation.length > 0)) return
+    if (missingIds.length === 0 && (!needsPopulation || data.countryPopulation.length > 0)) return
 
     let cancelled = false
     const dataBaseUrl = import.meta.env.BASE_URL
-    const requests: Array<Promise<Series[]>> = hasSeries
-      ? []
-      : [fetch(`${dataBaseUrl}data/series/${requiredIndicatorId}.json`).then((response) => {
-        if (!response.ok) throw new Error('Série indisponível')
-        return response.json() as Promise<Series[]>
-      })]
+    const requests: Array<Promise<Series[]>> = missingIds.map((id) => fetch(`${dataBaseUrl}data/series/${id}.json`).then((response) => {
+      if (!response.ok) throw new Error('Série indisponível')
+      return response.json() as Promise<Series[]>
+    }))
     const populationRequest = needsPopulation && data.countryPopulation.length === 0
       ? fetch(`${dataBaseUrl}data/series/country-population.json`).then((response) => {
         if (!response.ok) throw new Error('População indisponível')
@@ -257,7 +260,7 @@ function App() {
       if (!cancelled) setSeriesLoadError('Não foi possível carregar a série histórica desta visualização.')
     })
     return () => { cancelled = true }
-  }, [data, effectiveView, requiredIndicatorId])
+  }, [activeThemeId, data, effectiveView, requiredIndicatorId])
 
   useEffect(() => {
     if (!data || activeThemeId !== 'forced-migration' || migrationFlows) return
@@ -436,6 +439,7 @@ function App() {
           <EducationWorkPanel themeId={activeThemeId} />
           <NarrativeSynthesisPanel themeId={activeThemeId} />
           {(activeThemeId === 'decent-work' || activeThemeId === 'forced-migration') && <ComparabilityMatrixPanel />}
+          {(activeThemeId === 'decent-work' || activeThemeId === 'forced-migration') && <WorkMigrationComparisonPanel data={data} />}
           <GlobalInsightPanel indicator={indicator} continent={continent} average={continentAverage} coverage={countryLatest.length} leadingValue={worldRanking[0]} />
           {activeThemeId === 'forced-migration' && <MigrationFlowsPanel flows={migrationFlows} error={migrationFlowsError} />}
 

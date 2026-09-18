@@ -48,7 +48,9 @@ devem ser apresentados como prevalência comparável entre países.
   Ela não foi incorporada e não foi substituída silenciosamente por outra medida.
 - Trabalho informal, falta de contribuição e trabalho forçado são conceitos
   diferentes. Não são somados em um índice único.
-- A comparação entre trabalho e migração permanece para uma etapa futura.
+- A comparação inicial entre trabalho e migração está disponível como teste
+  descritivo: usa país–ano alinhado e refugiados acolhidos por mil habitantes;
+  não estima causalidade.
   Será necessário compatibilizar período, população e território, sem inferir
   causalidade de uma simples associação.
 

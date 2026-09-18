@@ -14,7 +14,10 @@ alinhar país, ano, população de referência e qualidade da fonte.
 | Refugiados e solicitantes de asilo | Pessoas sob proteção internacional ou em pedido de proteção | Estoque no fim do ano, por origem e acolhida | Separar de fluxos, migrantes econômicos e deslocados internos. |
 | Estoque de migrantes | Pessoas migrantes registradas ou estimadas como residentes | Estoque em uma data; definição da fonte nacional | Não equivale a refugiados nem a entradas no período. |
 
-O teste trabalho–migração deve começar com tabelas por país e ano, mostrando
-as definições lado a lado e intervalos de cobertura. Correlação, diferença de
-médias ou regressão podem descrever associação; não identificam causalidade sem
-desenho de pesquisa, variáveis de controle e hipóteses temporais explícitas.
+O painel já executa um primeiro teste descritivo com observações país–ano
+alinhadas: desemprego e emprego vulnerável são confrontados com refugiados
+acolhidos por mil habitantes, usando população do mesmo ano. Ele mostra o
+número de observações, uma correlação linear descritiva e os doze países com
+maior taxa no último ano alinhado. Correlação, diferença de médias ou regressão
+podem descrever associação; não identificam causalidade sem desenho de pesquisa,
+variáveis de controle e hipóteses temporais explícitas.
