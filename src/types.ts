@@ -30,7 +30,7 @@ export type Indicator = {
   unit: string
   geographyType: GeographyType
   sourceId: string
-  direction: 'higher-better' | 'higher-worse'
+  direction: 'higher-better' | 'higher-worse' | 'neutral'
   latestYear: number
 }
 

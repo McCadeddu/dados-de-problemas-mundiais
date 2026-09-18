@@ -30,7 +30,7 @@ type Indicator = {
   unit: string
   geographyType: GeographyType
   sourceId: string
-  direction: 'higher-better' | 'higher-worse'
+  direction: 'higher-better' | 'higher-worse' | 'neutral'
   latestYear: number
 }
 
@@ -492,7 +492,7 @@ const BRAZIL_STATE_ACTIVE_IMMIGRANTS_INDICATOR: Omit<Indicator, 'latestYear'> = 
   unit: 'pessoas',
   geographyType: 'brazil-state',
   sourceId: SISMIGRA_SOURCE_ID,
-  direction: 'higher-worse',
+  direction: 'neutral',
 }
 
 const BRAZIL_STATE_UNPAID_CARE_GAP_INDICATOR: Omit<Indicator, 'latestYear'> = {

@@ -171,12 +171,16 @@ function App() {
   const brazilIndicators = data?.indicators.filter((item) => item.geographyType === 'brazil-state') ?? []
   const stateThemeIndicators = brazilIndicators.filter((item) => item.themeId === activeThemeId)
   const brazilIndicator = stateThemeIndicators.find((item) => item.id === stateIndicatorId) ?? stateThemeIndicators[0] ?? brazilIndicators[0]
-  const effectiveView = view === 'states' && stateThemeIndicators.length === 0 ? 'world' : view
   const immediateIndicators = data?.indicators.filter(
     (item) => item.geographyType === 'brazil-immediate-region',
   ) ?? []
-  const regionalSanitationIndicators = immediateIndicators.filter((item) => item.themeId === 'hunger-water')
-  const immediateRegionIndicator = immediateIndicators.find((item) => item.id === immediateIndicatorId)
+  const regionalThemeIndicators = immediateIndicators.filter((item) => item.themeId === activeThemeId)
+  const effectiveView = (view === 'states' && stateThemeIndicators.length === 0)
+    || (view === 'regions' && regionalThemeIndicators.length === 0)
+    ? 'world'
+    : view
+  const regionalSanitationIndicators = regionalThemeIndicators.filter((item) => item.themeId === 'hunger-water')
+  const immediateRegionIndicator = regionalThemeIndicators.find((item) => item.id === immediateIndicatorId)
     ?? immediateIndicators[0]
   const selectedCountrySeries = data && indicator
     ? getSeriesForGeography(data, indicator.id, countryCode)
@@ -270,9 +274,11 @@ function App() {
       : 'regiões imediatas'
   const activeSeriesLoading = !data.series.some((entry) => entry.indicatorId === activeIndicator.id)
     || ((effectiveView === 'world' || effectiveView === 'country') && data.countryPopulation.length === 0)
-  const directionLabel = activeIndicator.direction === 'higher-worse'
-    ? 'Valores maiores indicam maior pressão ou vulnerabilidade.'
-    : 'Valores maiores indicam maior acesso, proteção ou capacidade.'
+  const directionLabel = activeIndicator.direction === 'neutral'
+    ? 'Valores maiores indicam maior volume de registros; a interpretação depende do contexto.'
+    : activeIndicator.direction === 'higher-worse'
+      ? 'Valores maiores indicam maior pressão ou vulnerabilidade.'
+      : 'Valores maiores indicam maior acesso, proteção ou capacidade.'
   const activeRanking = getTopRanked(data, activeIndicator.id, 10)
   const filteredCountries = continent === 'Todos'
     ? data.countries
@@ -366,7 +372,7 @@ function App() {
           3. Brasil: estados
           <span>Comparar unidades federativas equivalentes</span>
         </button>
-        <button className={view === 'regions' ? 'is-active' : ''} onClick={() => setView('regions')}>
+        <button className={view === 'regions' ? 'is-active' : ''} onClick={() => setView('regions')} disabled={regionalThemeIndicators.length === 0} title={regionalThemeIndicators.length === 0 ? 'Ainda não há indicador regional para esta problemática.' : undefined}>
           4. Regiões IBGE
           <span>Comparar Regiões Geográficas Imediatas</span>
         </button>
@@ -441,7 +447,7 @@ function App() {
             </article>
           </section>
           {countryCode === 'BRA' ? (
-            <section className="panel country-next-step"><div><span>Próximo nível disponível</span><h3>Subdivisões brasileiras</h3><p>Compare unidades federativas e, quando houver dados, Regiões Geográficas Imediatas do IBGE.</p></div><div><button className="advance-button" onClick={() => setView('states')} disabled={stateThemeIndicators.length === 0}>Ver estados brasileiros</button><button className="text-button" onClick={() => setView('regions')}>Ir para regiões imediatas</button></div></section>
+            <section className="panel country-next-step"><div><span>Próximo nível disponível</span><h3>Subdivisões brasileiras</h3><p>Compare unidades federativas e, quando houver dados compatíveis com a problemática, Regiões Geográficas Imediatas do IBGE.</p></div><div><button className="advance-button" onClick={() => setView('states')} disabled={stateThemeIndicators.length === 0}>Ver estados brasileiros</button><button className="text-button" onClick={() => setView('regions')} disabled={regionalThemeIndicators.length === 0}>Ir para regiões imediatas</button></div></section>
           ) : (
             <section className="panel country-next-step country-next-step--empty"><div><span>Detalhe territorial</span><h3>Sem série subnacional comparável neste MVP</h3><p>O programa não compara países a estados ou províncias. Novos conectores serão adicionados quando houver fonte pública, licença clara e unidades equivalentes.</p></div></section>
           )}
@@ -484,7 +490,7 @@ function App() {
         <>
           <section className="panel controls controls--regions">
             <label>Estado do Brasil<select value={stateCode} onChange={(event) => { const nextState = event.target.value; const nextRegions = data.brazilImmediateRegions.filter((region) => region.stateCode === nextState); setStateCode(nextState); setImmediateRegionCode(nextRegions[0]?.code ?? ''); setComparisonImmediateRegionCodes(nextRegions.slice(0, 3).map((region) => region.code)) }}>{data.brazilStates.map((state) => <option key={state.code} value={state.code}>{state.name}</option>)}</select></label>
-            <label>Indicador regional<select value={immediateRegionIndicator.id} onChange={(event) => setImmediateIndicatorId(event.target.value)}>{immediateIndicators.map((item) => <option key={item.id} value={item.id}>{item.name}</option>)}</select></label>
+            <label>Indicador regional<select value={immediateRegionIndicator.id} onChange={(event) => setImmediateIndicatorId(event.target.value)}>{regionalThemeIndicators.map((item) => <option key={item.id} value={item.id}>{item.name}</option>)}</select></label>
             <label>Região Geográfica Imediata<select value={immediateRegionCode} onChange={(event) => setImmediateRegionCode(event.target.value)}>{regionsForState.map((region) => <option key={region.code} value={region.code}>{region.name}</option>)}</select></label>
             <p className="controls__context">Indicador regional: <strong>{immediateRegionIndicator.name}</strong>. Agregação municipal do Censo 2022/SIDRA pela divisão territorial do IBGE.</p>
           </section>
@@ -532,15 +538,17 @@ type RankingPanelProps = {
   description: string
   ranking: DashboardData['latest']
   unit: string
-  direction: 'higher-better' | 'higher-worse'
+  direction: 'higher-better' | 'higher-worse' | 'neutral'
   color: string
   tooltipFormatter: (unit: string) => (value: unknown) => string
 }
 
 function RankingPanel({ title, description, ranking, unit, direction, color, tooltipFormatter }: RankingPanelProps) {
-  const directionText = direction === 'higher-worse'
-    ? 'Neste indicador, valores mais altos sinalizam maior pressão ou vulnerabilidade.'
-    : 'Neste indicador, valores mais altos sinalizam maior acesso, proteção ou capacidade.'
+  const directionText = direction === 'neutral'
+    ? 'Neste indicador, valores mais altos representam maior volume de registros; a interpretação depende do contexto.'
+    : direction === 'higher-worse'
+      ? 'Neste indicador, valores mais altos sinalizam maior pressão ou vulnerabilidade.'
+      : 'Neste indicador, valores mais altos sinalizam maior acesso, proteção ou capacidade.'
   return <section className="panel ranking-panel"><div className="panel__header"><div><h3>{title}</h3><p>{description}</p><p className={`ranking-meaning ranking-meaning--${direction}`}>{directionText}</p></div>{ranking.length > 0 && <button className="export-button" onClick={() => exportRankingCsv(title, ranking, unit)}>Baixar CSV</button>}</div>{ranking.length > 0 ? <div className="chart"><ResponsiveContainer width="100%" height={340}><BarChart data={[...ranking].reverse()}><CartesianGrid stroke="#334155" strokeDasharray="4 4" /><XAxis type="number" stroke="#a8b8cc" /><YAxis type="category" dataKey="geographyName" width={140} stroke="#a8b8cc" /><Tooltip formatter={tooltipFormatter(unit)} /><Bar dataKey="value" fill={color} radius={[0, 6, 6, 0]} /></BarChart></ResponsiveContainer></div> : <p className="ranking-empty">Não há valores disponíveis para este indicador e recorte territorial.</p>}</section>
 }
 
