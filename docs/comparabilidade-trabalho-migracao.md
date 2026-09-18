@@ -15,9 +15,10 @@ alinhar país, ano, população de referência e qualidade da fonte.
 | Estoque de migrantes | Pessoas migrantes registradas ou estimadas como residentes | Estoque em uma data; definição da fonte nacional | Não equivale a refugiados nem a entradas no período. |
 
 O painel já executa um primeiro teste descritivo com observações país–ano
-alinhadas: desemprego e emprego vulnerável são confrontados com refugiados
-acolhidos por mil habitantes, usando população do mesmo ano. Ele mostra o
-número de observações, uma correlação linear descritiva e os doze países com
-maior taxa no último ano alinhado. Correlação, diferença de médias ou regressão
-podem descrever associação; não identificam causalidade sem desenho de pesquisa,
-variáveis de controle e hipóteses temporais explícitas.
+alinhadas: desemprego e emprego vulnerável são confrontados com refugiados ou
+solicitantes de asilo acolhidos por mil habitantes, usando população do mesmo
+ano. Ele mostra o número de observações, uma correlação linear descritiva, os
+doze países com maior taxa no último ano alinhado e permite baixar o recorte em
+CSV. Correlação, diferença de médias ou regressão podem descrever associação;
+não identificam causalidade sem desenho de pesquisa, variáveis de controle e
+hipóteses temporais explícitas.

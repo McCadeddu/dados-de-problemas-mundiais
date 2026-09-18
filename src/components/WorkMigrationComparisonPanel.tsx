@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import type { DashboardData } from '../types'
 
 type AlignedRow = {
@@ -6,8 +7,8 @@ type AlignedRow = {
   year: number
   unemployment: number
   vulnerableEmployment: number
-  refugeesPerThousand: number
-  refugees: number
+  migrationPerThousand: number
+  migrationCount: number
 }
 
 function pointMap(series: { points?: Array<{ year: number; value: number }> } | undefined) {
@@ -25,11 +26,11 @@ function correlation(rows: AlignedRow[], left: (row: AlignedRow) => number, righ
   return denominator === 0 ? null : numerator / denominator
 }
 
-function downloadAlignedRows(rows: AlignedRow[]) {
+function downloadAlignedRows(rows: AlignedRow[], migrationLabel: string) {
   const escape = (value: string | number) => `"${String(value).replaceAll('"', '""')}"`
   const output = [
-    'codigo_pais,pais,ano,desemprego_pct,emprego_vulneravel_pct,refugiados_acolhidos_por_1000,refugiados_acolhidos',
-    ...rows.map((row) => [row.countryCode, row.countryName, row.year, row.unemployment, row.vulnerableEmployment, row.refugeesPerThousand, row.refugees].map(escape).join(',')),
+    `codigo_pais,pais,ano,desemprego_pct,emprego_vulneravel_pct,${migrationLabel}_por_1000,${migrationLabel}`,
+    ...rows.map((row) => [row.countryCode, row.countryName, row.year, row.unemployment, row.vulnerableEmployment, row.migrationPerThousand, row.migrationCount].map(escape).join(',')),
   ].join('\n')
   const blob = new Blob([`\ufeff${output}`], { type: 'text/csv;charset=utf-8' })
   const url = URL.createObjectURL(blob)
@@ -41,35 +42,38 @@ function downloadAlignedRows(rows: AlignedRow[]) {
 }
 
 export function WorkMigrationComparisonPanel({ data }: { data: DashboardData }) {
+  const [migrationMeasure, setMigrationMeasure] = useState<'refugees' | 'asylum'>('refugees')
   const unemployment = new Map(data.series.filter((series) => series.indicatorId === 'ilo-unemployment').map((series) => [series.geographyCode, pointMap(series)]))
   const vulnerable = new Map(data.series.filter((series) => series.indicatorId === 'ilo-vulnerable-employment').map((series) => [series.geographyCode, pointMap(series)]))
-  const refugees = new Map(data.series.filter((series) => series.indicatorId === 'unhcr-refugees-hosted').map((series) => [series.geographyCode, pointMap(series)]))
+  const migrationLabel = migrationMeasure === 'refugees' ? 'refugiados_acolhidos' : 'solicitantes_asilo_acolhidos'
+  const migrationTitle = migrationMeasure === 'refugees' ? 'Refugiados acolhidos' : 'Solicitantes de asilo acolhidos'
+  const migrationSeries = new Map(data.series.filter((series) => series.indicatorId === (migrationMeasure === 'refugees' ? 'unhcr-refugees-hosted' : 'unhcr-asylum-seekers-hosted')).map((series) => [series.geographyCode, pointMap(series)]))
   const population = new Map(data.countryPopulation.map((series) => [series.geographyCode, pointMap(series)]))
   const rows: AlignedRow[] = []
   for (const country of data.countries) {
     const unemploymentPoints = unemployment.get(country.code)
     const vulnerablePoints = vulnerable.get(country.code)
-    const refugeePoints = refugees.get(country.code)
+    const migrationPoints = migrationSeries.get(country.code)
     const populationPoints = population.get(country.code)
-    if (!unemploymentPoints || !vulnerablePoints || !refugeePoints || !populationPoints) continue
+    if (!unemploymentPoints || !vulnerablePoints || !migrationPoints || !populationPoints) continue
     for (const year of unemploymentPoints.keys()) {
       const unemploymentValue = unemploymentPoints.get(year)
       const vulnerableValue = vulnerablePoints.get(year)
-      const refugeeValue = refugeePoints.get(year)
+      const migrationValue = migrationPoints.get(year)
       const populationValue = populationPoints.get(year)
-      if (unemploymentValue === undefined || vulnerableValue === undefined || refugeeValue === undefined || !populationValue) continue
-      rows.push({ countryCode: country.code, countryName: country.name, year, unemployment: unemploymentValue, vulnerableEmployment: vulnerableValue, refugeesPerThousand: (refugeeValue / populationValue) * 1000, refugees: refugeeValue })
+      if (unemploymentValue === undefined || vulnerableValue === undefined || migrationValue === undefined || !populationValue) continue
+      rows.push({ countryCode: country.code, countryName: country.name, year, unemployment: unemploymentValue, vulnerableEmployment: vulnerableValue, migrationPerThousand: (migrationValue / populationValue) * 1000, migrationCount: migrationValue })
     }
   }
-  const latestByCountry = [...new Map(rows.map((row) => [row.countryCode, row])).values()].sort((a, b) => b.refugeesPerThousand - a.refugeesPerThousand).slice(0, 12)
-  const unemploymentCorrelation = correlation(rows, (row) => row.unemployment, (row) => row.refugeesPerThousand)
-  const vulnerableCorrelation = correlation(rows, (row) => row.vulnerableEmployment, (row) => row.refugeesPerThousand)
+  const latestByCountry = [...new Map(rows.map((row) => [row.countryCode, row])).values()].sort((a, b) => b.migrationPerThousand - a.migrationPerThousand).slice(0, 12)
+  const unemploymentCorrelation = correlation(rows, (row) => row.unemployment, (row) => row.migrationPerThousand)
+  const vulnerableCorrelation = correlation(rows, (row) => row.vulnerableEmployment, (row) => row.migrationPerThousand)
   const formatCorrelation = (value: number | null) => value === null ? 'indisponível' : value.toFixed(2)
   return <section className="panel work-migration-comparison" aria-label="Comparação descritiva entre trabalho e migração">
-    <div className="panel__header"><div><span>Teste descritivo</span><h3>Trabalho e migração no mesmo recorte</h3><p>Refugiados acolhidos são apresentados por mil habitantes; trabalho e migração só entram quando país, ano e população estão alinhados.</p></div><div className="work-migration-comparison__actions"><strong className="badge">Sem causalidade</strong><button className="export-button" onClick={() => downloadAlignedRows(rows)} disabled={!rows.length}>Baixar CSV alinhado</button></div></div>
+    <div className="panel__header"><div><span>Teste descritivo</span><h3>Trabalho e migração no mesmo recorte</h3><p>O indicador migratório é normalizado por mil habitantes; trabalho e migração só entram quando país, ano e população estão alinhados.</p></div><div className="work-migration-comparison__actions"><label>Medida migratória<select value={migrationMeasure} onChange={(event) => setMigrationMeasure(event.target.value as 'refugees' | 'asylum')}><option value="refugees">Refugiados acolhidos</option><option value="asylum">Solicitantes de asilo acolhidos</option></select></label><strong className="badge">Sem causalidade</strong><button className="export-button" onClick={() => downloadAlignedRows(rows, migrationLabel)} disabled={!rows.length}>Baixar CSV alinhado</button></div></div>
     {rows.length ? <>
-      <div className="work-migration-comparison__summary"><article><span>Observações alinhadas</span><strong>{rows.length.toLocaleString('pt-BR')}</strong><small>país–ano</small></article><article><span>Correlação descritiva</span><strong>{formatCorrelation(unemploymentCorrelation)}</strong><small>desemprego × refugiados/1.000</small></article><article><span>Correlação descritiva</span><strong>{formatCorrelation(vulnerableCorrelation)}</strong><small>emprego vulnerável × refugiados/1.000</small></article></div>
-      <div className="work-migration-comparison__table"><table><caption>Doze países com maior taxa de refugiados acolhidos no último ano alinhado</caption><thead><tr><th>País</th><th>Ano</th><th>Desemprego</th><th>Emprego vulnerável</th><th>Refugiados/1.000</th></tr></thead><tbody>{latestByCountry.map((row) => <tr key={row.countryCode}><th scope="row">{row.countryName}</th><td>{row.year}</td><td>{row.unemployment.toFixed(1)}%</td><td>{row.vulnerableEmployment.toFixed(1)}%</td><td>{row.refugeesPerThousand.toFixed(1)}</td></tr>)}</tbody></table></div>
+      <div className="work-migration-comparison__summary"><article><span>Observações alinhadas</span><strong>{rows.length.toLocaleString('pt-BR')}</strong><small>país–ano</small></article><article><span>Correlação descritiva</span><strong>{formatCorrelation(unemploymentCorrelation)}</strong><small>desemprego × {migrationTitle.toLowerCase()}/1.000</small></article><article><span>Correlação descritiva</span><strong>{formatCorrelation(vulnerableCorrelation)}</strong><small>emprego vulnerável × {migrationTitle.toLowerCase()}/1.000</small></article></div>
+      <div className="work-migration-comparison__table"><table><caption>Doze países com maior taxa de {migrationTitle.toLowerCase()} no último ano alinhado</caption><thead><tr><th>País</th><th>Ano</th><th>Desemprego</th><th>Emprego vulnerável</th><th>{migrationTitle}/1.000</th></tr></thead><tbody>{latestByCountry.map((row) => <tr key={row.countryCode}><th scope="row">{row.countryName}</th><td>{row.year}</td><td>{row.unemployment.toFixed(1)}%</td><td>{row.vulnerableEmployment.toFixed(1)}%</td><td>{row.migrationPerThousand.toFixed(1)}</td></tr>)}</tbody></table></div>
       <p className="meta">A correlação resume associação linear no recorte alinhado. Ela não controla conflito, renda, políticas de acolhida, composição etária ou causalidade reversa; não deve ser lida como efeito do desemprego sobre a migração.</p>
     </> : <p className="comparison-warning">Carregando as três séries de trabalho, migração e população para encontrar observações alinhadas.</p>}
   </section>

@@ -5,8 +5,8 @@
 - consolidar a camada de qualidade no painel: denominador, período observado,
   cobertura territorial e distinção entre ausência e zero;
 - ampliar a cobertura de contribuição previdenciária fora do Brasil e pesquisar dados oficiais de trabalho forçado, preservando a diferença entre prevalência e registros de fiscalização;
-- ampliar o teste descritivo trabalho–migração com estoque migrante e solicitantes
-  de asilo, mantendo períodos, territórios e populações compatíveis;
+- ampliar o teste descritivo trabalho–migração com estoque migrante, mantendo
+  períodos, territórios e populações compatíveis;
 
 - revisar as 38 entradas ainda pendentes no catálogo nacional e confirmar os endereços importados do diretório da ONU;
 - priorizar séries oficiais de cuidado não remunerado e violência de gênero, com definições compatíveis;
