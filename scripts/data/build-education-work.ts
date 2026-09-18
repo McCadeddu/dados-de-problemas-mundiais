@@ -30,7 +30,7 @@ const results = await Promise.all(EDUCATION_WORK_INDICATORS.map(async (config) =
     id: config.sourceId,
     name: config.sourceId === 'uis-literacy' ? 'UNESCO/UIS via Banco Mundial' : 'OIT/ILOSTAT via Banco Mundial',
     url: config.sourceId === 'uis-literacy' ? 'https://databrowser.uis.unesco.org/' : 'https://ilostat.ilo.org/data/',
-    methodologyUrl: config.sourceId === 'uis-literacy' ? 'https://data.worldbank.org/indicator/SE.ADT.LITR.ZS' : 'https://data.worldbank.org/indicator/SL.UEM.TOTL.ZS',
+    methodologyUrl: `https://databank.worldbank.org/metadataglossary/world-development-indicators/series/${config.code}`,
     license: 'CC BY 4.0 — World Bank Open Data; derivação explicitada no indicador', lastUpdated: meta.lastupdated,
   }
   return { indicator, series, source }
@@ -39,9 +39,11 @@ const results = await Promise.all(EDUCATION_WORK_INDICATORS.map(async (config) =
 const stateConfigs = [
   { id: 'ibge-state-illiteracy', themeId: 'illiteracy' as const, name: 'Analfabetismo — pessoas de 15 anos ou mais', table: '7113', variable: '10267', classification: '2[6794]|58[2795]', fourthQuarter: false, description: 'Taxa de analfabetismo das pessoas de 15 anos ou mais, ambos os sexos. PNAD Contínua anual/IBGE, tabela 7113. Anos sem divulgação não são interpolados.' },
   { id: 'ibge-state-no-pension', themeId: 'decent-work' as const, name: 'Ocupados sem contribuição previdenciária — 4º trimestre', table: '5947', variable: '4108', classification: '12027[99158]', fourthQuarter: true, description: 'Percentual das pessoas ocupadas de 14 anos ou mais que não contribuem para instituto de previdência em nenhum trabalho. PNAD Contínua/IBGE, tabela 5947; usa exclusivamente o 4º trimestre de cada ano, não uma média anual. Não equivale à taxa de informalidade ou à ausência de toda proteção social.' },
+  { id: 'ibge-state-unemployment', themeId: 'decent-work' as const, name: 'Taxa de desocupação — pessoas de 14 anos ou mais', table: '4562', variable: '4099', classification: '', fourthQuarter: false, description: 'Taxa anual de desocupação das pessoas de 14 anos ou mais, conforme a PNAD Contínua anual do IBGE. O denominador é a força de trabalho; não inclui toda a população sem ocupação.' },
 ]
 const states = await Promise.all(stateConfigs.map(async (config) => {
-  const url = `https://servicodados.ibge.gov.br/api/v3/agregados/${config.table}/periodos/all/variaveis/${config.variable}?localidades=N3[all]&classificacao=${encodeURIComponent(config.classification)}`
+  const classification = config.classification ? `&classificacao=${encodeURIComponent(config.classification)}` : ''
+  const url = `https://servicodados.ibge.gov.br/api/v3/agregados/${config.table}/periodos/all/variaveis/${config.variable}?localidades=N3[all]${classification}`
   const raw = await json<Array<{ resultados: Array<{ series: IbgeRow[] }> }>>(url)
   if (raw.length !== 1 || raw[0].resultados.length !== 1) throw new Error(`Recorte IBGE inesperado: ${config.table}`)
   const series = parseIbgeSeries(raw[0].resultados[0].series, config.id, config.fourthQuarter)

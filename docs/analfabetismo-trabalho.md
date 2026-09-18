@@ -12,6 +12,7 @@ nacional permanece ao final desse percurso.
 | Analfabetismo | Jovens de 15 a 24 anos | UNESCO/UIS via Banco Mundial, `100 - SE.ADT.1524.LT.ZS` | 172 países/territórios, último ano do conjunto 2024 |
 | Trabalho | Desemprego total | OIT, estimativas modeladas via Banco Mundial, `SL.UEM.TOTL.ZS` | 187 países/territórios, até 2025 |
 | Trabalho | Desemprego juvenil | OIT, estimativas modeladas via Banco Mundial, `SL.UEM.1524.ZS` | 187 países/territórios, até 2025 |
+| Trabalho | Emprego vulnerável | OIT, estimativas modeladas via Banco Mundial, `SL.EMP.VULN.ZS`; conta por conta própria e trabalhadores familiares auxiliares | 187 países/territórios, até 2025 |
 | Analfabetismo — Brasil | Taxa de analfabetismo 15+ | IBGE PNAD Contínua, tabela 7113, variável 10267, sexo total e idade 15+ | 27 UFs, até 2025 |
 | Trabalho — Brasil | Ocupados sem contribuição previdenciária em qualquer trabalho | IBGE PNAD Contínua, tabela 5947, variável 4108, categoria 99158 | 27 UFs; somente 4º trimestre de cada ano, até 2025 |
 
@@ -53,7 +54,7 @@ devem ser apresentados como prevalência comparável entre países.
 
 ## Atualização
 
-`npm run data:education-work` coleta as quatro séries mundiais e duas estaduais,
+`npm run data:education-work` coleta as cinco séries mundiais e três estaduais,
 atualiza mapas/rankings e grava as séries históricas. Ele integra `data:build`,
 antes de `data:national`, para atualizar também o diagnóstico de cobertura.
 Uma falha de coleta encerra o processo e impede a publicação automatizada.
