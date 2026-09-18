@@ -228,7 +228,7 @@ function App() {
   useEffect(() => {
     if (!data || !requiredIndicatorId) return
     const comparisonIds = activeThemeId === 'decent-work' || activeThemeId === 'forced-migration'
-      ? ['ilo-unemployment', 'ilo-vulnerable-employment', 'unhcr-refugees-hosted', 'unhcr-asylum-seekers-hosted']
+      ? ['ilo-unemployment', 'ilo-vulnerable-employment', 'unhcr-refugees-hosted', 'unhcr-asylum-seekers-hosted', 'wb-migrant-stock']
       : []
     const requiredIds = [...new Set([requiredIndicatorId, ...comparisonIds])]
     const missingIds = requiredIds.filter((id) => !data.series.some((entry) => entry.indicatorId === id))

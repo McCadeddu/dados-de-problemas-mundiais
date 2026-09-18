@@ -12,7 +12,7 @@ alinhar país, ano, população de referência e qualidade da fonte.
 | Ausência de contribuição | Ocupados sem contribuição previdenciária no recorte observado | Ocupados; Brasil/PNAD Contínua, 4º trimestre | Não comparar diretamente com a série global: cobertura e denominador diferem. |
 | Trabalho forçado | Trabalho sob ameaça ou coerção, sem liberdade efetiva | Estimativa global de estoque/prevalência, referência 2021 | Não é taxa anual de desemprego e não tem a mesma fonte ou unidade. |
 | Refugiados e solicitantes de asilo | Pessoas sob proteção internacional ou em pedido de proteção | Estoque no fim do ano, por origem e acolhida | Separar de fluxos, migrantes econômicos e deslocados internos. |
-| Estoque de migrantes | Pessoas migrantes registradas ou estimadas como residentes | Estoque em uma data; definição da fonte nacional | Não equivale a refugiados nem a entradas no período. |
+| Estoque de migrantes | Pessoas residentes em país diferente do país de nascimento | Estoque internacional harmonizado; Banco Mundial/ONU; ano da estimativa | Não equivale a refugiados, solicitantes de asilo nem a entradas no período. |
 
 O painel já executa um primeiro teste descritivo com observações país–ano
 alinhadas: desemprego e emprego vulnerável são confrontados com refugiados ou

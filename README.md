@@ -31,6 +31,7 @@ brasileira; a estimativa de trabalho forçado é global, referente a 2021.
 - World Bank Open Data
 - ND-GAIN Country Index: índice geral, vulnerabilidade e prontidão, com componentes de alimento, água, saúde e governança
 - UNHCR Refugee Data Finder
+- World Bank international migrant stock (`SM.POP.TOTL`)
 - IBGE SIDRA
 - IBGE Pesquisa de Orçamentos Familiares (POF 2017-2018)
 - Natural Earth

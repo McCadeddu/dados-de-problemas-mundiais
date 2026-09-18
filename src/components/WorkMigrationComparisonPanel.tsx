@@ -42,12 +42,13 @@ function downloadAlignedRows(rows: AlignedRow[], migrationLabel: string) {
 }
 
 export function WorkMigrationComparisonPanel({ data }: { data: DashboardData }) {
-  const [migrationMeasure, setMigrationMeasure] = useState<'refugees' | 'asylum'>('refugees')
+  const [migrationMeasure, setMigrationMeasure] = useState<'refugees' | 'asylum' | 'stock'>('refugees')
   const unemployment = new Map(data.series.filter((series) => series.indicatorId === 'ilo-unemployment').map((series) => [series.geographyCode, pointMap(series)]))
   const vulnerable = new Map(data.series.filter((series) => series.indicatorId === 'ilo-vulnerable-employment').map((series) => [series.geographyCode, pointMap(series)]))
-  const migrationLabel = migrationMeasure === 'refugees' ? 'refugiados_acolhidos' : 'solicitantes_asilo_acolhidos'
-  const migrationTitle = migrationMeasure === 'refugees' ? 'Refugiados acolhidos' : 'Solicitantes de asilo acolhidos'
-  const migrationSeries = new Map(data.series.filter((series) => series.indicatorId === (migrationMeasure === 'refugees' ? 'unhcr-refugees-hosted' : 'unhcr-asylum-seekers-hosted')).map((series) => [series.geographyCode, pointMap(series)]))
+  const migrationLabel = migrationMeasure === 'refugees' ? 'refugiados_acolhidos' : migrationMeasure === 'asylum' ? 'solicitantes_asilo_acolhidos' : 'estoque_migrante'
+  const migrationTitle = migrationMeasure === 'refugees' ? 'Refugiados acolhidos' : migrationMeasure === 'asylum' ? 'Solicitantes de asilo acolhidos' : 'Estoque internacional de migrantes'
+  const migrationSeriesId = migrationMeasure === 'refugees' ? 'unhcr-refugees-hosted' : migrationMeasure === 'asylum' ? 'unhcr-asylum-seekers-hosted' : 'wb-migrant-stock'
+  const migrationSeries = new Map(data.series.filter((series) => series.indicatorId === migrationSeriesId).map((series) => [series.geographyCode, pointMap(series)]))
   const population = new Map(data.countryPopulation.map((series) => [series.geographyCode, pointMap(series)]))
   const rows: AlignedRow[] = []
   for (const country of data.countries) {
@@ -70,7 +71,7 @@ export function WorkMigrationComparisonPanel({ data }: { data: DashboardData }) 
   const vulnerableCorrelation = correlation(rows, (row) => row.vulnerableEmployment, (row) => row.migrationPerThousand)
   const formatCorrelation = (value: number | null) => value === null ? 'indisponível' : value.toFixed(2)
   return <section className="panel work-migration-comparison" aria-label="Comparação descritiva entre trabalho e migração">
-    <div className="panel__header"><div><span>Teste descritivo</span><h3>Trabalho e migração no mesmo recorte</h3><p>O indicador migratório é normalizado por mil habitantes; trabalho e migração só entram quando país, ano e população estão alinhados.</p></div><div className="work-migration-comparison__actions"><label>Medida migratória<select value={migrationMeasure} onChange={(event) => setMigrationMeasure(event.target.value as 'refugees' | 'asylum')}><option value="refugees">Refugiados acolhidos</option><option value="asylum">Solicitantes de asilo acolhidos</option></select></label><strong className="badge">Sem causalidade</strong><button className="export-button" onClick={() => downloadAlignedRows(rows, migrationLabel)} disabled={!rows.length}>Baixar CSV alinhado</button></div></div>
+    <div className="panel__header"><div><span>Teste descritivo</span><h3>Trabalho e migração no mesmo recorte</h3><p>O indicador migratório é normalizado por mil habitantes; trabalho e migração só entram quando país, ano e população estão alinhados.</p></div><div className="work-migration-comparison__actions"><label>Medida migratória<select value={migrationMeasure} onChange={(event) => setMigrationMeasure(event.target.value as 'refugees' | 'asylum' | 'stock')}><option value="refugees">Refugiados acolhidos</option><option value="asylum">Solicitantes de asilo acolhidos</option><option value="stock">Estoque internacional de migrantes</option></select></label><strong className="badge">Sem causalidade</strong><button className="export-button" onClick={() => downloadAlignedRows(rows, migrationLabel)} disabled={!rows.length}>Baixar CSV alinhado</button></div></div>
     {rows.length ? <>
       <div className="work-migration-comparison__summary"><article><span>Observações alinhadas</span><strong>{rows.length.toLocaleString('pt-BR')}</strong><small>país–ano</small></article><article><span>Correlação descritiva</span><strong>{formatCorrelation(unemploymentCorrelation)}</strong><small>desemprego × {migrationTitle.toLowerCase()}/1.000</small></article><article><span>Correlação descritiva</span><strong>{formatCorrelation(vulnerableCorrelation)}</strong><small>emprego vulnerável × {migrationTitle.toLowerCase()}/1.000</small></article></div>
       <div className="work-migration-comparison__table"><table><caption>Doze países com maior taxa de {migrationTitle.toLowerCase()} no último ano alinhado</caption><thead><tr><th>País</th><th>Ano</th><th>Desemprego</th><th>Emprego vulnerável</th><th>{migrationTitle}/1.000</th></tr></thead><tbody>{latestByCountry.map((row) => <tr key={row.countryCode}><th scope="row">{row.countryName}</th><td>{row.year}</td><td>{row.unemployment.toFixed(1)}%</td><td>{row.vulnerableEmployment.toFixed(1)}%</td><td>{row.migrationPerThousand.toFixed(1)}</td></tr>)}</tbody></table></div>

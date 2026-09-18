@@ -166,6 +166,17 @@ const BRAZIL_STATE_CODE_BY_POSTAL: Record<string, string> = {
 
 const WORLD_BANK_INDICATORS: WorldBankIndicatorConfig[] = [
   {
+    id: 'wb-migrant-stock',
+    wbCode: 'SM.POP.TOTL',
+    name: 'Estoque internacional de migrantes',
+    themeId: 'forced-migration',
+    description: 'Número de pessoas residentes em um país diferente do país de nascimento, segundo a estimativa internacional harmonizada.',
+    unit: 'pessoas',
+    geographyType: 'country',
+    sourceId: WORLD_BANK_SOURCE_ID,
+    direction: 'neutral',
+  },
+  {
     id: 'wb-undernourishment',
     wbCode: 'SN.ITK.DEFC.ZS',
     name: 'Subalimentação',

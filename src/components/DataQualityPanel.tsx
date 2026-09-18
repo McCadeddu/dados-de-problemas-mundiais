@@ -8,6 +8,7 @@ const denominatorByIndicator: Record<string, string> = {
   'ilo-vulnerable-employment': 'emprego total',
   'ibge-state-no-pension': 'ocupados de 14 anos ou mais no 4º trimestre',
   'ibge-state-unemployment': 'força de trabalho estadual',
+  'wb-migrant-stock': 'estoque de pessoas residentes nascidas no exterior',
 }
 
 export function DataQualityPanel({ indicator, source, latest, coverageTotal, territoryLabel, generatedAt }: {
