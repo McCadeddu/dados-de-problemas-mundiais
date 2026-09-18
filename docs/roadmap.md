@@ -2,6 +2,8 @@
 
 ## Próxima etapa
 
+- consolidar a camada de qualidade no painel: denominador, período observado,
+  cobertura territorial e distinção entre ausência e zero;
 - ampliar a cobertura de contribuição previdenciária fora do Brasil e pesquisar dados oficiais de trabalho forçado, preservando a diferença entre prevalência e registros de fiscalização;
 - avaliar posteriormente a comparação entre trabalho e migração, com períodos, territórios e populações compatíveis;
 
