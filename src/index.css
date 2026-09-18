@@ -270,6 +270,12 @@ select {
   font-size: 1.5rem;
 }
 
+.csv-upload { display: inline-block; margin: 0.75rem 0 0; color: #5eead4; cursor: pointer; }
+.csv-upload input { display: block; margin-top: 0.4rem; color: #a8b8cc; }
+.csv-preview { grid-column: 1 / -1; margin-top: 1rem; padding: 0.9rem; border: 1px solid #334155; border-radius: 0.75rem; color: #cbd5e1; }
+.csv-preview p { margin: 0.4rem 0; }
+.csv-preview code { display: block; white-space: pre-wrap; overflow-wrap: anywhere; color: #94a3b8; }
+
 .hierarchy strong {
   color: #ccfbf1;
 }
