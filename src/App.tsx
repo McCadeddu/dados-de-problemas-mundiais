@@ -419,6 +419,7 @@ function App() {
           {activeThemeId === 'gender-equality' && <GenderPanel values={themeGlobalSnapshot} />}
           {activeThemeId === 'poverty-inequality' && <PovertyPanel values={themeGlobalSnapshot} />}
           {activeThemeId === 'climate-vulnerability' && <ClimatePanel values={themeGlobalSnapshot} />}
+          <GlobalInsightPanel indicator={indicator} continent={continent} average={continentAverage} coverage={countryLatest.length} leadingValue={worldRanking[0]} />
           <section className="panel world-next-step" aria-label="Próximo passo da análise mundial">
             <div><span>Próximo passo</span><h3>Escolha um país para detalhar</h3><p>A análise nacional abre somente depois da leitura mundial. Você também pode comparar países no mesmo indicador.</p></div>
             <div className="world-next-step__actions"><label>País<select value={countryCode} onChange={(event) => setCountryCode(event.target.value)}>{filteredCountries.map((country) => <option key={country.code} value={country.code}>{country.name}</option>)}</select></label><button className="advance-button" onClick={() => setView('country')}>Abrir {countryName}</button><button className="text-button" onClick={() => document.getElementById('comparar-paises')?.scrollIntoView({ behavior: 'smooth', block: 'start' })}>Comparar países</button></div>
@@ -614,6 +615,35 @@ function ClimatePanel({ values }: { values: GlobalThemeValue[] }) {
   return <section className="panel climate-panel">
     <div className="panel__header"><div><h3>Vulnerabilidade climática no mundo</h3><p>Médias ponderadas pela população dos componentes ND-GAIN: exposição e sensibilidade, capacidade de adaptação e prontidão para responder.</p></div><strong className="badge">Visão global</strong></div>
     {values.length > 0 ? <div className="climate-panel__grid">{values.map(({ indicator, value, year, coverage }) => <article key={indicator.id} className={indicator.direction === 'higher-worse' ? 'is-risk' : 'is-readiness'}><span>{indicator.name}</span><strong>{formatValue(value, indicator.unit)}</strong><small>{year} · {coverage} países · {indicator.direction === 'higher-worse' ? 'maior risco' : 'maior capacidade'}</small></article>)}</div> : <p className="comparison-warning">Carregando população para calcular as médias mundiais.</p>}
+  </section>
+}
+
+function GlobalInsightPanel({ indicator, continent, average, coverage, leadingValue }: {
+  indicator: DashboardData['indicators'][number]
+  continent: string
+  average: { value: number; coverage: number } | null
+  coverage: number
+  leadingValue?: DashboardData['latest'][number]
+}) {
+  const scope = continent === 'Todos' ? 'mundo' : continent
+  const meaning = indicator.direction === 'neutral'
+    ? 'maior volume de registros, cuja interpretação depende do contexto'
+    : indicator.direction === 'higher-worse'
+      ? 'maior pressão ou vulnerabilidade'
+      : 'maior acesso, proteção ou capacidade'
+  const themeFocus: Record<string, string> = {
+    'hunger-water': 'Observe conjuntamente alimentação e água: um único indicador não descreve toda a segurança alimentar.',
+    'gender-equality': 'Compare representação, trabalho, violência e cuidado separadamente: as medidas não devem ser somadas.',
+    'poverty-inequality': 'Pobreza e desigualdade são complementares: redução de uma não implica redução automática da outra.',
+    'climate-vulnerability': 'Risco e prontidão apontam dimensões diferentes da adaptação climática; leia os dois componentes juntos.',
+    'forced-migration': 'Os totais descrevem populações registradas; os corredores de refúgio complementam a leitura de origem e acolhimento.',
+  }
+  return <section className="panel global-insight" aria-live="polite">
+    <div className="panel__header"><div><span>Assistente de leitura</span><h3>O que os dados mostram agora</h3></div><strong className="badge">Atualiza com os filtros</strong></div>
+    <p>No recorte <strong>{scope}</strong>, o indicador <strong>{indicator.name}</strong> mede {meaning}. {average ? `A média ponderada pela população é ${formatValue(average.value, indicator.unit)}, com ${average.coverage} países no cálculo.` : 'A média ponderada está sendo calculada.'}</p>
+    {leadingValue && <p>O maior valor disponível no recorte é de <strong>{leadingValue.geographyName}</strong>: {formatValue(leadingValue.value, indicator.unit)}. Isso não significa automaticamente melhor ou pior sem considerar o sentido do indicador.</p>}
+    <p>{themeFocus[indicator.themeId]} Há {coverage} países com último dado disponível; os anos podem variar entre territórios.</p>
+    <small>Interpretação automatizada por regras transparentes do painel; não é uma resposta de modelo de IA e não envia seus dados a serviços externos.</small>
   </section>
 }
 
