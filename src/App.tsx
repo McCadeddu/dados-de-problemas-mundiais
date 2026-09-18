@@ -63,6 +63,7 @@ function App() {
   const [selectedIndicatorId, setSelectedIndicatorId] = useState(() => initialValue('indicador', ''))
   const [continent, setContinent] = useState(() => initialValue('continente', 'Todos'))
   const [countryCode, setCountryCode] = useState(() => initialValue('pais', 'BRA'))
+  const [countryQuery, setCountryQuery] = useState('')
   const [stateCode, setStateCode] = useState(() => initialValue('uf', '35'))
   const [stateIndicatorId, setStateIndicatorId] = useState(() => initialValue('indicadorEstadual', 'sidra-bolsa-familia'))
   const [immediateRegionCode, setImmediateRegionCode] = useState(() => initialValue('regiao', '350001'))
@@ -324,6 +325,13 @@ function App() {
   const filteredCountries = continent === 'Todos'
     ? data.countries
     : data.countries.filter((country) => country.continent === continent)
+  const countryMatches = filteredCountries.filter((country) => country.name.toLocaleLowerCase('pt-BR').includes(countryQuery.toLocaleLowerCase('pt-BR')))
+  const countryChoiceOptions = countryMatches.some((country) => country.code === countryCode)
+    ? countryMatches
+    : [
+      ...filteredCountries.filter((country) => country.code === countryCode),
+      ...countryMatches,
+    ]
   const worldRanking = (getRanking(data, indicator.id)?.items ?? []).filter((item) => {
     const country = data.countries.find((candidate) => candidate.code === item.geographyCode)
     return continent === 'Todos' || country?.continent === continent
@@ -413,7 +421,7 @@ function App() {
         <>
           <section className="panel controls controls--world">
             <label>Indicador<select value={indicatorId} onChange={(event) => setSelectedIndicatorId(event.target.value)}>{themeIndicators.map((item) => <option key={item.id} value={item.id}>{item.name}</option>)}</select></label>
-            <label>Continente<select value={continent} onChange={(event) => { const nextContinent = event.target.value; const nextCountries = nextContinent === 'Todos' ? data.countries : data.countries.filter((country) => country.continent === nextContinent); setContinent(nextContinent); setCountryCode(nextCountries[0]?.code ?? ''); setComparisonCountryCodes(nextCountries.slice(0, 3).map((country) => country.code)) }}><option value="Todos">Mundo inteiro</option>{data.continents.map((item) => <option key={item} value={item}>{item}</option>)}</select></label>
+            <label>Continente<select value={continent} onChange={(event) => { const nextContinent = event.target.value; const nextCountries = nextContinent === 'Todos' ? data.countries : data.countries.filter((country) => country.continent === nextContinent); setContinent(nextContinent); setCountryQuery(''); setCountryCode(nextCountries[0]?.code ?? ''); setComparisonCountryCodes(nextCountries.slice(0, 3).map((country) => country.code)) }}><option value="Todos">Mundo inteiro</option>{data.continents.map((item) => <option key={item} value={item}>{item}</option>)}</select></label>
           </section>
           {activeThemeId === 'hunger-water' && <HungerWaterPanel values={themeGlobalSnapshot} />}
           {activeThemeId === 'gender-equality' && <GenderPanel values={themeGlobalSnapshot} />}
@@ -422,7 +430,7 @@ function App() {
           <GlobalInsightPanel indicator={indicator} continent={continent} average={continentAverage} coverage={countryLatest.length} leadingValue={worldRanking[0]} />
           <section className="panel world-next-step" aria-label="Próximo passo da análise mundial">
             <div><span>Próximo passo</span><h3>Escolha um país para detalhar</h3><p>A análise nacional abre somente depois da leitura mundial. Você também pode comparar países no mesmo indicador.</p></div>
-            <div className="world-next-step__actions"><label>País<select value={countryCode} onChange={(event) => setCountryCode(event.target.value)}>{filteredCountries.map((country) => <option key={country.code} value={country.code}>{country.name}</option>)}</select></label><button className="advance-button" onClick={() => setView('country')}>Abrir {countryName}</button><button className="text-button" onClick={() => document.getElementById('comparar-paises')?.scrollIntoView({ behavior: 'smooth', block: 'start' })}>Comparar países</button></div>
+            <div className="world-next-step__actions"><label>Pesquisar país<input value={countryQuery} onChange={(event) => setCountryQuery(event.target.value)} placeholder="Digite um nome" /></label><label>Estado soberano / país<select value={countryCode} onChange={(event) => setCountryCode(event.target.value)}>{countryChoiceOptions.map((country) => <option key={country.code} value={country.code}>{country.name}</option>)}</select></label><button className="advance-button" onClick={() => setView('country')}>Abrir {countryName}</button><button className="text-button" onClick={() => document.getElementById('comparar-paises')?.scrollIntoView({ behavior: 'smooth', block: 'start' })}>Comparar países</button></div>
           </section>
           {activeThemeId === 'forced-migration' && <MigrationFlowsPanel flows={migrationFlows} error={migrationFlowsError} />}
 
@@ -470,7 +478,7 @@ function App() {
           <section className="panel controls controls--country">
             <label>Indicador<select value={indicatorId} onChange={(event) => setSelectedIndicatorId(event.target.value)}>{themeIndicators.map((item) => <option key={item.id} value={item.id}>{item.name}</option>)}</select></label>
             <label>Continente<select value={continent} onChange={(event) => { const nextContinent = event.target.value; const nextCountries = nextContinent === 'Todos' ? data.countries : data.countries.filter((country) => country.continent === nextContinent); setContinent(nextContinent); setCountryCode(nextCountries[0]?.code ?? '') }}><option value="Todos">Mundo inteiro</option>{data.continents.map((item) => <option key={item} value={item}>{item}</option>)}</select></label>
-            <label>País<select value={countryCode} onChange={(event) => setCountryCode(event.target.value)}>{filteredCountries.map((country) => <option key={country.code} value={country.code}>{country.name}</option>)}</select></label>
+            <label>Estado soberano / país<select value={countryCode} onChange={(event) => setCountryCode(event.target.value)}>{filteredCountries.map((country) => <option key={country.code} value={country.code}>{country.name}</option>)}</select></label>
           </section>
           <section className="content-grid content-grid--states">
             <article className="panel country-callout"><span>Análise do país</span><h3>{countryName}</h3><p>{data.countries.find((country) => country.code === countryCode)?.continent ?? 'Continente não identificado'} • {indicator.name}</p>{countryGlobalRank > 0 && <p className="country-callout__rank">Posição por valor no recorte mundial: {countryGlobalRank} de {globalRanking.length} países com dados.</p>}<button className="text-button" onClick={() => { if (countryCode === 'BRA') { setContinent('Todos'); setComparisonCountryCodes((current) => ['BRA', ...current.filter((code) => code !== 'BRA')].slice(0, 5)) }; setView('world') }}>{countryCode === 'BRA' ? 'Comparar Brasil com outros países' : 'Voltar ao panorama mundial'}</button></article>

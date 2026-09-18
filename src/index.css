@@ -522,6 +522,15 @@ select {
   color: #f8fafc;
 }
 
+.world-next-step__actions input {
+  min-width: 11rem;
+  padding: 0.6rem 0.7rem;
+  border: 1px solid #475569;
+  border-radius: 10px;
+  background: #0f1e31;
+  color: #f8fafc;
+}
+
 .world-summary {
   display: grid;
   align-content: center;
