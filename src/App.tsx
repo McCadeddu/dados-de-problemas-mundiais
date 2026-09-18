@@ -143,11 +143,12 @@ function App() {
     const separator = lines[0]?.includes(';') ? ';' : ','
     const headers = (lines[0] ?? '').split(separator).map((value) => value.trim())
     const normalizedHeaders = headers.map((header) => header.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, ''))
-    const missing = [
+    const checks: Array<[string, RegExp]> = [
       ['UF ou estado', /\b(uf|estado|sigla_uf)\b/],
       ['município ou código IBGE', /(municip|codigo.*ibge|cod.*mun)/],
       ['valor do indicador', /(valor|indice|risco|vulnerab|exposicao)/],
-    ].flatMap(([label, pattern]) => pattern instanceof RegExp && normalizedHeaders.some((header) => pattern.test(header)) ? [] : [label])
+    ]
+    const missing = checks.flatMap(([label, pattern]) => normalizedHeaders.some((header) => pattern.test(header)) ? [] : [label])
     setAdaptCsvPreview({
       name: file.name,
       headers,
