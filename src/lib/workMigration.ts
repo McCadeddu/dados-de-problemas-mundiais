@@ -29,6 +29,8 @@ export type ChangeRow = {
   deltaMigrationPerThousand: number
 }
 
+export type AlignmentIssue = { countryCode: string; countryName: string; reasons: string[] }
+
 function pointMap(points: DataPoint[]) {
   return new Map(points.map((point) => [point.year, point.value]))
 }
@@ -60,6 +62,34 @@ export function alignWorkMigration(data: DashboardData, migrationId: string): Al
     }
   }
   return rows.sort((a, b) => b.year - a.year || a.countryCode.localeCompare(b.countryCode))
+}
+
+/** Explains why a country/year is absent from an exact work/migration intersection. */
+export function workMigrationExclusions(data: DashboardData, migrationId: string, year: number): AlignmentIssue[] {
+  if (!Number.isInteger(year)) return []
+  const index = (id: string) => new Map(data.series
+    .filter((series) => series.indicatorId === id && series.geographyType === 'country')
+    .map((series) => [series.geographyCode, pointMap(series.points)]))
+  const unemployment = index('ilo-unemployment')
+  const vulnerable = index('ilo-vulnerable-employment')
+  const migration = index(migrationId)
+  const population = new Map(data.countryPopulation.map((series) => [series.geographyCode, pointMap(series.points)]))
+  return data.countries.flatMap((country) => {
+    const reasons: string[] = []
+    const u = unemployment.get(country.code)?.get(year)
+    const v = vulnerable.get(country.code)?.get(year)
+    const m = migration.get(country.code)?.get(year)
+    const p = population.get(country.code)?.get(year)
+    if (u === undefined) reasons.push('desemprego ausente')
+    else if (!Number.isFinite(u) || u < 0 || u > 100) reasons.push('desemprego inválido')
+    if (v === undefined) reasons.push('emprego vulnerável ausente')
+    else if (!Number.isFinite(v) || v < 0 || v > 100) reasons.push('emprego vulnerável inválido')
+    if (m === undefined) reasons.push('migração ausente')
+    else if (!Number.isFinite(m) || m < 0) reasons.push('migração inválida')
+    if (p === undefined) reasons.push('população ausente')
+    else if (!Number.isFinite(p) || p <= 0) reasons.push('população inválida')
+    return reasons.length ? [{ countryCode: country.code, countryName: country.name, reasons }] : []
+  })
 }
 
 /** One country per row in one year; Pearson r, unweighted, without inference. */

@@ -33,7 +33,7 @@ Pearson resume associação linear; Spearman compara a ordem dos países e é me
 sensível a valores extremos. A tabela
 completa e o CSV usam exatamente essa amostra; a antiga correlação que reunia
 vários anos foi removida. Países sem uma das quatro medidas válidas são listados
-como excluídos. Zero publicado é preservado; população não positiva, valores
+como excluídos com o requisito ausente ou inválido identificado. Zero publicado é preservado; população não positiva, valores
 não finitos, taxas de trabalho fora de 0–100% e contagens negativas são excluídos.
 
 O painel também oferece uma análise de sensibilidade com Pearson ponderado pela

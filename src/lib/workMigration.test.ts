@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
 import Papa from 'papaparse'
-import { alignedRowsCsv, alignWorkMigration, alignWorkMigrationChanges, leaveOneOutPearsonRange, pearson, pearsonChanges, spearman, spearmanChanges, weightedPearson } from './workMigration'
+import { alignedRowsCsv, alignWorkMigration, alignWorkMigrationChanges, leaveOneOutPearsonRange, pearson, pearsonChanges, spearman, spearmanChanges, weightedPearson, workMigrationExclusions } from './workMigration'
 import { workMigrationFixture } from '../test/workMigrationFixture'
 
 describe('work/migration alignment', () => {
@@ -58,6 +58,13 @@ describe('work/migration alignment', () => {
     expect(pearsonChanges(changes, 'deltaUnemployment')).toBeCloseTo(-1)
     expect(spearmanChanges(changes, 'deltaUnemployment')).toBeCloseTo(-1)
     expect(alignWorkMigrationChanges(rows, 2024)).toEqual([])
+  })
+  it('explains missing or invalid requirements for excluded country/year rows', () => {
+    const data = workMigrationFixture()
+    const issues = workMigrationExclusions(data, 'unhcr-refugees-hosted', 2025)
+    expect(issues).toEqual([{ countryCode: 'DDD', countryName: 'País D', reasons: ['migração ausente'] }])
+    data.countryPopulation[0].points[1].value = 0
+    expect(workMigrationExclusions(data, 'unhcr-refugees-hosted', 2025).find((item) => item.countryCode === 'AAA')?.reasons).toEqual(['população inválida'])
   })
   it('exports the exact subset with denominator, indicator, snapshot and unrounded values', () => {
     const data = workMigrationFixture()

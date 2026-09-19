@@ -1,6 +1,6 @@
 import { useMemo, useState } from 'react'
 import type { DashboardData } from '../types'
-import { alignedRowsCsv, alignWorkMigration, alignWorkMigrationChanges, leaveOneOutPearsonRange, migrationMeasures, pearson, pearsonChanges, spearman, spearmanChanges, weightedPearson, type MigrationMeasure } from '../lib/workMigration'
+import { alignedRowsCsv, alignWorkMigration, alignWorkMigrationChanges, leaveOneOutPearsonRange, migrationMeasures, pearson, pearsonChanges, spearman, spearmanChanges, weightedPearson, workMigrationExclusions, type MigrationMeasure } from '../lib/workMigration'
 
 export function WorkMigrationComparisonPanel({ data, continent = 'Todos', loadError = null }: {
   data: DashboardData; continent?: string; loadError?: string | null
@@ -16,6 +16,8 @@ export function WorkMigrationComparisonPanel({ data, continent = 'Todos', loadEr
   const countries = data.countries.filter((country) => continent === 'Todos' || country.continent === continent)
   const included = new Set(rows.map((row) => row.countryCode))
   const excluded = countries.filter((country) => !included.has(country.code))
+  const exclusionDetails = year === undefined ? [] : workMigrationExclusions(data, migration.id, year)
+    .filter((item) => countries.some((country) => country.code === item.countryCode))
   const ready = ['ilo-unemployment', 'ilo-vulnerable-employment', migration.id]
     .every((id) => data.series.some((series) => series.indicatorId === id)) && data.countryPopulation.length > 0
   const rUnemployment = pearson(rows, 'unemployment')
@@ -69,7 +71,7 @@ export function WorkMigrationComparisonPanel({ data, continent = 'Todos', loadEr
     </div>
     {!ready ? <p role={loadError ? 'alert' : 'status'}>{loadError ? 'Não foi possível carregar as séries necessárias à comparação. Recarregue a página para tentar novamente.' : 'Carregando séries de trabalho, migração e população…'}</p> : <>
       <p className="comparison-warning">{rows.length} de {countries.length} países e territórios incluídos{year !== undefined ? ` em ${year}` : ''}; {excluded.length} excluídos por falta de pelo menos uma observação válida no mesmo ano. Ausência não é zero.</p>
-      {excluded.length > 0 && <details><summary>Ver países e territórios excluídos ({excluded.length})</summary><p>{excluded.map((country) => country.name).join('; ')}.</p><p>É necessário ter as duas taxas de trabalho, o estoque migratório e uma população positiva no ano selecionado.</p></details>}
+      {excluded.length > 0 && <details><summary>Ver países e territórios excluídos ({excluded.length})</summary><ul className="work-migration-comparison__exclusions">{exclusionDetails.map((item) => <li key={item.countryCode}><strong>{item.countryName}</strong>: {item.reasons.join('; ')}.</li>)}</ul><p>É necessário ter as duas taxas de trabalho, a medida migratória e uma população positiva no ano selecionado.</p></details>}
       {rows.length > 0 ? <>
         <div className="work-migration-comparison__summary">
           <article><span>Amostra do recorte</span><strong>{rows.length.toLocaleString('pt-BR')}</strong><small>países e territórios · {year}</small></article>
