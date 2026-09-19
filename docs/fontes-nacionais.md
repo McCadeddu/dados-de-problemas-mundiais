@@ -44,7 +44,7 @@ e, portanto, a rotina diária já existente. Artefatos publicados:
 | México | INEGI, API de indicadores | Ainda não | Selecionar série e validar token, unidade e recorte estadual. |
 | Portugal | INE; EU-SILC via Eurostat | Pobreza relativa 2015–2025 | Avaliar ligação direta ao INE para trabalho e educação. |
 | Itália | Istat; EU-SILC via Eurostat | Pobreza relativa 2015–2025 | Validar SDMX nacional antes de adicionar novas séries. |
-| Austrália | Australian Bureau of Statistics | Ainda não | Escolher conjunto da Data API e validar licença e denominador. |
+| Austrália | Australian Bureau of Statistics | Desemprego mensal desde 2015, com ajuste sazonal | Avaliar outras medidas de trabalho e proteção social. |
 | África do Sul | Statistics South Africa | Ainda não | Priorizar pesquisa domiciliar compatível com trabalho e migração. |
 | Índia | MoSPI/eSankhyiki | Ainda não | Identificar série oficial estável antes de automatizar a coleta. |
 
@@ -60,6 +60,36 @@ O diagnóstico registra disponibilidade e ano por indicador e país. Ele não
 certifica atualidade ou qualidade e não soma territórios a Estados soberanos.
 
 ## Localizar instituições
+
+### Conector nacional de trabalho: Austrália
+
+Verificado em 18/09/2026. [API ABS](https://www.abs.gov.au/statistics/application-programming-interfaces-apis/data-api-user-guide),
+estrutura `LF` versão `1.0.0`, chave `M13.3.1599.20.AUS.M`:
+desemprego, total de pessoas, 15 anos ou mais, ajuste sazonal, Austrália, mensal.
+O denominador é a força de trabalho civil, e não a população total.
+[Metodologia verificada](https://www.abs.gov.au/methodologies/labour-force-australia-methodology/jul-2026):
+residentes civis de 15 anos ou mais; exclui forças de defesa permanentes,
+certos diplomatas e residentes estrangeiros em visita. A taxa segue a definição
+de desemprego da pesquisa, incluindo disponibilidade e procura de trabalho
+ou início de novo emprego nas condições especificadas pela ABS.
+
+A primeira coleta contém 139 meses, de 01/2015 a 07/2026. O último valor da API,
+4,46182469%, é apresentado como 4,5%, conforme `DECIMALS=1`, e foi conferido com a
+[publicação de julho de 2026](https://www.abs.gov.au/statistics/labour/employment-and-unemployment/labour-force-australia/jul-2026).
+O JSON preserva os valores numéricos, comentários e sinalizações originais.
+O coletor valida dimensões, unidades, datas, duplicatas, limites e redução de
+cobertura. Se a atualização falhar, mantém a coleta anterior, sua data e um aviso;
+sem coleta válida anterior, falha em vez de publicar uma série vazia.
+
+Dados sob [CC BY 4.0, com as exceções da ABS](https://www.abs.gov.au/website-privacy-copyright-and-disclaimer).
+Fonte atribuída ao Australian Bureau of Statistics, © Commonwealth of Australia.
+Seleção, tradução e arredondamento de exibição pelo Mundialidade.
+As estimativas podem ser revistas; mudanças mensais têm incerteza amostral.
+Este complemento não entra nos rankings internacionais nem na correlação
+trabalho–migração: esses continuam a usar as estimativas anuais harmonizadas da OIT.
+O conector participa da atualização diária via `data:national`.
+
+### Diretórios
 
 - [Diretório de institutos nacionais da ONU](https://unstats.un.org/home/nso_sites/): ponto de partida por país. Cada endereço deve ser confirmado no portal atual da instituição.
 - [Páginas nacionais do FMI](https://data.imf.org/Datasets/NSDP): complemento voltado sobretudo a indicadores macroeconômicos; não cobre sozinho os cinco temas do projeto.

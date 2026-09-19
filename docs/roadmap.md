@@ -5,8 +5,8 @@
 - consolidar a camada de qualidade no painel: denominador, período observado,
   cobertura territorial e distinção entre ausência e zero;
 - ampliar a cobertura de contribuição previdenciária fora do Brasil e pesquisar dados oficiais de trabalho forçado, preservando a diferença entre prevalência e registros de fiscalização;
-- integrar séries nacionais dos seis países prioritários, ainda pendentes além
-  do complemento EU-SILC de Portugal e Itália;
+- ampliar séries nacionais dos seis países prioritários, com EU-SILC em Portugal
+  e Itália e desemprego mensal da ABS na Austrália já integrados;
 
 - revisar as 38 entradas ainda pendentes no catálogo nacional e confirmar os endereços importados do diretório da ONU;
 - priorizar séries oficiais de cuidado não remunerado e violência de gênero, com definições compatíveis;
@@ -18,6 +18,10 @@
 - aprofundar fluxos de migração forçada por origem, acolhimento e tipo de deslocamento.
 
 ## Produto e qualidade
+
+- desemprego mensal nacional da Austrália via ABS: histórico desde 2015, recorte
+  e ajuste sazonal explícitos, coleta diária com preservação do histórico em caso
+  de falha; complemento separado das comparações anuais internacionais;
 
 - comparação trabalho–migração: três medidas migratórias, ano comum selecionável,
   filtro de continente, lista de exclusões e exportação da mesma amostra usada
@@ -36,3 +40,8 @@
 - metodologia e período visíveis no painel;
 - ausência de dado nunca deve ser apresentada como zero;
 - comparações devem indicar diferenças de cobertura, unidade e período.
+
+## Tema reservado para depois
+
+- Conflitos armados, sugeridos pelo usuário em 18/09/2026. A inclusão do tema e
+  sua pesquisa de fontes ficam para uma etapa futura, após as prioridades atuais.

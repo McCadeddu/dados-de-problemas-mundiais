@@ -95,7 +95,7 @@
     "institution": "Australian Bureau of Statistics",
     "url": "https://www.abs.gov.au/",
     "evidenceUrl": "https://www.abs.gov.au/statistics/application-programming-interfaces-apis/data-api-user-guide",
-    "status": "documented",
+    "status": "existing-connector",
     "checkedAt": "2026-09-18"
   },
   {

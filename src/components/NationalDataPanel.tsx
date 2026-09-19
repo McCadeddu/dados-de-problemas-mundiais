@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import type { DashboardData, NationalData } from '../types'
 import { formatValue } from '../lib/dashboard'
+import { AustraliaLaborData } from './AustraliaLaborData'
 
 const statusLabels = {
   'directory-listed': 'Instituição localizada no diretório da ONU',
@@ -13,7 +14,7 @@ const priorityNextSteps: Record<string, string> = {
   MEX: 'Selecionar uma série INEGI e validar token, unidade e recorte estadual.',
   PRT: 'Avaliar ligação direta ao INE para trabalho e educação; a pobreza relativa já está integrada via EU-SILC.',
   ITA: 'Validar o serviço SDMX do Istat antes de adicionar novas séries nacionais.',
-  AUS: 'Escolher um conjunto da Data API da ABS e validar licença e denominador.',
+  AUS: 'Desemprego mensal integrado pela ABS. Avaliar outras medidas de trabalho e proteção social.',
   ZAF: 'Priorizar uma pesquisa domiciliar da Statistics South Africa compatível com trabalho e migração.',
   IND: 'Identificar uma série oficial estável no MoSPI/eSankhyiki antes de automatizar a coleta.',
 }
@@ -41,6 +42,7 @@ export function NationalDataPanel({ countryCode, themeId, dashboard }: {
     ? data?.poverty.series.find((entry) => entry.countryCode === countryCode)
     : undefined
   const latest = series?.points.at(-1)
+  const australiaLabor = countryCode === 'AUS' && themeId === 'decent-work' ? data?.australiaUnemployment : undefined
   const missing = dashboard.indicators.filter((indicator) => indicator.geographyType === 'country'
     && indicator.themeId === themeId
     && !dashboard.latest.some((value) => value.indicatorId === indicator.id && value.geographyCode === countryCode))
@@ -71,7 +73,7 @@ export function NationalDataPanel({ countryCode, themeId, dashboard }: {
           <p className="meta">Fonte: <a href={data.poverty.sourceUrl}>Eurostat · ilc_li02</a>, a partir de estatísticas nacionais EU-SILC. <a href={data.poverty.methodologyUrl}>Metodologia e relatórios nacionais</a> · <a href={data.poverty.licenseUrl}>Condições de reutilização</a>.</p>
           <p className="meta">Atualização da fonte: {new Date(data.poverty.sourceUpdatedAt).toLocaleDateString('pt-BR')}. Coleta: {new Date(data.poverty.fetchedAt).toLocaleDateString('pt-BR')}. {data.poverty.cached && 'A última tentativa falhou; exibindo a coleta anterior.'}</p>
           <p className="meta">Seleção, tradução dos rótulos e apresentação pelo Mundialidade. O Eurostat não é responsável por estas adaptações. Valores mantidos como publicados.</p>
-        </article> : <p>Ainda não há uma série nacional complementar integrada para este país nesta problemática. Isso não indica ausência do problema ou inexistência de dados oficiais.</p>}
+        </article> : australiaLabor ? <AustraliaLaborData data={australiaLabor} /> : <p>Ainda não há uma série nacional complementar integrada para este país nesta problemática. Isso não indica ausência do problema ou inexistência de dados oficiais.</p>}
       </>}
     <p className="meta">{missing.length ? `Lacunas na base mundial deste tema: ${missing.map((indicator) => indicator.name).join('; ')}.` : 'Todos os indicadores mundiais deste tema têm algum dado para este país; os períodos podem variar.'}</p>
     <p className="meta"><a href={`${import.meta.env.BASE_URL}data/country-coverage.json`} download>Baixar diagnóstico de cobertura por país (JSON)</a></p>

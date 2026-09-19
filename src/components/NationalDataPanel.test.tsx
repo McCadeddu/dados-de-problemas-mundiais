@@ -17,6 +17,26 @@ const payload: NationalData = {
 afterEach(() => { cleanup(); vi.unstubAllGlobals() })
 
 describe('NationalDataPanel', () => {
+  it('shows monthly ABS data only for Australian work, with period, source precision and cache warning', async () => {
+    const absPayload: NationalData = { ...payload, australiaUnemployment: {
+      fetchedAt: '2026-09-17', lastAttemptAt: '2026-09-18', cached: true,
+      sourceUrl: 'https://www.abs.gov.au/', methodologyUrl: 'https://www.abs.gov.au/', licenseUrl: 'https://www.abs.gov.au/', requestUrl: 'https://data.api.abs.gov.au/',
+      points: [{ period: '2026-06', value: null, status: 'M' }, { period: '2026-07', value: 4.46182469 }],
+    } }
+    vi.stubGlobal('fetch', vi.fn().mockResolvedValue({ ok: true, json: async () => absPayload }))
+    const view = render(<NationalDataPanel countryCode="AUS" themeId="decent-work" dashboard={dashboard} />)
+    expect(await screen.findByText('Desemprego mensal — Austrália (ABS)')).toBeInTheDocument()
+    expect(screen.getByText(/mês de referência: 07\/2026/)).toBeInTheDocument()
+    expect(screen.getAllByText('4,5%').length).toBeGreaterThan(0)
+    expect(screen.getByText('Sem observação')).toBeInTheDocument()
+    expect(screen.getByText(/A última tentativa falhou/)).toBeInTheDocument()
+    expect(screen.getByText(/série anual harmonizada da OIT/)).toBeInTheDocument()
+    expect(screen.queryByText(/Ainda não há uma série nacional complementar/)).not.toBeInTheDocument()
+    view.rerender(<NationalDataPanel countryCode="AUS" themeId="illiteracy" dashboard={dashboard} />)
+    expect(screen.queryByText('Desemprego mensal — Austrália (ABS)')).not.toBeInTheDocument()
+    view.rerender(<NationalDataPanel countryCode="IND" themeId="decent-work" dashboard={dashboard} />)
+    expect(screen.queryByText('Desemprego mensal — Austrália (ABS)')).not.toBeInTheDocument()
+  })
   it('shows provenance and does not carry a country estimate to another country or theme', async () => {
     vi.stubGlobal('fetch', vi.fn().mockResolvedValue({ ok: true, json: async () => payload }))
     const view = render(<NationalDataPanel countryCode="PRT" themeId="poverty-inequality" dashboard={dashboard} />)
