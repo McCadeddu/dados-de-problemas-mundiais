@@ -17,6 +17,26 @@ const payload: NationalData = {
 afterEach(() => { cleanup(); vi.unstubAllGlobals() })
 
 describe('NationalDataPanel', () => {
+  it('shows the Portuguese quarterly complement and keeps the poverty and work themes separate', async () => {
+    const portuguese: NationalData = { ...payload, portugalUnemployment: {
+      fetchedAt: '2026-09-18', lastAttemptAt: '2026-09-19', sourceUpdatedAt: '2026-08-05', cached: true,
+      sourceUrl: 'https://www.ine.pt/', methodologyUrl: 'https://www.ine.pt/', licenseUrl: 'https://dados.gov.pt/', requestUrl: 'https://www.ine.pt/',
+      sourceNote: 'Estimativas anteriores revistas pelo INE.', points: [{ period: '2026-Q1', value: null, status: 'x', comment: 'Dado não disponível' }, { period: '2026-Q2', value: 5.3 }],
+    } }
+    vi.stubGlobal('fetch', vi.fn().mockResolvedValue({ ok: true, json: async () => portuguese }))
+    const view = render(<NationalDataPanel countryCode="PRT" themeId="decent-work" dashboard={dashboard} />)
+    expect(await screen.findByText('Desemprego trimestral — Portugal (INE)')).toBeInTheDocument()
+    expect(screen.getAllByText(/2º trimestre de 2026/).length).toBeGreaterThan(0)
+    expect(screen.getAllByText('5,3%').length).toBeGreaterThan(0)
+    expect(screen.getByText('Sem observação')).toBeInTheDocument()
+    expect(screen.getByText(/Estimativas anteriores revistas pelo INE/)).toBeInTheDocument()
+    expect(screen.getByText(/A última tentativa falhou/)).toBeInTheDocument()
+    view.rerender(<NationalDataPanel countryCode="PRT" themeId="poverty-inequality" dashboard={dashboard} />)
+    expect(screen.getByText('Risco de pobreza relativa — EU-SILC')).toBeInTheDocument()
+    expect(screen.queryByText('Desemprego trimestral — Portugal (INE)')).not.toBeInTheDocument()
+    view.rerender(<NationalDataPanel countryCode="ITA" themeId="decent-work" dashboard={dashboard} />)
+    expect(screen.queryByText('Desemprego trimestral — Portugal (INE)')).not.toBeInTheDocument()
+  })
   it('shows monthly ABS data only for Australian work, with period, source precision and cache warning', async () => {
     const absPayload: NationalData = { ...payload, australiaUnemployment: {
       fetchedAt: '2026-09-17', lastAttemptAt: '2026-09-18', cached: true,

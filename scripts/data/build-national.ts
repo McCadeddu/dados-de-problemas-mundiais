@@ -2,6 +2,7 @@ import { readFile, writeFile } from 'node:fs/promises'
 import type { DashboardData, NationalData, NationalSource } from '../../src/types.js'
 import { parsePoverty, POVERTY_URL, type JsonStat } from './eurostat.js'
 import { collectAbsUnemployment } from './abs.js'
+import { collectIneUnemployment } from './ine-portugal.js'
 
 const outputPath = 'public/data/national-data.json'
 const registry = JSON.parse(await readFile('scripts/data/national-source-registry.json', 'utf8')) as NationalSource[]
@@ -32,7 +33,8 @@ try {
 }
 const previous = JSON.parse(await readFile(outputPath, 'utf8')) as NationalData
 const australiaUnemployment = await collectAbsUnemployment(previous.australiaUnemployment)
-const result: NationalData = { generatedAt: new Date().toISOString(), registry, poverty, australiaUnemployment }
+const portugalUnemployment = await collectIneUnemployment(previous.portugalUnemployment)
+const result: NationalData = { generatedAt: new Date().toISOString(), registry, poverty, australiaUnemployment, portugalUnemployment }
 // Match the other static artifacts: Vite can hold the destination open on Windows,
 // preventing replacement by rename. Publication happens only after the build passes.
 await writeFile(outputPath, JSON.stringify(result))
@@ -44,6 +46,7 @@ const coverage = dashboard.countries.map((country) => ({
   supplementalIndicators: [
     ...(poverty.series.some((series) => series.countryCode === country.code) ? ['eurostat-relative-poverty'] : []),
     ...(country.code === 'AUS' ? ['abs-monthly-unemployment'] : []),
+    ...(country.code === 'PRT' ? ['ine-quarterly-unemployment'] : []),
   ],
   indicators: globalIndicators.map((indicator) => {
     const observation = dashboard.latest.find((value) => value.indicatorId === indicator.id && value.geographyCode === country.code)
@@ -53,3 +56,4 @@ const coverage = dashboard.countries.map((country) => ({
 await writeFile('public/data/country-coverage.json', JSON.stringify({ generatedAt: result.generatedAt, countries: coverage }))
 console.log(`Catálogo: ${registry.length} territórios; ${registry.filter((entry) => entry.url).length} fontes identificadas; pobreza relativa: ${poverty.series.length} países.`)
 console.log(`ABS: ${australiaUnemployment.points.length} meses; último período: ${australiaUnemployment.points.at(-1)?.period}; coleta anterior: ${australiaUnemployment.cached}.`)
+console.log(`INE Portugal: ${portugalUnemployment.points.length} trimestres; último período: ${portugalUnemployment.points.at(-1)?.period}; coleta anterior: ${portugalUnemployment.cached}.`)

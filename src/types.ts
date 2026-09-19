@@ -20,6 +20,18 @@ export type NationalSource = {
 export type NationalData = {
   generatedAt: string
   registry: NationalSource[]
+  portugalUnemployment?: {
+    fetchedAt: string
+    lastAttemptAt: string
+    sourceUpdatedAt: string
+    cached: boolean
+    sourceUrl: string
+    methodologyUrl: string
+    licenseUrl: string
+    requestUrl: string
+    sourceNote: string
+    points: Array<{ period: string; value: number | null; status?: string; comment?: string }>
+  }
   australiaUnemployment?: {
     fetchedAt: string
     lastAttemptAt: string

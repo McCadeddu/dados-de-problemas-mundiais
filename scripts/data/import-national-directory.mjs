@@ -26,7 +26,7 @@ const english = new Intl.DisplayNames(['en'], { type: 'region' })
 const overrides = {
   BRA: ['IBGE', 'https://www.ibge.gov.br/', 'https://servicodados.ibge.gov.br/api/docs/agregados', 'existing-connector'],
   MEX: ['INEGI', 'https://www.inegi.org.mx/', 'https://www.inegi.org.mx/servicios/api_indicadores.html', 'documented'],
-  PRT: ['Instituto Nacional de Estatística', 'https://www.ine.pt/', 'https://www.ine.pt/xportal/xmain?xpid=INE&xpgid=ine_main', 'documented'],
+  PRT: ['Instituto Nacional de Estatística', 'https://www.ine.pt/', 'https://www.ine.pt/xurl/indx/0012136/PT', 'existing-connector'],
   ITA: ['Istat', 'https://www.istat.it/', 'https://esploradati.istat.it/SDMXWS/swagger/index.html?urls.primaryName=v2', 'documented'],
   AUS: ['Australian Bureau of Statistics', 'https://www.abs.gov.au/', 'https://www.abs.gov.au/statistics/application-programming-interfaces-apis/data-api-user-guide', 'existing-connector'],
   KEN: ['Kenya National Bureau of Statistics', 'https://www.knbs.or.ke/', 'https://www.knbs.or.ke/county-statistical-abstracts/', 'documented'],
@@ -46,7 +46,7 @@ const entries = dashboard.countries.map((country) => {
     evidenceUrl: override?.[2] ?? directoryUrl,
     status: override?.[3] ?? (found ? 'directory-listed' : 'pending'),
     // Overrides were individually documented on this date; directory lookup is refreshed separately.
-    checkedAt: override ? '2026-09-18' : new Date().toISOString().slice(0, 10),
+    checkedAt: country.code === 'PRT' ? '2026-09-19' : override ? '2026-09-18' : new Date().toISOString().slice(0, 10),
   }
 })
 await writeFile('scripts/data/national-source-registry.json', JSON.stringify(entries, null, 2) + '\n')

@@ -6,7 +6,8 @@
   cobertura territorial e distinção entre ausência e zero;
 - ampliar a cobertura de contribuição previdenciária fora do Brasil e pesquisar dados oficiais de trabalho forçado, preservando a diferença entre prevalência e registros de fiscalização;
 - ampliar séries nacionais dos seis países prioritários, com EU-SILC em Portugal
-  e Itália e desemprego mensal da ABS na Austrália já integrados;
+  e Itália, desemprego mensal da ABS na Austrália e desemprego trimestral do INE
+  em Portugal já integrados;
 
 - revisar as 38 entradas ainda pendentes no catálogo nacional e confirmar os endereços importados do diretório da ONU;
 - priorizar séries oficiais de cuidado não remunerado e violência de gênero, com definições compatíveis;
@@ -18,6 +19,9 @@
 - aprofundar fluxos de migração forçada por origem, acolhimento e tipo de deslocamento.
 
 ## Produto e qualidade
+
+- desemprego trimestral de Portugal diretamente do INE (0012136): 62 trimestres
+  na primeira coleta, com revisão histórica e datas de atualização visíveis;
 
 - desemprego mensal nacional da Austrália via ABS: histórico desde 2015, recorte
   e ajuste sazonal explícitos, coleta diária com preservação do histórico em caso

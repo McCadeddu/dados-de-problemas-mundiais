@@ -1417,9 +1417,9 @@
     "countryName": "Portugal",
     "institution": "Instituto Nacional de Estatística",
     "url": "https://www.ine.pt/",
-    "evidenceUrl": "https://www.ine.pt/xportal/xmain?xpid=INE&xpgid=ine_main",
-    "status": "documented",
-    "checkedAt": "2026-09-18"
+    "evidenceUrl": "https://www.ine.pt/xurl/indx/0012136/PT",
+    "status": "existing-connector",
+    "checkedAt": "2026-09-19"
   },
   {
     "countryCode": "PRI",

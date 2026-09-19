@@ -42,7 +42,7 @@ e, portanto, a rotina diária já existente. Artefatos publicados:
 | País | Fonte oficial catalogada | Dado nacional complementar integrado | Próximo passo seguro |
 | --- | --- | --- | --- |
 | México | INEGI, API de indicadores | Ainda não | Selecionar série e validar token, unidade e recorte estadual. |
-| Portugal | INE; EU-SILC via Eurostat | Pobreza relativa 2015–2025 | Avaliar ligação direta ao INE para trabalho e educação. |
+| Portugal | INE; EU-SILC via Eurostat | Desemprego trimestral 2011–2026 diretamente do INE; pobreza relativa 2015–2025 | Avaliar educação e proteção social. |
 | Itália | Istat; EU-SILC via Eurostat | Pobreza relativa 2015–2025 | Validar SDMX nacional antes de adicionar novas séries. |
 | Austrália | Australian Bureau of Statistics | Desemprego mensal desde 2015, com ajuste sazonal | Avaliar outras medidas de trabalho e proteção social. |
 | África do Sul | Statistics South Africa | Ainda não | Priorizar pesquisa domiciliar compatível com trabalho e migração. |
@@ -89,7 +89,32 @@ Este complemento não entra nos rankings internacionais nem na correlação
 trabalho–migração: esses continuam a usar as estimativas anuais harmonizadas da OIT.
 O conector participa da atualização diária via `data:national`.
 
-### Diretórios
+### Conector nacional de trabalho: Portugal
+
+Verificado em 19/09/2026: [indicador INE 0012136](https://www.ine.pt/xurl/indx/0012136/PT),
+taxa de desemprego trimestral, série 2021, território `PT`, sexo `T` (HM).
+[Metadados JSON](https://www.ine.pt/ine/json_indicador/pindicaMeta.jsp?varcd=0012136&lang=PT):
+percentagem, potência 10 igual a zero, uma casa decimal, NUTS 2024 (`05257`),
+sexo (`00305`). A coleta descobre os períodos nos metadados e os solicita
+explicitamente em `Dim1`; a consulta sem períodos retorna apenas o trimestre
+mais recente. Não se interpreta essa resposta reduzida como histórico completo.
+
+Primeira coleta: 62 trimestres de 2011-Q1 a 2026-Q2; último valor 5,3%,
+atualização da fonte em 05/08/2026. A nota de reconciliação das estimativas
+2011–2020 com a série 2021 é preservada e exibida. O denominador é a população
+ativa (ocupados e desempregados), com recorte de 16 a 89 anos na série 2021,
+documentado pelo [INE no BME de agosto de 2022, p. 8](https://www.ine.pt/ine_novidades/BME_ago_2022/).
+A API não explicita o ajuste sazonal nos metadados consultados; essa limitação
+fica visível. Não foi calculada média anual nem aplicada dessazonalização.
+
+[Catálogo oficial e licença CC BY 4.0](https://dados.gov.pt/pt/datasets/taxa-de-desemprego-serie-2021-3/).
+O conector verifica versões, dimensões, cobertura temporal completa, duplicatas,
+percentuais e sinalizações. Falhas mantêm a coleta válida anterior com aviso e
+datas preservadas; sem coleta anterior, interrompem a publicação. Os valores
+complementam o detalhe de Portugal em trabalho, sem alterar rankings ou a
+comparação trabalho–migração. A pobreza relativa EU-SILC continua no tema próprio.
+
+### Diretórios internacionais
 
 - [Diretório de institutos nacionais da ONU](https://unstats.un.org/home/nso_sites/): ponto de partida por país. Cada endereço deve ser confirmado no portal atual da instituição.
 - [Páginas nacionais do FMI](https://data.imf.org/Datasets/NSDP): complemento voltado sobretudo a indicadores macroeconômicos; não cobre sozinho os cinco temas do projeto.
