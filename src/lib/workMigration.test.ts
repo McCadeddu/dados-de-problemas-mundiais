@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
 import Papa from 'papaparse'
-import { alignedRowsCsv, alignWorkMigration, pearson } from './workMigration'
+import { alignedRowsCsv, alignWorkMigration, pearson, spearman } from './workMigration'
 import { workMigrationFixture } from '../test/workMigrationFixture'
 
 describe('work/migration alignment', () => {
@@ -23,6 +23,13 @@ describe('work/migration alignment', () => {
     expect(pearson(rows.map((row) => ({ ...row, unemployment: -row.unemployment })), 'unemployment')).toBeCloseTo(-1)
     expect(pearson(rows.slice(0, 2), 'unemployment')).toBeNull()
     expect(pearson(rows.map((row) => ({ ...row, unemployment: 10 })), 'unemployment')).toBeNull()
+  })
+  it('calculates Spearman from average ranks, including tied values', () => {
+    const rows = alignWorkMigration(workMigrationFixture(), 'unhcr-refugees-hosted').filter((row) => row.year === 2025)
+    expect(spearman(rows, 'unemployment')).toBeCloseTo(1)
+    expect(spearman(rows.map((row) => ({ ...row, unemployment: -row.unemployment })), 'unemployment')).toBeCloseTo(-1)
+    expect(spearman(rows.map((row, index) => ({ ...row, unemployment: index === 0 ? 20 : row.unemployment })), 'unemployment')).toBeGreaterThan(0.8)
+    expect(spearman(rows.slice(0, 2), 'unemployment')).toBeNull()
   })
   it('exports the exact subset with denominator, indicator, snapshot and unrounded values', () => {
     const data = workMigrationFixture()

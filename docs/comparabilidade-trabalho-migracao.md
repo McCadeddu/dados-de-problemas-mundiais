@@ -27,8 +27,10 @@ página também se aplica à comparação. Um continente sem observações nesse
 recebe uma mensagem de ausência; não há recuo silencioso para outro ano.
 Ao trocar a medida migratória, o seletor volta ao último ano disponível dela.
 
-Cada país ou território entra uma única vez, no ano selecionado. Pearson r é
-calculado sem ponderação, com a mesma amostra nas duas associações. A tabela
+Cada país ou território entra uma única vez, no ano selecionado. Pearson r e
+Spearman ρ são calculados sem ponderação, com a mesma amostra nas duas associações.
+Pearson resume associação linear; Spearman compara a ordem dos países e é menos
+sensível a valores extremos. A tabela
 completa e o CSV usam exatamente essa amostra; a antiga correlação que reunia
 vários anos foi removida. Países sem uma das quatro medidas válidas são listados
 como excluídos. Zero publicado é preservado; população não positiva, valores

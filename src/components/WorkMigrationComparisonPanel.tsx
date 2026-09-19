@@ -1,6 +1,6 @@
 import { useMemo, useState } from 'react'
 import type { DashboardData } from '../types'
-import { alignedRowsCsv, alignWorkMigration, migrationMeasures, pearson, type MigrationMeasure } from '../lib/workMigration'
+import { alignedRowsCsv, alignWorkMigration, migrationMeasures, pearson, spearman, type MigrationMeasure } from '../lib/workMigration'
 
 export function WorkMigrationComparisonPanel({ data, continent = 'Todos', loadError = null }: {
   data: DashboardData; continent?: string; loadError?: string | null
@@ -20,6 +20,8 @@ export function WorkMigrationComparisonPanel({ data, continent = 'Todos', loadEr
     .every((id) => data.series.some((series) => series.indicatorId === id)) && data.countryPopulation.length > 0
   const rUnemployment = pearson(rows, 'unemployment')
   const rVulnerable = pearson(rows, 'vulnerableEmployment')
+  const rhoUnemployment = spearman(rows, 'unemployment')
+  const rhoVulnerable = spearman(rows, 'vulnerableEmployment')
   const formatR = (value: number | null) => value === null ? 'Não calculável' : value.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })
   const format = (value: number) => value.toLocaleString('pt-BR', { minimumFractionDigits: 1, maximumFractionDigits: 1 })
   const sourceIds = ['ilo-unemployment', 'ilo-vulnerable-employment', migration.id]
@@ -63,6 +65,8 @@ export function WorkMigrationComparisonPanel({ data, continent = 'Todos', loadEr
           <article><span>Amostra do recorte</span><strong>{rows.length.toLocaleString('pt-BR')}</strong><small>países e territórios · {year}</small></article>
           <article><span>Pearson r — desemprego</span><strong>{formatR(rUnemployment)}</strong><small>desemprego × {migration.title.toLowerCase()}/1.000</small></article>
           <article><span>Pearson r — emprego vulnerável</span><strong>{formatR(rVulnerable)}</strong><small>emprego vulnerável × {migration.title.toLowerCase()}/1.000</small></article>
+          <article><span>Spearman ρ — desemprego</span><strong>{formatR(rhoUnemployment)}</strong><small>associação monotônica por postos</small></article>
+          <article><span>Spearman ρ — emprego vulnerável</span><strong>{formatR(rhoVulnerable)}</strong><small>associação monotônica por postos</small></article>
         </div>
         {(rUnemployment === null || rVulnerable === null) && <p className="meta">A correlação exige pelo menos três países ou territórios e variação nas duas medidas.</p>}
         <details open={rows.length <= 12}><summary>Ver tabela completa ({rows.length} países e territórios)</summary>
@@ -74,7 +78,7 @@ export function WorkMigrationComparisonPanel({ data, continent = 'Todos', loadEr
         </details>
         <p className="meta">CSV: valores sem arredondamento, população usada no denominador, código do indicador migratório e data do arquivo de dados.</p>
       </> : <p>Sem observações compatíveis neste recorte. Escolha outro ano ou continente.</p>}
-      <p className="meta">Pearson r descreve associação linear entre países neste ano, com peso igual por território. O resultado depende da cobertura e de valores extremos; não é um efeito causal nem uma relação entre indivíduos. Não controla conflito, renda, composição etária ou políticas de acolhida e não deve ser lido como efeito da migração sobre o desemprego ou do desemprego sobre a migração.</p>
+      <p className="meta">Pearson r descreve associação linear; Spearman ρ compara a ordem dos países e é menos sensível a valores extremos. Ambos dão peso igual por território, dependem da cobertura e não são efeitos causais nem relações entre indivíduos. Não controlam conflito, renda, composição etária ou políticas de acolhida.</p>
       <p className="meta">O alinhamento anual não torna idênticas as populações de referência: as taxas de trabalho usam força de trabalho ou ocupados; o estoque migratório usa população total. Refugiados, solicitantes de asilo e estoque migrante podem se sobrepor e não devem ser somados.</p>
       {sources.length > 0 && <p className="meta">Fontes: {sources.map((source, index) => <span key={source.id}>{index > 0 && ' · '}<a href={source.url} target="_blank" rel="noreferrer">{source.name}</a></span>)}.</p>}
     </>}

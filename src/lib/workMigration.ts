@@ -72,6 +72,43 @@ export function pearson(rows: AlignedRow[], measure: 'unemployment' | 'vulnerabl
   return Number.isFinite(value) ? Math.max(-1, Math.min(1, value)) : null
 }
 
+function averageRanks(values: number[]) {
+  const sorted = values.map((value, index) => ({ value, index })).sort((a, b) => a.value - b.value)
+  const ranks = Array.from({ length: values.length }, () => 0)
+  let start = 0
+  while (start < sorted.length) {
+    let end = start + 1
+    while (end < sorted.length && sorted[end].value === sorted[start].value) end += 1
+    const rank = (start + 1 + end) / 2
+    for (let index = start; index < end; index += 1) ranks[sorted[index].index] = rank
+    start = end
+  }
+  return ranks
+}
+
+/** Rank correlation for monotonic association; ties receive their average rank. */
+export function spearman(rows: AlignedRow[], measure: 'unemployment' | 'vulnerableEmployment'): number | null {
+  if (rows.length < 3) return null
+  const x = averageRanks(rows.map((row) => row[measure]))
+  const y = averageRanks(rows.map((row) => row.migrationPerThousand))
+  const meanX = x.reduce((sum, value) => sum + value, 0) / x.length
+  const meanY = y.reduce((sum, value) => sum + value, 0) / y.length
+  let cross = 0
+  let squaredX = 0
+  let squaredY = 0
+  for (let index = 0; index < x.length; index += 1) {
+    const centeredX = x[index] - meanX
+    const centeredY = y[index] - meanY
+    cross += centeredX * centeredY
+    squaredX += centeredX * centeredX
+    squaredY += centeredY * centeredY
+  }
+  const denominator = Math.sqrt(squaredX) * Math.sqrt(squaredY)
+  if (!Number.isFinite(denominator) || denominator === 0) return null
+  const value = cross / denominator
+  return Number.isFinite(value) ? Math.max(-1, Math.min(1, value)) : null
+}
+
 export function alignedRowsCsv(rows: AlignedRow[], migrationId: string, generatedAt: string) {
   const escape = (value: string | number) => `"${String(value).replaceAll('"', '""')}"`
   const header = ['codigo_pais', 'pais', 'continente', 'ano', 'desemprego_pct', 'emprego_vulneravel_pct',

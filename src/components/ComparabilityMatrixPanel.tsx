@@ -21,7 +21,7 @@ export function ComparabilityMatrixPanel() {
         <li><strong>Encontramos o mesmo país e ano</strong> nas séries de desemprego, emprego vulnerável, migração e população. Dados ausentes ficam fora do cálculo; não são tratados como zero.</li>
         <li><strong>Validamos os valores:</strong> taxas de trabalho devem estar entre 0% e 100%, a população deve ser positiva e a medida migratória não pode ser negativa.</li>
         <li><strong>Normalizamos a migração:</strong> contagens são divididas pela população do mesmo ano e apresentadas por mil habitantes, evitando que países maiores dominem apenas pelo tamanho.</li>
-        <li><strong>Calculamos a associação:</strong> Pearson resume a relação linear entre países, dando o mesmo peso a cada território. O resultado é descritivo e não prova causa.</li>
+        <li><strong>Calculamos a associação:</strong> Pearson resume a relação linear e Spearman compara a ordem dos países, ambos dando o mesmo peso a cada território. Os resultados são descritivos e não provam causa.</li>
       </ol>
       <p className="meta">O botão de download no painel seguinte entrega exatamente as linhas usadas no cálculo, com população, denominador, códigos das fontes e data de processamento.</p>
     </div>}
