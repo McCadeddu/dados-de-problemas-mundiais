@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
 import Papa from 'papaparse'
-import { alignedRowsCsv, alignWorkMigration, leaveOneOutPearsonRange, pearson, spearman, weightedPearson } from './workMigration'
+import { alignedRowsCsv, alignWorkMigration, alignWorkMigrationChanges, leaveOneOutPearsonRange, pearson, pearsonChanges, spearman, spearmanChanges, weightedPearson } from './workMigration'
 import { workMigrationFixture } from '../test/workMigrationFixture'
 
 describe('work/migration alignment', () => {
@@ -49,6 +49,15 @@ describe('work/migration alignment', () => {
     expect(range?.min).toBeCloseTo(1)
     expect(range?.max).toBeCloseTo(1)
     expect(leaveOneOutPearsonRange(rows.slice(0, 3), 'unemployment')).toBeNull()
+  })
+  it('builds exact consecutive-year changes without bridging missing years', () => {
+    const rows = alignWorkMigration(workMigrationFixture(), 'unhcr-asylum-seekers-hosted')
+    const changes = alignWorkMigrationChanges(rows, 2025)
+    expect(changes.map((row) => row.countryCode)).toEqual(['AAA', 'BBB', 'CCC'])
+    expect(changes.map((row) => row.deltaMigrationPerThousand)).toEqual([25, 15, 5])
+    expect(pearsonChanges(changes, 'deltaUnemployment')).toBeCloseTo(-1)
+    expect(spearmanChanges(changes, 'deltaUnemployment')).toBeCloseTo(-1)
+    expect(alignWorkMigrationChanges(rows, 2024)).toEqual([])
   })
   it('exports the exact subset with denominator, indicator, snapshot and unrounded values', () => {
     const data = workMigrationFixture()

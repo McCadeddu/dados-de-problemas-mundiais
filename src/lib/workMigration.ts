@@ -18,6 +18,17 @@ export type AlignedRow = {
   migrationPerThousand: number
 }
 
+export type ChangeRow = {
+  countryCode: string
+  countryName: string
+  continent: string
+  year: number
+  previousYear: number
+  deltaUnemployment: number
+  deltaVulnerableEmployment: number
+  deltaMigrationPerThousand: number
+}
+
 function pointMap(points: DataPoint[]) {
   return new Map(points.map((point) => [point.year, point.value]))
 }
@@ -52,16 +63,16 @@ export function alignWorkMigration(data: DashboardData, migrationId: string): Al
 }
 
 /** One country per row in one year; Pearson r, unweighted, without inference. */
-export function pearson(rows: AlignedRow[], measure: 'unemployment' | 'vulnerableEmployment'): number | null {
-  if (rows.length < 3) return null
-  const meanX = rows.reduce((sum, row) => sum + row[measure], 0) / rows.length
-  const meanY = rows.reduce((sum, row) => sum + row.migrationPerThousand, 0) / rows.length
+function pearsonValues(valuesX: number[], valuesY: number[]): number | null {
+  if (valuesX.length < 3 || valuesX.length !== valuesY.length) return null
+  const meanX = valuesX.reduce((sum, value) => sum + value, 0) / valuesX.length
+  const meanY = valuesY.reduce((sum, value) => sum + value, 0) / valuesY.length
   let cross = 0
   let squaredX = 0
   let squaredY = 0
-  for (const row of rows) {
-    const x = row[measure] - meanX
-    const y = row.migrationPerThousand - meanY
+  for (let index = 0; index < valuesX.length; index += 1) {
+    const x = valuesX[index] - meanX
+    const y = valuesY[index] - meanY
     cross += x * y
     squaredX += x * x
     squaredY += y * y
@@ -70,6 +81,10 @@ export function pearson(rows: AlignedRow[], measure: 'unemployment' | 'vulnerabl
   if (!Number.isFinite(denominator) || denominator === 0) return null
   const value = cross / denominator
   return Number.isFinite(value) ? Math.max(-1, Math.min(1, value)) : null
+}
+
+export function pearson(rows: AlignedRow[], measure: 'unemployment' | 'vulnerableEmployment'): number | null {
+  return pearsonValues(rows.map((row) => row[measure]), rows.map((row) => row.migrationPerThousand))
 }
 
 function averageRanks(values: number[]) {
@@ -109,6 +124,19 @@ export function spearman(rows: AlignedRow[], measure: 'unemployment' | 'vulnerab
   return Number.isFinite(value) ? Math.max(-1, Math.min(1, value)) : null
 }
 
+function spearmanValues(valuesX: number[], valuesY: number[]) {
+  if (valuesX.length !== valuesY.length) return null
+  return pearsonValues(averageRanks(valuesX), averageRanks(valuesY))
+}
+
+export function pearsonChanges(rows: ChangeRow[], measure: 'deltaUnemployment' | 'deltaVulnerableEmployment'): number | null {
+  return pearsonValues(rows.map((row) => row[measure]), rows.map((row) => row.deltaMigrationPerThousand))
+}
+
+export function spearmanChanges(rows: ChangeRow[], measure: 'deltaUnemployment' | 'deltaVulnerableEmployment'): number | null {
+  return spearmanValues(rows.map((row) => row[measure]), rows.map((row) => row.deltaMigrationPerThousand))
+}
+
 /** Population-weighted Pearson sensitivity; it answers a different question from the country-weighted result. */
 export function weightedPearson(rows: AlignedRow[], measure: 'unemployment' | 'vulnerableEmployment'): number | null {
   const valid = rows.filter((row) => Number.isFinite(row.population) && row.population > 0)
@@ -141,6 +169,28 @@ export function leaveOneOutPearsonRange(rows: AlignedRow[], measure: 'unemployme
   const values = rows.map((_, index) => pearson(rows.filter((__, candidate) => candidate !== index), measure)).filter((value): value is number => value !== null)
   if (!values.length) return null
   return { min: Math.min(...values), max: Math.max(...values), count: values.length }
+}
+
+/** Exact consecutive-year changes; missing years are not bridged or interpolated. */
+export function alignWorkMigrationChanges(rows: AlignedRow[], year: number): ChangeRow[] {
+  if (!Number.isInteger(year)) return []
+  const byCountry = new Map<string, Map<number, AlignedRow>>()
+  for (const row of rows) {
+    if (!byCountry.has(row.countryCode)) byCountry.set(row.countryCode, new Map())
+    byCountry.get(row.countryCode)!.set(row.year, row)
+  }
+  const changes: ChangeRow[] = []
+  for (const countryRows of byCountry.values()) {
+    const current = countryRows.get(year)
+    const previous = countryRows.get(year - 1)
+    if (!current || !previous) continue
+    const values = [current.unemployment - previous.unemployment, current.vulnerableEmployment - previous.vulnerableEmployment,
+      current.migrationPerThousand - previous.migrationPerThousand]
+    if (!values.every(Number.isFinite)) continue
+    changes.push({ countryCode: current.countryCode, countryName: current.countryName, continent: current.continent,
+      year, previousYear: year - 1, deltaUnemployment: values[0], deltaVulnerableEmployment: values[1], deltaMigrationPerThousand: values[2] })
+  }
+  return changes.sort((a, b) => a.countryCode.localeCompare(b.countryCode))
 }
 
 export function alignedRowsCsv(rows: AlignedRow[], migrationId: string, generatedAt: string) {

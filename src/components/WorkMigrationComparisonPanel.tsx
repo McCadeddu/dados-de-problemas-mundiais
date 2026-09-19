@@ -1,6 +1,6 @@
 import { useMemo, useState } from 'react'
 import type { DashboardData } from '../types'
-import { alignedRowsCsv, alignWorkMigration, leaveOneOutPearsonRange, migrationMeasures, pearson, spearman, weightedPearson, type MigrationMeasure } from '../lib/workMigration'
+import { alignedRowsCsv, alignWorkMigration, alignWorkMigrationChanges, leaveOneOutPearsonRange, migrationMeasures, pearson, pearsonChanges, spearman, spearmanChanges, weightedPearson, type MigrationMeasure } from '../lib/workMigration'
 
 export function WorkMigrationComparisonPanel({ data, continent = 'Todos', loadError = null }: {
   data: DashboardData; continent?: string; loadError?: string | null
@@ -26,6 +26,11 @@ export function WorkMigrationComparisonPanel({ data, continent = 'Todos', loadEr
   const weightedRVulnerable = weightedPearson(rows, 'vulnerableEmployment')
   const leaveOneOutUnemployment = leaveOneOutPearsonRange(rows, 'unemployment')
   const leaveOneOutVulnerable = leaveOneOutPearsonRange(rows, 'vulnerableEmployment')
+  const changes = year === undefined ? [] : alignWorkMigrationChanges(aligned, year)
+  const deltaRUnemployment = pearsonChanges(changes, 'deltaUnemployment')
+  const deltaRVulnerable = pearsonChanges(changes, 'deltaVulnerableEmployment')
+  const deltaRhoUnemployment = spearmanChanges(changes, 'deltaUnemployment')
+  const deltaRhoVulnerable = spearmanChanges(changes, 'deltaVulnerableEmployment')
   const formatR = (value: number | null) => value === null ? 'Não calculável' : value.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })
   const formatRange = (range: { min: number; max: number; count: number } | null) => range === null ? 'Não calculável' : `${formatR(range.min)} a ${formatR(range.max)}`
   const format = (value: number) => value.toLocaleString('pt-BR', { minimumFractionDigits: 1, maximumFractionDigits: 1 })
@@ -85,6 +90,18 @@ export function WorkMigrationComparisonPanel({ data, continent = 'Todos', loadEr
             </tbody>
           </table></div>
           <p className="meta">A faixa de influência recalcula Pearson retirando cada país uma vez; ela só é calculável com pelo menos quatro países e três recalculações válidas.</p>
+        </details>
+        <details className="work-migration-comparison__sensitivity">
+          <summary>Variações dentro dos países: {changes.length} transições exatas</summary>
+          <p className="meta">Cada transição compara o mesmo país em {year - 1} e {year}. Anos ausentes não são interpolados; a associação entre mudanças não é um efeito causal.</p>
+          {changes.length > 0 ? <div className="work-migration-comparison__table"><table>
+            <caption>Mudança de {year - 1} para {year} · correlações entre variações</caption>
+            <thead><tr><th scope="col">Medida de trabalho</th><th scope="col">Pearson das mudanças</th><th scope="col">Spearman das mudanças</th></tr></thead>
+            <tbody>
+              <tr><th scope="row">Desemprego</th><td>{formatR(deltaRUnemployment)}</td><td>{formatR(deltaRhoUnemployment)}</td></tr>
+              <tr><th scope="row">Emprego vulnerável</th><td>{formatR(deltaRVulnerable)}</td><td>{formatR(deltaRhoVulnerable)}</td></tr>
+            </tbody>
+          </table></div> : <p className="meta">Não há países com observações completas nos dois anos consecutivos neste recorte.</p>}
         </details>
         {(rUnemployment === null || rVulnerable === null) && <p className="meta">A correlação exige pelo menos três países ou territórios e variação nas duas medidas.</p>}
         <details open={rows.length <= 12}><summary>Ver tabela completa ({rows.length} países e territórios)</summary>

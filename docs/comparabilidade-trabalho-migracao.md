@@ -46,6 +46,12 @@ Também é calculada uma faixa de influência retirando cada país uma vez e
 recalculando Pearson. Com pelo menos quatro países, uma faixa ampla indica que
 um ou poucos territórios podem estar determinando a associação observada.
 
+Quando existem observações completas em dois anos consecutivos, o painel também
+compara as mudanças dentro de cada país. Essa análise usa apenas pares exatos
+ano anterior/ano selecionado, sem preencher lacunas, e mostra Pearson e Spearman
+entre as variações. Ela reduz a influência de diferenças estruturais entre países,
+mas continua sendo descritiva e não identifica causalidade.
+
 Com menos de três observações ou sem variação em uma das duas medidas, o painel
 informa que a correlação não pode ser calculada. Isso é diferente de r = 0.
 O resultado não fornece significância estatística, relação individual ou efeito

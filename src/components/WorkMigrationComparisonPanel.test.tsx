@@ -15,7 +15,7 @@ describe('WorkMigrationComparisonPanel', () => {
     const view = render(<WorkMigrationComparisonPanel data={data} />)
     expect(screen.getByText(/3 de 4 países e territórios incluídos em 2025/)).toBeInTheDocument()
     expect(within(getDataTable()).queryByText('País D')).not.toBeInTheDocument()
-    expect(screen.getAllByText('1,00')).toHaveLength(8)
+    expect(screen.getAllByText('1,00')).toHaveLength(12)
     fireEvent.change(screen.getByLabelText('Ano comum'), { target: { value: '2024' } })
     expect(screen.getByText(/4 de 4 países e territórios incluídos em 2024/)).toBeInTheDocument()
     expect(within(getDataTable()).getByText('País D')).toBeInTheDocument()
@@ -27,7 +27,7 @@ describe('WorkMigrationComparisonPanel', () => {
   it('recalculates asylum and selects the latest available stock year without interpolation', () => {
     render(<WorkMigrationComparisonPanel data={workMigrationFixture()} />)
     fireEvent.change(screen.getByLabelText('Medida migratória'), { target: { value: 'asylum' } })
-    expect(screen.getAllByText('-1,00')).toHaveLength(8)
+    expect(screen.getAllByText('-1,00')).toHaveLength(12)
     fireEvent.change(screen.getByLabelText('Medida migratória'), { target: { value: 'stock' } })
     expect(screen.getByText(/4 de 4 países e territórios incluídos em 2024/)).toBeInTheDocument()
     expect(within(screen.getByLabelText('Ano comum')).queryByRole('option', { name: '2025' })).not.toBeInTheDocument()
