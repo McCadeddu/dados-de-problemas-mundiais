@@ -88,6 +88,7 @@ export function workMigrationExclusions(data: DashboardData, migrationId: string
     else if (!Number.isFinite(m) || m < 0) reasons.push('migração inválida')
     if (p === undefined) reasons.push('população ausente')
     else if (!Number.isFinite(p) || p <= 0) reasons.push('população inválida')
+    if (!reasons.length && !Number.isFinite((m! / p!) * 1000)) reasons.push('migração por mil habitantes inválida')
     return reasons.length ? [{ countryCode: country.code, countryName: country.name, reasons }] : []
   })
 }
@@ -95,6 +96,7 @@ export function workMigrationExclusions(data: DashboardData, migrationId: string
 /** One country per row in one year; Pearson r, unweighted, without inference. */
 function pearsonValues(valuesX: number[], valuesY: number[]): number | null {
   if (valuesX.length < 3 || valuesX.length !== valuesY.length) return null
+  if (!valuesX.every(Number.isFinite) || !valuesY.every(Number.isFinite)) return null
   const meanX = valuesX.reduce((sum, value) => sum + value, 0) / valuesX.length
   const meanY = valuesY.reduce((sum, value) => sum + value, 0) / valuesY.length
   let cross = 0
@@ -133,29 +135,12 @@ function averageRanks(values: number[]) {
 
 /** Rank correlation for monotonic association; ties receive their average rank. */
 export function spearman(rows: AlignedRow[], measure: 'unemployment' | 'vulnerableEmployment'): number | null {
-  if (rows.length < 3) return null
-  const x = averageRanks(rows.map((row) => row[measure]))
-  const y = averageRanks(rows.map((row) => row.migrationPerThousand))
-  const meanX = x.reduce((sum, value) => sum + value, 0) / x.length
-  const meanY = y.reduce((sum, value) => sum + value, 0) / y.length
-  let cross = 0
-  let squaredX = 0
-  let squaredY = 0
-  for (let index = 0; index < x.length; index += 1) {
-    const centeredX = x[index] - meanX
-    const centeredY = y[index] - meanY
-    cross += centeredX * centeredY
-    squaredX += centeredX * centeredX
-    squaredY += centeredY * centeredY
-  }
-  const denominator = Math.sqrt(squaredX) * Math.sqrt(squaredY)
-  if (!Number.isFinite(denominator) || denominator === 0) return null
-  const value = cross / denominator
-  return Number.isFinite(value) ? Math.max(-1, Math.min(1, value)) : null
+  return spearmanValues(rows.map((row) => row[measure]), rows.map((row) => row.migrationPerThousand))
 }
 
 function spearmanValues(valuesX: number[], valuesY: number[]) {
   if (valuesX.length !== valuesY.length) return null
+  if (!valuesX.every(Number.isFinite) || !valuesY.every(Number.isFinite)) return null
   return pearsonValues(averageRanks(valuesX), averageRanks(valuesY))
 }
 

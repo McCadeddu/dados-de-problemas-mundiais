@@ -24,8 +24,8 @@ const results = await Promise.all(EDUCATION_WORK_INDICATORS.map(async (config) =
   const indicator: Indicator = { id: config.id, name: config.name, themeId: config.themeId, description: config.description, unit: config.unit, geographyType: config.geographyType, sourceId: config.sourceId, direction: config.direction, latestYear: Math.max(...series.flatMap((entry) => entry.points.map((point) => point.year))) }
   const source: Source = {
     id: config.sourceId,
-    name: config.sourceId === 'uis-literacy' ? 'UNESCO/UIS via Banco Mundial' : 'OIT/ILOSTAT via Banco Mundial',
-    url: config.sourceId === 'uis-literacy' ? 'https://databrowser.uis.unesco.org/' : 'https://ilostat.ilo.org/data/',
+    name: config.themeId === 'illiteracy' ? 'UNESCO/UIS via Banco Mundial' : 'OIT/ILOSTAT via Banco Mundial',
+    url: config.themeId === 'illiteracy' ? 'https://databrowser.uis.unesco.org/' : 'https://ilostat.ilo.org/data/',
     methodologyUrl: `https://databank.worldbank.org/metadataglossary/world-development-indicators/series/${config.code}`,
     license: 'CC BY 4.0 — World Bank Open Data; derivação explicitada no indicador', lastUpdated: meta.lastupdated,
   }

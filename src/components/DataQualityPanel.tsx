@@ -8,7 +8,8 @@ const denominatorByIndicator: Record<string, string> = {
   'ilo-vulnerable-employment': 'emprego total',
   'ibge-state-no-pension': 'ocupados de 14 anos ou mais no 4º trimestre',
   'ibge-state-unemployment': 'força de trabalho estadual',
-  'wb-migrant-stock': 'estoque de pessoas residentes nascidas no exterior',
+  'ibge-state-illiteracy': 'população de 15 anos ou mais',
+  'wb-migrant-stock': 'Contagem de pessoas; não usa denominador neste indicador.',
 }
 
 export function DataQualityPanel({ indicator, source, latest, coverageTotal, territoryLabel, generatedAt }: {
@@ -21,7 +22,10 @@ export function DataQualityPanel({ indicator, source, latest, coverageTotal, ter
 }) {
   const years = [...new Set(latest.map((item) => item.year))].sort((a, b) => a - b)
   const coveragePercent = coverageTotal ? Math.round((latest.length / coverageTotal) * 100) : 0
-  const denominator = denominatorByIndicator[indicator.id] ?? `${territoryLabel} com observação publicada pela fonte`
+  const denominator = denominatorByIndicator[indicator.id]
+    ?? (['pessoas', 'mil pessoas', 'focos'].includes(indicator.unit)
+      ? 'Contagem absoluta; não usa denominador.'
+      : 'Consulte a definição e a metodologia do indicador. A cobertura territorial não é o denominador da medida.')
   const missing = Math.max(coverageTotal - latest.length, 0)
   return <section className="panel data-quality" aria-label="Qualidade e comparabilidade do indicador">
     <div className="panel__header"><div><span>Qualidade e comparabilidade</span><h3>Como ler este indicador</h3><p>Metadados para avaliar cobertura e limites antes de comparar territórios.</p></div><strong className="badge">{coveragePercent}% coberto</strong></div>

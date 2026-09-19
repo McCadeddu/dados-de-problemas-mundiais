@@ -17,6 +17,21 @@ describe('work/migration alignment', () => {
     data.series.find((s) => s.geographyCode === 'CCC' && s.indicatorId === 'unhcr-refugees-hosted')!.points[0].value = -1
     expect(alignWorkMigration(data, 'unhcr-refugees-hosted').filter((row) => row.year === 2025)).toEqual([])
   })
+  it('keeps exclusion reasons consistent when a per-capita calculation overflows', () => {
+    const data = workMigrationFixture()
+    data.countryPopulation[1].points[1].value = Number.MIN_VALUE
+    const aligned = alignWorkMigration(data, 'unhcr-refugees-hosted').filter((row) => row.year === 2025)
+    expect(aligned.some((row) => row.countryCode === 'BBB')).toBe(false)
+    expect(workMigrationExclusions(data, 'unhcr-refugees-hosted', 2025).find((row) => row.countryCode === 'BBB')?.reasons).toEqual(['migração por mil habitantes inválida'])
+  })
+  it('does not convert invalid inputs into valid ranks', () => {
+    const rows = alignWorkMigration(workMigrationFixture(), 'unhcr-refugees-hosted').filter((row) => row.year === 2025)
+    rows[0].unemployment = NaN
+    expect(spearman(rows, 'unemployment')).toBeNull()
+    const changes = alignWorkMigrationChanges(alignWorkMigration(workMigrationFixture(), 'unhcr-refugees-hosted'), 2025)
+    changes[0].deltaMigrationPerThousand = Infinity
+    expect(spearmanChanges(changes, 'deltaUnemployment')).toBeNull()
+  })
   it('calculates Pearson for the selected rows and withholds undefined results', () => {
     const rows = alignWorkMigration(workMigrationFixture(), 'unhcr-refugees-hosted').filter((row) => row.year === 2025)
     expect(pearson(rows, 'unemployment')).toBeCloseTo(1)

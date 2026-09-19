@@ -44,6 +44,14 @@ describe('WorkMigrationComparisonPanel', () => {
     view.rerender(<WorkMigrationComparisonPanel data={{ ...data, series: [] }} loadError="offline" />)
     expect(screen.getByRole('alert')).toHaveTextContent('Não foi possível carregar')
   })
+  it('explains when loaded series have no common year instead of showing an empty exclusion list', () => {
+    const data = workMigrationFixture()
+    data.countryPopulation = data.countryPopulation.map((row) => ({ ...row, points: row.points.map((point) => ({ ...point, year: 1900 })) }))
+    render(<WorkMigrationComparisonPanel data={data} />)
+    expect(screen.getByText(/Não há um ano comum/)).toBeInTheDocument()
+    expect(screen.queryByText(/Ver países e territórios excluídos/)).not.toBeInTheDocument()
+    expect(screen.getByRole('button', { name: 'Baixar CSV alinhado' })).toBeDisabled()
+  })
   it('offers an interpretation of agreement and sensitivity diagnostics', () => {
     render(<WorkMigrationComparisonPanel data={workMigrationFixture()} />)
     fireEvent.click(screen.getByText('Leitura orientativa do cruzamento'))
