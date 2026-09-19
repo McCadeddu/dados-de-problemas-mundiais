@@ -46,9 +46,16 @@ Também é calculada uma faixa de influência retirando cada país uma vez e
 recalculando Pearson. Com pelo menos quatro países, uma faixa ampla indica que
 um ou poucos territórios podem estar determinando a associação observada.
 
+O painel resume esses diagnósticos em uma leitura orientativa: proximidade entre
+Pearson e Spearman, diferença entre pesos iguais e populacionais e amplitude da
+faixa de influência. Diferenças ou amplitudes acima de 0,20 geram alertas
+heurísticos, sem validação como teste estatístico. Sinais opostos entre Pearson
+e Spearman são destacados mesmo abaixo desse limiar. Proximidade dos métodos e
+ausência de alertas não garantem associação forte, confiabilidade ou causalidade.
+
 Quando existem observações completas em dois anos consecutivos, o painel também
 compara as mudanças dentro de cada país. Essa análise usa apenas pares exatos
-ano anterior/ano selecionado, sem preencher lacunas, e mostra Pearson e Spearman
+ano anterior/ano selecionado, respeita o continente selecionado, sem preencher lacunas, e mostra Pearson e Spearman
 entre as variações. Ela reduz a influência de diferenças estruturais entre países,
 mas continua sendo descritiva e não identifica causalidade.
 

@@ -746,6 +746,43 @@ select {
   border-color: rgba(45, 212, 191, 0.28);
 }
 
+.indicator-explanation {
+  margin: -0.5rem 0 1.5rem;
+}
+
+.indicator-explanation > button {
+  padding: 0.7rem 1rem;
+  border: 1px solid #5eead4;
+  border-radius: 12px;
+  background: #123a40;
+  color: #ccfbf1;
+  font: inherit;
+  cursor: pointer;
+}
+
+.indicator-explanation > button:focus-visible {
+  outline: 3px solid #fbbf24;
+  outline-offset: 3px;
+}
+
+.indicator-explanation__body {
+  margin-top: 0.7rem;
+  padding: 1rem 1.2rem;
+  border: 1px solid rgba(94, 234, 212, 0.35);
+  border-radius: 14px;
+  background: #102433;
+  color: #cbd5e1;
+}
+
+.indicator-explanation__body h3,
+.indicator-explanation__body h4 {
+  color: #ccfbf1;
+  margin: 0.8rem 0 0.4rem;
+}
+
+.indicator-explanation__body h3 { margin-top: 0; }
+.indicator-explanation__body p { max-width: 95ch; margin: 0.4rem 0 0.8rem; }
+
 .data-quality .panel__header span {
   color: #5eead4;
   font-size: 0.78rem;

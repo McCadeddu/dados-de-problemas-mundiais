@@ -16,6 +16,7 @@ import { EducationWorkPanel } from './components/EducationWorkPanel'
 import { NarrativeSynthesisPanel } from './components/NarrativeSynthesisPanel'
 import { ComparabilityMatrixPanel } from './components/ComparabilityMatrixPanel'
 import { DataQualityPanel } from './components/DataQualityPanel'
+import { IndicatorExplanation } from './components/IndicatorExplanation'
 import { WorkMigrationComparisonPanel } from './components/WorkMigrationComparisonPanel'
 import { getThemeIdFromPath, getThemePath } from './lib/themeRoutes'
 import {
@@ -432,6 +433,7 @@ function App() {
             <label>Indicador<select value={indicatorId} onChange={(event) => setSelectedIndicatorId(event.target.value)}>{themeIndicators.map((item) => <option key={item.id} value={item.id}>{item.name}</option>)}</select></label>
             <label>Continente<select value={continent} onChange={(event) => { const nextContinent = event.target.value; const nextCountries = nextContinent === 'Todos' ? data.countries : data.countries.filter((country) => country.continent === nextContinent); setContinent(nextContinent); setCountryQuery(''); setCountryCode(nextCountries[0]?.code ?? ''); setComparisonCountryCodes(nextCountries.slice(0, 3).map((country) => country.code)) }}><option value="Todos">Mundo inteiro</option>{data.continents.map((item) => <option key={item} value={item}>{item}</option>)}</select></label>
           </section>
+          <IndicatorExplanation indicator={activeIndicator} source={activeSource} />
           {activeThemeId === 'hunger-water' && <HungerWaterPanel values={themeGlobalSnapshot} />}
           {activeThemeId === 'gender-equality' && <GenderPanel values={themeGlobalSnapshot} />}
           {activeThemeId === 'poverty-inequality' && <PovertyPanel values={themeGlobalSnapshot} />}
@@ -493,6 +495,7 @@ function App() {
             <label>Continente<select value={continent} onChange={(event) => { const nextContinent = event.target.value; const nextCountries = nextContinent === 'Todos' ? data.countries : data.countries.filter((country) => country.continent === nextContinent); setContinent(nextContinent); setCountryCode(nextCountries[0]?.code ?? '') }}><option value="Todos">Mundo inteiro</option>{data.continents.map((item) => <option key={item} value={item}>{item}</option>)}</select></label>
             <label>Estado soberano / país<select value={countryCode} onChange={(event) => setCountryCode(event.target.value)}>{filteredCountries.map((country) => <option key={country.code} value={country.code}>{country.name}</option>)}</select></label>
           </section>
+          <IndicatorExplanation indicator={activeIndicator} source={activeSource} />
           <section className="content-grid content-grid--states">
             <article className="panel country-callout"><span>Análise do país</span><h3>{countryName}</h3><p>{data.countries.find((country) => country.code === countryCode)?.continent ?? 'Continente não identificado'} • {indicator.name}</p>{countryGlobalRank > 0 && <p className="country-callout__rank">Posição por valor no recorte mundial: {countryGlobalRank} de {globalRanking.length} países com dados.</p>}<button className="text-button" onClick={() => { if (countryCode === 'BRA') { setContinent('Todos'); setComparisonCountryCodes((current) => ['BRA', ...current.filter((code) => code !== 'BRA')].slice(0, 5)) }; setView('world') }}>{countryCode === 'BRA' ? 'Comparar Brasil com outros países' : 'Voltar ao panorama mundial'}</button></article>
             <article className="panel">
@@ -515,6 +518,7 @@ function App() {
             <label>Indicador estadual<select value={brazilIndicator.id} onChange={(event) => setStateIndicatorId(event.target.value)}>{stateThemeIndicators.map((item) => <option key={item.id} value={item.id}>{item.name}</option>)}</select></label>
             <p className="controls__context">Indicador estadual selecionado: <strong>{brazilIndicator.name}</strong>. Novas tabelas do IBGE podem ser adicionadas pelo conector de dados.</p>
           </section>
+          <IndicatorExplanation indicator={activeIndicator} source={activeSource} />
           {activeThemeId === 'climate-vulnerability' && <section className="panel source-link-panel"><div><h3>Dados climáticos complementares para o Brasil</h3><p>Como usar: 1. abra o catálogo oficial; 2. baixe um arquivo CSV; 3. selecione-o abaixo; 4. confira as colunas e os avisos; 5. envie o arquivo validado para integração por estado.</p></div><div><a className="advance-button" href="https://www.gov.br/mcti/pt-br/acesso-a-informacao/dados-abertos/dados-abertos/arquivos/adapta-brasil/adaptabrasil" target="_blank" rel="noreferrer">Baixar CSV do AdaptaBrasil</a><label className="csv-upload">Carregar CSV para pré-visualizar<input type="file" accept=".csv,text/csv" onChange={(event) => void previewAdaptCsv(event.target.files?.[0])} /></label></div>{adaptCsvPreview && <div className="csv-preview"><strong>{adaptCsvPreview.name}</strong><p>{adaptCsvPreview.rows.toLocaleString('pt-BR')} linhas de dados. Colunas: {adaptCsvPreview.headers.join(' | ')}</p><p>{adaptCsvPreview.missing.length ? `Atenção: não identifiquei ${adaptCsvPreview.missing.join(', ')}.` : 'Estrutura territorial básica identificada para avaliação.'}</p><code>{adaptCsvPreview.sample.join('\n')}</code></div>}</section>}
           {brazilIndicator.id === 'sismigra-state-active-immigrants' && <section className="panel migration-context"><strong>Como interpretar</strong><p>Este mapa soma registros ativos de imigrantes por UF no SISMIGRA/Polícia Federal. Ele não estima todos os migrantes residentes, refugiados, solicitantes de asilo ou pessoas deslocadas à força.</p></section>}
           <section className="content-grid content-grid--states">
@@ -551,6 +555,7 @@ function App() {
             <label>Região Geográfica Imediata<select value={immediateRegionCode} onChange={(event) => setImmediateRegionCode(event.target.value)}>{regionsForState.map((region) => <option key={region.code} value={region.code}>{region.name}</option>)}</select></label>
             <p className="controls__context">Indicador regional: <strong>{immediateRegionIndicator.name}</strong>. Agregação municipal do Censo 2022/SIDRA pela divisão territorial do IBGE.</p>
           </section>
+          <IndicatorExplanation indicator={activeIndicator} source={activeSource} />
           <section className="content-grid content-grid--states">
             <article className="panel region-callout"><span>UF selecionada</span><h3>{stateName}</h3><p>{regionsForState.length} Regiões Geográficas Imediatas disponíveis para análise.</p></article>
             <article className="panel">

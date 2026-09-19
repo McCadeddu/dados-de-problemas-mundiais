@@ -29,12 +29,25 @@ export function WorkMigrationComparisonPanel({ data, continent = 'Todos', loadEr
   const leaveOneOutUnemployment = leaveOneOutPearsonRange(rows, 'unemployment')
   const leaveOneOutVulnerable = leaveOneOutPearsonRange(rows, 'vulnerableEmployment')
   const changes = year === undefined ? [] : alignWorkMigrationChanges(aligned, year)
+    .filter((row) => continent === 'Todos' || row.continent === continent)
   const deltaRUnemployment = pearsonChanges(changes, 'deltaUnemployment')
   const deltaRVulnerable = pearsonChanges(changes, 'deltaVulnerableEmployment')
   const deltaRhoUnemployment = spearmanChanges(changes, 'deltaUnemployment')
   const deltaRhoVulnerable = spearmanChanges(changes, 'deltaVulnerableEmployment')
   const formatR = (value: number | null) => value === null ? 'Não calculável' : value.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })
   const formatRange = (range: { min: number; max: number; count: number } | null) => range === null ? 'Não calculável' : `${formatR(range.min)} a ${formatR(range.max)}`
+  const summarize = (label: string, linear: number | null, rank: number | null, weighted: number | null, influence: { min: number; max: number; count: number } | null) => {
+    if (linear === null || rank === null) return `${label}: não há amostra ou variação suficiente para avaliar a consistência.`
+    const messages = [linear * rank < 0
+      ? 'Pearson e Spearman têm sinais opostos. Confira os valores, sobretudo quando próximos de zero.'
+      : Math.abs(linear - rank) > 0.2
+        ? 'Pearson e Spearman diferem mais de 0,20. Isso sugere examinar a forma da relação e os valores extremos.'
+        : 'Pearson e Spearman são próximos pelo critério de diferença até 0,20. Essa proximidade, sozinha, não demonstra uma associação forte ou confiável.']
+    if (weighted !== null && Math.abs(linear - weighted) > 0.2) messages.push('O peso populacional altera sensivelmente o resultado.')
+    if (influence !== null && influence.max - influence.min > 0.2) messages.push('A faixa ao retirar um país é ampla; alguns territórios podem dominar a associação.')
+    if (influence === null) messages.push('A influência de retirar um país não pôde ser avaliada neste recorte.')
+    return `${label}: ${messages.join(' ')}`
+  }
   const format = (value: number) => value.toLocaleString('pt-BR', { minimumFractionDigits: 1, maximumFractionDigits: 1 })
   const sourceIds = ['ilo-unemployment', 'ilo-vulnerable-employment', migration.id]
     .map((id) => data.indicators.find((indicator) => indicator.id === id)?.sourceId)
@@ -80,6 +93,14 @@ export function WorkMigrationComparisonPanel({ data, continent = 'Todos', loadEr
           <article><span>Spearman ρ — desemprego</span><strong>{formatR(rhoUnemployment)}</strong><small>associação monotônica por postos</small></article>
           <article><span>Spearman ρ — emprego vulnerável</span><strong>{formatR(rhoVulnerable)}</strong><small>associação monotônica por postos</small></article>
         </div>
+        <details className="work-migration-comparison__interpretation">
+          <summary>Leitura orientativa do cruzamento</summary>
+          <ul className="work-migration-comparison__exclusions">
+            <li>{summarize('Desemprego', rUnemployment, rhoUnemployment, weightedRUnemployment, leaveOneOutUnemployment)}</li>
+            <li>{summarize('Emprego vulnerável', rVulnerable, rhoVulnerable, weightedRVulnerable, leaveOneOutVulnerable)}</li>
+          </ul>
+          <p className="meta">Os limiares de diagnóstico são heurísticos: diferenças ou amplitudes acima de 0,20 geram alertas. São critérios orientativos do painel, sem validação como teste estatístico. Ausência de alerta não garante robustez. Esta leitura não testa significância, não estima efeitos individuais e não identifica causas.</p>
+        </details>
         <details className="work-migration-comparison__sensitivity">
           <summary>Análise de sensibilidade: peso da população</summary>
           <p className="meta">A leitura principal dá o mesmo peso a cada país. Esta alternativa dá mais peso aos países com maior população e pode responder a uma pergunta diferente.</p>
@@ -91,7 +112,7 @@ export function WorkMigrationComparisonPanel({ data, continent = 'Todos', loadEr
               <tr><th scope="row">Emprego vulnerável</th><td>{formatR(rVulnerable)}</td><td>{formatR(weightedRVulnerable)}</td><td>{formatRange(leaveOneOutVulnerable)}</td></tr>
             </tbody>
           </table></div>
-          <p className="meta">A faixa de influência recalcula Pearson retirando cada país uma vez; ela só é calculável com pelo menos quatro países e três recalculações válidas.</p>
+          <p className="meta">A faixa de influência recalcula Pearson retirando cada país uma vez; exige pelo menos quatro países. Recalculos sem variação são descartados. Resultados válidos: desemprego {leaveOneOutUnemployment?.count ?? 0} de {rows.length}; emprego vulnerável {leaveOneOutVulnerable?.count ?? 0} de {rows.length}. A faixa não é um intervalo de confiança.</p>
         </details>
         <details className="work-migration-comparison__sensitivity">
           <summary>Variações dentro dos países: {changes.length} transições exatas</summary>

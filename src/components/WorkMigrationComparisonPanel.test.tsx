@@ -44,6 +44,20 @@ describe('WorkMigrationComparisonPanel', () => {
     view.rerender(<WorkMigrationComparisonPanel data={{ ...data, series: [] }} loadError="offline" />)
     expect(screen.getByRole('alert')).toHaveTextContent('Não foi possível carregar')
   })
+  it('offers an interpretation of agreement and sensitivity diagnostics', () => {
+    render(<WorkMigrationComparisonPanel data={workMigrationFixture()} />)
+    fireEvent.click(screen.getByText('Leitura orientativa do cruzamento'))
+    expect(screen.getAllByText(/Pearson e Spearman são próximos/)).toHaveLength(2)
+    expect(screen.getByText(/Os limiares de diagnóstico são heurísticos/)).toBeInTheDocument()
+  })
+  it('keeps consecutive-year comparisons inside the selected continent', () => {
+    const view = render(<WorkMigrationComparisonPanel data={workMigrationFixture()} continent="Europe" />)
+    expect(screen.getByText('Variações dentro dos países: 2 transições exatas')).toBeInTheDocument()
+    const changes = screen.getByRole('table', { name: /correlações entre variações/ })
+    expect(within(changes).getAllByText('Não calculável')).toHaveLength(4)
+    view.rerender(<WorkMigrationComparisonPanel data={workMigrationFixture()} continent="Asia" />)
+    expect(screen.getByText('Variações dentro dos países: 1 transições exatas')).toBeInTheDocument()
+  })
   it('downloads only the same country/year subset displayed in the table', async () => {
     let exported: Blob | undefined
     vi.stubGlobal('URL', { createObjectURL: vi.fn((blob: Blob) => { exported = blob; return 'blob:export' }), revokeObjectURL: vi.fn() })
