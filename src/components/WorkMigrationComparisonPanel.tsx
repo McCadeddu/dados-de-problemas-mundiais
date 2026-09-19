@@ -1,6 +1,6 @@
 import { useMemo, useState } from 'react'
 import type { DashboardData } from '../types'
-import { alignedRowsCsv, alignWorkMigration, migrationMeasures, pearson, spearman, weightedPearson, type MigrationMeasure } from '../lib/workMigration'
+import { alignedRowsCsv, alignWorkMigration, leaveOneOutPearsonRange, migrationMeasures, pearson, spearman, weightedPearson, type MigrationMeasure } from '../lib/workMigration'
 
 export function WorkMigrationComparisonPanel({ data, continent = 'Todos', loadError = null }: {
   data: DashboardData; continent?: string; loadError?: string | null
@@ -24,7 +24,10 @@ export function WorkMigrationComparisonPanel({ data, continent = 'Todos', loadEr
   const rhoVulnerable = spearman(rows, 'vulnerableEmployment')
   const weightedRUnemployment = weightedPearson(rows, 'unemployment')
   const weightedRVulnerable = weightedPearson(rows, 'vulnerableEmployment')
+  const leaveOneOutUnemployment = leaveOneOutPearsonRange(rows, 'unemployment')
+  const leaveOneOutVulnerable = leaveOneOutPearsonRange(rows, 'vulnerableEmployment')
   const formatR = (value: number | null) => value === null ? 'Não calculável' : value.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })
+  const formatRange = (range: { min: number; max: number; count: number } | null) => range === null ? 'Não calculável' : `${formatR(range.min)} a ${formatR(range.max)}`
   const format = (value: number) => value.toLocaleString('pt-BR', { minimumFractionDigits: 1, maximumFractionDigits: 1 })
   const sourceIds = ['ilo-unemployment', 'ilo-vulnerable-employment', migration.id]
     .map((id) => data.indicators.find((indicator) => indicator.id === id)?.sourceId)
@@ -75,12 +78,13 @@ export function WorkMigrationComparisonPanel({ data, continent = 'Todos', loadEr
           <p className="meta">A leitura principal dá o mesmo peso a cada país. Esta alternativa dá mais peso aos países com maior população e pode responder a uma pergunta diferente.</p>
           <div className="work-migration-comparison__table"><table>
             <caption>Pearson no mesmo ano e recorte</caption>
-            <thead><tr><th scope="col">Medida de trabalho</th><th scope="col">Peso igual por país</th><th scope="col">Peso pela população</th></tr></thead>
+            <thead><tr><th scope="col">Medida de trabalho</th><th scope="col">Peso igual por país</th><th scope="col">Peso pela população</th><th scope="col">Faixa ao retirar 1 país</th></tr></thead>
             <tbody>
-              <tr><th scope="row">Desemprego</th><td>{formatR(rUnemployment)}</td><td>{formatR(weightedRUnemployment)}</td></tr>
-              <tr><th scope="row">Emprego vulnerável</th><td>{formatR(rVulnerable)}</td><td>{formatR(weightedRVulnerable)}</td></tr>
+              <tr><th scope="row">Desemprego</th><td>{formatR(rUnemployment)}</td><td>{formatR(weightedRUnemployment)}</td><td>{formatRange(leaveOneOutUnemployment)}</td></tr>
+              <tr><th scope="row">Emprego vulnerável</th><td>{formatR(rVulnerable)}</td><td>{formatR(weightedRVulnerable)}</td><td>{formatRange(leaveOneOutVulnerable)}</td></tr>
             </tbody>
           </table></div>
+          <p className="meta">A faixa de influência recalcula Pearson retirando cada país uma vez; ela só é calculável com pelo menos quatro países e três recalculações válidas.</p>
         </details>
         {(rUnemployment === null || rVulnerable === null) && <p className="meta">A correlação exige pelo menos três países ou territórios e variação nas duas medidas.</p>}
         <details open={rows.length <= 12}><summary>Ver tabela completa ({rows.length} países e territórios)</summary>

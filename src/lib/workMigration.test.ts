@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
 import Papa from 'papaparse'
-import { alignedRowsCsv, alignWorkMigration, pearson, spearman, weightedPearson } from './workMigration'
+import { alignedRowsCsv, alignWorkMigration, leaveOneOutPearsonRange, pearson, spearman, weightedPearson } from './workMigration'
 import { workMigrationFixture } from '../test/workMigrationFixture'
 
 describe('work/migration alignment', () => {
@@ -40,6 +40,15 @@ describe('work/migration alignment', () => {
     expect(populationWeight).not.toBeNull()
     expect(populationWeight).not.toBeCloseTo(equalWeight!, 2)
     expect(weightedPearson(rows.slice(0, 2), 'unemployment')).toBeNull()
+  })
+  it('reports the influence range after removing one country at a time', () => {
+    const baseRows = alignWorkMigration(workMigrationFixture(), 'unhcr-refugees-hosted').filter((row) => row.year === 2025)
+    const rows = [...baseRows, { ...baseRows[0], countryCode: 'DDD', countryName: 'País D', unemployment: 40, migrationPerThousand: 30 }]
+    const range = leaveOneOutPearsonRange(rows, 'unemployment')
+    expect(range?.count).toBe(4)
+    expect(range?.min).toBeCloseTo(1)
+    expect(range?.max).toBeCloseTo(1)
+    expect(leaveOneOutPearsonRange(rows.slice(0, 3), 'unemployment')).toBeNull()
   })
   it('exports the exact subset with denominator, indicator, snapshot and unrounded values', () => {
     const data = workMigrationFixture()

@@ -42,6 +42,10 @@ responde a uma pergunta diferente, dando mais influência aos países maiores. U
 diferença relevante entre as duas versões deve ser registrada, pois mostra que a
 associação depende da composição populacional do recorte.
 
+Também é calculada uma faixa de influência retirando cada país uma vez e
+recalculando Pearson. Com pelo menos quatro países, uma faixa ampla indica que
+um ou poucos territórios podem estar determinando a associação observada.
+
 Com menos de três observações ou sem variação em uma das duas medidas, o painel
 informa que a correlação não pode ser calculada. Isso é diferente de r = 0.
 O resultado não fornece significância estatística, relação individual ou efeito

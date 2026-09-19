@@ -21,7 +21,7 @@ describe('WorkMigrationComparisonPanel', () => {
     expect(within(getDataTable()).getByText('País D')).toBeInTheDocument()
     view.rerender(<WorkMigrationComparisonPanel data={data} continent="Asia" />)
     expect(screen.getByText(/1 de 1 países e territórios incluídos em 2024/)).toBeInTheDocument()
-    expect(screen.getAllByText('Não calculável')).toHaveLength(8)
+    expect(screen.getAllByText('Não calculável')).toHaveLength(10)
     expect(within(getDataTable()).queryByText('País A')).not.toBeInTheDocument()
   })
   it('recalculates asylum and selects the latest available stock year without interpolation', () => {

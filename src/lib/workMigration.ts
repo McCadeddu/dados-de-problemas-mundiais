@@ -133,6 +133,16 @@ export function weightedPearson(rows: AlignedRow[], measure: 'unemployment' | 'v
   return Number.isFinite(value) ? Math.max(-1, Math.min(1, value)) : null
 }
 
+export type LeaveOneOutRange = { min: number; max: number; count: number }
+
+/** Range of Pearson values after removing each country once; useful for influence checks. */
+export function leaveOneOutPearsonRange(rows: AlignedRow[], measure: 'unemployment' | 'vulnerableEmployment'): LeaveOneOutRange | null {
+  if (rows.length < 4) return null
+  const values = rows.map((_, index) => pearson(rows.filter((__, candidate) => candidate !== index), measure)).filter((value): value is number => value !== null)
+  if (!values.length) return null
+  return { min: Math.min(...values), max: Math.max(...values), count: values.length }
+}
+
 export function alignedRowsCsv(rows: AlignedRow[], migrationId: string, generatedAt: string) {
   const escape = (value: string | number) => `"${String(value).replaceAll('"', '""')}"`
   const header = ['codigo_pais', 'pais', 'continente', 'ano', 'desemprego_pct', 'emprego_vulneravel_pct',

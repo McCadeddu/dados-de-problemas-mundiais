@@ -23,6 +23,7 @@ export function ComparabilityMatrixPanel() {
         <li><strong>Normalizamos a migração:</strong> contagens são divididas pela população do mesmo ano e apresentadas por mil habitantes, evitando que países maiores dominem apenas pelo tamanho.</li>
         <li><strong>Calculamos a associação:</strong> Pearson resume a relação linear e Spearman compara a ordem dos países, ambos dando o mesmo peso a cada território. Os resultados são descritivos e não provam causa.</li>
         <li><strong>Testamos a sensibilidade:</strong> o painel também permite comparar Pearson com peso igual e Pearson ponderado pela população. Uma diferença grande indica que o resultado depende do tamanho dos países.</li>
+        <li><strong>Verificamos a influência:</strong> retiramos cada país uma vez e mostramos a faixa de Pearson resultante. Uma faixa ampla pede cautela com valores extremos.</li>
       </ol>
       <p className="meta">O botão de download no painel seguinte entrega exatamente as linhas usadas no cálculo, com população, denominador, códigos das fontes e data de processamento.</p>
     </div>}
