@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
 import Papa from 'papaparse'
-import { alignedRowsCsv, alignWorkMigration, pearson, spearman } from './workMigration'
+import { alignedRowsCsv, alignWorkMigration, pearson, spearman, weightedPearson } from './workMigration'
 import { workMigrationFixture } from '../test/workMigrationFixture'
 
 describe('work/migration alignment', () => {
@@ -30,6 +30,16 @@ describe('work/migration alignment', () => {
     expect(spearman(rows.map((row) => ({ ...row, unemployment: -row.unemployment })), 'unemployment')).toBeCloseTo(-1)
     expect(spearman(rows.map((row, index) => ({ ...row, unemployment: index === 0 ? 20 : row.unemployment })), 'unemployment')).toBeGreaterThan(0.8)
     expect(spearman(rows.slice(0, 2), 'unemployment')).toBeNull()
+  })
+  it('exposes population weighting as a distinct sensitivity result', () => {
+    const rows = alignWorkMigration(workMigrationFixture(), 'unhcr-refugees-hosted').filter((row) => row.year === 2025)
+      .map((row, index) => ({ ...row, unemployment: [10, 60, 30][index], population: [1000, 10, 10][index] }))
+    const equalWeight = pearson(rows, 'unemployment')
+    const populationWeight = weightedPearson(rows, 'unemployment')
+    expect(equalWeight).not.toBeNull()
+    expect(populationWeight).not.toBeNull()
+    expect(populationWeight).not.toBeCloseTo(equalWeight!, 2)
+    expect(weightedPearson(rows.slice(0, 2), 'unemployment')).toBeNull()
   })
   it('exports the exact subset with denominator, indicator, snapshot and unrounded values', () => {
     const data = workMigrationFixture()

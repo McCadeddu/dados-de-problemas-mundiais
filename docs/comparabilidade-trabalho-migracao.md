@@ -36,6 +36,12 @@ vários anos foi removida. Países sem uma das quatro medidas válidas são list
 como excluídos. Zero publicado é preservado; população não positiva, valores
 não finitos, taxas de trabalho fora de 0–100% e contagens negativas são excluídos.
 
+O painel também oferece uma análise de sensibilidade com Pearson ponderado pela
+população. A leitura principal dá o mesmo peso a cada país; a versão ponderada
+responde a uma pergunta diferente, dando mais influência aos países maiores. Uma
+diferença relevante entre as duas versões deve ser registrada, pois mostra que a
+associação depende da composição populacional do recorte.
+
 Com menos de três observações ou sem variação em uma das duas medidas, o painel
 informa que a correlação não pode ser calculada. Isso é diferente de r = 0.
 O resultado não fornece significância estatística, relação individual ou efeito

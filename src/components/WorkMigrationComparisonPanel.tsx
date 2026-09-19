@@ -1,6 +1,6 @@
 import { useMemo, useState } from 'react'
 import type { DashboardData } from '../types'
-import { alignedRowsCsv, alignWorkMigration, migrationMeasures, pearson, spearman, type MigrationMeasure } from '../lib/workMigration'
+import { alignedRowsCsv, alignWorkMigration, migrationMeasures, pearson, spearman, weightedPearson, type MigrationMeasure } from '../lib/workMigration'
 
 export function WorkMigrationComparisonPanel({ data, continent = 'Todos', loadError = null }: {
   data: DashboardData; continent?: string; loadError?: string | null
@@ -22,6 +22,8 @@ export function WorkMigrationComparisonPanel({ data, continent = 'Todos', loadEr
   const rVulnerable = pearson(rows, 'vulnerableEmployment')
   const rhoUnemployment = spearman(rows, 'unemployment')
   const rhoVulnerable = spearman(rows, 'vulnerableEmployment')
+  const weightedRUnemployment = weightedPearson(rows, 'unemployment')
+  const weightedRVulnerable = weightedPearson(rows, 'vulnerableEmployment')
   const formatR = (value: number | null) => value === null ? 'Não calculável' : value.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })
   const format = (value: number) => value.toLocaleString('pt-BR', { minimumFractionDigits: 1, maximumFractionDigits: 1 })
   const sourceIds = ['ilo-unemployment', 'ilo-vulnerable-employment', migration.id]
@@ -68,6 +70,18 @@ export function WorkMigrationComparisonPanel({ data, continent = 'Todos', loadEr
           <article><span>Spearman ρ — desemprego</span><strong>{formatR(rhoUnemployment)}</strong><small>associação monotônica por postos</small></article>
           <article><span>Spearman ρ — emprego vulnerável</span><strong>{formatR(rhoVulnerable)}</strong><small>associação monotônica por postos</small></article>
         </div>
+        <details className="work-migration-comparison__sensitivity">
+          <summary>Análise de sensibilidade: peso da população</summary>
+          <p className="meta">A leitura principal dá o mesmo peso a cada país. Esta alternativa dá mais peso aos países com maior população e pode responder a uma pergunta diferente.</p>
+          <div className="work-migration-comparison__table"><table>
+            <caption>Pearson no mesmo ano e recorte</caption>
+            <thead><tr><th scope="col">Medida de trabalho</th><th scope="col">Peso igual por país</th><th scope="col">Peso pela população</th></tr></thead>
+            <tbody>
+              <tr><th scope="row">Desemprego</th><td>{formatR(rUnemployment)}</td><td>{formatR(weightedRUnemployment)}</td></tr>
+              <tr><th scope="row">Emprego vulnerável</th><td>{formatR(rVulnerable)}</td><td>{formatR(weightedRVulnerable)}</td></tr>
+            </tbody>
+          </table></div>
+        </details>
         {(rUnemployment === null || rVulnerable === null) && <p className="meta">A correlação exige pelo menos três países ou territórios e variação nas duas medidas.</p>}
         <details open={rows.length <= 12}><summary>Ver tabela completa ({rows.length} países e territórios)</summary>
           <div className="work-migration-comparison__table"><table>

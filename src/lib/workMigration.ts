@@ -109,6 +109,30 @@ export function spearman(rows: AlignedRow[], measure: 'unemployment' | 'vulnerab
   return Number.isFinite(value) ? Math.max(-1, Math.min(1, value)) : null
 }
 
+/** Population-weighted Pearson sensitivity; it answers a different question from the country-weighted result. */
+export function weightedPearson(rows: AlignedRow[], measure: 'unemployment' | 'vulnerableEmployment'): number | null {
+  const valid = rows.filter((row) => Number.isFinite(row.population) && row.population > 0)
+  if (valid.length < 3) return null
+  const totalWeight = valid.reduce((sum, row) => sum + row.population, 0)
+  if (!Number.isFinite(totalWeight) || totalWeight <= 0) return null
+  const meanX = valid.reduce((sum, row) => sum + row.population * row[measure], 0) / totalWeight
+  const meanY = valid.reduce((sum, row) => sum + row.population * row.migrationPerThousand, 0) / totalWeight
+  let cross = 0
+  let squaredX = 0
+  let squaredY = 0
+  for (const row of valid) {
+    const centeredX = row[measure] - meanX
+    const centeredY = row.migrationPerThousand - meanY
+    cross += row.population * centeredX * centeredY
+    squaredX += row.population * centeredX * centeredX
+    squaredY += row.population * centeredY * centeredY
+  }
+  const denominator = Math.sqrt(squaredX) * Math.sqrt(squaredY)
+  if (!Number.isFinite(denominator) || denominator === 0) return null
+  const value = cross / denominator
+  return Number.isFinite(value) ? Math.max(-1, Math.min(1, value)) : null
+}
+
 export function alignedRowsCsv(rows: AlignedRow[], migrationId: string, generatedAt: string) {
   const escape = (value: string | number) => `"${String(value).replaceAll('"', '""')}"`
   const header = ['codigo_pais', 'pais', 'continente', 'ano', 'desemprego_pct', 'emprego_vulneravel_pct',
