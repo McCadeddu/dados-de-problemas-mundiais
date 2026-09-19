@@ -59,7 +59,20 @@ devem ser apresentados como prevalência comparável entre países.
 `npm run data:education-work` coleta as cinco séries mundiais e três estaduais,
 atualiza mapas/rankings e grava as séries históricas. Ele integra `data:build`,
 antes de `data:national`, para atualizar também o diagnóstico de cobertura.
-Uma falha de coleta encerra o processo e impede a publicação automatizada.
+A coleta tenta novamente até três vezes em falhas de conexão, expiração de prazo
+ou HTTP 408/429/500/502/503/504, com espera de 2 e 4 segundos. Cada tentativa tem
+limite de 60 segundos, incluindo a leitura do corpo da resposta. Os logs identificam
+a URL e a causa. JSON inválido e erros HTTP permanentes não são repetidos.
+Se as tentativas se esgotarem ou a validação de cobertura falhar, o processo
+encerra e impede a publicação automatizada; a versão pública anterior permanece.
+
+Correção de 19/09/2026: a execução `35444247043` falhou por
+`UND_ERR_CONNECT_TIMEOUT` ao acessar o IBGE na etapa de educação e trabalho,
+que anteriormente fazia apenas uma tentativa. Testes simulam esse erro, respostas
+HTTP transitórias e leitura interrompida, além de verificar o limite de tentativas.
+Validação local em 19/09/2026: `npm run data:build` concluiu todas as etapas,
+preservando 49 indicadores, 217 entradas territoriais e 6.973 últimos valores.
+As três séries estaduais de educação e trabalho mantiveram cobertura das 27 UFs.
 
 As definições podem ser consultadas na [API de metadados do Banco Mundial](https://api.worldbank.org/v2/indicator/SE.ADT.LITR.ZS?format=json),
 no [IBGE 7113](https://servicodados.ibge.gov.br/api/v3/agregados/7113/metadados)

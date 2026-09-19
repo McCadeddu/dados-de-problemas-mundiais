@@ -1,15 +1,11 @@
 import { readFile, writeFile } from 'node:fs/promises'
 import type { DashboardData, Indicator, Series, Source, Theme } from '../../src/types.js'
 import { EDUCATION_WORK_INDICATORS, parseIbgeSeries, percentage, type IbgeRow } from './education-work.js'
+import { fetchJsonWithRetry as json } from './http.js'
 
 const dataPath = 'public/data/mundialidade.json'
 const data = JSON.parse(await readFile(dataPath, 'utf8')) as DashboardData
 const validCountries = new Set(data.countries.map((country) => country.code))
-async function json<T>(url: string): Promise<T> {
-  const response = await fetch(url, { signal: AbortSignal.timeout(60000) })
-  if (!response.ok) throw new Error(`HTTP ${response.status}: ${url}`)
-  return response.json() as Promise<T>
-}
 const results = await Promise.all(EDUCATION_WORK_INDICATORS.map(async (config) => {
   type Row = { country: { value: string }; countryiso3code: string; date: string; value: number | null }
   const [meta, rows] = await json<[{ pages: number; lastupdated: string }, Row[]]>(`https://api.worldbank.org/v2/country/all/indicator/${config.code}?format=json&per_page=20000`)
