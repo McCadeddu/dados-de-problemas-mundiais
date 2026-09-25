@@ -86,4 +86,43 @@ describe('WorkMigrationComparisonPanel', () => {
     expect(rows.every((row) => row.ano === '2025' && row.continente === 'Europe')).toBe(true)
     expect(within(getDataTable()).getAllByRole('row')).toHaveLength(rows.length + 1)
   })
+  it('shows and exports the same annual transitions when the measure and continent change', async () => {
+    let exported: Blob | undefined
+    let filename = ''
+    vi.stubGlobal('URL', { createObjectURL: vi.fn((blob: Blob) => { exported = blob; return 'blob:changes' }), revokeObjectURL: vi.fn() })
+    vi.spyOn(HTMLAnchorElement.prototype, 'click').mockImplementation(function (this: HTMLAnchorElement) { filename = this.download })
+    const data = workMigrationFixture()
+    const view = render(<WorkMigrationComparisonPanel data={data} continent="Europe" />)
+    const getChangesTable = () => screen.getByRole('table', { name: /Variações por país/ })
+    expect(within(getChangesTable()).getAllByRole('row')).toHaveLength(3)
+    expect(within(getChangesTable()).getByText('-20,00')).toBeInTheDocument()
+    expect(within(getChangesTable()).queryByText('País C')).not.toBeInTheDocument()
+    expect(within(getChangesTable()).queryByText('País D')).not.toBeInTheDocument()
+    view.rerender(<WorkMigrationComparisonPanel data={data} continent="Asia" />)
+    fireEvent.change(screen.getByLabelText('Medida migratória'), { target: { value: 'asylum' } })
+    expect(within(getChangesTable()).getByText('País C')).toBeInTheDocument()
+    expect(within(getChangesTable()).getByText('+5,00')).toBeInTheDocument()
+    expect(within(getChangesTable()).queryByText('País A')).not.toBeInTheDocument()
+    vi.useFakeTimers()
+    fireEvent.click(screen.getByRole('button', { name: 'Baixar CSV das variações' }))
+    vi.runAllTimers()
+    vi.useRealTimers()
+    const csv = await new Promise<string>((resolve, reject) => {
+      const reader = new FileReader()
+      reader.onload = () => resolve(String(reader.result))
+      reader.onerror = reject
+      reader.readAsText(exported!)
+    })
+    expect(filename).toBe('variacoes-trabalho-migracao-asylum-2024-2025-Asia.csv')
+    const rows = Papa.parse<Record<string, string>>(csv, { header: true }).data
+    expect(rows).toHaveLength(1)
+    expect(rows[0]).toMatchObject({ codigo_pais: 'CCC', continente: 'Asia', ano_anterior: '2024', ano_atual: '2025',
+      variacao_migracao_por_1000: '5', indicador_migratorio: 'unhcr-asylum-seekers-hosted' })
+    fireEvent.change(screen.getByLabelText('Ano comum'), { target: { value: '2024' } })
+    expect(screen.queryByRole('table', { name: /Variações por país/ })).not.toBeInTheDocument()
+    expect(screen.getByRole('button', { name: 'Baixar CSV das variações' })).toBeDisabled()
+    expect(screen.getByText(/Não há países com observações completas nos dois anos/)).toBeInTheDocument()
+    fireEvent.change(screen.getByLabelText('Medida migratória'), { target: { value: 'stock' } })
+    expect(screen.getByRole('button', { name: 'Baixar CSV das variações' })).toBeDisabled()
+  })
 })

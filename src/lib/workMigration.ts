@@ -24,6 +24,8 @@ export type ChangeRow = {
   continent: string
   year: number
   previousYear: number
+  previous: AlignedRow
+  current: AlignedRow
   deltaUnemployment: number
   deltaVulnerableEmployment: number
   deltaMigrationPerThousand: number
@@ -203,7 +205,8 @@ export function alignWorkMigrationChanges(rows: AlignedRow[], year: number): Cha
       current.migrationPerThousand - previous.migrationPerThousand]
     if (!values.every(Number.isFinite)) continue
     changes.push({ countryCode: current.countryCode, countryName: current.countryName, continent: current.continent,
-      year, previousYear: year - 1, deltaUnemployment: values[0], deltaVulnerableEmployment: values[1], deltaMigrationPerThousand: values[2] })
+      year, previousYear: year - 1, previous, current,
+      deltaUnemployment: values[0], deltaVulnerableEmployment: values[1], deltaMigrationPerThousand: values[2] })
   }
   return changes.sort((a, b) => a.countryCode.localeCompare(b.countryCode))
 }
@@ -215,4 +218,21 @@ export function alignedRowsCsv(rows: AlignedRow[], migrationId: string, generate
   return '\ufeff' + [header.join(','), ...rows.map((row) => [row.countryCode, row.countryName, row.continent,
     row.year, row.unemployment, row.vulnerableEmployment, row.population, row.migrationCount,
     row.migrationPerThousand, migrationId, generatedAt].map(escape).join(','))].join('\r\n')
+}
+
+/** Same transitions used in the panel, with both endpoints so changes can be reproduced. */
+export function changeRowsCsv(rows: ChangeRow[], migrationId: string, generatedAt: string) {
+  const escape = (value: string | number) => `"${String(value).replaceAll('"', '""')}"`
+  const header = ['codigo_pais', 'pais', 'continente', 'ano_anterior', 'ano_atual',
+    'desemprego_anterior_pct', 'desemprego_atual_pct', 'variacao_desemprego_pp',
+    'emprego_vulneravel_anterior_pct', 'emprego_vulneravel_atual_pct', 'variacao_emprego_vulneravel_pp',
+    'populacao_anterior', 'populacao_atual', 'migracao_anterior_pessoas', 'migracao_atual_pessoas',
+    'migracao_anterior_por_1000', 'migracao_atual_por_1000', 'variacao_migracao_por_1000',
+    'indicador_migratorio', 'arquivo_gerado_em']
+  return '\ufeff' + [header.join(','), ...rows.map((row) => [row.countryCode, row.countryName, row.continent,
+    row.previousYear, row.year, row.previous.unemployment, row.current.unemployment, row.deltaUnemployment,
+    row.previous.vulnerableEmployment, row.current.vulnerableEmployment, row.deltaVulnerableEmployment,
+    row.previous.population, row.current.population, row.previous.migrationCount, row.current.migrationCount,
+    row.previous.migrationPerThousand, row.current.migrationPerThousand, row.deltaMigrationPerThousand,
+    migrationId, generatedAt].map(escape).join(','))].join('\r\n')
 }

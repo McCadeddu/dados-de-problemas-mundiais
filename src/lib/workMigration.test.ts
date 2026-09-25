@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
 import Papa from 'papaparse'
-import { alignedRowsCsv, alignWorkMigration, alignWorkMigrationChanges, leaveOneOutPearsonRange, pearson, pearsonChanges, spearman, spearmanChanges, weightedPearson, workMigrationExclusions } from './workMigration'
+import { alignedRowsCsv, alignWorkMigration, alignWorkMigrationChanges, changeRowsCsv, leaveOneOutPearsonRange, pearson, pearsonChanges, spearman, spearmanChanges, weightedPearson, workMigrationExclusions } from './workMigration'
 import { workMigrationFixture } from '../test/workMigrationFixture'
 
 describe('work/migration alignment', () => {
@@ -80,6 +80,27 @@ describe('work/migration alignment', () => {
     expect(issues).toEqual([{ countryCode: 'DDD', countryName: 'País D', reasons: ['migração ausente'] }])
     data.countryPopulation[0].points[1].value = 0
     expect(workMigrationExclusions(data, 'unhcr-refugees-hosted', 2025).find((item) => item.countryCode === 'AAA')?.reasons).toEqual(['população inválida'])
+  })
+  it('exports reproducible annual changes using each year’s own population, preserving zeros and precision', () => {
+    const data = workMigrationFixture()
+    data.countries[0].name = 'País "A", região'
+    data.countryPopulation[0].points[0].value = 300000
+    const changes = alignWorkMigrationChanges(alignWorkMigration(data, 'unhcr-refugees-hosted'), 2025)
+    const csv = changeRowsCsv(changes, 'unhcr-refugees-hosted', data.generatedAt)
+    expect(csv.startsWith('\ufeff')).toBe(true)
+    const parsed = Papa.parse<Record<string, string>>(csv, { header: true })
+    expect(parsed.errors).toEqual([])
+    expect(parsed.data.map((row) => row.codigo_pais)).toEqual(['AAA', 'BBB', 'CCC'])
+    expect(parsed.data[0]).toMatchObject({ pais: 'País "A", região', ano_anterior: '2024', ano_atual: '2025',
+      desemprego_anterior_pct: '30', desemprego_atual_pct: '10', variacao_desemprego_pp: '-20',
+      populacao_anterior: '300000', populacao_atual: '100000', migracao_anterior_pessoas: '1000', migracao_atual_pessoas: '0',
+      migracao_anterior_por_1000: String(1000 / 300000 * 1000), migracao_atual_por_1000: '0',
+      indicador_migratorio: 'unhcr-refugees-hosted', arquivo_gerado_em: data.generatedAt })
+    for (const row of parsed.data) {
+      expect(Number(row.variacao_desemprego_pp)).toBe(Number(row.desemprego_atual_pct) - Number(row.desemprego_anterior_pct))
+      expect(Number(row.variacao_emprego_vulneravel_pp)).toBe(Number(row.emprego_vulneravel_atual_pct) - Number(row.emprego_vulneravel_anterior_pct))
+      expect(Number(row.variacao_migracao_por_1000)).toBe(Number(row.migracao_atual_por_1000) - Number(row.migracao_anterior_por_1000))
+    }
   })
   it('exports the exact subset with denominator, indicator, snapshot and unrounded values', () => {
     const data = workMigrationFixture()

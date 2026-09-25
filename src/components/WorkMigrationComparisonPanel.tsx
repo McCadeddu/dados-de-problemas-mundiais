@@ -1,6 +1,6 @@
 import { useMemo, useState } from 'react'
 import type { DashboardData } from '../types'
-import { alignedRowsCsv, alignWorkMigration, alignWorkMigrationChanges, leaveOneOutPearsonRange, migrationMeasures, pearson, pearsonChanges, spearman, spearmanChanges, weightedPearson, workMigrationExclusions, type MigrationMeasure } from '../lib/workMigration'
+import { alignedRowsCsv, alignWorkMigration, alignWorkMigrationChanges, changeRowsCsv, leaveOneOutPearsonRange, migrationMeasures, pearson, pearsonChanges, spearman, spearmanChanges, weightedPearson, workMigrationExclusions, type MigrationMeasure } from '../lib/workMigration'
 
 export function WorkMigrationComparisonPanel({ data, continent = 'Todos', loadError = null }: {
   data: DashboardData; continent?: string; loadError?: string | null
@@ -49,17 +49,21 @@ export function WorkMigrationComparisonPanel({ data, continent = 'Todos', loadEr
     return `${label}: ${messages.join(' ')}`
   }
   const format = (value: number) => value.toLocaleString('pt-BR', { minimumFractionDigits: 1, maximumFractionDigits: 1 })
+  const formatChange = (value: number) => value.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2, signDisplay: 'exceptZero' })
   const sourceIds = ['ilo-unemployment', 'ilo-vulnerable-employment', migration.id]
     .map((id) => data.indicators.find((indicator) => indicator.id === id)?.sourceId)
   // Population is distributed with the World Bank series in this dataset.
   const sources = data.sources.filter((source) => [...sourceIds, 'world-bank'].includes(source.id))
 
-  function download() {
-    const blob = new Blob([alignedRowsCsv(rows, migration.id, data.generatedAt)], { type: 'text/csv;charset=utf-8' })
+  function download(kind: 'levels' | 'changes') {
+    const csv = kind === 'changes' ? changeRowsCsv(changes, migration.id, data.generatedAt) : alignedRowsCsv(rows, migration.id, data.generatedAt)
+    const blob = new Blob([csv], { type: 'text/csv;charset=utf-8' })
     const url = URL.createObjectURL(blob)
     const anchor = document.createElement('a')
     anchor.href = url
-    anchor.download = `trabalho-migracao-${measure}-${year}-${continent}.csv`
+    anchor.download = kind === 'changes'
+      ? `variacoes-trabalho-migracao-${measure}-${year - 1}-${year}-${continent}.csv`
+      : `trabalho-migracao-${measure}-${year}-${continent}.csv`
     anchor.click()
     window.setTimeout(() => URL.revokeObjectURL(url), 1000)
   }
@@ -79,7 +83,7 @@ export function WorkMigrationComparisonPanel({ data, continent = 'Todos', loadEr
           {years.map((value) => <option key={value} value={value}>{value}</option>)}
         </select></label>
         <strong className="badge">Sem causalidade</strong>
-        <button className="export-button" onClick={download} disabled={!ready || !rows.length}>Baixar CSV alinhado</button>
+        <button className="export-button" onClick={() => download('levels')} disabled={!ready || !rows.length}>Baixar CSV alinhado</button>
       </div>
     </div>
     {!ready ? <p role={loadError ? 'alert' : 'status'}>{loadError ? 'Não foi possível carregar as séries necessárias à comparação. Recarregue a página para tentar novamente.' : 'Carregando séries de trabalho, migração e população…'}</p> : <>
@@ -118,6 +122,8 @@ export function WorkMigrationComparisonPanel({ data, continent = 'Todos', loadEr
         <details className="work-migration-comparison__sensitivity">
           <summary>Variações dentro dos países: {changes.length} transições exatas</summary>
           <p className="meta">Cada transição compara o mesmo país em {year - 1} e {year}. Anos ausentes não são interpolados; a associação entre mudanças não é um efeito causal.</p>
+          <p className="meta">Países e territórios da amostra de {year} com observações completas também em {year - 1}: {changes.length} de {rows.length}. Fora da análise de mudanças por falta de um par anual válido: {rows.length - changes.length}.</p>
+          <button className="export-button" onClick={() => download('changes')} disabled={!changes.length}>Baixar CSV das variações</button>
           {changes.length > 0 ? <div className="work-migration-comparison__table"><table>
             <caption>Mudança de {year - 1} para {year} · correlações entre variações</caption>
             <thead><tr><th scope="col">Medida de trabalho</th><th scope="col">Pearson das mudanças</th><th scope="col">Spearman das mudanças</th></tr></thead>
@@ -126,6 +132,15 @@ export function WorkMigrationComparisonPanel({ data, continent = 'Todos', loadEr
               <tr><th scope="row">Emprego vulnerável</th><td>{formatR(deltaRVulnerable)}</td><td>{formatR(deltaRhoVulnerable)}</td></tr>
             </tbody>
           </table></div> : <p className="meta">Não há países com observações completas nos dois anos consecutivos neste recorte.</p>}
+          {changes.length > 0 && <>
+            <p className="meta">Variação = valor de {year} menos valor de {year - 1}. Sinal positivo indica aumento; negativo, redução. As taxas de trabalho variam em pontos percentuais (p.p.): passar de 10% para 12% significa +2 p.p. A medida migratória varia em pessoas por mil habitantes, usando a população de cada ano. Essa mudança de estoque por habitante não mede entradas ou saídas de pessoas.</p>
+            <div className="work-migration-comparison__table"><table>
+              <caption>Variações por país · {year - 1} → {year} · {migration.title} · mesma amostra dos cálculos e do CSV</caption>
+              <thead><tr><th scope="col">País / território</th><th scope="col">Δ Desemprego (p.p.)</th><th scope="col">Δ Emprego vulnerável (p.p.)</th><th scope="col">Δ {migration.title} (por 1.000 hab.)</th></tr></thead>
+              <tbody>{changes.map((row) => <tr key={row.countryCode}><th scope="row">{row.countryName}</th><td>{formatChange(row.deltaUnemployment)}</td><td>{formatChange(row.deltaVulnerableEmployment)}</td><td>{formatChange(row.deltaMigrationPerThousand)}</td></tr>)}</tbody>
+            </table></div>
+            <p className="meta">A tabela arredonda para duas casas decimais; variações muito pequenas podem aparecer como zero. O CSV preserva os valores sem arredondamento, as taxas, contagens e populações dos dois anos, o indicador migratório e a data do arquivo de dados.</p>
+          </>}
         </details>
         {(rUnemployment === null || rVulnerable === null) && <p className="meta">A correlação exige pelo menos três países ou territórios e variação nas duas medidas.</p>}
         <details open={rows.length <= 12}><summary>Ver tabela completa ({rows.length} países e territórios)</summary>

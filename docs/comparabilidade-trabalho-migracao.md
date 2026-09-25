@@ -59,6 +59,21 @@ ano anterior/ano selecionado, respeita o continente selecionado, sem preencher l
 entre as variações. Ela reduz a influência de diferenças estruturais entre países,
 mas continua sendo descritiva e não identifica causalidade.
 
+A seção de variações mostra uma linha por país com a diferença entre o ano
+selecionado e o anterior. Desemprego e emprego vulnerável são expressos em
+pontos percentuais; a medida migratória, em pessoas por mil habitantes. Sinais
+positivos indicam aumento e negativos indicam redução, sem julgamento automático
+de melhora ou piora. A diferença entre estoques por habitante não mede fluxos
+de entrada ou saída. O painel informa quantos países da amostra anual também
+têm um par válido e quantos ficam fora da análise de mudanças.
+
+O botão “Baixar CSV das variações” exporta exatamente as transições do continente,
+medida e período selecionados, na ordem da tabela. Inclui os valores de trabalho,
+contagens migratórias e denominadores populacionais dos dois anos, diferenças
+sem arredondamento, identificação da medida migratória e data do arquivo de dados.
+A tabela arredonda as diferenças para duas casas decimais. Sem pares anuais
+válidos, a tabela é omitida e o botão de exportação fica desativado.
+
 Com menos de três observações ou sem variação em uma das duas medidas, o painel
 informa que a correlação não pode ser calculada. Isso é diferente de r = 0.
 O resultado não fornece significância estatística, relação individual ou efeito
