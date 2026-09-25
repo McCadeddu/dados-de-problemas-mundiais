@@ -290,7 +290,7 @@ function App() {
           <p>Escolha um tema para abrir seu panorama mundial.</p>
           <div className="landing__themes" aria-label="Problemáticas disponíveis">
             {data.themes.map((theme) => (
-              <button key={theme.id} onClick={() => { setThemeId(theme.id); setSelectedIndicatorId(''); setView('world') }}>
+              <button key={theme.id} className={`landing-theme--${theme.id}`} onClick={() => { setThemeId(theme.id); setSelectedIndicatorId(''); setView('world') }}>
                 <strong>{theme.name}</strong>
                 <span>{theme.description}</span>
               </button>
@@ -390,7 +390,7 @@ function App() {
   }
 
   return (
-    <main className="shell">
+    <main className={`shell theme-shell theme-shell--${activeThemeId}`}>
       <header className="analysis-header">
         <div>
           <button className="text-button" onClick={() => setView('landing')}>Escolher outra problemática</button>

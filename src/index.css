@@ -36,6 +36,67 @@ select {
   width: 100%;
 }
 
+/* Each problem has a stable accent so users can recognize the active context
+   while the dark neutral background keeps text and map colors readable. */
+.theme-shell--hunger-water { --theme-accent: #22c55e; --theme-accent-soft: rgba(34, 197, 94, 0.18); --theme-accent-strong: #166534; }
+.theme-shell--gender-equality { --theme-accent: #f472b6; --theme-accent-soft: rgba(244, 114, 182, 0.18); --theme-accent-strong: #9d174d; }
+.theme-shell--poverty-inequality { --theme-accent: #fbbf24; --theme-accent-soft: rgba(251, 191, 36, 0.18); --theme-accent-strong: #92400e; }
+.theme-shell--climate-vulnerability { --theme-accent: #38bdf8; --theme-accent-soft: rgba(56, 189, 248, 0.18); --theme-accent-strong: #075985; }
+.theme-shell--forced-migration { --theme-accent: #a78bfa; --theme-accent-soft: rgba(167, 139, 250, 0.18); --theme-accent-strong: #5b21b6; }
+.theme-shell--illiteracy { --theme-accent: #fb923c; --theme-accent-soft: rgba(251, 146, 60, 0.18); --theme-accent-strong: #9a3412; }
+.theme-shell--decent-work { --theme-accent: #2dd4bf; --theme-accent-soft: rgba(45, 212, 191, 0.18); --theme-accent-strong: #0f766e; }
+
+.theme-shell .analysis-header {
+  border-bottom: 1px solid var(--theme-accent-soft);
+}
+
+.theme-shell .analysis-header p strong,
+.theme-shell .hierarchy strong,
+.theme-shell .text-button,
+.theme-shell .population-chip {
+  color: var(--theme-accent);
+}
+
+.theme-shell .hierarchy span {
+  color: var(--theme-accent);
+}
+
+.theme-shell .view-switcher button.is-active {
+  border-color: var(--theme-accent);
+  background: linear-gradient(135deg, var(--theme-accent-strong), #0e2238);
+  box-shadow: 0 12px 28px var(--theme-accent-soft);
+}
+
+.theme-shell .controls,
+.theme-shell .indicator-explanation,
+.theme-shell .data-quality {
+  border-color: var(--theme-accent-soft);
+}
+
+.theme-shell .panel__header > div > span,
+.theme-shell .indicator-explanation > button {
+  color: var(--theme-accent);
+}
+
+.theme-shell .advance-button,
+.theme-shell .share-button,
+.theme-shell .export-button {
+  border-color: var(--theme-accent);
+  background: var(--theme-accent-strong);
+}
+
+.theme-shell .share-button:hover,
+.theme-shell .export-button:hover,
+.theme-shell .advance-button:hover {
+  background: var(--theme-accent);
+  color: #07111f;
+}
+
+.theme-shell .badge {
+  border-color: var(--theme-accent-soft);
+  background: var(--theme-accent-soft);
+}
+
 .shell {
   width: min(1400px, calc(100% - 2rem));
   margin: 0 auto;
@@ -106,6 +167,24 @@ select {
   color: #b9c9db;
   font-size: 0.9rem;
 }
+
+.landing__themes button[class*="landing-theme--"] {
+  border-top: 4px solid var(--card-accent, #2dd4bf);
+}
+
+.landing__themes button[class*="landing-theme--"]:hover,
+.landing__themes button[class*="landing-theme--"]:focus-visible {
+  border-color: var(--card-accent, #2dd4bf);
+  background: linear-gradient(145deg, var(--card-soft, rgba(15, 118, 110, 0.48)), rgba(15, 30, 49, 0.82));
+}
+
+.landing-theme--hunger-water { --card-accent: #22c55e; --card-soft: rgba(34, 197, 94, 0.25); }
+.landing-theme--gender-equality { --card-accent: #f472b6; --card-soft: rgba(244, 114, 182, 0.25); }
+.landing-theme--poverty-inequality { --card-accent: #fbbf24; --card-soft: rgba(251, 191, 36, 0.25); }
+.landing-theme--climate-vulnerability { --card-accent: #38bdf8; --card-soft: rgba(56, 189, 248, 0.25); }
+.landing-theme--forced-migration { --card-accent: #a78bfa; --card-soft: rgba(167, 139, 250, 0.25); }
+.landing-theme--illiteracy { --card-accent: #fb923c; --card-soft: rgba(251, 146, 60, 0.25); }
+.landing-theme--decent-work { --card-accent: #2dd4bf; --card-soft: rgba(45, 212, 191, 0.25); }
 
 .analysis-header {
   display: flex;
