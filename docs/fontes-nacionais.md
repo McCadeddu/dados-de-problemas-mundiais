@@ -30,6 +30,21 @@ O levantamento inicial foi seguido pela primeira integração descrita abaixo.
 - O novo indicador não altera rankings nem preenche automaticamente as lacunas
   da linha internacional de pobreza. Não há novos mapas subnacionais nesta etapa.
 
+### Complemento nacional de segurança alimentar: Brasil
+
+Em 25/09/2026 foi integrada a [tabela 6665 do IBGE/SIDRA](https://sidra.ibge.gov.br/tabela/6665),
+com a proporção de domicílios particulares em alguma insegurança alimentar,
+insegurança moderada e insegurança grave. A consulta usa a variável de
+domicílios e cobre seis anos publicados pelo IBGE, até 2024. A definição e o
+questionário seguem a [PNAD Contínua e a EBIA](https://www.ibge.gov.br/biblioteca/visualizacao/livros/liv102084.pdf).
+
+O denominador é o domicílio, enquanto o indicador mundial de insegurança
+alimentar é uma proporção da população. O painel mostra os dois conjuntos em
+camadas distintas e não os combina nem os usa para substituir a série mundial.
+A tabela 6665 tem apenas o nível Brasil (N1); um recorte por UF será pesquisado
+se o IBGE publicar uma tabela com cobertura e definições compatíveis. A coleta
+diária conserva a última série válida quando a API falha e exibe essa condição.
+
 ### Operação
 
 `npm run data:national` atualiza o complemento usando o catálogo revisado em

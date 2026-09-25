@@ -30,6 +30,15 @@ export type NationalData = {
     requestUrl: string
     points: Array<{ period: string; value: number }>
   }
+  brazilFoodSecurity?: {
+    fetchedAt: string
+    lastAttemptAt: string
+    cached: boolean
+    sourceUrl: string
+    methodologyUrl: string
+    requestUrl: string
+    points: Array<{ year: number; foodInsecurity: number; moderate: number; severe: number }>
+  }
   southAfricaUnemployment?: {
     edition: string
     sourceUpdatedAt: string

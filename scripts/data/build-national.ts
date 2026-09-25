@@ -7,6 +7,7 @@ import { collectIstatUnemployment } from './istat.js'
 import { collectInegiUnemployment } from './inegi.js'
 import { collectStatsSaUnemployment } from './statssa.js'
 import { collectMospiUnemployment } from './mospi.js'
+import { collectIbgeFoodSecurity } from './ibge-food-security.js'
 
 const outputPath = 'public/data/national-data.json'
 const registry = JSON.parse(await readFile('scripts/data/national-source-registry.json', 'utf8')) as NationalSource[]
@@ -42,7 +43,8 @@ const italyUnemployment = await collectIstatUnemployment(previous.italyUnemploym
 const mexicoUnemployment = await collectInegiUnemployment(previous.mexicoUnemployment)
 const southAfricaUnemployment = await collectStatsSaUnemployment(previous.southAfricaUnemployment)
 const indiaUnemployment = await collectMospiUnemployment(previous.indiaUnemployment)
-const result: NationalData = { generatedAt: new Date().toISOString(), registry, poverty, australiaUnemployment, portugalUnemployment, italyUnemployment, mexicoUnemployment, southAfricaUnemployment, indiaUnemployment }
+const brazilFoodSecurity = await collectIbgeFoodSecurity(previous.brazilFoodSecurity)
+const result: NationalData = { generatedAt: new Date().toISOString(), registry, poverty, australiaUnemployment, portugalUnemployment, italyUnemployment, mexicoUnemployment, southAfricaUnemployment, indiaUnemployment, brazilFoodSecurity }
 // Match the other static artifacts: Vite can hold the destination open on Windows,
 // preventing replacement by rename. Publication happens only after the build passes.
 await writeFile(outputPath, JSON.stringify(result))
@@ -75,3 +77,4 @@ console.log(`INEGI: ${mexicoUnemployment.points.length} meses; último período:
 
 console.log(`Stats SA: ${southAfricaUnemployment.points.length} trimestres; edição: ${southAfricaUnemployment.edition}; coleta anterior: ${southAfricaUnemployment.cached}.`)
 console.log(`MoSPI: ${indiaUnemployment.points.length} meses; último período: ${indiaUnemployment.points.at(-1)?.period}; coleta anterior: ${indiaUnemployment.cached}.`)
+console.log(`IBGE segurança alimentar: ${brazilFoodSecurity.points.length} anos; último período: ${brazilFoodSecurity.points.at(-1)?.year}; coleta anterior: ${brazilFoodSecurity.cached}.`)

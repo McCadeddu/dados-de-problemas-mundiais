@@ -10,10 +10,11 @@
 - aprofundar recortes estaduais ou provinciais dos seis países prioritários
   somente quando a fonte fornecer códigos, cobertura e definições estáveis;
 
-- fome e água: localizar uma série oficial nacional e, quando existir cobertura
-  comparável, um recorte subnacional de insegurança alimentar. A rede de água e
-  o saneamento brasileiros já estão integrados, mas não devem ser apresentados
-  como medida de fome ou segurança alimentar;
+- fome e água: complemento nacional do Brasil integrado com IBGE/SIDRA 6665
+  (insegurança alimentar em domicílios, 2019–2024). Pesquisar um recorte
+  subnacional somente quando houver cobertura e definições compatíveis. A rede
+  de água e o saneamento brasileiros já estão integrados, mas não são medida de
+  fome ou segurança alimentar;
 
 - revisar as 38 entradas ainda pendentes no catálogo nacional e confirmar os endereços importados do diretório da ONU;
 - priorizar séries oficiais de cuidado não remunerado e violência de gênero, com definições compatíveis;

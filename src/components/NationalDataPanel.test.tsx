@@ -17,6 +17,22 @@ const payload: NationalData = {
 afterEach(() => { cleanup(); vi.unstubAllGlobals() })
 
 describe('NationalDataPanel', () => {
+  it('shows Brazilian food security household data only for the hunger theme', async () => {
+    const brazil: NationalData = { ...payload, registry: [{ ...payload.registry[0], countryCode: 'BRA', countryName: 'Brasil', institution: 'IBGE', status: 'existing-connector' }], brazilFoodSecurity: {
+      fetchedAt: '2026-09-25', lastAttemptAt: '2026-09-25', cached: false,
+      sourceUrl: 'https://sidra.ibge.gov.br/tabela/6665', methodologyUrl: 'https://www.ibge.gov.br/biblioteca/visualizacao/livros/liv102084.pdf',
+      requestUrl: 'https://apisidra.ibge.gov.br/values/t/6665', points: [{ year: 2023, foodInsecurity: 27.6, moderate: 5.3, severe: 4.1 }, { year: 2024, foodInsecurity: 24.2, moderate: 4.5, severe: 3.2 }],
+    } }
+    vi.stubGlobal('fetch', vi.fn().mockResolvedValue({ ok: true, json: async () => brazil }))
+    const view = render(<NationalDataPanel countryCode="BRA" themeId="hunger-water" dashboard={dashboard} />)
+    expect(await screen.findByText('Segurança alimentar — Brasil (IBGE/PNAD Contínua)')).toBeInTheDocument()
+    expect(screen.getAllByText('24,2%').length).toBeGreaterThan(0)
+    expect(screen.getByText(/Último ano disponível: 2024/)).toBeInTheDocument()
+    expect(screen.getByText(/denominador os domicílios/)).toBeInTheDocument()
+    expect(screen.getByRole('link', { name: /IBGE\/SIDRA/ })).toHaveAttribute('href', brazil.brazilFoodSecurity!.sourceUrl)
+    view.rerender(<NationalDataPanel countryCode="BRA" themeId="decent-work" dashboard={dashboard} />)
+    expect(screen.queryByText('Segurança alimentar — Brasil (IBGE/PNAD Contínua)')).not.toBeInTheDocument()
+  })
   it('shows Indian CWS definition, history and cache provenance only for Indian work', async () => {
     const indian: NationalData = { ...payload, indiaUnemployment: {
       fetchedAt: '2026-09-25', lastAttemptAt: '2026-09-26', cached: true,

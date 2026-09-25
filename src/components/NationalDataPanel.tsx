@@ -7,6 +7,7 @@ import { ItalyLaborData } from './ItalyLaborData'
 import { MexicoLaborData } from './MexicoLaborData'
 import { SouthAfricaLaborData } from './SouthAfricaLaborData'
 import { IndiaLaborData } from './IndiaLaborData'
+import { BrazilFoodSecurityData } from './BrazilFoodSecurityData'
 
 const statusLabels = {
   'directory-listed': 'Instituição localizada no diretório da ONU',
@@ -53,6 +54,7 @@ export function NationalDataPanel({ countryCode, themeId, dashboard }: {
   const mexicoLabor = countryCode === 'MEX' && themeId === 'decent-work' ? data?.mexicoUnemployment : undefined
   const italyLabor = countryCode === 'ITA' && themeId === 'decent-work' ? data?.italyUnemployment : undefined
   const indiaLabor = countryCode === 'IND' && themeId === 'decent-work' ? data?.indiaUnemployment : undefined
+  const brazilFoodSecurity = countryCode === 'BRA' && themeId === 'hunger-water' ? data?.brazilFoodSecurity : undefined
   const missing = dashboard.indicators.filter((indicator) => indicator.geographyType === 'country'
     && indicator.themeId === themeId
     && !dashboard.latest.some((value) => value.indicatorId === indicator.id && value.geographyCode === countryCode))
@@ -83,7 +85,7 @@ export function NationalDataPanel({ countryCode, themeId, dashboard }: {
           <p className="meta">Fonte: <a href={data.poverty.sourceUrl}>Eurostat · ilc_li02</a>, a partir de estatísticas nacionais EU-SILC. <a href={data.poverty.methodologyUrl}>Metodologia e relatórios nacionais</a> · <a href={data.poverty.licenseUrl}>Condições de reutilização</a>.</p>
           <p className="meta">Atualização da fonte: {new Date(data.poverty.sourceUpdatedAt).toLocaleDateString('pt-BR')}. Coleta: {new Date(data.poverty.fetchedAt).toLocaleDateString('pt-BR')}. {data.poverty.cached && 'A última tentativa falhou; exibindo a coleta anterior.'}</p>
           <p className="meta">Seleção, tradução dos rótulos e apresentação pelo Mundialidade. O Eurostat não é responsável por estas adaptações. Valores mantidos como publicados.</p>
-        </article> : indiaLabor ? <IndiaLaborData data={indiaLabor} /> : australiaLabor ? <AustraliaLaborData data={australiaLabor} /> : portugalLabor ? <PortugalLaborData data={portugalLabor} /> : southAfricaLabor ? <SouthAfricaLaborData data={southAfricaLabor} /> : mexicoLabor ? <MexicoLaborData data={mexicoLabor} /> : italyLabor ? <ItalyLaborData data={italyLabor} /> : <p>Ainda não há uma série nacional complementar integrada para este país nesta problemática. Isso não indica ausência do problema ou inexistência de dados oficiais.</p>}
+        </article> : brazilFoodSecurity ? <BrazilFoodSecurityData data={brazilFoodSecurity} /> : indiaLabor ? <IndiaLaborData data={indiaLabor} /> : australiaLabor ? <AustraliaLaborData data={australiaLabor} /> : portugalLabor ? <PortugalLaborData data={portugalLabor} /> : southAfricaLabor ? <SouthAfricaLaborData data={southAfricaLabor} /> : mexicoLabor ? <MexicoLaborData data={mexicoLabor} /> : italyLabor ? <ItalyLaborData data={italyLabor} /> : <p>Ainda não há uma série nacional complementar integrada para este país nesta problemática. Isso não indica ausência do problema ou inexistência de dados oficiais.</p>}
       </>}
     <p className="meta">{missing.length ? `Lacunas na base mundial deste tema: ${missing.map((indicator) => indicator.name).join('; ')}.` : 'Todos os indicadores mundiais deste tema têm algum dado para este país; os períodos podem variar.'}</p>
     <p className="meta"><a href={`${import.meta.env.BASE_URL}data/country-coverage.json`} download>Baixar diagnóstico de cobertura por país (JSON)</a></p>
