@@ -16,6 +16,8 @@ type MapPanelProps = {
   projectionKind?: 'mercator' | 'peters'
   width?: number
   height?: number
+  colors?: string[]
+  selectedColor?: string
 }
 
 const COLORS = ['#dbeafe', '#93c5fd', '#60a5fa', '#2563eb', '#1d4ed8']
@@ -50,6 +52,8 @@ export function MapPanel({
   projectionKind = 'mercator',
   width = 760,
   height = 420,
+  colors = COLORS,
+  selectedColor = '#fbbf24',
 }: MapPanelProps) {
   const [hoveredCode, setHoveredCode] = useState<string | null>(null)
   const mapProjection = useMemo(() => {
@@ -67,8 +71,8 @@ export function MapPanel({
   const colorScale = useMemo(() => {
     return scaleQuantize<string>()
       .domain([scaleMin, scaleMax])
-      .range(COLORS)
-  }, [scaleMax, scaleMin])
+      .range(colors)
+  }, [colors, scaleMax, scaleMin])
   const legendValues = [0, 0.25, 0.5, 0.75, 1].map(
     (step) => scaleMin + (scaleMax - scaleMin) * step,
   )
@@ -115,7 +119,7 @@ export function MapPanel({
               d={pathData}
               className="map__feature"
               fill={metric ? colorScale(metric.value) : '#e2e8f0'}
-              stroke={code === selectedCode ? '#fbbf24' : '#64748b'}
+              stroke={code === selectedCode ? selectedColor : '#64748b'}
               strokeWidth={code === selectedCode ? 2 : 0.5}
               onClick={() => onSelect(code)}
               onMouseEnter={() => setHoveredCode(code)}
@@ -146,7 +150,7 @@ export function MapPanel({
       <div className="map__legend" aria-label="Escala de valores no mapa">
         <span>Sem dado</span>
         <div className="map__legend-scale">
-          {COLORS.map((color) => <i key={color} style={{ background: color }} />)}
+          {colors.map((color) => <i key={color} style={{ background: color }} />)}
         </div>
         <span>{formatValue(legendValues[0])}</span>
         <span>{formatValue(legendValues[legendValues.length - 1])}</span>

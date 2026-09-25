@@ -36,6 +36,16 @@ import type { DashboardData, LatestValue, MigrationFlow, Series } from './types'
 type GeoJson = GeoJSON.FeatureCollection
 type ViewMode = 'landing' | 'world' | 'country' | 'states' | 'regions'
 
+const THEME_MAP_COLORS: Record<string, string[]> = {
+  'hunger-water': ['#dcfce7', '#86efac', '#4ade80', '#16a34a', '#166534'],
+  'gender-equality': ['#fce7f3', '#f9a8d4', '#f472b6', '#db2777', '#9d174d'],
+  'poverty-inequality': ['#fef3c7', '#fde68a', '#fbbf24', '#d97706', '#92400e'],
+  'climate-vulnerability': ['#e0f2fe', '#7dd3fc', '#38bdf8', '#0284c7', '#075985'],
+  'forced-migration': ['#ede9fe', '#c4b5fd', '#a78bfa', '#7c3aed', '#5b21b6'],
+  illiteracy: ['#ffedd5', '#fdba74', '#fb923c', '#ea580c', '#9a3412'],
+  'decent-work': ['#ccfbf1', '#5eead4', '#2dd4bf', '#0d9488', '#0f766e'],
+}
+
 const initialParams = new URLSearchParams(window.location.search)
 
 function initialView(): ViewMode {
@@ -446,7 +456,7 @@ function App() {
           {activeThemeId === 'forced-migration' && <MigrationFlowsPanel flows={migrationFlows} error={migrationFlowsError} />}
 
           <section className="content-grid content-grid--world">
-            <MapPanel title="Mapa mundial" subtitle={`${indicator.name} • clique para destacar um país e escolhê-lo no fim da página`} geography={worldGeo} valueByCode={worldValueByCode} codeKeys={['ADM0_A3', 'ISO_A3', 'SOV_A3', 'gu_a3']} onSelect={(code) => { setCountryCode(code); setCountryQuery('') }} selectedCode={countryCode} formatValue={(value) => formatValue(value, indicator.unit)} direction={indicator.direction} projectionKind="peters" />
+            <MapPanel title="Mapa mundial" subtitle={`${indicator.name} • clique para destacar um país e escolhê-lo no fim da página`} geography={worldGeo} valueByCode={worldValueByCode} codeKeys={['ADM0_A3', 'ISO_A3', 'SOV_A3', 'gu_a3']} onSelect={(code) => { setCountryCode(code); setCountryQuery('') }} selectedCode={countryCode} formatValue={(value) => formatValue(value, indicator.unit)} direction={indicator.direction} projectionKind="peters" colors={THEME_MAP_COLORS[activeThemeId]} selectedColor="var(--theme-accent)" />
             <article className="panel">
               <div className="panel__header"><div><h3>{continent === 'Todos' ? 'Panorama mundial' : `Panorama: ${continent}`}</h3><p>{indicator.description}</p>{continentAverage && <p className="context-metric">Média do recorte, ponderada pela população: {formatValue(continentAverage.value, indicator.unit)} ({continentAverage.coverage} países)</p>}</div><strong className="badge">{indicator.latestYear}</strong></div>
               <div className="world-summary"><strong>{countryLatest.length}</strong><span>países com último dado disponível</span><p>Use o mapa, o ranking e as comparações disponíveis para observar diferenças antes de escolher um país.</p></div>
@@ -523,7 +533,7 @@ function App() {
           {brazilIndicator.id === 'sismigra-state-active-immigrants' && <section className="panel migration-context"><strong>Como interpretar</strong><p>Este mapa soma registros ativos de imigrantes por UF no SISMIGRA/Polícia Federal. Ele não estima todos os migrantes residentes, refugiados, solicitantes de asilo ou pessoas deslocadas à força.</p></section>}
           <section className="content-grid content-grid--states">
             {brazilGeo
-              ? <MapPanel title="Mapa dos estados brasileiros" subtitle={`${brazilIndicator.name} • clique para selecionar uma UF`} geography={brazilGeo} valueByCode={brazilValueByCode} codeKeys={['sidra_code', 'iso_3166_2', 'postal']} onSelect={setStateCode} selectedCode={stateCode} formatValue={(value) => formatValue(value, brazilIndicator.unit)} direction={brazilIndicator.direction} />
+              ? <MapPanel title="Mapa dos estados brasileiros" subtitle={`${brazilIndicator.name} • clique para selecionar uma UF`} geography={brazilGeo} valueByCode={brazilValueByCode} codeKeys={['sidra_code', 'iso_3166_2', 'postal']} onSelect={setStateCode} selectedCode={stateCode} formatValue={(value) => formatValue(value, brazilIndicator.unit)} direction={brazilIndicator.direction} colors={THEME_MAP_COLORS[activeThemeId]} selectedColor="var(--theme-accent)" />
               : <article className="panel map-loading"><h3>Carregando mapa dos estados</h3><p>{brazilMapError ?? 'O painel principal continua disponível enquanto o mapa detalhado é preparado.'}</p>{brazilMapError && <button className="advance-button" onClick={() => { setBrazilMapError(null); setBrazilMapLoadAttempt((attempt) => attempt + 1) }}>Tentar novamente</button>}</article>}
             <article className="panel">
               <div className="panel__header"><div><h3>{stateName}</h3><p>{brazilIndicator.description}</p></div><strong className="badge">{brazilIndicator.latestYear}</strong></div>
