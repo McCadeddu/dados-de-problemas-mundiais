@@ -70,13 +70,13 @@ export function getDefaultIndicator(data: DashboardData, themeId: string): Indic
 
 export function formatValue(value: number, unit: string) {
   if (unit === '%') {
-    return `${value.toFixed(1)}%`
+    return `${value.toLocaleString('pt-BR', { minimumFractionDigits: 1, maximumFractionDigits: 1 })}%`
   }
   if (unit === 'p.p.') {
-    return `${value.toFixed(1)} p.p.`
+    return `${value.toLocaleString('pt-BR', { minimumFractionDigits: 1, maximumFractionDigits: 1 })} p.p.`
   }
   if (unit === 'índice 0-1') {
-    return value.toFixed(3)
+    return value.toLocaleString('pt-BR', { minimumFractionDigits: 3, maximumFractionDigits: 3 })
   }
   if (unit === 'mil pessoas') {
     return `${value.toLocaleString('pt-BR', { maximumFractionDigits: 0 })} mil`
@@ -85,7 +85,7 @@ export function formatValue(value: number, unit: string) {
     return value.toLocaleString('pt-BR', { maximumFractionDigits: 0 })
   }
   if (unit === 'score' || unit === 'índice') {
-    return value.toFixed(1)
+    return value.toLocaleString('pt-BR', { minimumFractionDigits: 1, maximumFractionDigits: 1 })
   }
   return value.toLocaleString('pt-BR', { maximumFractionDigits: 1 })
 }

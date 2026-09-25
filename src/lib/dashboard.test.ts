@@ -73,15 +73,15 @@ describe('dashboard helpers', () => {
   })
 
   it('formats percentages', () => {
-    expect(formatValue(12.34, '%')).toBe('12.3%')
+    expect(formatValue(12.34, '%')).toBe('12,3%')
   })
 
   it('formats percentage-point gaps', () => {
-    expect(formatValue(12.34, 'p.p.')).toBe('12.3 p.p.')
+    expect(formatValue(12.34, 'p.p.')).toBe('12,3 p.p.')
   })
 
   it('preserves precision for zero-to-one indexes', () => {
-    expect(formatValue(0.489, 'índice 0-1')).toBe('0.489')
+    expect(formatValue(0.489, 'índice 0-1')).toBe('0,489')
   })
 
   it('returns ranking slices', () => {
