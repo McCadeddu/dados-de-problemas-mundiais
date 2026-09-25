@@ -17,6 +17,26 @@ const payload: NationalData = {
 afterEach(() => { cleanup(); vi.unstubAllGlobals() })
 
 describe('NationalDataPanel', () => {
+  it('shows Indian CWS definition, history and cache provenance only for Indian work', async () => {
+    const indian: NationalData = { ...payload, indiaUnemployment: {
+      fetchedAt: '2026-09-25', lastAttemptAt: '2026-09-26', cached: true,
+      sourceUrl: 'https://www.mospi.gov.in/', methodologyUrl: 'https://www.mospi.gov.in/metadata.pdf',
+      accessPolicyUrl: 'https://mospi.gov.in/faq', requestUrl: 'https://api.mospi.gov.in/api/plfs/getData',
+      points: [{ period: '2026-07', value: 5.1 }, { period: '2026-08', value: 5 }],
+    } }
+    vi.stubGlobal('fetch', vi.fn().mockResolvedValue({ ok: true, json: async () => indian }))
+    const view = render(<NationalDataPanel countryCode="IND" themeId="decent-work" dashboard={dashboard} />)
+    expect(await screen.findByText('Desemprego mensal — Índia (MoSPI)')).toBeInTheDocument()
+    expect(screen.getAllByText('5,0%').length).toBeGreaterThan(0)
+    expect(screen.getByText(/mês de referência: 08\/2026/)).toBeInTheDocument()
+    expect(screen.getByText(/situação semanal corrente/)).toHaveTextContent('procurou ou esteve disponível')
+    expect(screen.getByText(/A última tentativa falhou/)).toBeInTheDocument()
+    expect(screen.getByRole('link', { name: 'Consulta utilizada (JSON)' })).toHaveAttribute('href', indian.indiaUnemployment!.requestUrl)
+    view.rerender(<NationalDataPanel countryCode="IND" themeId="illiteracy" dashboard={dashboard} />)
+    expect(screen.queryByText('Desemprego mensal — Índia (MoSPI)')).not.toBeInTheDocument()
+    view.rerender(<NationalDataPanel countryCode="ZAF" themeId="decent-work" dashboard={dashboard} />)
+    expect(screen.queryByText('Desemprego mensal — Índia (MoSPI)')).not.toBeInTheDocument()
+  })
   it('shows the South African definition, vintage and cache warning only for South African work', async () => {
     const southAfrican: NationalData = { ...payload, southAfricaUnemployment: {
       edition: '2026-Q2', sourceUpdatedAt: '2026-08-11', fetchedAt: '2026-09-25', lastAttemptAt: '2026-09-26', cached: true,

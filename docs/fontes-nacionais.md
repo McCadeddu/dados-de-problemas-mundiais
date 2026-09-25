@@ -46,7 +46,7 @@ e, portanto, a rotina diária já existente. Artefatos publicados:
 | Itália | Istat; EU-SILC via Eurostat | Desemprego mensal desde 2015 diretamente do Istat; pobreza relativa 2015–2025 | Avaliar recortes regionais e educação. |
 | Austrália | Australian Bureau of Statistics | Desemprego mensal desde 2015, com ajuste sazonal | Avaliar outras medidas de trabalho e proteção social. |
 | África do Sul | Statistics South Africa, QLFS | Desemprego oficial trimestral 2008–2026Q2 | Avaliar contribuição previdenciária e recortes provinciais. |
-| Índia | MoSPI/eSankhyiki | Ainda não | Identificar série oficial estável antes de automatizar a coleta. |
+| Índia | MoSPI/eSankhyiki, PLFS | Desemprego mensal CWS desde abril de 2025 | Avaliar outras medidas de trabalho e recortes estaduais. |
 
 “Ainda não” significa que a fonte foi identificada, mas nenhum valor nacional
 foi importado por este conector. O painel mantém essa distinção para não
@@ -60,6 +60,52 @@ O diagnóstico registra disponibilidade e ano por indicador e país. Ele não
 certifica atualidade ou qualidade e não soma territórios a Estados soberanos.
 
 ## Localizar instituições
+
+### Conector nacional de trabalho: Índia
+
+Integração em 25/09/2026 pela [API pública eSankhyiki](https://api.mospi.gov.in/):
+17 meses, abril de 2025 a agosto de 2026. Último valor 5,0%, confirmado no
+[comunicado do MoSPI de 15/09/2026](https://www.pib.gov.in/PressReleaseIframePage.aspx?PRID=2310427&lang=2&reg=48).
+O comunicado contém uma inconsistência sobre julho (5,0% no resumo e 5,1% no
+texto); preservamos os valores da API, que traz julho 5,1% e agosto 5,0%.
+
+Endpoint `/api/plfs/getData`, filtros `indicator_code=3` (UR),
+`frequency_code=3` (mensal), `state_code=99` (All India), `age_code=1` (15+),
+`gender_code=3` (person), `sector_code=3` (rural + urban), `Format=JSON`.
+São percentuais da força de trabalho, conceito CWS (sete dias anteriores à
+entrevista), conforme a [metodologia PLFS](https://www.mospi.gov.in/sites/default/files/NMDS_2.0_PLFS_final_update.pdf).
+A definição considera ausência de trabalho por sequer uma hora na semana e
+procura **ou** disponibilidade para trabalhar, conforme o
+[relatório PLFS 2025, seção 2.6](https://www.mospi.gov.in/uploads/publications_reports/publications_reports1780040415321_0624fb13-fb47-40bc-b470-7c7e9635c3ef_PLFS_2025_F_REV_29052026.pdf).
+
+A consulta omite `year_type_code`: embora documentado no Swagger, o valor 2
+eliminou silenciosamente 13 dos 17 meses na verificação. Os rótulos mensais e
+anos civis retornados são validados; não se misturam frequências. O conector
+percorre as páginas, confere contagens e exige histórico mensal contínuo desde
+abril de 2025. Recortes diferentes, duplicatas, valores ausentes/desconhecidos,
+percentuais inválidos, períodos futuros ou perda de cobertura preservam a coleta
+anterior com aviso. A primeira coleta precisa ser válida. Revisões de valores
+com a mesma cobertura são aceitas. Nenhuma ausência é convertida em zero.
+
+A coleta diária incorpora os novos meses disponibilizados pela API. A data
+da coleta usa HTTPS com verificação de certificado e nome do servidor. O servidor
+não sinalizou renegociação segura na verificação; o adaptador permite apenas
+o handshake inicial legado nesse endpoint público, exige TLS 1.2 ou superior,
+desabilita renegociação e não segue redirecionamentos. Não envia credenciais.
+A data
+da coleta não é apresentada como revisão da fonte, pois essa informação não
+vem na resposta. A API tampouco informa ajuste sazonal ou incerteza nesta
+consulta; a tela aponta os relatórios oficiais para precisão amostral.
+A série começa após a reformulação de 2025: não se emenda ao histórico urbano
+trimestral ou à medida anual de situação habitual (365 dias), nem entra
+automaticamente nas comparações mundiais ou trabalho–migração.
+
+Utilizam-se apenas estatísticas agregadas públicas. As
+[FAQ do MoSPI sobre GSDD 2026](https://mospi.gov.in/faq) classificam publicações
+e agregados como categoria A, de acesso gratuito e sem registro, inclusive
+para usuários estrangeiros. Fonte e adaptações são atribuídas expressamente;
+não se presume uma licença Creative Commons nem se aplicam regras de microdados
+à série agregada. O painel mantém o link para a política de acesso.
 
 ### Conector nacional de trabalho: África do Sul
 

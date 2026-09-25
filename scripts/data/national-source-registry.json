@@ -805,9 +805,9 @@
     "countryName": "India",
     "institution": "MoSPI",
     "url": "https://www.mospi.gov.in/",
-    "evidenceUrl": "https://esankhyiki.mospi.gov.in/",
-    "status": "documented",
-    "checkedAt": "2026-09-18"
+    "evidenceUrl": "https://api.mospi.gov.in/",
+    "status": "existing-connector",
+    "checkedAt": "2026-09-25"
   },
   {
     "countryCode": "IDN",

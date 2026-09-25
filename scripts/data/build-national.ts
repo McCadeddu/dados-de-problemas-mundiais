@@ -6,6 +6,7 @@ import { collectIneUnemployment } from './ine-portugal.js'
 import { collectIstatUnemployment } from './istat.js'
 import { collectInegiUnemployment } from './inegi.js'
 import { collectStatsSaUnemployment } from './statssa.js'
+import { collectMospiUnemployment } from './mospi.js'
 
 const outputPath = 'public/data/national-data.json'
 const registry = JSON.parse(await readFile('scripts/data/national-source-registry.json', 'utf8')) as NationalSource[]
@@ -40,7 +41,8 @@ const portugalUnemployment = await collectIneUnemployment(previous.portugalUnemp
 const italyUnemployment = await collectIstatUnemployment(previous.italyUnemployment)
 const mexicoUnemployment = await collectInegiUnemployment(previous.mexicoUnemployment)
 const southAfricaUnemployment = await collectStatsSaUnemployment(previous.southAfricaUnemployment)
-const result: NationalData = { generatedAt: new Date().toISOString(), registry, poverty, australiaUnemployment, portugalUnemployment, italyUnemployment, mexicoUnemployment, southAfricaUnemployment }
+const indiaUnemployment = await collectMospiUnemployment(previous.indiaUnemployment)
+const result: NationalData = { generatedAt: new Date().toISOString(), registry, poverty, australiaUnemployment, portugalUnemployment, italyUnemployment, mexicoUnemployment, southAfricaUnemployment, indiaUnemployment }
 // Match the other static artifacts: Vite can hold the destination open on Windows,
 // preventing replacement by rename. Publication happens only after the build passes.
 await writeFile(outputPath, JSON.stringify(result))
@@ -50,6 +52,7 @@ const coverage = dashboard.countries.map((country) => ({
   countryCode: country.code, countryName: country.name,
   sourceStatus: registry.find((entry) => entry.countryCode === country.code)?.status,
   supplementalIndicators: [
+    ...(country.code === 'IND' && indiaUnemployment.points.length ? ['mospi-monthly-unemployment'] : []),
     ...(poverty.series.some((series) => series.countryCode === country.code) ? ['eurostat-relative-poverty'] : []),
     ...(country.code === 'ZAF' && southAfricaUnemployment.points.length ? ['statssa-quarterly-unemployment'] : []),
     ...(country.code === 'AUS' ? ['abs-monthly-unemployment'] : []),
@@ -71,3 +74,4 @@ console.log(`Istat: ${italyUnemployment.points.length} meses; último período: 
 console.log(`INEGI: ${mexicoUnemployment.points.length} meses; último período: ${mexicoUnemployment.points.at(-1)?.period}; coleta anterior: ${mexicoUnemployment.cached}.`)
 
 console.log(`Stats SA: ${southAfricaUnemployment.points.length} trimestres; edição: ${southAfricaUnemployment.edition}; coleta anterior: ${southAfricaUnemployment.cached}.`)
+console.log(`MoSPI: ${indiaUnemployment.points.length} meses; último período: ${indiaUnemployment.points.at(-1)?.period}; coleta anterior: ${indiaUnemployment.cached}.`)

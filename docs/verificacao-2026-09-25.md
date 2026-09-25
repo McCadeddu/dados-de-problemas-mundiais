@@ -83,3 +83,24 @@ as regressões automatizadas, não uma nova auditoria de todas as fontes externa
 - A tela documenta a edição fixa e a revisão necessária para integrar novos
   relatórios; a rotina diária não descobre novas publicações automaticamente.
 - Fontes, condições de reutilização, notas e limites disponíveis no painel.
+
+## Ciclo seguinte — conector nacional da Índia
+
+- MoSPI/eSankhyiki PLFS integrado pela API pública: 17 meses, abril de 2025 a
+  agosto de 2026; último valor 5,0% em agosto de 2026. O painel identifica a
+  população de 15 anos ou mais, total rural + urbana, pessoas de ambos os sexos,
+  e a situação semanal corrente (CWS).
+- A coleta valida dimensões, unidade, sequência mensal, paginação, valores
+  ausentes, limites e períodos futuros. O filtro `year_type_code=2` foi omitido
+  porque eliminava 13 observações sem erro; a série mensal retornada foi validada
+  diretamente pelos campos de ano e mês. Falhas preservam a coleta anterior.
+- O endpoint antigo exige compatibilidade TLS específica; o adaptador restrito
+  ao host público mantém verificação de certificado e nome, exige TLS 1.2 ou
+  superior, desabilita renegociação e não segue redirecionamentos.
+- O painel explica CWS, o início da nova série mensal, a diferença em relação à
+  situação habitual anual e os limites para cruzar trabalho e migração. A API
+  não informa ajuste sazonal nem data de revisão, portanto isso não é inferido.
+- Testes de parser, paginação, cache, segurança do transporte e componente
+  passaram; a coleta nacional completa passou sem cache: ABS 140 meses, INE
+  Portugal 62 trimestres, Istat 139 meses, INEGI 44 meses, Stats SA 74
+  trimestres e MoSPI 17 meses. O conector não altera rankings mundiais.
