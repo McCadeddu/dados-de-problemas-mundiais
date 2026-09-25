@@ -20,6 +20,18 @@ export type NationalSource = {
 export type NationalData = {
   generatedAt: string
   registry: NationalSource[]
+  mexicoUnemployment?: {
+    fetchedAt: string
+    lastAttemptAt: string
+    cached: boolean
+    sourceUrl: string
+    methodologyUrl: string
+    licenseUrl: string
+    requestUrl: string
+    precisionUrl: string
+    sourceNotes: string[]
+    points: Array<{ period: string; value: number | null; status?: string }>
+  }
   italyUnemployment?: {
     edition: string
     sourceUpdatedAt: string

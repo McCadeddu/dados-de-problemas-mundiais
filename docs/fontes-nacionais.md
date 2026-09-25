@@ -41,7 +41,7 @@ e, portanto, a rotina diária já existente. Artefatos publicados:
 
 | País | Fonte oficial catalogada | Dado nacional complementar integrado | Próximo passo seguro |
 | --- | --- | --- | --- |
-| México | INEGI, API de indicadores | Ainda não | Selecionar série e validar token, unidade e recorte estadual. |
+| México | INEGI, ENOE | Desemprego mensal desde janeiro de 2023, sem ajuste sazonal | Avaliar informalidade e recortes estaduais. |
 | Portugal | INE; EU-SILC via Eurostat | Desemprego trimestral 2011–2026 diretamente do INE; pobreza relativa 2015–2025 | Avaliar educação e proteção social. |
 | Itália | Istat; EU-SILC via Eurostat | Desemprego mensal desde 2015 diretamente do Istat; pobreza relativa 2015–2025 | Avaliar recortes regionais e educação. |
 | Austrália | Australian Bureau of Statistics | Desemprego mensal desde 2015, com ajuste sazonal | Avaliar outras medidas de trabalho e proteção social. |
@@ -60,6 +60,38 @@ O diagnóstico registra disponibilidade e ano por indicador e país. Ele não
 certifica atualidade ou qualidade e não soma territórios a Estados soberanos.
 
 ## Localizar instituições
+
+### Conector nacional de trabalho: México
+
+Integração em 25/09/2026 de 44 meses, de janeiro de 2023 a agosto de 2026.
+Fonte: [ENOE, tabulados oficiais do INEGI](https://www.inegi.org.mx/programas/enoe/15ymas/),
+arquivo `enoe_indicadores_estrategicos_2005_2026_mensual.xlsx`, planilha `1.2`,
+Nacional (Relativos), linha «Tasa de desocupación». Percentual da população
+economicamente ativa de 15 anos ou mais, ambos os sexos; cifras originais,
+sem ajuste sazonal. Último valor recebido: 3,0107%, exibido como 3,0%, conferido
+com o [comunicado de 25/09/2026](https://www.inegi.org.mx/app/saladeprensa/noticia/11241).
+
+O download público dispensa o token da API de indicadores. A URL do arquivo
+inclui o ano final: na virada do ano, verificar o novo endereço na aba Tabulados
+antes de alterar o conector. Recoletar um arquivo inalterado não comprova atualização
+da fonte; o painel mostra separadamente mês de referência e data de coleta.
+
+O recorte começa em 2023 para não unir silenciosamente ENOE, ETOE e ENOE Nova
+Edição. As notas originais da planilha são preservadas, inclusive revisões
+populacionais e as limitações de coleta em Guerrero de outubro a dezembro de
+2023 após o furacão Otis. As cores de precisão amostral não são importadas:
+a interface explicita isso e oferece o arquivo oficial de precisão. Não se
+atribui qualidade ou caráter definitivo a observações sem códigos.
+
+O parser valida título, população, indicador, meses consecutivos, percentuais,
+notas e cobertura. Preserva ND como ausência, zeros e casas decimais recebidas.
+Em falhas ou redução da cobertura, retém a coleta anterior com aviso e data
+original. Não calcula desemprego por diferença nem preenche lacunas da OIT.
+Este complemento não participa automaticamente do cruzamento trabalho–migração.
+
+Reutilização segundo os [termos do INEGI](https://www.inegi.org.mx/inegi/terminos.html),
+com atribuição, metadados e identificação da seleção, tradução e arredondamento
+feitos pelo Mundialidade; sem alegar endosso da instituição.
 
 ### Conector nacional de trabalho: Austrália
 

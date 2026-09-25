@@ -17,6 +17,27 @@ const payload: NationalData = {
 afterEach(() => { cleanup(); vi.unstubAllGlobals() })
 
 describe('NationalDataPanel', () => {
+  it('shows Mexican unemployment, collection caveats and provenance only for Mexican work', async () => {
+    const mexican: NationalData = { ...payload, mexicoUnemployment: {
+      fetchedAt: '2026-09-25', lastAttemptAt: '2026-09-26', cached: true,
+      sourceUrl: 'https://www.inegi.org.mx/', methodologyUrl: 'https://www.inegi.org.mx/', licenseUrl: 'https://www.inegi.org.mx/inegi/terminos.html',
+      requestUrl: 'https://www.inegi.org.mx/series.xlsx', precisionUrl: 'https://www.inegi.org.mx/precision.xlsx', sourceNotes: ['Nota original'],
+      points: [{ period: '2026-07', value: null, status: 'ND' }, { period: '2026-08', value: 3.0107 }],
+    } }
+    vi.stubGlobal('fetch', vi.fn().mockResolvedValue({ ok: true, json: async () => mexican }))
+    const view = render(<NationalDataPanel countryCode="MEX" themeId="decent-work" dashboard={dashboard} />)
+    expect(await screen.findByText('Desemprego mensal — México (INEGI)')).toBeInTheDocument()
+    expect(screen.getAllByText('3,0%').length).toBeGreaterThan(0)
+    expect(screen.getByText(/mês de referência: 08\/2026/)).toBeInTheDocument()
+    expect(screen.getByText(/Ressalva de coleta/)).toHaveTextContent('Guerrero')
+    expect(screen.getByText('Sem observação')).toBeInTheDocument()
+    expect(screen.getByText(/A última tentativa falhou/)).toBeInTheDocument()
+    expect(screen.getByRole('link', { name: 'Planilha oficial utilizada (XLSX)' })).toHaveAttribute('href', mexican.mexicoUnemployment!.requestUrl)
+    view.rerender(<NationalDataPanel countryCode="MEX" themeId="illiteracy" dashboard={dashboard} />)
+    expect(screen.queryByText('Desemprego mensal — México (INEGI)')).not.toBeInTheDocument()
+    view.rerender(<NationalDataPanel countryCode="IND" themeId="decent-work" dashboard={dashboard} />)
+    expect(screen.queryByText('Desemprego mensal — México (INEGI)')).not.toBeInTheDocument()
+  })
   it('shows the Italian vintage, precision and cache status only in the Italian work view', async () => {
     const italian: NationalData = { ...payload, italyUnemployment: {
       edition: '2026M9G1', sourceUpdatedAt: '2026-09-01', fetchedAt: '2026-09-25', lastAttemptAt: '2026-09-26', cached: true,
@@ -93,7 +114,7 @@ describe('NationalDataPanel', () => {
     const priorityPayload = { ...payload, registry: [{ ...payload.registry[0], countryCode: 'MEX', countryName: 'Mexico', institution: 'INEGI', status: 'documented' as const }] }
     vi.stubGlobal('fetch', vi.fn().mockResolvedValue({ ok: true, json: async () => priorityPayload }))
     render(<NationalDataPanel countryCode="MEX" themeId="decent-work" dashboard={dashboard} />)
-    expect(await screen.findByText(/Selecionar uma série INEGI/)).toBeInTheDocument()
+    expect(await screen.findByText(/Avaliar informalidade e recortes estaduais/)).toBeInTheDocument()
   })
   it('recovers from a loading failure on retry', async () => {
     const fetchMock = vi.fn().mockRejectedValueOnce(new Error('offline'))

@@ -46,3 +46,23 @@ as regressões automatizadas, não uma nova auditoria de todas as fontes externa
   que os dados italianos não apareçam em outro país ou tema.
 - A comparação mundial e seus algoritmos permanecem com as séries anuais
   harmonizadas; este ciclo acrescenta o complemento nacional italiano.
+
+## Ciclo seguinte — conector nacional do México
+
+- INEGI ENOE: 44 meses, janeiro de 2023 a agosto de 2026, desemprego nacional
+  de pessoas de 15 anos ou mais, ambos os sexos, sem ajuste sazonal.
+- Coleta real do XLSX público concluída sem token e sem cache. Último valor
+  3,0107%, exibido como 3,0%, conferido no comunicado oficial de 25/09/2026.
+- Notas originais preservadas, ressalva de Guerrero em 2023 visível e link
+  para precisão amostral. Não se reproduzem as cores de precisão do XLSX.
+- Validação de estrutura, população, continuidade mensal, percentuais e
+  cobertura; ausência ND e zero distintos; falhas mantêm a coleta anterior.
+- 97 testes em 18 arquivos passaram; ESLint, TypeScript, build com base do
+  GitHub Pages e verificação de whitespace passaram. Uma falha intermediária
+  de codificação de acentos foi corrigida antes da execução final dos testes.
+- Navegador local: mês, valor, fonte e ressalvas confirmados; histórico aberto
+  com 44 observações, nenhum erro de console capturado.
+- Atualização de adm-zip 0.6.0 para 0.6.1 no lockfile; auditoria npm sem
+  vulnerabilidades conhecidas após a atualização.
+- ABS, INE Portugal, Istat e Eurostat recoletados sem cache; cobertura mantida.
+  Dados nacionais não foram incorporados automaticamente ao cruzamento mundial.

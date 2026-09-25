@@ -66,3 +66,7 @@ export function fetchJsonWithRetry<T>(url: string, options: RetryOptions = {}): 
 export function fetchTextWithRetry(url: string, options: RetryOptions = {}): Promise<string> {
   return fetchWithRetry(url, 'text/csv', (response) => response.text(), options)
 }
+
+export function fetchBufferWithRetry(url: string, options: RetryOptions = {}): Promise<ArrayBuffer> {
+  return fetchWithRetry(url, 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', (response) => response.arrayBuffer(), options)
+}

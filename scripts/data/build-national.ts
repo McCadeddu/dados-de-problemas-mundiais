@@ -4,6 +4,7 @@ import { parsePoverty, POVERTY_URL, type JsonStat } from './eurostat.js'
 import { collectAbsUnemployment } from './abs.js'
 import { collectIneUnemployment } from './ine-portugal.js'
 import { collectIstatUnemployment } from './istat.js'
+import { collectInegiUnemployment } from './inegi.js'
 
 const outputPath = 'public/data/national-data.json'
 const registry = JSON.parse(await readFile('scripts/data/national-source-registry.json', 'utf8')) as NationalSource[]
@@ -36,7 +37,8 @@ const previous = JSON.parse(await readFile(outputPath, 'utf8')) as NationalData
 const australiaUnemployment = await collectAbsUnemployment(previous.australiaUnemployment)
 const portugalUnemployment = await collectIneUnemployment(previous.portugalUnemployment)
 const italyUnemployment = await collectIstatUnemployment(previous.italyUnemployment)
-const result: NationalData = { generatedAt: new Date().toISOString(), registry, poverty, australiaUnemployment, portugalUnemployment, italyUnemployment }
+const mexicoUnemployment = await collectInegiUnemployment(previous.mexicoUnemployment)
+const result: NationalData = { generatedAt: new Date().toISOString(), registry, poverty, australiaUnemployment, portugalUnemployment, italyUnemployment, mexicoUnemployment }
 // Match the other static artifacts: Vite can hold the destination open on Windows,
 // preventing replacement by rename. Publication happens only after the build passes.
 await writeFile(outputPath, JSON.stringify(result))
@@ -49,6 +51,7 @@ const coverage = dashboard.countries.map((country) => ({
     ...(poverty.series.some((series) => series.countryCode === country.code) ? ['eurostat-relative-poverty'] : []),
     ...(country.code === 'AUS' ? ['abs-monthly-unemployment'] : []),
     ...(country.code === 'PRT' ? ['ine-quarterly-unemployment'] : []),
+    ...(country.code === 'MEX' && mexicoUnemployment.points.length ? ['inegi-monthly-unemployment'] : []),
     ...(country.code === 'ITA' ? ['istat-monthly-unemployment'] : []),
   ],
   indicators: globalIndicators.map((indicator) => {
@@ -61,3 +64,5 @@ console.log(`Catálogo: ${registry.length} territórios; ${registry.filter((entr
 console.log(`ABS: ${australiaUnemployment.points.length} meses; último período: ${australiaUnemployment.points.at(-1)?.period}; coleta anterior: ${australiaUnemployment.cached}.`)
 console.log(`INE Portugal: ${portugalUnemployment.points.length} trimestres; último período: ${portugalUnemployment.points.at(-1)?.period}; coleta anterior: ${portugalUnemployment.cached}.`)
 console.log(`Istat: ${italyUnemployment.points.length} meses; último período: ${italyUnemployment.points.at(-1)?.period}; edição: ${italyUnemployment.edition}; coleta anterior: ${italyUnemployment.cached}.`)
+
+console.log(`INEGI: ${mexicoUnemployment.points.length} meses; último período: ${mexicoUnemployment.points.at(-1)?.period}; coleta anterior: ${mexicoUnemployment.cached}.`)

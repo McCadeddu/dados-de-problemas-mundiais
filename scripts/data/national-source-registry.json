@@ -1147,9 +1147,9 @@
     "countryName": "Mexico",
     "institution": "INEGI",
     "url": "https://www.inegi.org.mx/",
-    "evidenceUrl": "https://www.inegi.org.mx/servicios/api_indicadores.html",
-    "status": "documented",
-    "checkedAt": "2026-09-18"
+    "evidenceUrl": "https://www.inegi.org.mx/programas/enoe/15ymas/",
+    "status": "existing-connector",
+    "checkedAt": "2026-09-25"
   },
   {
     "countryCode": "FSM",
