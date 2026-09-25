@@ -17,6 +17,26 @@ const payload: NationalData = {
 afterEach(() => { cleanup(); vi.unstubAllGlobals() })
 
 describe('NationalDataPanel', () => {
+  it('shows the South African definition, vintage and cache warning only for South African work', async () => {
+    const southAfrican: NationalData = { ...payload, southAfricaUnemployment: {
+      edition: '2026-Q2', sourceUpdatedAt: '2026-08-11', fetchedAt: '2026-09-25', lastAttemptAt: '2026-09-26', cached: true,
+      sourceUrl: 'https://www.statssa.gov.za/', methodologyUrl: 'https://www.statssa.gov.za/report.pdf',
+      licenseUrl: 'https://www.statssa.gov.za/?page_id=425', requestUrl: 'https://www.statssa.gov.za/trends.xlsx',
+      sourceNotes: ['Original source note'], points: [{ period: '2026-Q1', value: 32.7 }, { period: '2026-Q2', value: 33.6 }],
+    } }
+    vi.stubGlobal('fetch', vi.fn().mockResolvedValue({ ok: true, json: async () => southAfrican }))
+    const view = render(<NationalDataPanel countryCode="ZAF" themeId="decent-work" dashboard={dashboard} />)
+    expect(await screen.findByText('Desemprego trimestral — África do Sul (Stats SA)')).toBeInTheDocument()
+    expect(screen.getAllByText('33,6%').length).toBeGreaterThan(0)
+    expect(screen.getByText(/Pessoas desalentadas/)).toBeInTheDocument()
+    expect(screen.getByText(/Publicação consultada: 11\/08\/2026/)).toBeInTheDocument()
+    expect(screen.getByText(/A última tentativa falhou/)).toBeInTheDocument()
+    expect(screen.getByRole('link', { name: 'Planilha oficial utilizada (XLSX)' })).toHaveAttribute('href', southAfrican.southAfricaUnemployment!.requestUrl)
+    view.rerender(<NationalDataPanel countryCode="ZAF" themeId="illiteracy" dashboard={dashboard} />)
+    expect(screen.queryByText('Desemprego trimestral — África do Sul (Stats SA)')).not.toBeInTheDocument()
+    view.rerender(<NationalDataPanel countryCode="IND" themeId="decent-work" dashboard={dashboard} />)
+    expect(screen.queryByText('Desemprego trimestral — África do Sul (Stats SA)')).not.toBeInTheDocument()
+  })
   it('shows Mexican unemployment, collection caveats and provenance only for Mexican work', async () => {
     const mexican: NationalData = { ...payload, mexicoUnemployment: {
       fetchedAt: '2026-09-25', lastAttemptAt: '2026-09-26', cached: true,

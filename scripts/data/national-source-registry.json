@@ -1597,9 +1597,9 @@
     "countryName": "South Africa",
     "institution": "Statistics South Africa",
     "url": "https://www.statssa.gov.za/",
-    "evidenceUrl": "https://www.statssa.gov.za/?page_id=1417",
-    "status": "documented",
-    "checkedAt": "2026-09-18"
+    "evidenceUrl": "https://www.statssa.gov.za/?PPN=P0211&page_id=1854",
+    "status": "existing-connector",
+    "checkedAt": "2026-09-25"
   },
   {
     "countryCode": "SSD",

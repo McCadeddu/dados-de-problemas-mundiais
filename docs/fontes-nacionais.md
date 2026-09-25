@@ -45,7 +45,7 @@ e, portanto, a rotina diária já existente. Artefatos publicados:
 | Portugal | INE; EU-SILC via Eurostat | Desemprego trimestral 2011–2026 diretamente do INE; pobreza relativa 2015–2025 | Avaliar educação e proteção social. |
 | Itália | Istat; EU-SILC via Eurostat | Desemprego mensal desde 2015 diretamente do Istat; pobreza relativa 2015–2025 | Avaliar recortes regionais e educação. |
 | Austrália | Australian Bureau of Statistics | Desemprego mensal desde 2015, com ajuste sazonal | Avaliar outras medidas de trabalho e proteção social. |
-| África do Sul | Statistics South Africa | Ainda não | Priorizar pesquisa domiciliar compatível com trabalho e migração. |
+| África do Sul | Statistics South Africa, QLFS | Desemprego oficial trimestral 2008–2026Q2 | Avaliar contribuição previdenciária e recortes provinciais. |
 | Índia | MoSPI/eSankhyiki | Ainda não | Identificar série oficial estável antes de automatizar a coleta. |
 
 “Ainda não” significa que a fonte foi identificada, mas nenhum valor nacional
@@ -60,6 +60,37 @@ O diagnóstico registra disponibilidade e ano por indicador e país. Ele não
 certifica atualidade ou qualidade e não soma territórios a Estados soberanos.
 
 ## Localizar instituições
+
+### Conector nacional de trabalho: África do Sul
+
+Integração em 25/09/2026: 74 trimestres, 2008Q1–2026Q2. O conector lê
+`Table 2` do [arquivo QLFS Trends 2008–2026Q2](https://www.statssa.gov.za/publications/P0211/QLFS%20Trends%202008-2026Q2.xlsx),
+bloco `Both sexes`, indicador `LU1- Unemployment rate`, percentual da força
+de trabalho de 15–64 anos. Não calcula a taxa a partir dos totais arredondados.
+Último valor: 33,6%, confirmado no [comunicado oficial](https://www.statssa.gov.za/?p=19804).
+
+O histórico mantém os valores publicados e as notas da planilha. A tela explica
+o denominador, a exclusão do desalento e os limites de interpretação; oferece
+o relatório com precisão amostral. Não integra automaticamente a série nacional
+às comparações anuais internacionais. O arquivo não identifica ajuste sazonal.
+
+A URL e a data (11/08/2026) identificam uma edição revisada manualmente. A rotina
+diária recoleta essa edição; não descobre nem incorpora novas publicações sozinha.
+Para avançar, verificar a [página P0211](https://www.statssa.gov.za/?PPN=P0211&page_id=1854),
+rever conceitos e estrutura, atualizar edição/URL/data no conector e validar
+cobertura e último valor antes de publicar. Isso evita aceitar silenciosamente
+mudanças de conceito. A data da coleta não é apresentada como nova publicação.
+
+O parser valida tabela, idade, unidade, sexo, LU1, sequência de trimestres,
+percentuais e cobertura. Não interpreta branco, traço ou texto como zero.
+Respostas HTML de bloqueio, erros e perda de cobertura acionam a coleta anterior,
+preservando sua data e exibindo aviso. A primeira coleta precisa ser válida.
+O portal HTML exigiu verificação de segurança durante a pesquisa; o arquivo
+público XLSX foi baixado e processado normalmente, sem interação com o desafio.
+
+Reutilização conforme [copyright e condições da Stats SA](https://www.statssa.gov.za/?page_id=425):
+atribuir os dados à instituição e identificar o processamento e análise próprios.
+Não se atribui licença Creative Commons ao conjunto.
 
 ### Conector nacional de trabalho: México
 

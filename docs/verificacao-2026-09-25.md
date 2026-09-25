@@ -66,3 +66,20 @@ as regressões automatizadas, não uma nova auditoria de todas as fontes externa
   vulnerabilidades conhecidas após a atualização.
 - ABS, INE Portugal, Istat e Eurostat recoletados sem cache; cobertura mantida.
   Dados nacionais não foram incorporados automaticamente ao cruzamento mundial.
+
+## Ciclo seguinte — conector nacional da África do Sul
+
+- Stats SA QLFS, indicador LU1: 74 trimestres, 2008Q1–2026Q2. Edição publicada
+  em 11/08/2026; último valor 33,6%, conferido no comunicado oficial.
+- Download real e leitura da planilha pública concluídos sem cache. Os demais
+  complementos nacionais também foram recoletados sem cache e mantiveram cobertura.
+- Validação de recorte, unidade, idade, sequência temporal, valores e edição;
+  testes de zeros, duplicatas, resposta HTML de bloqueio e manutenção do histórico.
+- 101 testes em 19 arquivos passaram. ESLint, TypeScript, build de produção
+  com base GitHub Pages e verificação de whitespace passaram.
+- Navegador local: valor e período corretos, histórico aberto com 74 observações,
+  apresentação legível e nenhum erro de console capturado. Teste de componente
+  mantém o complemento restrito à África do Sul no tema trabalho.
+- A tela documenta a edição fixa e a revisão necessária para integrar novos
+  relatórios; a rotina diária não descobre novas publicações automaticamente.
+- Fontes, condições de reutilização, notas e limites disponíveis no painel.
