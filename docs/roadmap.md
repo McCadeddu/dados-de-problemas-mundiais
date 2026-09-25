@@ -2,12 +2,13 @@
 
 ## Próxima etapa
 
-- consolidar a camada de qualidade no painel: denominador, período observado,
-  cobertura territorial e distinção entre ausência e zero;
-- ampliar a cobertura de contribuição previdenciária fora do Brasil e pesquisar dados oficiais de trabalho forçado, preservando a diferença entre prevalência e registros de fiscalização;
-- ampliar séries nacionais dos seis países prioritários, com EU-SILC em Portugal
-  e Itália, desemprego mensal da ABS na Austrália e desemprego trimestral do INE
-  em Portugal já integrados;
+- ampliar a camada nacional de trabalho para medidas de proteção social e
+  contribuição previdenciária fora do Brasil, começando por fontes que publiquem
+  denominador, população e período compatíveis;
+- pesquisar dados oficiais de trabalho forçado, preservando a diferença entre
+  prevalência estimada e registros de fiscalização;
+- aprofundar recortes estaduais ou provinciais dos seis países prioritários
+  somente quando a fonte fornecer códigos, cobertura e definições estáveis;
 
 - revisar as 38 entradas ainda pendentes no catálogo nacional e confirmar os endereços importados do diretório da ONU;
 - priorizar séries oficiais de cuidado não remunerado e violência de gênero, com definições compatíveis;
@@ -30,6 +31,13 @@
 - comparação trabalho–migração: três medidas migratórias, ano comum selecionável,
   filtro de continente, lista de exclusões e exportação da mesma amostra usada
   nas correlações; testes de cálculo, ausência de dados e exportação;
+
+- entregue em 25/09/2026: matriz de comparabilidade trabalho–migração com
+  alinhamento de país/ano, denominadores, Pearson, Spearman, ponderação
+  populacional, influência por exclusão e CSV das transições;
+- entregue em 25/09/2026: seis complementos nacionais prioritários de trabalho
+  (México, Portugal, Itália, Austrália, África do Sul e Índia), com fontes,
+  definições, histórico, cache seguro e limites de comparação;
 
 - entregue em 18/09/2026: catálogo com 217 entradas territoriais, diagnóstico de cobertura e complemento de pobreza relativa para 30 países, com atualização diária e testes;
 
