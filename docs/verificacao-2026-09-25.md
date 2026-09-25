@@ -25,3 +25,24 @@
 
 Não houve nova coleta de dados neste ciclo. A validação cobre esta entrega e
 as regressões automatizadas, não uma nova auditoria de todas as fontes externas.
+
+## Ciclo seguinte — conector nacional da Itália
+
+- Integração direta do Istat: desemprego mensal, Itália, ambos os sexos, 15–74
+  anos, com ajuste sazonal. 139 meses de 2015-01 a 2026-07, edição 2026M9G1.
+- Valor final 5,778043%, apresentado como 5,8%, conferido com o comunicado oficial.
+- Nova coleta nacional concluída sem uso de cache: Istat 139 meses, ABS 140
+  meses, INE Portugal 62 trimestres, EU-SILC 30 países. Cobertura anterior preservada.
+- Parser seleciona uma só edição e rejeita recortes incorretos, duplicatas,
+  meses omitidos, percentuais inválidos e perda de cobertura. Testes cobrem
+  revisões, zeros, ausências, notas e recuperação por cache com datas preservadas.
+- 93 testes em 17 arquivos passaram, com dois trabalhadores para reduzir a
+  disputa por recursos no computador. A primeira execução paralela excedeu
+  o limite de tempo de um teste preexistente de explicações dos 49 indicadores;
+  não houve mudança de asserções ou aumento de timeout para contornar a falha.
+- ESLint, TypeScript e build de produção com base GitHub Pages passaram.
+- Navegador local: fonte Istat, mês e valor, edição, metodologia e histórico
+  confirmados; nenhum erro de console capturado. Teste de componente garante
+  que os dados italianos não apareçam em outro país ou tema.
+- A comparação mundial e seus algoritmos permanecem com as séries anuais
+  harmonizadas; este ciclo acrescenta o complemento nacional italiano.

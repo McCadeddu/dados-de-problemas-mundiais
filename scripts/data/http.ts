@@ -2,6 +2,7 @@ type RetryOptions = {
   fetcher?: typeof fetch
   timeoutMs?: number
   onRetry?: (message: string) => void
+  acceptLanguage?: string
 }
 
 class HttpError extends Error {
@@ -26,7 +27,7 @@ function isTransient(error: unknown) {
 }
 
 /** Retry transport failures, including an interrupted body; never retry a schema/JSON error. */
-export async function fetchJsonWithRetry<T>(url: string, options: RetryOptions = {}): Promise<T> {
+async function fetchWithRetry<T>(url: string, accept: string, read: (response: Response) => Promise<T>, options: RetryOptions = {}): Promise<T> {
   const { fetcher = fetch, timeoutMs = 60000, onRetry = console.warn } = options
   for (let attempt = 1; attempt <= 3; attempt++) {
     const controller = new AbortController()
@@ -35,13 +36,14 @@ export async function fetchJsonWithRetry<T>(url: string, options: RetryOptions =
     try {
       const response = await fetcher(url, {
         signal: controller.signal,
-        headers: { Accept: 'application/json', 'User-Agent': 'Mundialidade-open-source-dashboard/1.0' },
+        headers: { Accept: accept, 'User-Agent': 'Mundialidade-open-source-dashboard/1.0',
+          ...(options.acceptLanguage ? { 'Accept-Language': options.acceptLanguage } : {}) },
       })
       if (!response.ok) {
         await response.body?.cancel()
         throw new HttpError(response.status)
       }
-      return await response.json() as T
+      return await read(response)
     } catch (error) {
       failure = error
       if (attempt === 3 || !isTransient(error)) {
@@ -55,4 +57,12 @@ export async function fetchJsonWithRetry<T>(url: string, options: RetryOptions =
     await new Promise((resolve) => setTimeout(resolve, delayMs))
   }
   throw new Error(`Coleta não concluída: ${url}`)
+}
+
+export function fetchJsonWithRetry<T>(url: string, options: RetryOptions = {}): Promise<T> {
+  return fetchWithRetry(url, 'application/json', (response) => response.json() as Promise<T>, options)
+}
+
+export function fetchTextWithRetry(url: string, options: RetryOptions = {}): Promise<string> {
+  return fetchWithRetry(url, 'text/csv', (response) => response.text(), options)
 }

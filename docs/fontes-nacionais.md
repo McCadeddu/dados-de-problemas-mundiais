@@ -43,7 +43,7 @@ e, portanto, a rotina diária já existente. Artefatos publicados:
 | --- | --- | --- | --- |
 | México | INEGI, API de indicadores | Ainda não | Selecionar série e validar token, unidade e recorte estadual. |
 | Portugal | INE; EU-SILC via Eurostat | Desemprego trimestral 2011–2026 diretamente do INE; pobreza relativa 2015–2025 | Avaliar educação e proteção social. |
-| Itália | Istat; EU-SILC via Eurostat | Pobreza relativa 2015–2025 | Validar SDMX nacional antes de adicionar novas séries. |
+| Itália | Istat; EU-SILC via Eurostat | Desemprego mensal desde 2015 diretamente do Istat; pobreza relativa 2015–2025 | Avaliar recortes regionais e educação. |
 | Austrália | Australian Bureau of Statistics | Desemprego mensal desde 2015, com ajuste sazonal | Avaliar outras medidas de trabalho e proteção social. |
 | África do Sul | Statistics South Africa | Ainda não | Priorizar pesquisa domiciliar compatível com trabalho e migração. |
 | Índia | MoSPI/eSankhyiki | Ainda não | Identificar série oficial estável antes de automatizar a coleta. |
@@ -113,6 +113,42 @@ percentuais e sinalizações. Falhas mantêm a coleta válida anterior com aviso
 datas preservadas; sem coleta anterior, interrompem a publicação. Os valores
 complementam o detalhe de Portugal em trabalho, sem alterar rankings ou a
 comparação trabalho–migração. A pobreza relativa EU-SILC continua no tema próprio.
+
+### Conector nacional de trabalho: Itália
+
+Verificado em 25/09/2026: [serviço SDMX do Istat](https://www.istat.it/classificazioni-e-strumenti/web-services-sdmx/),
+dataflow `IT1,151_874,1.0`, estrutura `DCCV_TAXDISOCCUMENS1`, versão `1.0`.
+Chave `M.IT.UNEM_R.Y.9.Y15-74.`: mensal, Itália, taxa de desemprego,
+ajuste sazonal, ambos os sexos, 15–74 anos, todas as edições. Recorte validado
+contra a estrutura e listas de códigos retornadas pelo serviço oficial.
+`UNIT_MEAS` e `UNIT_MULT` vêm vazios neste conjunto; a unidade percentual é
+estabelecida pela definição `UNEM_R` e pela metodologia. O parser rejeita
+mudanças nesses atributos até nova revisão.
+O pedido envia `Accept-Language: en`: sem esse cabeçalho o serviço retornou
+HTTP 500 com mensagem `languageTag1`. Falhas transitórias têm até três tentativas,
+com limite de tempo também durante a leitura do corpo da resposta.
+
+A consulta retorna várias revisões históricas. O conector ordena as edições
+pela data codificada (por exemplo, `2026M9G1` = 01/09/2026), seleciona a mais
+recente e exige seu histórico mensal completo desde janeiro de 2015.
+Não completa uma edição recente com observações de edições anteriores.
+Valida dimensões, duplicatas, percentuais, sequência dos meses e perda de
+cobertura. Preserva precisão, sinalizações e códigos de notas. Em caso de falha,
+mantém a coleta anterior com sua data e aviso; sem coleta anterior válida,
+interrompe a publicação. A rotina diária inclui o conector via `data:national`.
+
+Primeira coleta: 139 meses, de 01/2015 a 07/2026, edição `2026M9G1`.
+Último valor: 5,778043%, exibido como 5,8%, conferido com o
+[comunicado oficial](https://www.istat.it/comunicato-stampa/occupati-e-disoccupati-dati-provvisori-luglio-2026/).
+A [metodologia consultada](https://www.istat.it/wp-content/uploads/2026/09/CS_Occupati-e-disoccupati_LUGLIO_2026.pdf)
+documenta a pesquisa amostral e as revisões. O denominador é a força de trabalho
+da faixa de 15 a 74 anos, não a população total. Estimativas mensais nacionais
+não substituem a série anual harmonizada da OIT nem entram no cruzamento
+trabalho–migração. A série aparece somente no detalhe de trabalho da Itália.
+
+[Licença Istat: CC BY 4.0, salvo exceções indicadas](https://www.istat.it/note-legali/).
+A interface atribui a fonte e identifica seleção, tradução e arredondamento
+feitos pelo Mundialidade. A data da edição e a data da coleta são distintas.
 
 ### Diretórios internacionais
 

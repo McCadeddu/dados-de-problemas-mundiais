@@ -868,9 +868,9 @@
     "countryName": "Italy",
     "institution": "Istat",
     "url": "https://www.istat.it/",
-    "evidenceUrl": "https://esploradati.istat.it/SDMXWS/swagger/index.html?urls.primaryName=v2",
-    "status": "documented",
-    "checkedAt": "2026-09-18"
+    "evidenceUrl": "https://www.istat.it/classificazioni-e-strumenti/web-services-sdmx/",
+    "status": "existing-connector",
+    "checkedAt": "2026-09-25"
   },
   {
     "countryCode": "JAM",

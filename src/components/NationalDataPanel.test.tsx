@@ -17,6 +17,26 @@ const payload: NationalData = {
 afterEach(() => { cleanup(); vi.unstubAllGlobals() })
 
 describe('NationalDataPanel', () => {
+  it('shows the Italian vintage, precision and cache status only in the Italian work view', async () => {
+    const italian: NationalData = { ...payload, italyUnemployment: {
+      edition: '2026M9G1', sourceUpdatedAt: '2026-09-01', fetchedAt: '2026-09-25', lastAttemptAt: '2026-09-26', cached: true,
+      sourceUrl: 'https://esploradati.istat.it/databrowser/', methodologyUrl: 'https://www.istat.it/', licenseUrl: 'https://www.istat.it/note-legali/', requestUrl: 'https://esploradati.istat.it/SDMXWS/',
+      points: [{ period: '2026-06', value: null, status: 'c' }, { period: '2026-07', value: 5.778043, status: 'p' }],
+    } }
+    vi.stubGlobal('fetch', vi.fn().mockResolvedValue({ ok: true, json: async () => italian }))
+    const view = render(<NationalDataPanel countryCode="ITA" themeId="decent-work" dashboard={dashboard} />)
+    expect(await screen.findByText('Desemprego mensal — Itália (Istat)')).toBeInTheDocument()
+    expect(screen.getAllByText('5,8%').length).toBeGreaterThan(0)
+    expect(screen.getByText(/mês de referência: 07\/2026/)).toBeInTheDocument()
+    expect(screen.getByText(/01\/09\/2026 \(2026M9G1\)/)).toBeInTheDocument()
+    expect(screen.getByText('Sem observação')).toBeInTheDocument()
+    expect(screen.getByText(/A última tentativa falhou/)).toBeInTheDocument()
+    expect(screen.getByRole('link', { name: 'Consulta utilizada (CSV)' })).toHaveAttribute('href', italian.italyUnemployment!.requestUrl)
+    view.rerender(<NationalDataPanel countryCode="ITA" themeId="illiteracy" dashboard={dashboard} />)
+    expect(screen.queryByText('Desemprego mensal — Itália (Istat)')).not.toBeInTheDocument()
+    view.rerender(<NationalDataPanel countryCode="MEX" themeId="decent-work" dashboard={dashboard} />)
+    expect(screen.queryByText('Desemprego mensal — Itália (Istat)')).not.toBeInTheDocument()
+  })
   it('shows the Portuguese quarterly complement and keeps the poverty and work themes separate', async () => {
     const portuguese: NationalData = { ...payload, portugalUnemployment: {
       fetchedAt: '2026-09-18', lastAttemptAt: '2026-09-19', sourceUpdatedAt: '2026-08-05', cached: true,

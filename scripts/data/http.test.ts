@@ -1,10 +1,20 @@
 import { afterEach, describe, expect, it, vi } from 'vitest'
-import { fetchJsonWithRetry } from './http.js'
+import { fetchJsonWithRetry, fetchTextWithRetry } from './http.js'
 
 const url = 'https://servicodados.ibge.gov.br/example'
 afterEach(() => vi.useRealTimers())
 
 describe('data HTTP retries', () => {
+  it('retries a CSV service failure without parsing the successful body as JSON', async () => {
+    vi.useFakeTimers()
+    const fetcher = vi.fn<typeof fetch>().mockResolvedValueOnce(new Response('unavailable', { status: 500 }))
+      .mockResolvedValueOnce(new Response('period,value\r\n2026-07,5.778043'))
+    const result = fetchTextWithRetry(url, { fetcher, onRetry: vi.fn() })
+    await vi.advanceTimersByTimeAsync(2000)
+    await expect(result).resolves.toBe('period,value\r\n2026-07,5.778043')
+    expect(fetcher).toHaveBeenCalledTimes(2)
+    expect(vi.getTimerCount()).toBe(0)
+  })
   it('recovers from the IBGE connection timeout and preserves real zero/null values', async () => {
     vi.useFakeTimers()
     const fetcher = vi.fn<typeof fetch>()
