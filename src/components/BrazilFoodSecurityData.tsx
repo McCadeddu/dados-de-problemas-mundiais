@@ -23,7 +23,7 @@ export function BrazilFoodSecurityData({ data }: { data: NonNullable<NationalDat
       </table></div>
       <p className="meta">Os anos são apresentados como publicados pelo IBGE; a série não interpola anos sem observação.</p>
     </details>
-    <p>Este complemento cobre o Brasil. Os dados estaduais de água e saneamento apresentados em outro painel não medem insegurança alimentar.</p>
+    <p>Este complemento cobre o Brasil. O painel estadual apresenta a insegurança alimentar pela PNAD Contínua, tabela 9552, a partir de 2023. Água e saneamento são indicadores distintos.</p>
     <p className="meta">Fonte: <a href={data.sourceUrl}>IBGE/SIDRA · tabela 6665</a> · <a href={data.requestUrl}>Consulta utilizada (JSON)</a> · <a href={data.methodologyUrl}>Metodologia PNAD Contínua e EBIA</a>.</p>
     <p className="meta">Coleta: {new Date(data.fetchedAt).toLocaleDateString('pt-BR')}. Última tentativa: {new Date(data.lastAttemptAt).toLocaleDateString('pt-BR')}. {data.cached && 'A última tentativa falhou; exibindo a coleta anterior.'}</p>
     <p className="meta">Dados agregados públicos do IBGE. Seleção, tradução e apresentação pelo Mundialidade. <a href={`${import.meta.env.BASE_URL}data/national-data.json`} download>Baixar dados nacionais e proveniência (JSON)</a>.</p>

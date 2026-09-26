@@ -1,6 +1,9 @@
 import type { Indicator, LatestValue, Source } from '../types'
 
 const denominatorByIndicator: Record<string, string> = {
+  'ibge-state-food-insecurity': 'domicílios particulares permanentes da UF, urbanos e rurais, representados pela pesquisa',
+  'ibge-state-food-insecurity-moderate': 'domicílios particulares permanentes da UF, urbanos e rurais, representados pela pesquisa',
+  'ibge-state-food-insecurity-severe': 'domicílios particulares permanentes da UF, urbanos e rurais, representados pela pesquisa',
   'uis-adult-illiteracy': 'população de 15 anos ou mais',
   'uis-youth-illiteracy': 'população de 15 a 24 anos',
   'ilo-unemployment': 'força de trabalho',

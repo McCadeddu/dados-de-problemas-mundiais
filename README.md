@@ -92,6 +92,11 @@ Uma série mundial de diferença salarial comparável continua prevista para uma
 
 ### Indicadores estaduais do Brasil
 
+- Insegurança alimentar em domicílios: alguma, moderada e grave; IBGE/PNAD
+  Contínua, tabela 9552, 27 UFs em 2023 e 2024. Disponível no mapa, histórico,
+  ranking e comparação entre estados. Atualização: `npm run data:food-security-states`
+  (também incluída em `data:build`). Estimativas amostrais, com denominador domiciliar.
+
 - Pobreza multidimensional e vulnerabilidade multidimensional: POF 2017-2018, estatísticas experimentais do IBGE.
 - Renda per capita até 1/4 do salário mínimo: Censo 2022.
 - Participação feminina, diferença de participação e diferença de cuidado não remunerado: PNAD Contínua.

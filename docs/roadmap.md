@@ -12,8 +12,8 @@
 
 - fome e água: complemento nacional do Brasil integrado com IBGE/SIDRA 6665
   (insegurança alimentar em domicílios, seis observações entre 2004 e 2024,
-  provenientes de PNAD, POF e PNAD Contínua). Pesquisar um recorte
-  subnacional somente quando houver cobertura e definições compatíveis. A rede
+  provenientes de PNAD, POF e PNAD Contínua). Recorte estadual integrado em
+  26/09/2026 pela tabela 9552: 27 UFs, 2023 e 2024, três indicadores. A rede
   de água e o saneamento brasileiros já estão integrados, mas não são medida de
   fome ou segurança alimentar;
 
@@ -27,6 +27,10 @@
 - aprofundar fluxos de migração forçada por origem, acolhimento e tipo de deslocamento.
 
 ## Produto e qualidade
+
+- entregue em 26/09/2026: insegurança alimentar por UF no mapa, histórico,
+  ranking e comparação estadual, com três categorias, denominador domiciliar,
+  ressalva amostral e preservação da última coleta válida;
 
 - revisão de 26/09/2026: corrigida a identificação das pesquisas no histórico
   brasileiro de segurança alimentar (PNAD, POF e PNAD Contínua), com limites de

@@ -46,11 +46,33 @@ Moderada e grave são subconjuntos de alguma insegurança, que também inclui a 
 O denominador é o domicílio, enquanto o indicador mundial de insegurança
 alimentar é uma proporção da população. O painel mostra os dois conjuntos em
 camadas distintas e não os combina nem os usa para substituir a série mundial.
-A tabela 6665 tem apenas o nível Brasil (N1); um recorte por UF será pesquisado
-se o IBGE publicar uma tabela com cobertura e definições compatíveis. A coleta
+A tabela 6665 tem apenas o nível Brasil (N1). O recorte por UF usa a tabela 9552,
+descrita abaixo, sem estender os períodos nacionais antigos às UFs. A coleta
 diária conserva a última série válida quando a API falha e exibe essa condição.
 Também rejeita categorias duplicadas, totais incompatíveis e perda de qualquer
 ano já integrado, mesmo quando o número total de anos permanece igual.
+
+### Segurança alimentar por UF: PNAD Contínua
+
+Integrada em 26/09/2026, a [tabela 9552](https://sidra.ibge.gov.br/tabela/9552)
+fornece 2023 e 2024 para as 27 UFs (incluindo o Distrito Federal). A
+[consulta utilizada](https://apisidra.ibge.gov.br/values/t/9552/n3/all/v/9784/p/all/c1/6795/c12404/109099,109101,109102)
+seleciona distribuição percentual dos domicílios (9784), situação urbana e rural
+em conjunto (c1/6795) e insegurança total, moderada e grave (c12404).
+O denominador são domicílios particulares permanentes representados pela pesquisa,
+não pessoas. Moderada e grave são partes do total, que também inclui a leve.
+
+São estimativas amostrais: o ranking não estabelece significância estatística.
+Coeficientes de variação podem ser consultados na tabela oficial. O painel não
+extrapola os resultados para municípios ou Regiões Geográficas Imediatas.
+
+`npm run data:food-security-states` integra a rotina diária `data:build` e gera
+três arquivos em `public/data/series/`, atualiza mapa e ranking no manifesto e
+salva `public/data/brazil-food-security-states.json` com consulta, datas e cache.
+O conector exige as 27 UFs e três categorias em cada ano; rejeita dimensões
+alteradas, duplicidades, valores ausentes, totais incompatíveis e perda de anos.
+Em falha preserva o último conjunto completo, sinalizado na fonte e no JSON;
+sem coleta anterior válida, falha explicitamente. Ausências nunca viram zero.
 
 ### Operação
 
