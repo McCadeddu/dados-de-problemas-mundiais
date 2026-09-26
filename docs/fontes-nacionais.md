@@ -35,8 +35,13 @@ O levantamento inicial foi seguido pela primeira integração descrita abaixo.
 Em 25/09/2026 foi integrada a [tabela 6665 do IBGE/SIDRA](https://sidra.ibge.gov.br/tabela/6665),
 com a proporção de domicílios particulares em alguma insegurança alimentar,
 insegurança moderada e insegurança grave. A consulta usa a variável de
-domicílios e cobre seis anos publicados pelo IBGE, até 2024. A definição e o
-questionário seguem a [PNAD Contínua e a EBIA](https://www.ibge.gov.br/biblioteca/visualizacao/livros/liv102084.pdf).
+domicílios e cobre seis observações: PNAD (2004, 2009 e 2013), POF 2017–2018
+(identificada como 2018 no SIDRA) e PNAD Contínua (2023 e 2024). A
+[publicação do IBGE, tabela 2](https://www.ibge.gov.br/biblioteca/visualizacao/livros/liv102084.pdf)
+documenta essa composição histórica. A EBIA é a referência, mas mudanças de
+pesquisa e coleta exigem cautela: não se trata de uma série anual contínua da PNAD
+Contínua. Os percentuais representam domicílios, com os pesos da pesquisa.
+Moderada e grave são subconjuntos de alguma insegurança, que também inclui a leve.
 
 O denominador é o domicílio, enquanto o indicador mundial de insegurança
 alimentar é uma proporção da população. O painel mostra os dois conjuntos em
@@ -44,6 +49,8 @@ camadas distintas e não os combina nem os usa para substituir a série mundial.
 A tabela 6665 tem apenas o nível Brasil (N1); um recorte por UF será pesquisado
 se o IBGE publicar uma tabela com cobertura e definições compatíveis. A coleta
 diária conserva a última série válida quando a API falha e exibe essa condição.
+Também rejeita categorias duplicadas, totais incompatíveis e perda de qualquer
+ano já integrado, mesmo quando o número total de anos permanece igual.
 
 ### Operação
 

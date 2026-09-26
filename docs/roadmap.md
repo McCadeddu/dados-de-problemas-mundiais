@@ -11,7 +11,8 @@
   somente quando a fonte fornecer códigos, cobertura e definições estáveis;
 
 - fome e água: complemento nacional do Brasil integrado com IBGE/SIDRA 6665
-  (insegurança alimentar em domicílios, 2019–2024). Pesquisar um recorte
+  (insegurança alimentar em domicílios, seis observações entre 2004 e 2024,
+  provenientes de PNAD, POF e PNAD Contínua). Pesquisar um recorte
   subnacional somente quando houver cobertura e definições compatíveis. A rede
   de água e o saneamento brasileiros já estão integrados, mas não são medida de
   fome ou segurança alimentar;
@@ -26,6 +27,10 @@
 - aprofundar fluxos de migração forçada por origem, acolhimento e tipo de deslocamento.
 
 ## Produto e qualidade
+
+- revisão de 26/09/2026: corrigida a identificação das pesquisas no histórico
+  brasileiro de segurança alimentar (PNAD, POF e PNAD Contínua), com limites de
+  comparação explícitos e validação de duplicidades e perda de anos na coleta;
 
 - desemprego trimestral de Portugal diretamente do INE (0012136): 62 trimestres
   na primeira coleta, com revisão histórica e datas de atualização visíveis;

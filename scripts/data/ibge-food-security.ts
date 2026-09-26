@@ -13,7 +13,11 @@ const parse = (raw: unknown): Collection['points'] => {
     throw new Error('IBGE segurança alimentar: dimensões ou valores inesperados')
   }
   const byYear = new Map<number, Partial<Collection['points'][number]>>()
+  const seen = new Set<string>()
   for (const row of rows) {
+    const key = `${row.D3C}:${row.D4C}`
+    if (seen.has(key)) throw new Error('IBGE segurança alimentar: categoria duplicada no mesmo ano')
+    seen.add(key)
     const year = Number(row.D3C)
     const value = Number(row.V)
     if (!Number.isFinite(value) || value < 0 || value > 100) throw new Error('IBGE segurança alimentar: percentual inválido')
@@ -27,7 +31,9 @@ const parse = (raw: unknown): Collection['points'] => {
   if (points.length < 2 || points.some((point) => point.foodInsecurity === undefined || point.moderate === undefined || point.severe === undefined)) {
     throw new Error('IBGE segurança alimentar: categorias ou histórico incompletos')
   }
-  for (let i = 1; i < points.length; i++) if (Number(points[i].year) <= Number(points[i - 1].year)) throw new Error('IBGE segurança alimentar: ano duplicado ou fora de ordem')
+  for (const point of points) {
+    if (point.moderate! + point.severe! > point.foodInsecurity! + 0.1) throw new Error('IBGE segurança alimentar: categorias incompatíveis com o total')
+  }
   return points as Collection['points']
 }
 
@@ -37,7 +43,7 @@ export async function collectIbgeFoodSecurity(previous?: Collection, fetcher: ty
   const lastAttemptAt = new Date().toISOString()
   try {
     const points = parse(await fetchJsonWithRetry<unknown>(IBGE_FOOD_SECURITY_URL, { fetcher }))
-    if (previous && (points.length < previous.points.length || points.at(-1)!.year < previous.points.at(-1)!.year)) throw new Error('IBGE segurança alimentar: redução de cobertura')
+    if (previous && previous.points.some((old) => !points.some((point) => point.year === old.year))) throw new Error('IBGE segurança alimentar: redução de cobertura')
     return { points, fetchedAt: lastAttemptAt, lastAttemptAt, cached: false,
       sourceUrl: 'https://sidra.ibge.gov.br/tabela/6665',
       methodologyUrl: 'https://www.ibge.gov.br/biblioteca/visualizacao/livros/liv102084.pdf', requestUrl: IBGE_FOOD_SECURITY_URL }

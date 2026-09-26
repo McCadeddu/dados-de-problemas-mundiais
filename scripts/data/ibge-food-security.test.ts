@@ -26,10 +26,27 @@ describe('IBGE food security', () => {
       (data: FixtureRow[]) => { data[1].D1C = '2' },
       (data: FixtureRow[]) => { data[2].D4C = '109100' },
       (data: FixtureRow[]) => { data[4].D3C = '2023' },
+      (data: FixtureRow[]) => { data.push({ ...data[1] }) },
+      (data: FixtureRow[]) => { data.push({ ...data[1], V: '99' }) },
+      (data: FixtureRow[]) => { data[2].V = '25' },
     ]) {
       const data = rows(); mutate(data)
       expect(() => parseIbgeFoodSecurity(data)).toThrow()
     }
+  })
+  it('preserves the snapshot when an older year disappears despite equal total coverage', async () => {
+    vi.spyOn(console, 'warn').mockImplementation(() => {})
+    const fresh = await collectIbgeFoodSecurity(undefined, vi.fn<typeof fetch>().mockResolvedValue(Response.json(rows([2018, 2023, 2024]))))
+    const cached = await collectIbgeFoodSecurity(fresh, vi.fn<typeof fetch>().mockResolvedValue(Response.json(rows([2023, 2024, 2025]))))
+    expect(cached).toMatchObject({ cached: true, points: fresh.points, fetchedAt: fresh.fetchedAt })
+  })
+  it('accepts revisions without losing years and accepts a newly published year', async () => {
+    const fresh = await collectIbgeFoodSecurity(undefined, vi.fn<typeof fetch>().mockResolvedValue(Response.json(rows())))
+    const revised = rows([2023, 2024, 2025]); revised[1].V = '28.0'
+    const next = await collectIbgeFoodSecurity(fresh, vi.fn<typeof fetch>().mockResolvedValue(Response.json(revised)))
+    expect(next.cached).toBe(false)
+    expect(next.points[0].foodInsecurity).toBe(28)
+    expect(next.points.at(-1)?.year).toBe(2025)
   })
   it('retains the previous snapshot on API or coverage failure', async () => {
     vi.spyOn(console, 'warn').mockImplementation(() => {})

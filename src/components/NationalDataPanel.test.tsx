@@ -21,17 +21,21 @@ describe('NationalDataPanel', () => {
     const brazil: NationalData = { ...payload, registry: [{ ...payload.registry[0], countryCode: 'BRA', countryName: 'Brasil', institution: 'IBGE', status: 'existing-connector' }], brazilFoodSecurity: {
       fetchedAt: '2026-09-25', lastAttemptAt: '2026-09-25', cached: false,
       sourceUrl: 'https://sidra.ibge.gov.br/tabela/6665', methodologyUrl: 'https://www.ibge.gov.br/biblioteca/visualizacao/livros/liv102084.pdf',
-      requestUrl: 'https://apisidra.ibge.gov.br/values/t/6665', points: [{ year: 2023, foodInsecurity: 27.6, moderate: 5.3, severe: 4.1 }, { year: 2024, foodInsecurity: 24.2, moderate: 4.5, severe: 3.2 }],
+      requestUrl: 'https://apisidra.ibge.gov.br/values/t/6665', points: [{ year: 2018, foodInsecurity: 36.7, moderate: 8.1, severe: 4.6 }, { year: 2023, foodInsecurity: 27.6, moderate: 5.3, severe: 4.1 }, { year: 2024, foodInsecurity: 24.2, moderate: 4.5, severe: 3.2 }],
     } }
     vi.stubGlobal('fetch', vi.fn().mockResolvedValue({ ok: true, json: async () => brazil }))
     const view = render(<NationalDataPanel countryCode="BRA" themeId="hunger-water" dashboard={dashboard} />)
-    expect(await screen.findByText('Segurança alimentar — Brasil (IBGE/PNAD Contínua)')).toBeInTheDocument()
+    expect(await screen.findByText('Segurança alimentar — Brasil (IBGE/EBIA)')).toBeInTheDocument()
     expect(screen.getAllByText('24,2%').length).toBeGreaterThan(0)
     expect(screen.getByText(/Último ano disponível: 2024/)).toBeInTheDocument()
     expect(screen.getByText(/denominador os domicílios/)).toBeInTheDocument()
+    expect(screen.getByText(/O histórico reúne pesquisas diferentes/)).toHaveTextContent('POF 2017–2018')
+    expect(screen.queryByText(/Ver histórico da PNAD Contínua/)).not.toBeInTheDocument()
+    fireEvent.click(screen.getByText('Ver histórico do IBGE (3 anos com observação)'))
+    expect(screen.getByRole('row', { name: '2018 POF 2017–2018 36,7% 8,1% 4,6%' })).toBeInTheDocument()
     expect(screen.getByRole('link', { name: /IBGE\/SIDRA/ })).toHaveAttribute('href', brazil.brazilFoodSecurity!.sourceUrl)
     view.rerender(<NationalDataPanel countryCode="BRA" themeId="decent-work" dashboard={dashboard} />)
-    expect(screen.queryByText('Segurança alimentar — Brasil (IBGE/PNAD Contínua)')).not.toBeInTheDocument()
+    expect(screen.queryByText('Segurança alimentar — Brasil (IBGE/EBIA)')).not.toBeInTheDocument()
   })
   it('shows Indian CWS definition, history and cache provenance only for Indian work', async () => {
     const indian: NationalData = { ...payload, indiaUnemployment: {
