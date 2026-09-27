@@ -47,6 +47,10 @@ const fixture: DashboardData = {
 }
 
 describe('dashboard helpers', () => {
+  it('does not create gender aggregates using total population for incompatible denominators', () => {
+    const data = { ...fixture, indicators: fixture.indicators.map((indicator) => ({ ...indicator, themeId: 'gender-equality' as const })) }
+    expect(getPopulationWeightedAverage(data, fixture.latest)).toBeNull()
+  })
   it('falls back to an available theme for an invalid shared link', () => {
     expect(getSafeThemeId({ ...fixture, themes: [{ id: 'hunger-water', name: 'Fome e sede', description: '' }] }, 'tema-removido')).toBe('hunger-water')
   })

@@ -28,6 +28,12 @@
 
 ## Produto e qualidade
 
+- revisão de gênero em 27/09/2026: removidas médias por população total para
+  medidas com denominadores incompatíveis; cartões mostram cobertura e período
+  por continente. Violência agora identifica corretamente parceiros íntimos,
+  janela da pesquisa e população de referência. Violência estadual e outras
+  dimensões de discriminação permanecem lacunas explícitas;
+
 - entregue em 26/09/2026: insegurança alimentar por UF no mapa, histórico,
   ranking e comparação estadual, com três categorias, denominador domiciliar,
   ressalva amostral e preservação da última coleta válida;

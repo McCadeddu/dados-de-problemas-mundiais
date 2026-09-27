@@ -35,6 +35,7 @@ export function getLatestByIndicator(
 }
 
 export function getPopulationWeightedAverage(data: DashboardData, values: LatestValue[]) {
+  if (values.some((value) => !supportsTotalPopulationAverage(getIndicator(data, value.indicatorId)?.themeId ?? ''))) return null
   const populationByCountry = new Map(data.countryPopulation.map((entry) => [entry.geographyCode, entry.points]))
   let weightedTotal = 0
   let populationTotal = 0
@@ -54,6 +55,10 @@ export function getPopulationWeightedAverage(data: DashboardData, values: Latest
     firstYear: Math.min(...years),
     lastYear: Math.max(...years),
   } : null
+}
+
+export function supportsTotalPopulationAverage(themeId: string) {
+  return !['gender-equality', 'illiteracy', 'decent-work'].includes(themeId)
 }
 
 export function getRanking(data: DashboardData, indicatorId: string): Ranking | undefined {

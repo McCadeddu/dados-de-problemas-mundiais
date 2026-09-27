@@ -1,4 +1,5 @@
 import type { Indicator, LatestValue, Source } from '../types'
+import { genderMetadata } from '../lib/gender'
 
 const denominatorByIndicator: Record<string, string> = {
   'ibge-state-food-insecurity': 'domicílios particulares permanentes da UF, urbanos e rurais, representados pela pesquisa',
@@ -25,7 +26,7 @@ export function DataQualityPanel({ indicator, source, latest, coverageTotal, ter
 }) {
   const years = [...new Set(latest.map((item) => item.year))].sort((a, b) => a - b)
   const coveragePercent = coverageTotal ? Math.round((latest.length / coverageTotal) * 100) : 0
-  const denominator = denominatorByIndicator[indicator.id]
+  const denominator = genderMetadata[indicator.id]?.denominator ?? denominatorByIndicator[indicator.id]
     ?? (['pessoas', 'mil pessoas', 'focos'].includes(indicator.unit)
       ? 'Contagem absoluta; não usa denominador.'
       : 'Consulte a definição e a metodologia do indicador. A cobertura territorial não é o denominador da medida.')

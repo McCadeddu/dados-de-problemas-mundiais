@@ -1,5 +1,6 @@
 import { useId, useState } from 'react'
 import type { Indicator, Source } from '../types'
+import { genderMetadata } from '../lib/gender'
 
 const unitExplanations: Record<string, string> = {
   '%': 'Percentual: valor expresso em centésimos da base indicada na definição. Confira se a base é população, força de trabalho, ocupados ou domicílios. Passar de 10% para 12% significa aumentar 2 pontos percentuais.',
@@ -35,6 +36,7 @@ export function IndicatorExplanation({ indicator, source }: { indicator: Indicat
       <h4>Como ler a unidade: {indicator.unit}</h4>
       <p>{unitExplanations[indicator.unit] ?? 'A unidade deve ser interpretada conforme a definição e a metodologia da fonte.'}</p>
       <h4>Como interpretar</h4>
+      {genderMetadata[indicator.id] && <p>Base da medida: {genderMetadata[indicator.id].denominator}. <a href={genderMetadata[indicator.id].methodologyUrl}>Metodologia específica deste indicador</a>.</p>}
       <p>{interpretation} O indicador descreve apenas o aspecto definido acima; sozinho, não explica as causas do problema.</p>
       <p>Compare valores com o mesmo conceito, período e população de referência. Ausência de observação não significa valor zero.</p>
       {source && <p className="meta">Fonte: <a href={source.url} target="_blank" rel="noreferrer">{source.name}</a> · <a href={source.methodologyUrl} target="_blank" rel="noreferrer">Definições e metodologia</a></p>}

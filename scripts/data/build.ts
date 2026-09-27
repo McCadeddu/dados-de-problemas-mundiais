@@ -3,6 +3,7 @@ import { mkdir, readFile, writeFile } from 'node:fs/promises'
 import path from 'node:path'
 import Papa from 'papaparse'
 import { withCachedFallback } from './resilience.js'
+import { genderDefinitions } from '../../src/lib/gender.js'
 
 type ThemeId =
   | 'hunger-water'
@@ -1703,7 +1704,7 @@ async function main() {
   const data: DashboardData = {
     generatedAt: new Date().toISOString(),
     themes: THEMES,
-    indicators,
+    indicators: indicators.map((indicator) => ({ ...indicator, ...genderDefinitions[indicator.id] })),
     sources: Array.from(sources.values()),
     countries: countriesWithContinent,
     continents: Array.from(new Set(countriesWithContinent.map((country) => country.continent)))
