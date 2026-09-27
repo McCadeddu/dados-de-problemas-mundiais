@@ -1,0 +1,26 @@
+{
+  "edition": "Labour Market Dynamics in South Africa, 2024",
+  "publishedAt": "2025-12-10",
+  "reviewedAt": "2026-09-27",
+  "sourceUrl": "https://www.statssa.gov.za/?PPN=Report-02-11-02&page_id=1854",
+  "documentUrl": "https://www.statssa.gov.za/publications/Report-02-11-02/Report-02-11-022024.pdf",
+  "sha256": "7ef452cbd80b055d6a5dd2f8fea2dbd25ba374d19356be3609c4b76c1d450e9a",
+  "table": "3.28",
+  "printedPage": 160,
+  "pdfPage": 161,
+  "geographyCode": "ZAF",
+  "measure": "employer-pension-contribution",
+  "unit": "%",
+  "population": "employees",
+  "ageRange": "15-64",
+  "aggregation": "annual-qlfs",
+  "license": "© Statistics South Africa. Uso e processamento com atribuição e identificação da análise independente. Dados e versões processadas não podem ser vendidos sem autorização prévia da Stats SA (página impressa 2).",
+  "points": [
+    { "year": 2019, "bothSexes": 48.2, "men": 50.4, "women": 45.6 },
+    { "year": 2020, "bothSexes": 50.9, "men": 53.2, "women": 48.2 },
+    { "year": 2021, "bothSexes": 48.0, "men": 50.4, "women": 45.2 },
+    { "year": 2022, "bothSexes": 46.2, "men": 47.2, "women": 45.0 },
+    { "year": 2023, "bothSexes": 44.6, "men": 45.7, "women": 43.4 },
+    { "year": 2024, "bothSexes": 44.8, "men": 45.8, "women": 43.6 }
+  ]
+}

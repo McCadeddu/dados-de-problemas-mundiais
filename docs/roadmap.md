@@ -4,7 +4,9 @@
 
 - ampliar a camada nacional de trabalho para medidas de proteção social e
   contribuição previdenciária fora do Brasil, começando por fontes que publiquem
-  denominador, população e período compatíveis;
+  denominador, população e período compatíveis. Primeiro complemento entregue:
+  contribuição patronal para aposentadoria na África do Sul (Stats SA, LMD 2024),
+  2019–2024, total e por sexo; avançar para outros países e modalidades;
 - pesquisar dados oficiais de trabalho forçado, preservando a diferença entre
   prevalência estimada e registros de fiscalização;
 - aprofundar recortes estaduais ou provinciais dos seis países prioritários
@@ -28,11 +30,16 @@
 
 ## Produto e qualidade
 
+- entregue em 27/09/2026: contribuição patronal para aposentadoria na África
+  do Sul, como complemento nacional de trabalho; edição revisada, histórico
+  por sexo, denominador, ressalvas da pandemia, condições de uso e CSV/JSON;
+
 - revisão de gênero em 27/09/2026: removidas médias por população total para
   medidas com denominadores incompatíveis; cartões mostram cobertura e período
   por continente. Violência agora identifica corretamente parceiros íntimos,
-  janela da pesquisa e população de referência. Violência estadual e outras
-  dimensões de discriminação permanecem lacunas explícitas;
+  janela da pesquisa e população de referência. Feminicídio estadual foi integrado
+  no complemento RASEAM; outras formas de violência e dimensões de discriminação
+  permanecem lacunas explícitas;
 
 - entregue em 26/09/2026: insegurança alimentar por UF no mapa, histórico,
   ranking e comparação estadual, com três categorias, denominador domiciliar,

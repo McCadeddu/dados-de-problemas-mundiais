@@ -8,6 +8,7 @@ import { collectInegiUnemployment } from './inegi.js'
 import { collectStatsSaUnemployment } from './statssa.js'
 import { collectMospiUnemployment } from './mospi.js'
 import { collectIbgeFoodSecurity } from './ibge-food-security.js'
+import { loadStatsSaPension, pensionCsv, PENSION_INDICATOR_ID } from './statssa-pension.js'
 
 const outputPath = 'public/data/national-data.json'
 const registry = JSON.parse(await readFile('scripts/data/national-source-registry.json', 'utf8')) as NationalSource[]
@@ -44,7 +45,9 @@ const mexicoUnemployment = await collectInegiUnemployment(previous.mexicoUnemplo
 const southAfricaUnemployment = await collectStatsSaUnemployment(previous.southAfricaUnemployment)
 const indiaUnemployment = await collectMospiUnemployment(previous.indiaUnemployment)
 const brazilFoodSecurity = await collectIbgeFoodSecurity(previous.brazilFoodSecurity)
-const result: NationalData = { generatedAt: new Date().toISOString(), registry, poverty, australiaUnemployment, portugalUnemployment, italyUnemployment, mexicoUnemployment, southAfricaUnemployment, indiaUnemployment, brazilFoodSecurity }
+const southAfricaPension = await loadStatsSaPension()
+const result: NationalData = { generatedAt: new Date().toISOString(), registry, poverty, australiaUnemployment, portugalUnemployment, italyUnemployment, mexicoUnemployment, southAfricaUnemployment, indiaUnemployment, brazilFoodSecurity, southAfricaPension }
+await writeFile('public/data/south-africa-pension.csv', pensionCsv(southAfricaPension))
 // Match the other static artifacts: Vite can hold the destination open on Windows,
 // preventing replacement by rename. Publication happens only after the build passes.
 await writeFile(outputPath, JSON.stringify(result))
@@ -57,6 +60,7 @@ const coverage = dashboard.countries.map((country) => ({
     ...(country.code === 'IND' && indiaUnemployment.points.length ? ['mospi-monthly-unemployment'] : []),
     ...(poverty.series.some((series) => series.countryCode === country.code) ? ['eurostat-relative-poverty'] : []),
     ...(country.code === 'ZAF' && southAfricaUnemployment.points.length ? ['statssa-quarterly-unemployment'] : []),
+    ...(country.code === 'ZAF' && southAfricaPension.points.length ? [PENSION_INDICATOR_ID] : []),
     ...(country.code === 'AUS' ? ['abs-monthly-unemployment'] : []),
     ...(country.code === 'PRT' ? ['ine-quarterly-unemployment'] : []),
     ...(country.code === 'MEX' && mexicoUnemployment.points.length ? ['inegi-monthly-unemployment'] : []),

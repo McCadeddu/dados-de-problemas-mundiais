@@ -17,7 +17,28 @@ export type NationalSource = {
   checkedAt: string
 }
 
+export type SouthAfricaPension = {
+  edition: string
+  publishedAt: string
+  reviewedAt: string
+  sourceUrl: string
+  documentUrl: string
+  sha256: string
+  table: string
+  printedPage: number
+  pdfPage: number
+  geographyCode: 'ZAF'
+  measure: 'employer-pension-contribution'
+  unit: '%'
+  population: 'employees'
+  ageRange: '15-64'
+  aggregation: 'annual-qlfs'
+  license: string
+  points: Array<{ year: number; bothSexes: number; men: number; women: number }>
+}
+
 export type NationalData = {
+  southAfricaPension?: SouthAfricaPension
   generatedAt: string
   registry: NationalSource[]
   indiaUnemployment?: {

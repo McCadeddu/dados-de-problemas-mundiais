@@ -349,6 +349,10 @@ Contagens calculadas sobre `public/data/mundialidade.json` após a coleta de 18/
 
 ## Regras propostas para integrar
 
+Complemento de 27/09/2026: a África do Sul também possui uma série nacional
+de contribuição do empregador para aposentadoria (2019–2024, total e por sexo),
+na edição revisada LMD 2024 da Stats SA. [Definições e proveniência](protecao-social-africa-do-sul.md).
+
 1. Criar catálogo por código territorial com instituição, portal, documentação,
    licença, acesso, indicador, unidade, população de referência, anos, divisões
    territoriais e data da verificação. Distinguir fonte identificada, dados

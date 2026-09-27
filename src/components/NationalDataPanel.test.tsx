@@ -3,6 +3,9 @@ import { cleanup, fireEvent, render, screen } from '@testing-library/react'
 import { afterEach, describe, expect, it, vi } from 'vitest'
 import type { DashboardData, NationalData } from '../types'
 import { NationalDataPanel } from './NationalDataPanel'
+import { readFileSync } from 'node:fs'
+
+const pension = JSON.parse(readFileSync('scripts/data/sources/statssa-pension-2024.json', 'utf8')) as NonNullable<NationalData['southAfricaPension']>
 
 const dashboard = { indicators: [], latest: [] } as unknown as DashboardData
 const payload: NationalData = {
@@ -58,7 +61,7 @@ describe('NationalDataPanel', () => {
     expect(screen.queryByText('Desemprego mensal — Índia (MoSPI)')).not.toBeInTheDocument()
   })
   it('shows the South African definition, vintage and cache warning only for South African work', async () => {
-    const southAfrican: NationalData = { ...payload, southAfricaUnemployment: {
+    const southAfrican: NationalData = { ...payload, southAfricaPension: pension, southAfricaUnemployment: {
       edition: '2026-Q2', sourceUpdatedAt: '2026-08-11', fetchedAt: '2026-09-25', lastAttemptAt: '2026-09-26', cached: true,
       sourceUrl: 'https://www.statssa.gov.za/', methodologyUrl: 'https://www.statssa.gov.za/report.pdf',
       licenseUrl: 'https://www.statssa.gov.za/?page_id=425', requestUrl: 'https://www.statssa.gov.za/trends.xlsx',
@@ -72,10 +75,26 @@ describe('NationalDataPanel', () => {
     expect(screen.getByText(/Publicação consultada: 11\/08\/2026/)).toBeInTheDocument()
     expect(screen.getByText(/A última tentativa falhou/)).toBeInTheDocument()
     expect(screen.getByRole('link', { name: 'Planilha oficial utilizada (XLSX)' })).toHaveAttribute('href', southAfrican.southAfricaUnemployment!.requestUrl)
+    expect(screen.getByRole('heading', { name: 'Contribuição do empregador para aposentadoria — África do Sul' })).toBeInTheDocument()
+    expect(screen.getAllByText('44,8%').length).toBeGreaterThan(0)
+    expect(screen.getByText(/Publicado em 10\/12\/2025/)).toHaveTextContent('Último ano observado: 2024')
+    expect(screen.getByText(/O denominador são os empregados/)).toBeInTheDocument()
+    expect(screen.getByText(/não é a média simples/)).toBeInTheDocument()
+    fireEvent.click(screen.getByText('Ver histórico de contribuição patronal (6 anos)'))
+    expect(screen.getByRole('row', { name: '2024 44,8% 45,8% 43,6%' })).toBeInTheDocument()
+    expect(screen.getByRole('link', { name: /Baixar histórico de contribuição patronal/ })).toHaveAttribute('href', expect.stringContaining('south-africa-pension.csv'))
     view.rerender(<NationalDataPanel countryCode="ZAF" themeId="illiteracy" dashboard={dashboard} />)
     expect(screen.queryByText('Desemprego trimestral — África do Sul (Stats SA)')).not.toBeInTheDocument()
+    expect(screen.queryByText('Contribuição do empregador para aposentadoria — África do Sul')).not.toBeInTheDocument()
     view.rerender(<NationalDataPanel countryCode="IND" themeId="decent-work" dashboard={dashboard} />)
     expect(screen.queryByText('Desemprego trimestral — África do Sul (Stats SA)')).not.toBeInTheDocument()
+    expect(screen.queryByText('Contribuição do empregador para aposentadoria — África do Sul')).not.toBeInTheDocument()
+  })
+  it('shows the reviewed pension series even without the separate unemployment series', async () => {
+    vi.stubGlobal('fetch', vi.fn().mockResolvedValue({ ok: true, json: async () => ({ ...payload, southAfricaPension: pension }) }))
+    render(<NationalDataPanel countryCode="ZAF" themeId="decent-work" dashboard={dashboard} />)
+    expect(await screen.findByRole('heading', { name: 'Contribuição do empregador para aposentadoria — África do Sul' })).toBeInTheDocument()
+    expect(screen.queryByText(/Ainda não há uma série nacional complementar/)).not.toBeInTheDocument()
   })
   it('shows Mexican unemployment, collection caveats and provenance only for Mexican work', async () => {
     const mexican: NationalData = { ...payload, mexicoUnemployment: {
