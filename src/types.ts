@@ -38,6 +38,7 @@ export type SouthAfricaPension = {
 }
 
 export type NationalData = {
+  portugalBenefits?: NonNullable<NationalData['portugalUnemployment']>
   southAfricaPension?: SouthAfricaPension
   generatedAt: string
   registry: NationalSource[]

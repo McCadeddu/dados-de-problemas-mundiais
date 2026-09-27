@@ -3,6 +3,7 @@ import type { DashboardData, NationalData, NationalSource } from '../../src/type
 import { parsePoverty, POVERTY_URL, type JsonStat } from './eurostat.js'
 import { collectAbsUnemployment } from './abs.js'
 import { collectIneUnemployment } from './ine-portugal.js'
+import { collectBenefits, benefitsCsv, BENEFITS_ID } from './ine-benefits.js'
 import { collectIstatUnemployment } from './istat.js'
 import { collectInegiUnemployment } from './inegi.js'
 import { collectStatsSaUnemployment } from './statssa.js'
@@ -40,13 +41,15 @@ try {
 const previous = JSON.parse(await readFile(outputPath, 'utf8')) as NationalData
 const australiaUnemployment = await collectAbsUnemployment(previous.australiaUnemployment)
 const portugalUnemployment = await collectIneUnemployment(previous.portugalUnemployment)
+const portugalBenefits = await collectBenefits(previous.portugalBenefits)
 const italyUnemployment = await collectIstatUnemployment(previous.italyUnemployment)
 const mexicoUnemployment = await collectInegiUnemployment(previous.mexicoUnemployment)
 const southAfricaUnemployment = await collectStatsSaUnemployment(previous.southAfricaUnemployment)
 const indiaUnemployment = await collectMospiUnemployment(previous.indiaUnemployment)
 const brazilFoodSecurity = await collectIbgeFoodSecurity(previous.brazilFoodSecurity)
 const southAfricaPension = await loadStatsSaPension()
-const result: NationalData = { generatedAt: new Date().toISOString(), registry, poverty, australiaUnemployment, portugalUnemployment, italyUnemployment, mexicoUnemployment, southAfricaUnemployment, indiaUnemployment, brazilFoodSecurity, southAfricaPension }
+const result: NationalData = { generatedAt: new Date().toISOString(), registry, poverty, australiaUnemployment, portugalUnemployment, portugalBenefits, italyUnemployment, mexicoUnemployment, southAfricaUnemployment, indiaUnemployment, brazilFoodSecurity, southAfricaPension }
+await writeFile('public/data/portugal-benefits.csv', benefitsCsv(portugalBenefits))
 await writeFile('public/data/south-africa-pension.csv', pensionCsv(southAfricaPension))
 // Match the other static artifacts: Vite can hold the destination open on Windows,
 // preventing replacement by rename. Publication happens only after the build passes.
@@ -63,6 +66,7 @@ const coverage = dashboard.countries.map((country) => ({
     ...(country.code === 'ZAF' && southAfricaPension.points.length ? [PENSION_INDICATOR_ID] : []),
     ...(country.code === 'AUS' ? ['abs-monthly-unemployment'] : []),
     ...(country.code === 'PRT' ? ['ine-quarterly-unemployment'] : []),
+    ...(country.code === 'PRT' && portugalBenefits.points.length ? [BENEFITS_ID] : []),
     ...(country.code === 'MEX' && mexicoUnemployment.points.length ? ['inegi-monthly-unemployment'] : []),
     ...(country.code === 'ITA' ? ['istat-monthly-unemployment'] : []),
   ],

@@ -20,6 +20,26 @@ const payload: NationalData = {
 afterEach(() => { cleanup(); vi.unstubAllGlobals() })
 
 describe('NationalDataPanel', () => {
+  it('shows Portuguese benefits independently with counting caveat and country/theme gating', async () => {
+    const benefits: NonNullable<NationalData['portugalBenefits']> = {
+      fetchedAt: '2026-09-27', lastAttemptAt: '2026-09-27', sourceUpdatedAt: '2026-07-04', cached: true,
+      sourceUrl: 'https://www.ine.pt/xurl/indx/0004348/PT', methodologyUrl: 'https://www.ine.pt/', licenseUrl: 'https://dados.gov.pt/', requestUrl: 'https://www.ine.pt/',
+      sourceNote: 'Contados por subsídio recebido.', points: [{ period: '2024', value: null, status: 'x' }, { period: '2025', value: 378306 }],
+    }
+    vi.stubGlobal('fetch', vi.fn().mockResolvedValue({ ok: true, json: async () => ({ ...payload, portugalBenefits: benefits }) }))
+    const view = render(<NationalDataPanel countryCode="PRT" themeId="decent-work" dashboard={dashboard} />)
+    expect(await screen.findByText('Subsídios de desemprego — Portugal')).toBeInTheDocument()
+    expect(screen.getByText(/O total não representa pessoas únicas/)).toBeInTheDocument()
+    expect(screen.getByText(/A última tentativa falhou/)).toBeInTheDocument()
+    expect(screen.queryByText(/Ainda não há uma série nacional complementar/)).not.toBeInTheDocument()
+    expect(screen.getByRole('link', { name: 'Baixar histórico e proveniência (CSV)' })).toHaveAttribute('href', expect.stringContaining('portugal-benefits.csv'))
+    fireEvent.click(screen.getByText('Ver histórico dos subsídios (2 anos)'))
+    expect(screen.getByRole('row', { name: '2024 Sem observação x —' })).toBeInTheDocument()
+    view.rerender(<NationalDataPanel countryCode="PRT" themeId="gender-equality" dashboard={dashboard} />)
+    expect(screen.queryByText('Subsídios de desemprego — Portugal')).not.toBeInTheDocument()
+    view.rerender(<NationalDataPanel countryCode="ZAF" themeId="decent-work" dashboard={dashboard} />)
+    expect(screen.queryByText('Subsídios de desemprego — Portugal')).not.toBeInTheDocument()
+  })
   it('shows Brazilian food security household data only for the hunger theme', async () => {
     const brazil: NationalData = { ...payload, registry: [{ ...payload.registry[0], countryCode: 'BRA', countryName: 'Brasil', institution: 'IBGE', status: 'existing-connector' }], brazilFoodSecurity: {
       fetchedAt: '2026-09-25', lastAttemptAt: '2026-09-25', cached: false,

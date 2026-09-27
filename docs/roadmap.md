@@ -6,7 +6,9 @@
   contribuição previdenciária fora do Brasil, começando por fontes que publiquem
   denominador, população e período compatíveis. Primeiro complemento entregue:
   contribuição patronal para aposentadoria na África do Sul (Stats SA, LMD 2024),
-  2019–2024, total e por sexo; avançar para outros países e modalidades;
+  2019–2024, total e por sexo. Portugal: subsídios de desemprego, INE 0004348,
+  1990–2025, contagem anual por subsídio, sem representar pessoas únicas ou taxa
+  de cobertura. Ambos com histórico e CSV; avançar para outros países e modalidades;
 - pesquisar dados oficiais de trabalho forçado, preservando a diferença entre
   prevalência estimada e registros de fiscalização;
 - aprofundar recortes estaduais ou provinciais dos seis países prioritários
