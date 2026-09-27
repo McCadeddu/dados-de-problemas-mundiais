@@ -49,6 +49,8 @@ publicação, revisão e último ano observado. `npm run data:social-protection`
 aplica a edição ao arquivo nacional existente sem refazer outras coletas.
 `data:national` também a inclui e atualiza o diagnóstico de cobertura; por isso
 o processamento diário preserva o complemento. CSV e JSON são disponibilizados.
+O CSV inclui tabela, páginas, data de revisão, hash do PDF e condições de
+reutilização em cada linha, preservando a proveniência fora do painel.
 
 O validador rejeita conceito, denominador, período, unidade ou edição diferentes,
 anos ausentes/duplicados, valores ausentes ou fora de 0–100 e um total incompatível

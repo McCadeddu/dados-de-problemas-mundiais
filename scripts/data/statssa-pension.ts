@@ -34,7 +34,7 @@ export async function loadStatsSaPension(): Promise<SouthAfricaPension> {
 
 export function pensionCsv(data: SouthAfricaPension): string {
   const quote = (value: string | number) => `"${String(value).replaceAll('"', '""')}"`
-  return [['ano', 'ambos_os_sexos', 'homens', 'mulheres', 'unidade', 'denominador', 'medida', 'edicao', 'publicacao', 'fonte'],
-    ...data.points.map((point) => [point.year, point.bothSexes, point.men, point.women, '%', 'empregados de 15 a 64 anos; cada sexo no seu grupo', 'contribuição do empregador para aposentadoria', data.edition, data.publishedAt, data.documentUrl]),
+  return [['ano', 'ambos_os_sexos', 'homens', 'mulheres', 'unidade', 'denominador', 'medida', 'edicao', 'publicacao', 'fonte', 'tabela', 'pagina_impressa', 'pagina_pdf', 'revisao', 'sha256_documento', 'condicoes_reutilizacao'],
+    ...data.points.map((point) => [point.year, point.bothSexes, point.men, point.women, '%', 'empregados de 15 a 64 anos; cada sexo no seu grupo', 'contribuição do empregador para aposentadoria', data.edition, data.publishedAt, data.documentUrl, data.table, data.printedPage, data.pdfPage, data.reviewedAt, data.sha256, data.license]),
   ].map((row) => row.map(quote).join(',')).join('\r\n') + '\r\n'
 }
