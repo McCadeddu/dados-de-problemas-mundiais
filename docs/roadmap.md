@@ -9,8 +9,10 @@
   2019–2024, total e por sexo. Portugal: subsídios de desemprego, INE 0004348,
   1990–2025, contagem anual por subsídio, sem representar pessoas únicas ou taxa
   de cobertura. Ambos com histórico e CSV; avançar para outros países e modalidades;
-- pesquisar dados oficiais de trabalho forçado, preservando a diferença entre
-  prevalência estimada e registros de fiscalização;
+- trabalho forçado: complemento mundial e regional entregue em 27/09/2026,
+  OIT/Walk Free/OIM, referência 2021, modalidades, taxas por mil e CSV com
+  proveniência. Avançar para registros de fiscalização em série separada,
+  preservando a diferença em relação à prevalência estimada;
 - aprofundar recortes estaduais ou provinciais dos seis países prioritários
   somente quando a fonte fornecer códigos, cobertura e definições estáveis;
 

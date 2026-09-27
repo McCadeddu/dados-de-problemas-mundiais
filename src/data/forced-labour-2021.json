@@ -1,0 +1,30 @@
+{
+  "edition": "Global Estimates of Modern Slavery: Forced Labour and Forced Marriage",
+  "referenceYear": 2021,
+  "publishedAt": "2022-09-12",
+  "reviewedAt": "2026-09-27",
+  "authors": "OIT, Walk Free e OIM",
+  "documentUrl": "https://www.ilo.org/sites/default/files/wcmsp5/groups/public/%40ed_norm/%40ipec/documents/publication/wcms_854733.pdf",
+  "sha256": "0b5a44257ec470bb2a2921bb664f199ea291d3e14ba59b2a72fbeb62aab61aa4",
+  "license": "CC BY 4.0",
+  "licenseUrl": "https://creativecommons.org/licenses/by/4.0/",
+  "adaptationNotice": "Tradução e adaptação pelo Mundialidade. Esta tradução não foi criada pela OIT, Walk Free ou OIM e não é uma tradução oficial dessas organizações. Elas não se responsabilizam pelo conteúdo ou precisão da tradução. A responsabilidade pelas opiniões expressas nesta adaptação é exclusivamente de seus autores; a adaptação não é endossada pela OIT, Walk Free ou OIM.",
+  "countUnit": "milhares de pessoas",
+  "rateUnit": "pessoas por 1.000 habitantes",
+  "population": "população total de cada região",
+  "period": "em um dia qualquer de 2021",
+  "world": { "countThousands": 27577, "perThousand": 3.5 },
+  "categories": [
+    { "id": "private-non-sexual", "label": "Imposto por agentes privados, exceto exploração sexual comercial", "countThousands": 17325 },
+    { "id": "commercial-sexual", "label": "Exploração sexual comercial forçada", "countThousands": 6332 },
+    { "id": "state-imposed", "label": "Imposto pelo Estado", "countThousands": 3920 }
+  ],
+  "regions": [
+    { "id": "africa", "label": "África", "countThousands": 3819, "perThousand": 2.9 },
+    { "id": "americas", "label": "Américas", "countThousands": 3593, "perThousand": 3.5 },
+    { "id": "arab-states", "label": "Estados Árabes", "countThousands": 886, "perThousand": 5.3 },
+    { "id": "asia-pacific", "label": "Ásia e Pacífico", "countThousands": 15142, "perThousand": 3.5 },
+    { "id": "europe-central-asia", "label": "Europa e Ásia Central", "countThousands": 4137, "perThousand": 4.4 }
+  ],
+  "tables": { "categories": { "number": 1, "printedPage": 17, "pdfPage": 26 }, "regions": { "number": 2, "printedPage": 18, "pdfPage": 27 } }
+}

@@ -16,6 +16,7 @@ import { GenderPanel } from './components/GenderPanel'
 import { FeminicidePanel } from './components/FeminicidePanel'
 import { FEMINICIDE_RATE_ID, isFeminicideIndicator } from './lib/feminicide'
 import { EducationWorkPanel } from './components/EducationWorkPanel'
+import { ForcedLabourPanel } from './components/ForcedLabourPanel'
 import { NarrativeSynthesisPanel } from './components/NarrativeSynthesisPanel'
 import { ComparabilityMatrixPanel } from './components/ComparabilityMatrixPanel'
 import { DataQualityPanel } from './components/DataQualityPanel'
@@ -453,6 +454,7 @@ function App() {
           {activeThemeId === 'poverty-inequality' && <PovertyPanel values={themeGlobalSnapshot} />}
           {activeThemeId === 'climate-vulnerability' && <ClimatePanel values={themeGlobalSnapshot} />}
           <EducationWorkPanel themeId={activeThemeId} />
+          {activeThemeId === 'decent-work' && <ForcedLabourPanel />}
           <NarrativeSynthesisPanel themeId={activeThemeId} />
           {(activeThemeId === 'decent-work' || activeThemeId === 'forced-migration') && <ComparabilityMatrixPanel />}
           {(activeThemeId === 'decent-work' || activeThemeId === 'forced-migration') && <WorkMigrationComparisonPanel data={data} continent={continent} loadError={seriesLoadError} />}
