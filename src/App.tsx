@@ -15,6 +15,7 @@ import { NationalDataPanel } from './components/NationalDataPanel'
 import { GenderPanel } from './components/GenderPanel'
 import { FeminicidePanel } from './components/FeminicidePanel'
 import { FEMINICIDE_RATE_ID, isFeminicideIndicator } from './lib/feminicide'
+import { ThemeCoveragePanel } from './components/ThemeCoveragePanel'
 import { EducationWorkPanel } from './components/EducationWorkPanel'
 import { ForcedLabourPanel } from './components/ForcedLabourPanel'
 import { NarrativeSynthesisPanel } from './components/NarrativeSynthesisPanel'
@@ -31,6 +32,7 @@ import {
   getLatestByIndicator,
   getPopulationWeightedAverage,
   supportsTotalPopulationAverage,
+  aggregationExplanation,
   getRanking,
   getSafeThemeId,
   getSeriesForGeography,
@@ -366,7 +368,7 @@ function App() {
     const country = data.countries.find((candidate) => candidate.code === item.geographyCode)
     return continent === 'Todos' || country?.continent === continent
   })
-  const supportsPopulationAverage = supportsTotalPopulationAverage(activeThemeId)
+  const supportsPopulationAverage = supportsTotalPopulationAverage(indicator)
   const continentAverage = supportsPopulationAverage ? getPopulationWeightedAverage(data, continentValues) : null
   const regionsForState = data.brazilImmediateRegions.filter((region) => region.stateCode === stateCode)
   const selectedImmediateRegion = data.brazilImmediateRegions.find(
@@ -451,8 +453,8 @@ function App() {
           <IndicatorExplanation indicator={activeIndicator} source={activeSource} />
           {activeThemeId === 'hunger-water' && <HungerWaterPanel values={themeGlobalSnapshot} />}
           {activeThemeId === 'gender-equality' && <GenderPanel data={data} continent={continent} />}
-          {activeThemeId === 'poverty-inequality' && <PovertyPanel values={themeGlobalSnapshot} />}
-          {activeThemeId === 'climate-vulnerability' && <ClimatePanel values={themeGlobalSnapshot} />}
+          {activeThemeId === 'poverty-inequality' && <ThemeCoveragePanel title="Pobreza e desigualdade no mundo" indicators={themeIndicators} latest={data.latest} />}
+          {activeThemeId === 'climate-vulnerability' && <ThemeCoveragePanel title="Vulnerabilidade climática no mundo" indicators={themeIndicators} latest={data.latest} />}
           <EducationWorkPanel themeId={activeThemeId} />
           {activeThemeId === 'decent-work' && <ForcedLabourPanel />}
           <NarrativeSynthesisPanel themeId={activeThemeId} />
@@ -464,7 +466,7 @@ function App() {
           <section className="content-grid content-grid--world">
             <MapPanel title="Mapa mundial" subtitle={`${indicator.name} • clique para destacar um país e escolhê-lo no fim da página`} geography={worldGeo} valueByCode={worldValueByCode} codeKeys={['ADM0_A3', 'ISO_A3', 'SOV_A3', 'gu_a3']} onSelect={(code) => { setCountryCode(code); setCountryQuery('') }} selectedCode={countryCode} formatValue={(value) => formatValue(value, indicator.unit)} direction={indicator.direction} projectionKind="peters" colors={THEME_MAP_COLORS[activeThemeId]} selectedColor="var(--theme-accent)" />
             <article className="panel">
-              <div className="panel__header"><div><h3>{continent === 'Todos' ? 'Panorama mundial' : `Panorama: ${continent}`}</h3><p>{indicator.description}</p>{continentAverage && <p className="context-metric">Média do recorte, ponderada pela população: {formatValue(continentAverage.value, indicator.unit)} ({continentAverage.coverage} países)</p>}</div><strong className="badge">{indicator.latestYear}</strong></div>
+              <div className="panel__header"><div><h3>{continent === 'Todos' ? 'Panorama mundial' : `Panorama: ${continent}`}</h3><p>{indicator.description}</p>{continentAverage && <p className="context-metric">Estimativa do painel para o recorte: {formatValue(continentAverage.value, indicator.unit)} ({continentAverage.coverage} países · {continentAverage.firstYear}; não é agregado oficial)</p>}</div><strong className="badge">{indicator.latestYear}</strong></div>
               <div className="world-summary"><strong>{continentValues.length}</strong><span>países com último dado disponível no recorte</span><p>Use o mapa, o ranking e as comparações disponíveis para observar diferenças antes de escolher um país.</p></div>
               <p className="meta">Fonte: <a href={activeSource?.url}>{activeSource?.name}</a> • Atualização conhecida: {activeSource?.lastUpdated}</p>
             </article>
@@ -472,7 +474,7 @@ function App() {
           <RankingPanel title={continent === 'Todos' ? 'Ranking global' : `Ranking: ${continent}`} description="10 países com os maiores valores para o indicador e recorte selecionados." ranking={worldRanking} unit={indicator.unit} direction={indicator.direction} color="#2563eb" tooltipFormatter={tooltipFormatter} />
           {supportsPopulationAverage && <TerritoryComparisonPanel
             title="Comparar continentes"
-            description="Média ponderada pela população, usando apenas países com dados do indicador e população no mesmo ano."
+            description="Estimativas do painel, não agregados oficiais: população e indicador em um único ano por ponto. Cobertura pode variar. O último valor fica ausente quando os países têm anos diferentes; consulte o histórico anual."
             territories={continentTerritories}
             selectedCodes={comparisonContinentCodes}
             latestValues={comparisonContinentLatest}
@@ -640,29 +642,15 @@ type GlobalThemeValue = { indicator: DashboardData['indicators'][number]; value:
 
 function HungerWaterPanel({ values }: { values: GlobalThemeValue[] }) {
   return <section className="panel hunger-water-panel">
-    <div className="panel__header"><div><h3>Alimento e água no mundo</h3><p>Médias ponderadas pela população nos países com dados disponíveis; não representam a situação de um país específico.</p></div><strong className="badge">Visão global</strong></div>
-    {values.length > 0 ? <div className="hunger-water-panel__grid">{values.map(({ indicator, value, year, coverage }) => <article key={indicator.id}><span>{indicator.name}</span><strong>{formatValue(value, indicator.unit)}</strong><small>{year} · {coverage} países · {indicator.direction === 'higher-worse' ? 'maior pressão' : 'maior acesso'}</small></article>)}</div> : <p className="comparison-warning">Carregando população para calcular as médias mundiais.</p>}
-  </section>
-}
-
-function PovertyPanel({ values }: { values: GlobalThemeValue[] }) {
-  return <section className="panel poverty-panel">
-    <div className="panel__header"><div><h3>Pobreza e desigualdade no mundo</h3><p>Médias ponderadas pela população para duas dimensões complementares: privação monetária e concentração de renda.</p></div><strong className="badge">Visão global</strong></div>
-    {values.length > 0 ? <div className="poverty-panel__grid">{values.map(({ indicator, value, year, coverage }) => <article key={indicator.id}><span>{indicator.name}</span><strong>{formatValue(value, indicator.unit)}</strong><small>{year} · {coverage} países · {indicator.id === 'wb-gini' ? 'maior concentração de renda' : 'população abaixo da linha internacional'}</small></article>)}</div> : <p className="comparison-warning">Carregando população para calcular as médias mundiais.</p>}
-  </section>
-}
-
-function ClimatePanel({ values }: { values: GlobalThemeValue[] }) {
-  return <section className="panel climate-panel">
-    <div className="panel__header"><div><h3>Vulnerabilidade climática no mundo</h3><p>Médias ponderadas pela população dos componentes ND-GAIN: exposição e sensibilidade, capacidade de adaptação e prontidão para responder.</p></div><strong className="badge">Visão global</strong></div>
-    {values.length > 0 ? <div className="climate-panel__grid">{values.map(({ indicator, value, year, coverage }) => <article key={indicator.id} className={indicator.direction === 'higher-worse' ? 'is-risk' : 'is-readiness'}><span>{indicator.name}</span><strong>{formatValue(value, indicator.unit)}</strong><small>{year} · {coverage} países · {indicator.direction === 'higher-worse' ? 'maior risco' : 'maior capacidade'}</small></article>)}</div> : <p className="comparison-warning">Carregando população para calcular as médias mundiais.</p>}
+    <div className="panel__header"><div><h3>Alimento e água no mundo</h3><p>Estimativas do painel para acesso à água nos países cobertos, em um único ano. Não são agregados oficiais. Os indicadores de alimentação permanecem disponíveis no mapa e nas comparações nacionais.</p></div><strong className="badge">Visão global</strong></div>
+    {values.length > 0 ? <div className="hunger-water-panel__grid">{values.map(({ indicator, value, year, coverage }) => <article key={indicator.id}><span>{indicator.name}</span><strong>{formatValue(value, indicator.unit)}</strong><small>{year} · {coverage} países · {indicator.direction === 'higher-worse' ? 'maior pressão' : 'maior acesso'}</small></article>)}</div> : <p className="comparison-warning">Sem média disponível: são necessários dados compatíveis em um único ano e população correspondente. Ausência não significa zero.</p>}
   </section>
 }
 
 function GlobalInsightPanel({ indicator, continent, average, coverage, leadingValue }: {
   indicator: DashboardData['indicators'][number]
   continent: string
-  average: { value: number; coverage: number } | null
+  average: { value: number; coverage: number; firstYear: number } | null
   coverage: number
   leadingValue?: DashboardData['latest'][number]
 }) {
@@ -683,7 +671,7 @@ function GlobalInsightPanel({ indicator, continent, average, coverage, leadingVa
   }
   return <section className="panel global-insight" aria-live="polite">
     <div className="panel__header"><div><span>Assistente de leitura</span><h3>O que os dados mostram agora</h3></div><strong className="badge">Atualiza com os filtros</strong></div>
-    <p>No recorte <strong>{scope}</strong>, o indicador <strong>{indicator.name}</strong> mede {meaning}. {!supportsTotalPopulationAverage(indicator.themeId) ? 'Não calculamos uma média mundial ou continental com a população total: são necessários os denominadores específicos de cada indicador, como cadeiras, população por sexo e idade ou força de trabalho.' : average ? `A média ponderada pela população é ${formatValue(average.value, indicator.unit)}, com ${average.coverage} países no cálculo.` : 'A média ponderada está sendo calculada.'}</p>
+    <p>No recorte <strong>{scope}</strong>, o indicador <strong>{indicator.name}</strong> mede {meaning}. {aggregationExplanation(indicator)} {average ? `Estimativa para os países cobertos: ${formatValue(average.value, indicator.unit)}, com ${average.coverage} países, em ${average.firstYear}.` : supportsTotalPopulationAverage(indicator) ? 'Sem média disponível para este recorte: verifique anos comuns e população correspondente.' : ''}</p>
     {leadingValue && <p>O maior valor disponível no recorte é de <strong>{leadingValue.geographyName}</strong>: {formatValue(leadingValue.value, indicator.unit)}. Isso não significa automaticamente melhor ou pior sem considerar o sentido do indicador.</p>}
     <p>{themeFocus[indicator.themeId]} Há {coverage} países com último dado disponível; os anos podem variar entre territórios.</p>
     <small>Interpretação automatizada por regras transparentes do painel; não é uma resposta de modelo de IA e não envia seus dados a serviços externos.</small>
@@ -770,7 +758,7 @@ function buildContinentLatestValues(data: DashboardData, indicatorId: string): L
       geographyType: 'country' as const,
       geographyCode: continent,
       geographyName: continent,
-      year: Math.max(...values.map((item) => item.year)),
+      year: weightedAverage.firstYear,
       value: weightedAverage.value,
     }]
   })

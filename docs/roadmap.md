@@ -34,6 +34,12 @@
 
 ## Produto e qualidade
 
+- revisão de agregações em 27/09/2026: autorização por indicador, bloqueio de
+  anos misturados e duplicidades. Médias populacionais limitadas a acesso à água,
+  como estimativas dos países cobertos. Gini, ND-GAIN e contagens migratórias
+  sem médias genéricas; pobreza e clima mostram cobertura e anos disponíveis.
+  Próximo passo: integrar agregados oficiais com metodologia própria por fonte;
+
 - entregue em 27/09/2026: contribuição patronal para aposentadoria na África
   do Sul, como complemento nacional de trabalho; edição revisada, histórico
   por sexo, denominador, ressalvas da pandemia, condições de uso e CSV/JSON;

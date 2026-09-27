@@ -35,7 +35,11 @@ export function getLatestByIndicator(
 }
 
 export function getPopulationWeightedAverage(data: DashboardData, values: LatestValue[]) {
-  if (values.some((value) => !supportsTotalPopulationAverage(getIndicator(data, value.indicatorId)?.themeId ?? ''))) return null
+  if (!values.length || new Set(values.map(value => value.indicatorId)).size !== 1
+    || new Set(values.map(value => value.year)).size !== 1
+    || new Set(values.map(value => value.geographyCode)).size !== values.length
+    || values.some(value => value.geographyType !== 'country' || !Number.isFinite(value.value) || value.value < 0 || value.value > 100
+      || !supportsTotalPopulationAverage(getIndicator(data, value.indicatorId)))) return null
   const populationByCountry = new Map(data.countryPopulation.map((entry) => [entry.geographyCode, entry.points]))
   let weightedTotal = 0
   let populationTotal = 0
@@ -57,8 +61,17 @@ export function getPopulationWeightedAverage(data: DashboardData, values: Latest
   } : null
 }
 
-export function supportsTotalPopulationAverage(themeId: string) {
-  return !['gender-equality', 'illiteracy', 'decent-work'].includes(themeId)
+export function supportsTotalPopulationAverage(indicator?: Indicator) {
+  return indicator?.geographyType === 'country' && indicator.themeId === 'hunger-water' && indicator.unit === '%'
+    && ['wb-basic-water', 'wb-safely-managed-water'].includes(indicator.id)
+}
+
+export function aggregationExplanation(indicator: Indicator) {
+  if (supportsTotalPopulationAverage(indicator)) return 'Estimativa do painel para os países cobertos, ponderada pela população em um único ano; não é um agregado oficial. A cobertura pode variar entre anos e continentes.'
+  if (indicator.unit === 'pessoas') return 'Contagens não recebem média ponderada pela população. Um total territorial exige soma validada, no mesmo ano, com cobertura e ausência de duplicidades verificadas; esse total ainda não está integrado.'
+  if (indicator.id === 'wb-gini') return 'A média dos Ginis nacionais não mede a desigualdade continental ou mundial. Para isso, é necessária a distribuição conjunta de renda ou consumo.'
+  if (indicator.themeId === 'climate-vulnerability') return 'Os índices ND-GAIN descrevem países. O painel não os transforma em um índice continental ou mundial por ponderação populacional.'
+  return 'Sem agregado calculado: é preciso validar o denominador, o período de referência e a comparabilidade de cada indicador. Os dados nacionais continuam disponíveis no mapa e nas comparações.'
 }
 
 export function getRanking(data: DashboardData, indicatorId: string): Ranking | undefined {
