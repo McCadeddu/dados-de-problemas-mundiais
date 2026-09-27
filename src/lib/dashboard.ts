@@ -68,6 +68,7 @@ export function supportsTotalPopulationAverage(indicator?: Indicator) {
 
 export function aggregationExplanation(indicator: Indicator) {
   if (supportsTotalPopulationAverage(indicator)) return 'Estimativa do painel para os países cobertos, ponderada pela população em um único ano; não é um agregado oficial. A cobertura pode variar entre anos e continentes.'
+  if (['wb-undernourishment', 'wb-moderate-severe-food-insecurity'].includes(indicator.id)) return 'Os agregados oficiais de alimentação estão no complemento acima, com regiões e anos próprios da fonte. O painel não calcula uma média dos últimos valores nacionais para estes indicadores.'
   if (indicator.unit === 'pessoas') return 'Contagens não recebem média ponderada pela população. Um total territorial exige soma validada, no mesmo ano, com cobertura e ausência de duplicidades verificadas; esse total ainda não está integrado.'
   if (indicator.id === 'wb-gini') return 'A média dos Ginis nacionais não mede a desigualdade continental ou mundial. Para isso, é necessária a distribuição conjunta de renda ou consumo.'
   if (indicator.themeId === 'climate-vulnerability') return 'Os índices ND-GAIN descrevem países. O painel não os transforma em um índice continental ou mundial por ponderação populacional.'

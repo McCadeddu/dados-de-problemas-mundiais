@@ -4,7 +4,8 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "data:build": "tsx scripts/data/build.ts && npm run data:education-work && npm run data:food-security-states && npm run data:gender-states && npm run data:forced-labour && npm run data:national",
+    "data:build": "tsx scripts/data/build.ts && npm run data:education-work && npm run data:food-security-states && npm run data:gender-states && npm run data:forced-labour && npm run data:hunger-aggregates && npm run data:national",
+    "data:hunger-aggregates": "tsx scripts/data/build-hunger-aggregates.ts",
     "data:forced-labour": "tsx scripts/data/build-forced-labour.ts",
     "data:gender-states": "tsx scripts/data/build-gender-states.ts",
     "data:food-security-states": "tsx scripts/data/build-food-security-states.ts",

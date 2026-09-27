@@ -15,6 +15,7 @@ import { NationalDataPanel } from './components/NationalDataPanel'
 import { GenderPanel } from './components/GenderPanel'
 import { FeminicidePanel } from './components/FeminicidePanel'
 import { FEMINICIDE_RATE_ID, isFeminicideIndicator } from './lib/feminicide'
+import { HungerAggregatesPanel } from './components/HungerAggregatesPanel'
 import { ThemeCoveragePanel } from './components/ThemeCoveragePanel'
 import { EducationWorkPanel } from './components/EducationWorkPanel'
 import { ForcedLabourPanel } from './components/ForcedLabourPanel'
@@ -222,13 +223,6 @@ function App() {
   const brazilLatest = data && brazilIndicator
     ? getLatestByIndicator(data, brazilIndicator.id, 'brazil-state')
       : []
-  const themeGlobalSnapshot = data ? themeIndicators.flatMap((item) => {
-    const latest = getLatestByIndicator(data, item.id, 'country')
-    const average = getPopulationWeightedAverage(data, latest)
-    if (!average || latest.length === 0) return []
-    return [{ indicator: item, value: average.value, year: average.firstYear === average.lastYear ? String(average.lastYear) : String(average.firstYear) + '–' + String(average.lastYear), coverage: average.coverage }]
-  }) : []
-
   const worldValueByCode = new Map(countryLatest.map((item) => [
     item.geographyCode,
     { name: item.geographyName, value: item.value },
@@ -451,7 +445,7 @@ function App() {
             <label>Continente<select value={continent} onChange={(event) => { const nextContinent = event.target.value; const nextCountries = nextContinent === 'Todos' ? data.countries : data.countries.filter((country) => country.continent === nextContinent); setContinent(nextContinent); setCountryQuery(''); setCountryCode(nextCountries[0]?.code ?? ''); setComparisonCountryCodes(nextCountries.slice(0, 3).map((country) => country.code)) }}><option value="Todos">Mundo inteiro</option>{data.continents.map((item) => <option key={item} value={item}>{item}</option>)}</select></label>
           </section>
           <IndicatorExplanation indicator={activeIndicator} source={activeSource} />
-          {activeThemeId === 'hunger-water' && <HungerWaterPanel values={themeGlobalSnapshot} />}
+          {activeThemeId === 'hunger-water' && <HungerAggregatesPanel indicatorId={indicator.id} />}
           {activeThemeId === 'gender-equality' && <GenderPanel data={data} continent={continent} />}
           {activeThemeId === 'poverty-inequality' && <ThemeCoveragePanel title="Pobreza e desigualdade no mundo" indicators={themeIndicators} latest={data.latest} />}
           {activeThemeId === 'climate-vulnerability' && <ThemeCoveragePanel title="Vulnerabilidade climática no mundo" indicators={themeIndicators} latest={data.latest} />}
@@ -635,15 +629,6 @@ function MigrationFlowsPanel({ flows, error }: { flows: MigrationFlow[] | null; 
     {!flows && !error && <p className="series-loading" role="status">Carregando corredores de refúgio...</p>}
     {flows && <ol className="migration-flows__list">{flows.slice(0, 12).map((flow) => <li key={`${flow.originCode}-${flow.asylumCode}`}><span>{flow.originName} <b>→</b> {flow.asylumName}</span><strong>{formatValue(flow.value, 'pessoas')}</strong></li>)}</ol>}
     <p className="meta">Os valores representam pessoas refugiadas ou em situação semelhante registradas no país de acolhimento no final do ano. Não equivalem ao número de viagens realizadas naquele ano.</p>
-  </section>
-}
-
-type GlobalThemeValue = { indicator: DashboardData['indicators'][number]; value: number; year: string; coverage: number }
-
-function HungerWaterPanel({ values }: { values: GlobalThemeValue[] }) {
-  return <section className="panel hunger-water-panel">
-    <div className="panel__header"><div><h3>Alimento e água no mundo</h3><p>Estimativas do painel para acesso à água nos países cobertos, em um único ano. Não são agregados oficiais. Os indicadores de alimentação permanecem disponíveis no mapa e nas comparações nacionais.</p></div><strong className="badge">Visão global</strong></div>
-    {values.length > 0 ? <div className="hunger-water-panel__grid">{values.map(({ indicator, value, year, coverage }) => <article key={indicator.id}><span>{indicator.name}</span><strong>{formatValue(value, indicator.unit)}</strong><small>{year} · {coverage} países · {indicator.direction === 'higher-worse' ? 'maior pressão' : 'maior acesso'}</small></article>)}</div> : <p className="comparison-warning">Sem média disponível: são necessários dados compatíveis em um único ano e população correspondente. Ausência não significa zero.</p>}
   </section>
 }
 

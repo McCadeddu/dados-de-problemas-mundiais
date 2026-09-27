@@ -34,6 +34,10 @@
 
 ## Produto e qualidade
 
+- fome e água, 27/09/2026: agregados oficiais FAO/JMP via WDI, quatro indicadores,
+  mundo e sete regiões da fonte, histórico desde 2000, seleção de ano e CSV/JSON.
+  Nulos e anos de referência preservados; grupos oficiais separados dos continentes.
+
 - revisão de agregações em 27/09/2026: autorização por indicador, bloqueio de
   anos misturados e duplicidades. Médias populacionais limitadas a acesso à água,
   como estimativas dos países cobertos. Gini, ND-GAIN e contagens migratórias

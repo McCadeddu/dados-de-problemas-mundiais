@@ -1,6 +1,7 @@
 import { useId, useState } from 'react'
 import type { Indicator, Source } from '../types'
 import { genderMetadata } from '../lib/gender'
+import { HUNGER_AGGREGATE_INDICATORS } from '../lib/hungerAggregates'
 
 const unitExplanations: Record<string, string> = {
   'vítimas': 'Contagem de vítimas registradas, sem denominador populacional. O número depende também do tamanho da população e do registro e classificação pela fonte; não é uma taxa de risco.',
@@ -21,6 +22,7 @@ const unitExplanations: Record<string, string> = {
 export function IndicatorExplanation({ indicator, source }: { indicator: Indicator; source?: Source }) {
   const [open, setOpen] = useState(false)
   const id = useId()
+  const hungerDefinition = HUNGER_AGGREGATE_INDICATORS.find(item => item.id === indicator.id)
   const interpretation = indicator.direction === 'higher-better'
     ? 'Na orientação adotada pelo painel, valores maiores indicam uma situação mais favorável nesta dimensão.'
     : indicator.direction === 'higher-worse'
@@ -38,6 +40,7 @@ export function IndicatorExplanation({ indicator, source }: { indicator: Indicat
       <h4>Como ler a unidade: {indicator.unit}</h4>
       <p>{unitExplanations[indicator.unit] ?? 'A unidade deve ser interpretada conforme a definição e a metodologia da fonte.'}</p>
       <h4>Como interpretar</h4>
+      {hungerDefinition && <><p>{hungerDefinition.definition}</p><p>{hungerDefinition.note}</p><p><a href={`https://databank.worldbank.org/metadataglossary/world-development-indicators/series/${hungerDefinition.code}`}>Metodologia específica de fome e água</a></p></>}
       {genderMetadata[indicator.id] && <p>Base da medida: {genderMetadata[indicator.id].denominator}. <a href={genderMetadata[indicator.id].methodologyUrl}>Metodologia específica deste indicador</a>.</p>}
       <p>{interpretation} O indicador descreve apenas o aspecto definido acima; sozinho, não explica as causas do problema.</p>
       <p>Compare valores com o mesmo conceito, período e população de referência. Ausência de observação não significa valor zero.</p>
