@@ -28,8 +28,10 @@ explicita essa limitação. Ausência de dados não significa ausência de viol�
 
 ## Lacunas
 
-Não há série estadual integrada de violência. Registros administrativos exigem
-avaliação de cobertura, classificação e subnotificação, sem equivaler a prevalência.
+Complemento de 27/09/2026: foram integradas contagens e taxas estaduais de
+feminicídio registrado para 2024–2025, na edição RASEAM 2026. Consulte
+[fonte, atualização e limites](feminicidio-estadual.md). Registros administrativos
+não equivalem a prevalência; outras formas de violência continuam sem série estadual.
 O tema não cobre todas as formas de discriminação racial, social ou contra pessoas
 LGBTQIA+. Novas fontes devem ser avaliadas antes de afirmar completude do tema.
 

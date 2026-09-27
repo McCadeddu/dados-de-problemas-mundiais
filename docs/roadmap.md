@@ -18,11 +18,11 @@
   fome ou segurança alimentar;
 
 - revisar as 38 entradas ainda pendentes no catálogo nacional e confirmar os endereços importados do diretório da ONU;
-- priorizar séries oficiais de cuidado não remunerado e violência de gênero, com definições compatíveis;
+- ampliar séries oficiais de cuidado não remunerado e violência de gênero, com definições compatíveis;
 - ampliar os conectores nacionais além da primeira série de pobreza relativa Eurostat, preservando a origem de cada observação;
 
 - ampliar indicadores estaduais de clima com fontes oficiais e cobertura claramente delimitada, além dos focos ativos de fogo do INPE já incluídos;
-- adicionar dados de violência de gênero somente quando a licença, definição e cobertura por UF forem verificadas;
+- feminicídio estadual integrado em 27/09/2026: RASEAM 2026, 27 UFs, taxas e contagens para 2024–2025, com proveniência, reconciliação e limites explícitos;
 - ampliar recortes do IBGE para regiões geográficas imediatas, sem confundir dados municipais e estaduais;
 - aprofundar fluxos de migração forçada por origem, acolhimento e tipo de deslocamento.
 

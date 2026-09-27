@@ -3,6 +3,8 @@ import type { Indicator, Source } from '../types'
 import { genderMetadata } from '../lib/gender'
 
 const unitExplanations: Record<string, string> = {
+  'vítimas': 'Contagem de vítimas registradas, sem denominador populacional. O número depende também do tamanho da população e do registro e classificação pela fonte; não é uma taxa de risco.',
+  'por 100 mil mulheres': 'Número de vítimas registradas dividido pela população feminina do mesmo ano e território, multiplicado por 100.000. Não é um percentual nem uma taxa padronizada por idade.',
   '%': 'Percentual: valor expresso em centésimos da base indicada na definição. Confira se a base é população, força de trabalho, ocupados ou domicílios. Passar de 10% para 12% significa aumentar 2 pontos percentuais.',
   'p.p.': 'Pontos percentuais: diferença entre dois percentuais. Por exemplo, 60% menos 40% são 20 pontos percentuais; a ordem da subtração está na definição.',
   pessoas: 'Número de pessoas ou registros abrangidos pela definição e pelo período da fonte. Uma contagem maior também pode refletir o tamanho do território; ela não é uma taxa.',
