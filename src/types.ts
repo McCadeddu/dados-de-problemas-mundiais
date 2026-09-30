@@ -164,6 +164,8 @@ export type Indicator = {
 export type DataPoint = {
   year: number
   value: number
+  observationType?: 'reported' | 'imputed' | 'unknown'
+  sourceObservationStatus?: string
 }
 
 export type Series = {

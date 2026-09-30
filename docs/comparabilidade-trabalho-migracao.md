@@ -14,6 +14,16 @@ alinhar país, ano, população de referência e qualidade da fonte.
 | Refugiados e solicitantes de asilo | Pessoas sob proteção internacional ou em pedido de proteção | Estoque no fim do ano, por origem e acolhida | Separar de fluxos, migrantes econômicos e deslocados internos. |
 | Estoque de migrantes | Pessoas residentes em país diferente do país de nascimento | Estoque internacional harmonizado; Banco Mundial/ONU; ano da estimativa | Não equivale a refugiados, solicitantes de asilo nem a entradas no período. |
 
+## Classificação obrigatória das observações — 30/09/2026
+
+As duas taxas OIT precisam estar classificadas como reportadas pela fonte em
+cada país/ano. Imputadas, desconhecidas e séries antigas sem classificação são
+excluídas dos cálculos e exportações, com motivo no painel. Status vazio da API
+não comprova observação reportada. A base atual ainda exige classificação
+comprovada para reativar amostras elegíveis. Consulte [a revisão](trabalho-classificacao.md).
+Quando não há linhas elegíveis, o seletor pode mostrar anos das observações não
+classificadas para permitir consultar os motivos de exclusão.
+
 ## Comparação anual reproduzível
 
 Desemprego e emprego vulnerável são confrontados com uma das três medidas:

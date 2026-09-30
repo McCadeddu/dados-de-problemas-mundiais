@@ -1,4 +1,5 @@
 import AdmZip from 'adm-zip'
+import { POVERTY_ID, POVERTY_NAME, POVERTY_DESCRIPTION, POVERTY_METADATA_URL, validatePovertyDefinition } from './poverty-definition.js'
 import { mkdir, readFile, writeFile } from 'node:fs/promises'
 import path from 'node:path'
 import Papa from 'papaparse'
@@ -257,9 +258,9 @@ const WORLD_BANK_INDICATORS: WorldBankIndicatorConfig[] = [
   {
     id: 'wb-poverty-685',
     wbCode: 'SI.POV.UMIC',
-    name: 'Pobreza na linha de US$ 6,85/dia',
+    name: POVERTY_NAME,
     themeId: 'poverty-inequality',
-    description: 'Taxa de pobreza na linha de US$ 6,85 PPC de 2017 (% da população).',
+    description: POVERTY_DESCRIPTION,
     unit: '%',
     geographyType: 'country',
     sourceId: WORLD_BANK_SOURCE_ID,
@@ -724,6 +725,7 @@ async function loadWorldBankIndicator(
   config: WorldBankIndicatorConfig,
   validCountryIso3: Set<string>,
 ) {
+  if (config.id === POVERTY_ID) validatePovertyDefinition(await fetchJson(POVERTY_METADATA_URL))
   const [meta, rows] = await fetchJson<
     [{ lastupdated: string }, Array<{
       country: { value: string }

@@ -15,6 +15,14 @@ const fixture: HungerAggregates = {
   ]),
 }
 afterEach(() => { cleanup(); vi.unstubAllGlobals() })
+it('compares the selected country with official aggregates only at the selected year', async () => {
+  vi.stubGlobal('fetch', vi.fn().mockResolvedValue({ ok: true, json: async () => fixture }))
+  render(<HungerAggregatesPanel indicatorId="wb-basic-water" countryName="Brasil" countrySeries={{ indicatorId: 'wb-basic-water', geographyCode: 'BRA', geographyName: 'Brasil', geographyType: 'country', points: [{ year: 2023, value: 88 }] }} />)
+  expect(await screen.findByRole('row', { name: /País selecionado/ })).toHaveTextContent('Sem observação')
+  fireEvent.change(screen.getByRole('combobox', { name: 'Ano dos agregados oficiais' }), { target: { value: '2023' } })
+  expect(screen.getByRole('row', { name: /País selecionado/ })).toHaveTextContent('88,0%')
+  expect(screen.getByText(/Coletas diferentes podem conter revisões/)).toBeInTheDocument()
+})
 it('keeps each world reference year and does not fill missing regional data from another year', async () => {
   vi.stubGlobal('fetch', vi.fn().mockResolvedValue({ ok: true, json: async () => fixture }))
   render(<HungerAggregatesPanel indicatorId="wb-basic-water" />)

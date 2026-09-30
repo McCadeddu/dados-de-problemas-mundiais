@@ -37,6 +37,7 @@ export function IndicatorExplanation({ indicator, source }: { indicator: Indicat
       <h3>{indicator.name}</h3>
       <h4>O que é e o que mede</h4>
       <p>{indicator.description.trim() || 'A definição deste indicador ainda não foi disponibilizada. Consulte a metodologia da fonte antes de interpretar o valor.'}</p>
+      {indicator.id === 'wb-poverty-685' && <p><a href="https://data.worldbank.org/indicator/SI.POV.UMIC">Definição atual da linha de pobreza (Banco Mundial)</a> · <a href={`${import.meta.env.BASE_URL}data/poverty-definition-review.json`}>Conferência da série e dos metadados</a></p>}
       <h4>Como ler a unidade: {indicator.unit}</h4>
       <p>{unitExplanations[indicator.unit] ?? 'A unidade deve ser interpretada conforme a definição e a metodologia da fonte.'}</p>
       <h4>Como interpretar</h4>

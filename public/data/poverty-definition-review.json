@@ -1,0 +1,25 @@
+{
+  "checkedAt": "2026-09-30T15:25:48.151Z",
+  "checkedObservations": 2430,
+  "sourceUpdatedAt": "2026-07-13",
+  "requestUrl": "https://api.worldbank.org/v2/country/all/indicator/SI.POV.UMIC?source=2&format=json&per_page=20000",
+  "metadataUrl": "https://api.worldbank.org/v2/indicator/SI.POV.UMIC?source=2&format=json",
+  "metadata": {
+    "id": "SI.POV.UMIC",
+    "name": "Poverty headcount ratio at $8.30 a day (2021 PPP) (% of population)",
+    "unit": "",
+    "source": {
+      "id": "2",
+      "value": "World Development Indicators"
+    },
+    "sourceNote": "Poverty headcount ratio at $8.30 a day is the percentage of the population living on less than $8.30 a day at 2021 international prices.",
+    "sourceOrganization": "World Bank, Poverty and Inequality Platform. Data are based on primary household survey data obtained from government statistical agencies and World Bank country departments. Data for high-income economies are mostly from the Luxembourg Income Study database. For more information and methodology, please see http://pip.worldbank.org., World Bank (WB), uri: http://pip.worldbank.org, note: Data are based on primary household survey data obtained from government statistical agencies and World Bank country departments. Data for high-income economies are mostly from the Luxembourg Income Study database.",
+    "topics": [
+      {
+        "id": "11",
+        "value": "Poverty "
+      }
+    ]
+  },
+  "result": "Every saved observation matches the current 2021 PPP series; label corrected. Not a full data refresh."
+}

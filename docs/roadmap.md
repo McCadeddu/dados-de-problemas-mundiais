@@ -1,5 +1,24 @@
 # Roadmap
 
+## Consolidação — 30/09/2026
+
+Estado: alterações de 30/09 validadas localmente (180 testes, TypeScript, lint e
+build, inclusive base GitHub Pages), ainda sem publicação. Registro em
+[verificacao-2026-09-30.md](verificacao-2026-09-30.md).
+A cópia ativa é `C:/projetos/Mundialidade`; a pasta OneDrive é antiga.
+
+1. Concluir validação conjunta e preparar publicação das correções locais.
+2. Fechar pobreza/desigualdade: aprofundar concentração de renda e distinguir riqueza.
+3. Trabalho: obter classificação OIT por observação e agregados oficiais regionais/mundiais.
+4. Recuperar discriminação social e integração efetiva AdaptaBrasil.
+5. Ampliar educação, gênero, migração e subdivisões nacionais, uma entrega por vez.
+
+Navegação: mundo e regiões primeiro; complemento do país somente na análise nacional.
+Cada entrega deve registrar cobertura, limitações, testes e estado de publicação.
+Discriminação social permanece uma lacuna do pedido original, além de gênero.
+AdaptaBrasil ainda tem apenas pré-visualização de CSV; não é um conector integrado.
+Status das fontes existe, mas precisa consolidar falhas, cache e revisões necessárias.
+
 ## Próxima etapa
 
 - ampliar a camada nacional de trabalho para medidas de proteção social e
@@ -33,6 +52,21 @@
 - aprofundar fluxos de migração forçada por origem, acolhimento e tipo de deslocamento.
 
 ## Produto e qualidade
+
+- pobreza, 30/09/2026: países, sete regiões e mundo integrados via WDI/PIP,
+  na mesma coleta; linha US$ 8,30/dia em PPC 2021, histórico desde 2000,
+  nulos preservados, ano selecionável e CSV/JSON. Catálogo documental ampliado
+  com Eurostat, ADB, Banco Africano de Desenvolvimento e Pacific Community.
+  Ver `docs/pobreza-agregados.md`; conexões numéricas regionais adicionais e
+  detalhamento de renda/consumo e sinalizações permanecem pendentes.
+
+- revisão de 30/09/2026: controle documental de fontes nas sete problemáticas;
+  ano comum no mapa/ranking/cartões nacionais, exclusões explícitas e ano no CSV;
+  linha de pobreza corrigida após conferir 2.430 observações; rankings de séries
+  OIT suspensos sem sinalizações de imputação. Detalhes e limites em
+  `docs/revisao-fontes-comparabilidade.md`. Cruzamento trabalho–migração agora exclui observações imputadas ou sem
+  classificação comprovada; falta obter classificação documental da OIT e
+  integrar agregados oficiais por tema. Ver `docs/trabalho-classificacao.md`.
 
 - fome e água, 27/09/2026: agregados oficiais FAO/JMP via WDI, quatro indicadores,
   mundo e sete regiões da fonte, histórico desde 2000, seleção de ano e CSV/JSON.
@@ -83,10 +117,10 @@
 
 - entregue em 18/09/2026: catálogo com 217 entradas territoriais, diagnóstico de cobertura e complemento de pobreza relativa para 30 países, com atualização diária e testes;
 
-- criar páginas temáticas compartilháveis para fome e água, gênero, pobreza, clima e migração;
-- carregar séries e visualizações sob demanda para reduzir ainda mais o primeiro acesso;
+- páginas temáticas compartilháveis entregues para os sete temas;
+- séries já carregadas sob demanda; ampliar carregamento sob demanda das visualizações;
 - ampliar testes de conectores e de interface;
-- manter modelos de issue para sugestões de fonte e reporte de qualidade de dados.
+- modelos de issue para sugestões de fonte e qualidade já entregues; manter atualizados.
 
 ## Princípios de evolução
 

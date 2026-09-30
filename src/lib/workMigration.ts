@@ -33,6 +33,10 @@ export type ChangeRow = {
 
 export type AlignmentIssue = { countryCode: string; countryName: string; reasons: string[] }
 
+function reportedLabourPoints(data: DashboardData, id: string, country: string) {
+  return new Map(data.series.find((series) => series.indicatorId === id && series.geographyType === 'country' && series.geographyCode === country)?.points.map((point) => [point.year, point]) ?? [])
+}
+
 function pointMap(points: DataPoint[]) {
   return new Map(points.map((point) => [point.year, point.value]))
 }
@@ -48,7 +52,10 @@ export function alignWorkMigration(data: DashboardData, migrationId: string): Al
   const population = new Map(data.countryPopulation.map((series) => [series.geographyCode, pointMap(series.points)]))
   const rows: AlignedRow[] = []
   for (const country of data.countries) {
+    const unemploymentPoints = reportedLabourPoints(data, 'ilo-unemployment', country.code)
+    const vulnerablePoints = reportedLabourPoints(data, 'ilo-vulnerable-employment', country.code)
     for (const [year, u] of unemployment.get(country.code) ?? []) {
+      if (unemploymentPoints.get(year)?.observationType !== 'reported' || vulnerablePoints.get(year)?.observationType !== 'reported') continue
       const v = vulnerable.get(country.code)?.get(year)
       const m = migration.get(country.code)?.get(year)
       const p = population.get(country.code)?.get(year)
@@ -78,6 +85,10 @@ export function workMigrationExclusions(data: DashboardData, migrationId: string
   const population = new Map(data.countryPopulation.map((series) => [series.geographyCode, pointMap(series.points)]))
   return data.countries.flatMap((country) => {
     const reasons: string[] = []
+    for (const [id, label] of [['ilo-unemployment', 'desemprego'], ['ilo-vulnerable-employment', 'emprego vulnerável']]) {
+      const point = reportedLabourPoints(data, id, country.code).get(year)
+      if (point && point.observationType !== 'reported') reasons.push(`${label}: ${point.observationType === 'imputed' ? 'observação imputada' : 'classificação da observação não comprovada'}`)
+    }
     const u = unemployment.get(country.code)?.get(year)
     const v = vulnerable.get(country.code)?.get(year)
     const m = migration.get(country.code)?.get(year)

@@ -7,7 +7,7 @@ const dataPath = 'public/data/mundialidade.json'
 const data = JSON.parse(await readFile(dataPath, 'utf8')) as DashboardData
 const validCountries = new Set(data.countries.map((country) => country.code))
 const results = await Promise.all(EDUCATION_WORK_INDICATORS.map(async (config) => {
-  type Row = { country: { value: string }; countryiso3code: string; date: string; value: number | null }
+  type Row = { country: { value: string }; countryiso3code: string; date: string; value: number | null; obs_status?: string }
   const [meta, rows] = await json<[{ pages: number; lastupdated: string }, Row[]]>(`https://api.worldbank.org/v2/country/all/indicator/${config.code}?format=json&per_page=20000`)
   if (!rows || meta.pages !== 1) throw new Error(`Resposta incompleta: ${config.code}`)
   const grouped = new Map<string, Series>()
@@ -16,7 +16,7 @@ const results = await Promise.all(EDUCATION_WORK_INDICATORS.map(async (config) =
     const value = percentage(row.value, config.complement)
     if (value === null) continue
     const series = grouped.get(row.countryiso3code) ?? { indicatorId: config.id, geographyType: 'country', geographyCode: row.countryiso3code, geographyName: row.country.value, points: [] }
-    series.points.push({ year: Number(row.date), value })
+    series.points.push({ year: Number(row.date), value, ...(config.id.startsWith('ilo-') ? { observationType: 'unknown' as const, sourceObservationStatus: row.obs_status ?? '' } : {}) })
     grouped.set(row.countryiso3code, series)
   }
   const series = [...grouped.values()].map((entry) => ({ ...entry, points: entry.points.sort((a, b) => a.year - b.year) }))

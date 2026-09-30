@@ -9,7 +9,7 @@ export function WorkMigrationComparisonPanel({ data, continent = 'Todos', loadEr
   const [selectedYear, setSelectedYear] = useState('latest')
   const migration = migrationMeasures[measure]
   const aligned = useMemo(() => alignWorkMigration(data, migration.id), [data, migration.id])
-  const years = [...new Set(aligned.map((row) => row.year))].sort((a, b) => b - a)
+  const years = [...new Set(aligned.length ? aligned.map((row) => row.year) : data.series.filter((series) => ['ilo-unemployment', 'ilo-vulnerable-employment'].includes(series.indicatorId)).flatMap((series) => series.points.filter((point) => point.observationType !== 'reported').map((point) => point.year)))].sort((a, b) => b - a)
   const year = selectedYear === 'latest' ? years[0] : Number(selectedYear)
   const rows = aligned.filter((row) => row.year === year && (continent === 'Todos' || row.continent === continent))
     .sort((a, b) => b.migrationPerThousand - a.migrationPerThousand || a.countryCode.localeCompare(b.countryCode))
@@ -87,7 +87,8 @@ export function WorkMigrationComparisonPanel({ data, continent = 'Todos', loadEr
       </div>
     </div>
     {!ready ? <p role={loadError ? 'alert' : 'status'}>{loadError ? 'Não foi possível carregar as séries necessárias à comparação. Recarregue a página para tentar novamente.' : 'Carregando séries de trabalho, migração e população…'}</p> : <>
-      <p className="comparison-warning">{rows.length} de {countries.length} países e territórios incluídos{year !== undefined ? ` em ${year}` : ''}; {excluded.length} excluídos por falta de pelo menos uma observação válida no mesmo ano. Ausência não é zero.</p>
+      <p className="comparison-warning">A comparação exige duas observações de trabalho classificadas como reportadas pela fonte. Valores imputados ou sem classificação comprovada ficam fora dos cálculos e dos CSVs. <a href="https://www.ilo.org/resource/news/note-ilo-modelled-estimates-and-country-rankings-or-comparisons" target="_blank" rel="noreferrer">Orientação da OIT</a>.</p>
+      <p className="comparison-warning">{rows.length} de {countries.length} países e territórios incluídos{year !== undefined ? ` em ${year}` : ''}; {excluded.length} excluídos por falta de pelo menos uma observação elegível no mesmo ano. Ausência não é zero.</p>
       {excluded.length > 0 && year !== undefined && <details><summary>Ver países e territórios excluídos ({excluded.length})</summary><ul className="work-migration-comparison__exclusions">{exclusionDetails.map((item) => <li key={item.countryCode}><strong>{item.countryName}</strong>: {item.reasons.join('; ')}.</li>)}</ul><p>É necessário ter as duas taxas de trabalho, a medida migratória e uma população positiva no ano selecionado.</p></details>}
       {year === undefined && <p className="meta">Não há um ano comum com observações completas para esta medida. A lista de motivos por país exige um ano definido.</p>}
       {rows.length > 0 ? <>

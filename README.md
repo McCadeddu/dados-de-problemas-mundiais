@@ -28,6 +28,14 @@ brasileira; a estimativa de trabalho forçado é global, referente a 2021.
 
 ## Fontes principais
 
+Pobreza agora inclui uma [comparação oficial entre país, regiões e mundo](docs/pobreza-agregados.md),
+na linha de US$ 8,30/dia em PPC de 2021, com ano selecionável e CSV/JSON.
+Atualização: `npm run data:poverty-aggregates` (incluída na coleta completa).
+
+Revisão de 30/09/2026: cada tema inclui fontes nacionais, regionais e mundiais,
+evidência da consulta e lacunas. Mapa e ranking têm ano comum selecionável e
+lista de exclusões. Consulte a [revisão de comparabilidade](docs/revisao-fontes-comparabilidade.md).
+
 - World Bank Open Data
 - ND-GAIN Country Index: índice geral, vulnerabilidade e prontidão, com componentes de alimento, água, saúde e governança
 - UNHCR Refugee Data Finder
@@ -61,14 +69,16 @@ acesso básico e serviço de água com critérios de disponibilidade e qualidade
 
 ### Comparação entre continentes
 
-As médias continentais usam ponderação pela população anual do World Bank. Um país só entra no
-cálculo quando há população e valor do indicador no mesmo ano; o painel informa a quantidade de
-países incluídos. Essa regra evita que países muito pequenos tenham o mesmo peso de populações
-muito maiores, mas não substitui análises por subgrupos ou distribuição interna.
+Estimativas continentais por população são permitidas apenas para os indicadores
+de acesso à água autorizados. Um país só entra com população e indicador no mesmo
+ano. A cobertura é explícita; não são agregados oficiais. Para os demais temas,
+consulte os complementos oficiais ou as lacunas metodológicas de cada fonte.
 
 ### Indicadores iniciais de migração e crise humanitária
 
-O painel trabalho–migração compara um ano comum por vez e acompanha o filtro
+O painel trabalho–migração exige classificação comprovada como reportada nas
+duas taxas de trabalho; observações imputadas ou desconhecidas são excluídas
+([regras](docs/trabalho-classificacao.md)). Com dados elegíveis, compara um ano comum por vez e acompanha o filtro
 de continente. Mostra a amostra e os países excluídos; tabela e CSV usam os mesmos
 registros dos cálculos. A correlação é descritiva, com peso igual por território,
 e não estima causalidade. Consulte a [metodologia](docs/comparabilidade-trabalho-migracao.md).

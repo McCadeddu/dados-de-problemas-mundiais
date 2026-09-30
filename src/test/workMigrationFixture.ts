@@ -17,7 +17,7 @@ export function workMigrationFixture(): DashboardData {
     indicatorId: id as string, geographyType: 'country', geographyCode: country.code, geographyName: country.name,
     // Stock has no 2025 release. D has no migration observation in 2025.
     points: [2024, 2025].filter((year) => year === 2024 || (id !== 'wb-migrant-stock' && (index !== 3 || String(id).startsWith('ilo-'))))
-      .map((year) => ({ year, value: (values as number[])[year - 2024] })).reverse(),
+      .map((year) => ({ year, value: (values as number[])[year - 2024], observationType: 'reported' as const })).reverse(),
   })))
   return {
     generatedAt: '2026-09-18T12:00:00Z', countries, continents: ['Europe', 'Asia'], series,

@@ -1,7 +1,8 @@
 import { useEffect, useState } from 'react'
+import type { Series } from '../types'
 import { HUNGER_AGGREGATE_INDICATORS as definitions, aggregateValue, type HungerAggregates } from '../lib/hungerAggregates'
 
-export function HungerAggregatesPanel({ indicatorId }: { indicatorId: string }) {
+export function HungerAggregatesPanel({ indicatorId, countrySeries, countryName, countryDataGeneratedAt }: { indicatorId: string; countrySeries?: Series; countryName?: string; countryDataGeneratedAt?: string }) {
   const [data, setData] = useState<HungerAggregates | null>(null)
   const [error, setError] = useState(false)
   const [attempt, setAttempt] = useState(0)
@@ -37,12 +38,13 @@ export function HungerAggregatesPanel({ indicatorId }: { indicatorId: string }) 
     <div className="controls"><label>Ano dos agregados oficiais<select value={activeYear ?? ''} onChange={event => setYear(Number(event.target.value))}>{years.map(y => <option key={y} value={y}>{y}</option>)}</select></label></div>
     <div className="national-data__table"><table><caption>{definition.name} — {activeYear ?? 'sem ano'}, percentual da população de cada área</caption>
       <thead><tr><th scope="col">Área publicada pela fonte</th><th scope="col">Valor</th><th scope="col">Sinalização</th></tr></thead>
-      <tbody>{[...data.areas].sort((a, b) => a.code === 'WLD' ? -1 : b.code === 'WLD' ? 1 : a.name.localeCompare(b.name)).map(a => {
+      <tbody>{countryName && <tr><th scope="row">País selecionado · {countryName}</th><td>{aggregateValue(countrySeries?.indicatorId === indicatorId ? countrySeries.points.find(p => p.year === activeYear)?.value : undefined)}</td><td>Série nacional harmonizada via WDI</td></tr>}{[...data.areas].sort((a, b) => a.code === 'WLD' ? -1 : b.code === 'WLD' ? 1 : a.name.localeCompare(b.name)).map(a => {
         const point = series.find(s => s.areaCode === a.code)?.points.find(p => p.year === activeYear)
         return <tr key={a.code}><th scope="row">{a.code === 'WLD' ? 'Mundo (World)' : a.name}</th><td>{aggregateValue(point?.value)}</td><td>{point?.status || '—'}</td></tr>
       })}</tbody>
     </table></div>
     <p className="meta">Todas as linhas usam o ano selecionado. Sem observação permanece ausente; não buscamos outro ano para preencher a tabela. Os agregados podem ter cobertura parcial e regras próprias de estimação; a API não informa aqui a proporção da população coberta. Regiões podem mudar de composição entre edições.</p>
+    {countryName && <p className="meta">O país selecionado no painel aparece com o mesmo indicador e ano dos agregados. A linha nacional usa FAO/JMP via WDI, não EBIA ou SINISA. Arquivo nacional processado em {countryDataGeneratedAt ? date(countryDataGeneratedAt) : 'data não informada'}; coleta dos agregados em {date(data.fetchedAt)}. Coletas diferentes podem conter revisões; a coincidência do ano não certifica igualdade de edição.</p>}
     <details><summary>Ver histórico oficial e definição da fonte</summary>
       <div className="controls"><label>Área do histórico oficial<select value={area} onChange={event => setArea(event.target.value)}>{data.areas.map(a => <option key={a.code} value={a.code}>{a.code === 'WLD' ? 'Mundo (World)' : a.name}</option>)}</select></label></div>
       <div className="national-data__table"><table><caption>Histórico: {definition.name} · {data.areas.find(a => a.code === area)?.name}</caption><thead><tr><th scope="col">Ano da fonte</th><th scope="col">Valor</th><th scope="col">Sinalização</th></tr></thead><tbody>{[...(history?.points ?? [])].reverse().map(p => <tr key={p.year}><td>{p.year}</td><td>{aggregateValue(p.value)}</td><td>{p.status || '—'}</td></tr>)}</tbody></table></div>

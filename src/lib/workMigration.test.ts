@@ -4,6 +4,17 @@ import { alignedRowsCsv, alignWorkMigration, alignWorkMigrationChanges, changeRo
 import { workMigrationFixture } from '../test/workMigrationFixture'
 
 describe('work/migration alignment', () => {
+  it('excludes imputed and unclassified labour values from levels and changes', () => {
+    const data = workMigrationFixture()
+    const points = data.series.find((s) => s.geographyCode === 'AAA' && s.indicatorId === 'ilo-unemployment')!.points
+    points[0].observationType = 'imputed'
+    delete points[1].observationType
+    const rows = alignWorkMigration(data, 'unhcr-refugees-hosted')
+    expect(rows.some((row) => row.countryCode === 'AAA')).toBe(false)
+    expect(alignWorkMigrationChanges(rows, 2025).some((row) => row.countryCode === 'AAA')).toBe(false)
+    expect(workMigrationExclusions(data, 'unhcr-refugees-hosted', 2025).find((row) => row.countryCode === 'AAA')?.reasons).toContain('desemprego: observação imputada')
+    expect(workMigrationExclusions(data, 'unhcr-refugees-hosted', 2024).find((row) => row.countryCode === 'AAA')?.reasons).toContain('desemprego: classificação da observação não comprovada')
+  })
   it('keeps published zeros, matches exact country/year and does not carry forward older observations', () => {
     const rows = alignWorkMigration(workMigrationFixture(), 'unhcr-refugees-hosted').filter((row) => row.year === 2025)
     expect(rows.map((row) => row.countryCode)).toEqual(['AAA', 'BBB', 'CCC'])
