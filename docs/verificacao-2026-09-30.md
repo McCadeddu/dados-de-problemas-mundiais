@@ -2,8 +2,8 @@
 
 ## Estado
 
-Preparação local para publicação, sem commit ou push nesta etapa. Alterações
-anteriores preservadas na cópia ativa C:/projetos/Mundialidade.
+Preparação versionada para publicação. Alterações anteriores preservadas na
+cópia ativa C:/projetos/Mundialidade. A confirmação remota depende do CI/deploy.
 
 ## Entregas consolidadas
 
@@ -27,3 +27,10 @@ Não houve nova coleta completa nem auditoria de todas as fontes externas. A
 validação não confirma publicação remota. Próximo passo operacional: revisar e
 versionar o conjunto, sincronizar com o repositório remoto e acompanhar CI/deploy.
 Próximo lote funcional: pobreza/desigualdade, incluindo concentração de renda.
+
+## Sincronização para publicação
+
+Incorporadas as duas atualizações automáticas do remoto até e4751ae. No conflito
+em mundialidade.json, preservada a base remota mais recente e reaplicada apenas
+a correção de metadados após reconferir 2.430 observações com a API. Nenhuma
+atualização automática de outro indicador foi substituída pela base antiga.
