@@ -28,10 +28,14 @@ brasileira; a estimativa de trabalho forçado é global, referente a 2021.
 
 ## Fontes principais
 
-Distribuição nacional: parcelas da renda ou consumo dos 10% mais ricos e dos
+Distribuição por país: parcelas da renda ou consumo dos 10% mais ricos e dos
 20% mais pobres (Banco Mundial/PIP), com mapa, histórico e complemento nacional
 em ano comum. [Metodologia e limites](docs/distribuicao-renda.md).
 Atualização: `npm run data:income-distribution`.
+Notas por observação WDI identificam pesquisa e conceito quando disponíveis.
+O filtro mundial de renda/consumo usa essas declarações, exclui notas não
+classificadas e cobertura explicitamente urbana, e controla também o histórico
+comparativo. O link compartilhado e os CSV preservam a informação da fonte.
 O complemento nacional também confere pesquisas candidatas na PIP por país,
 ano e coincidência das duas parcelas. Exibe conceito, sigla, edição e divergências;
 coincidência não comprova a pesquisa usada pela WDI. CSV/JSON de conferência

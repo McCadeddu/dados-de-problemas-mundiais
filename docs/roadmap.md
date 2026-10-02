@@ -1,5 +1,17 @@
 # Roadmap
 
+## Notas WDI e filtro de conceito — 02/10/2026
+
+- Vínculo documental encontrado em `footnote=y`: sigla da pesquisa e conceito
+  declarados pela WDI por país/indicador/ano. 1.770 de 1.862 observações por
+  série classificadas; 30 com cobertura apenas urbana. Notas brutas preservadas.
+- Filtros de renda/consumo controlam mapa, ranking, cartões e histórico
+  comparativo, excluindo notas desconhecidas e cobertura urbana explícita.
+  Filtro preservado no link; CSV do ranking inclui pesquisa, conceito e nota.
+- Pendente: equivalência dos conceitos detalhados e desenho das pesquisas;
+  siglas WDI não certificam a edição da candidata PIP. Riqueza patrimonial
+  permanece uma série a investigar separadamente.
+
 ## Pesquisas e conceitos PIP — 02/10/2026
 
 - Conferência nacional por país/ano integrada, com edição PIP fixada e sem
@@ -8,9 +20,9 @@
   diária incluídos.
 - Brasil/2024: candidata PNADC-E1, conceito renda. Coincidência numérica não
   comprova vínculo com a pesquisa WDI; edições das bases são diferentes.
-- Pendente: comprovar vínculos WDI–pesquisa antes de automatizar filtros de
-  conceito para comparações internacionais. Riqueza patrimonial permanece
-  uma lacuna distinta. Detalhes em [distribuicao-renda.md](distribuicao-renda.md).
+- A etapa posterior encontrou declarações documentais nas notas WDI, permitindo
+  filtros de conceito sem inferência PIP. Detalhes em
+  [distribuicao-renda.md](distribuicao-renda.md).
 
 ## Distribuição de renda — 02/10/2026
 
@@ -19,8 +31,8 @@
   168 países com observações por série, desde 2000, conforme disponibilidade.
   Mapas e históricos; complemento nacional em ano comum; CSV/JSON, metadados e
   atualização diária. Não há média continental/mundial dessas parcelas.
-- Conceito e pesquisa têm agora conferência separada na PIP; a identificação
-  definitiva da pesquisa WDI permanece pendente. Ver
+- Conceito e pesquisa têm conferência separada na PIP e declaração da própria
+  WDI nas notas reconhecidas por observação. Ver
   [distribuicao-renda.md](distribuicao-renda.md).
 
 ## Consolidação — 30/09/2026

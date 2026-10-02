@@ -1,7 +1,8 @@
 import type { DashboardData, LatestValue } from '../types'
+import { isIncomeDistribution, permitsIncomeConcept, type IncomeConcept } from './incomeDistribution'
 
 /** No latest-value substitution: every displayed territory belongs to one year. */
-export function comparisonSnapshot(data: DashboardData, indicatorId: string, requestedYear: number | null, continent: string) {
+export function comparisonSnapshot(data: DashboardData, indicatorId: string, requestedYear: number | null, continent: string, incomeConcept: IncomeConcept = 'all') {
   const countries = data.countries.filter(c => continent === 'Todos' || c.continent === continent)
   const allowed = new Set(countries.map(c => c.code))
   const series = data.series.filter(s => s.indicatorId === indicatorId && s.geographyType === 'country')
@@ -16,7 +17,8 @@ export function comparisonSnapshot(data: DashboardData, indicatorId: string, req
       grouped.set(s.geographyCode, rows)
     }
   }
-  const values = [...grouped.values()].filter(rows => rows.length === 1 && Number.isFinite(rows[0].value)).map(rows => rows[0])
+  const values = [...grouped.values()].filter(rows => rows.length === 1 && Number.isFinite(rows[0].value)
+    && (!isIncomeDistribution(indicatorId) || permitsIncomeConcept(rows[0].sourceIncomeMetadata, incomeConcept))).map(rows => rows[0])
   const included = new Set(values.map(v => v.geographyCode))
   return { year, years, values, total: countries.length, excluded: countries.filter(c => !included.has(c.code)) }
 }

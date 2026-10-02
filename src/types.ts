@@ -161,11 +161,20 @@ export type Indicator = {
   latestYear: number
 }
 
+export type IncomeObservationMetadata = {
+  surveyAcronym: string
+  welfareType: 'income' | 'consumption'
+  distributionType: 'unit-record' | 'grouped'
+  coverageRestriction: 'urban-only' | 'not-stated'
+}
+
 export type DataPoint = {
   year: number
   value: number
   observationType?: 'reported' | 'imputed' | 'unknown'
   sourceObservationStatus?: string
+  sourceFootnote?: string
+  sourceIncomeMetadata?: IncomeObservationMetadata
 }
 
 export type Series = {
@@ -183,6 +192,8 @@ export type LatestValue = {
   geographyName: string
   year: number
   value: number
+  sourceFootnote?: string
+  sourceIncomeMetadata?: IncomeObservationMetadata
 }
 
 export type MigrationFlow = {

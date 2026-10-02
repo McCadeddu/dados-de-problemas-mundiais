@@ -13,7 +13,7 @@ data.latest = data.latest.filter(i => !ids.has(i.indicatorId))
 data.rankings = data.rankings.filter(i => !ids.has(i.indicatorId))
 for (const definition of INCOME_DISTRIBUTION) {
   const series: Series[] = result.series.filter(s => s.indicatorId === definition.id).map(s => ({ indicatorId: s.indicatorId, geographyType: 'country' as const, geographyCode: s.countryCode, geographyName: s.countryName,
-    points: s.points.filter(p => p.value !== null).map(p => ({ year: p.year, value: p.value!, sourceObservationStatus: p.status })) })).filter(s => s.points.length)
+    points: s.points.filter(p => p.value !== null).map(p => ({ year: p.year, value: p.value!, sourceObservationStatus: p.status, sourceFootnote: p.sourceFootnote, sourceIncomeMetadata: p.sourceIncomeMetadata })) })).filter(s => s.points.length)
   const latest = series.map(s => ({ indicatorId: s.indicatorId, geographyType: s.geographyType, geographyCode: s.geographyCode, geographyName: s.geographyName, ...s.points.at(-1)! }))
   const latestYear = Math.max(...latest.map(p => p.year))
   data.indicators.push(incomeIndicator(definition, latestYear))

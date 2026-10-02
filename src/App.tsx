@@ -18,6 +18,7 @@ import { FEMINICIDE_RATE_ID, isFeminicideIndicator } from './lib/feminicide'
 import { HungerAggregatesPanel } from './components/HungerAggregatesPanel'
 import { PovertyAggregatesPanel } from './components/PovertyAggregatesPanel'
 import { IncomeDistributionPanel } from './components/IncomeDistributionPanel'
+import { isIncomeDistribution, permitsIncomeConcept, type IncomeConcept } from './lib/incomeDistribution'
 import { SourceReviewPanel } from './components/SourceReviewPanel'
 import { comparisonSnapshot, permitsCountryRanking } from './lib/comparisonYear'
 import { ThemeCoveragePanel } from './components/ThemeCoveragePanel'
@@ -90,6 +91,10 @@ function App() {
   const [themeId, setThemeId] = useState(() => getThemeIdFromPath(window.location.pathname) ?? initialValue('tema', 'hunger-water'))
   const [selectedIndicatorId, setSelectedIndicatorId] = useState(() => initialValue('indicador', ''))
   const [continent, setContinent] = useState(() => initialValue('continente', 'Todos'))
+  const [incomeConcept, setIncomeConcept] = useState<IncomeConcept>(() => {
+    const value = initialValue('conceitoRenda', 'all')
+    return value === 'income' || value === 'consumption' ? value : 'all'
+  })
   const [comparisonYear, setComparisonYear] = useState<number | null>(() => {
     const value = initialParams.get('ano')
     return value && /^\d{4}$/.test(value) ? Number(value) : null
@@ -150,6 +155,7 @@ function App() {
       tema: activeThemeId,
       indicador: selectedIndicatorId,
       continente: continent,
+      conceitoRenda: incomeConcept,
       ano: comparisonYear === null ? '' : String(comparisonYear),
       pais: countryCode,
       uf: stateCode,
@@ -165,7 +171,7 @@ function App() {
       ? import.meta.env.BASE_URL
       : `${getThemePath(data ? getSafeThemeId(data, themeId) : 'hunger-water')}?${params.toString()}`
     window.history.replaceState(null, '', path)
-  }, [activeThemeId, comparisonContinentCodes, comparisonCountryCodes, comparisonImmediateRegionCodes, comparisonStateCodes, comparisonYear, continent, countryCode, data, immediateIndicatorId, immediateRegionCode, selectedIndicatorId, stateCode, stateIndicatorId, themeId, view])
+  }, [activeThemeId, comparisonContinentCodes, comparisonCountryCodes, comparisonImmediateRegionCodes, comparisonStateCodes, comparisonYear, continent, incomeConcept, countryCode, data, immediateIndicatorId, immediateRegionCode, selectedIndicatorId, stateCode, stateIndicatorId, themeId, view])
 
   const copyShareLink = async () => {
     try {
@@ -230,7 +236,7 @@ function App() {
   const brazilLatest = data && brazilIndicator
     ? getLatestByIndicator(data, brazilIndicator.id, 'brazil-state')
       : []
-  const snapshot = data && indicator ? comparisonSnapshot(data, indicator.id, comparisonYear, continent) : null
+  const snapshot = data && indicator ? comparisonSnapshot(data, indicator.id, comparisonYear, continent, incomeConcept) : null
   const worldValueByCode = new Map((snapshot?.values ?? []).map((item) => [
     item.geographyCode,
     { name: item.geographyName, value: item.value },
@@ -363,7 +369,7 @@ function App() {
   const worldRanking = permitsCountryRanking(indicator.id)
     ? [...(snapshot?.values ?? [])].sort((a, b) => b.value - a.value || a.geographyCode.localeCompare(b.geographyCode)).slice(0, 10) : []
   const globalRanking = permitsCountryRanking(indicator.id)
-    ? comparisonSnapshot(data, indicator.id, snapshot?.year ?? null, 'Todos').values.sort((a, b) => b.value - a.value || a.geographyCode.localeCompare(b.geographyCode)) : []
+    ? comparisonSnapshot(data, indicator.id, snapshot?.year ?? null, 'Todos', incomeConcept).values.sort((a, b) => b.value - a.value || a.geographyCode.localeCompare(b.geographyCode)) : []
   const countryGlobalRank = globalRanking.findIndex((item) => item.geographyCode === countryCode) + 1
   const continentValues = snapshot?.values ?? []
   const supportsPopulationAverage = supportsTotalPopulationAverage(indicator)
@@ -387,7 +393,10 @@ function App() {
   const comparisonChartData = buildComparisonChartData(data, brazilIndicator.id, comparisonStates)
   const comparisonCountries = filteredCountries.filter((country) => comparisonCountryCodes.includes(country.code))
   const comparisonCountryLatest = continentValues.filter((item) => comparisonCountryCodes.includes(item.geographyCode))
-  const comparisonCountryChartData = buildComparisonChartData(data, indicator.id, comparisonCountries)
+  const comparisonHistoryData = isIncomeDistribution(indicator.id) && incomeConcept !== 'all'
+    ? { ...data, series: data.series.map(s => s.indicatorId === indicator.id
+      ? { ...s, points: s.points.filter(p => permitsIncomeConcept(p.sourceIncomeMetadata, incomeConcept)) } : s) } : data
+  const comparisonCountryChartData = buildComparisonChartData(comparisonHistoryData, indicator.id, comparisonCountries)
   const continentTerritories = data.continents.map((name) => ({ code: name, name }))
   const comparisonContinents = continentTerritories.filter((item) => comparisonContinentCodes.includes(item.code))
   const continentLatest = buildContinentLatestValues(data, indicator.id)
@@ -450,8 +459,10 @@ function App() {
           </section>
           <section className="panel national-data" aria-label="Controle do ano de comparação">
             <div className="controls"><label>Ano comum do mapa e ranking<select value={snapshot?.year ?? ''} disabled={!snapshot?.years.length} onChange={event => setComparisonYear(Number(event.target.value))}>{!snapshot?.years.length && <option value="">Aguardando série</option>}{snapshot?.years.map(year => <option key={year} value={year}>{year}</option>)}</select></label></div>
+            {isIncomeDistribution(indicator.id) && <><div className="controls"><label>Conceito documentado na WDI<select value={incomeConcept} onChange={event => setIncomeConcept(event.target.value as IncomeConcept)}><option value="all">Todos os conceitos e coberturas</option><option value="income">Somente renda documentada, excluindo cobertura urbana</option><option value="consumption">Somente consumo documentado, excluindo cobertura urbana</option></select></label></div><p>O filtro usa as notas da própria observação WDI e também controla o histórico comparativo. Notas ausentes ou não reconhecidas ficam fora dos filtros de renda/consumo. Mesmo conceito e ano não garantem equivalência entre pesquisas. A ausência de restrição urbana na nota não comprova cobertura nacional.</p>
+              <details><summary>Pesquisas e conceitos das {snapshot?.values.length ?? 0} observações do recorte</summary><div className="national-data__table"><table><thead><tr><th>País</th><th>Pesquisa WDI</th><th>Conceito WDI</th><th>Nota da fonte</th></tr></thead><tbody>{snapshot?.values.map(row => <tr key={row.geographyCode}><td>{row.geographyName}</td><td>{row.sourceIncomeMetadata?.surveyAcronym ?? 'Não identificado'}</td><td>{row.sourceIncomeMetadata ? row.sourceIncomeMetadata.welfareType === 'income' ? 'Renda' : 'Consumo' : 'Não identificado'}</td><td>{row.sourceFootnote || 'Nota não disponível'}</td></tr>)}</tbody></table></div><p><a href={`${import.meta.env.BASE_URL}data/income-distribution.csv`} download>Baixar valores e notas WDI (CSV)</a></p></details></>}
             <p>{snapshot?.values.length ?? 0} de {snapshot?.total ?? 0} países e territórios com dado em {snapshot?.year ?? 'ano ainda indisponível'}. Valores de outros anos não preenchem ausências. O ano comum é necessário, mas não garante que conceitos e pesquisas sejam equivalentes.</p>
-            {!!snapshot?.excluded.length && <details><summary>Ver {snapshot.excluded.length} territórios excluídos deste recorte</summary><p>{snapshot.excluded.map(c => c.name).join('; ')}.</p><p>Sem observação única e válida no ano selecionado; ausência não é zero.</p></details>}
+            {!!snapshot?.excluded.length && <details><summary>Ver {snapshot.excluded.length} territórios excluídos deste recorte</summary><p>{snapshot.excluded.map(c => c.name).join('; ')}.</p><p>Sem observação única e válida no ano selecionado ou fora do filtro de conceito e cobertura; ausência não é zero.</p></details>}
             <p className="meta">Este seletor controla o mapa, panorama e ranking abaixo. Complementos oficiais e históricos têm seletores próprios e identificam seus períodos.</p>
           </section>
           <SourceReviewPanel themeId={activeThemeId} />
@@ -690,8 +701,8 @@ function RankingPanel({ title, description, ranking, unit, direction, color, too
 
 function exportRankingCsv(title: string, ranking: DashboardData['latest'], unit: string) {
   const escape = (value: string | number) => `"${String(value).replaceAll('"', '""')}"`
-  const rows = ['posicao,territorio,codigo,indicador,ano,valor,unidade']
-  ranking.forEach((item, index) => rows.push([index + 1, item.geographyName, item.geographyCode, item.indicatorId, item.year, item.value, unit].map(escape).join(',')))
+  const rows = ['posicao,territorio,codigo,indicador,ano,valor,unidade,pesquisa_wdi,conceito_wdi,restricao_cobertura_wdi,nota_wdi']
+  ranking.forEach((item, index) => rows.push([index + 1, item.geographyName, item.geographyCode, item.indicatorId, item.year, item.value, unit, item.sourceIncomeMetadata?.surveyAcronym ?? '', item.sourceIncomeMetadata?.welfareType ?? '', item.sourceIncomeMetadata?.coverageRestriction ?? '', item.sourceFootnote ?? ''].map(escape).join(',')))
   const blob = new Blob([`\ufeff${rows.join('\n')}`], { type: 'text/csv;charset=utf-8' })
   const anchor = document.createElement('a')
   anchor.href = URL.createObjectURL(blob)

@@ -13,7 +13,7 @@ brasileira de 2024 apresenta 39,3% para o grupo superior e 3,9% para o inferior.
 Esses são percentuais do total nacional, não proporções da população.
 
 O mapa mundial, histórico, ano comum e CSV de ranking seguem os controles já
-existentes. O panorama mundial mostra cobertura nacional e não produz agregado.
+existentes. O panorama mundial mostra cobertura por país e não produz agregado.
 Na página nacional, as duas parcelas aparecem juntas apenas nos anos com ambas
 as observações. O histórico conserva ausências e anos sem par. A ausência não
 é substituída por zero ou pelo último dado de outra pesquisa.
@@ -21,9 +21,37 @@ as observações. O histórico conserva ausências e anos sem par. A ausência n
 ## Limitações
 
 Os metadados WDI informam que a distribuição usa renda ou consumo de pesquisas
-domiciliares. Esta API não fornece por observação a variável de bem-estar ou o
-identificador da pesquisa. Mesmo ano não comprova mesma pesquisa ou equivalência
-de conceito. A PIP deve ser consultada para essa verificação.
+domiciliares. A consulta inicial não solicitava notas por observação. Isso foi
+corrigido em 02/10/2026: `footnote=y` retorna a sigla da pesquisa, o conceito
+e eventuais restrições de cobertura em texto. Mesmo ano e conceito não comprovam
+equivalência metodológica entre países. Ausência de restrição na nota não
+comprova cobertura nacional.
+
+## Notas WDI e filtro por conceito
+
+Cada série tem 1.862 observações desde 2000; em 1.770 a nota é reconhecida
+como declaração de pesquisa e conceito. Destas, 30 indicam cobertura apenas
+urbana. Outras 92 permanecem sem classificação, preservando a nota bruta.
+Brasil/2024 é identificado pela própria WDI como PNADC-E1, microdados de renda;
+Argentina/2024 como EPHC-S2, renda com cobertura apenas urbana.
+
+O parser aceita apenas o formato explícito `Based on data from …` e
+`Estimated from unit-record/grouped income/consumption data`, com a restrição
+opcional `Urban only`. Texto ausente ou diferente não recebe classificação
+por inferência. O nome da pesquisa, conceito, tipo de distribuição, restrição
+e nota original seguem para as séries, últimos valores e CSV/JSON.
+
+O seletor mundial **Conceito documentado na WDI** controla mapa, ranking,
+cartões e histórico da comparação entre países. Renda/consumo excluem notas
+sem classificação e cobertura explicitamente urbana. O modo todos conserva
+as observações originais. O ano selecionado não é substituído quando o filtro
+resulta vazio. O parâmetro `conceitoRenda` preserva o filtro no link partilhado.
+Uma tabela identifica as pesquisas e notas de cada observação do recorte;
+o CSV do ranking também conserva esses campos. Complementos oficiais e a
+análise nacional continuam identificando suas próprias fontes e períodos.
+
+Documentação oficial do parâmetro:
+[API Basic Call Structures](https://datahelpdesk.worldbank.org/knowledgebase/articles/898581-api-basic-call-structures).
 
 O ano identifica a pesquisa ou o início da coleta quando ela cruza dois anos.
 Mudanças de conceito, desenho amostral e tratamento da produção para consumo
@@ -105,6 +133,7 @@ Fontes: [API PIP](https://pip.worldbank.org/api),
 [cliente oficial](https://worldbank.github.io/pipr/reference/get_stats.html).
 Os dados seguem a licença Banco Mundial já documentada acima.
 
-Próximas etapas: comprovar vínculos WDI–pesquisa para automatizar filtros de
-conceito; ampliar desigualdade nacional/subnacional com conceitos compatíveis
-e pesquisar riqueza patrimonial em uma série própria.
+Próximas etapas: detalhar conceitos de renda, desenho e cobertura das pesquisas
+identificadas pela WDI; não confundir a sigla declarada com uma edição PIP
+numericamente coincidente. Ampliar desigualdade nacional/subnacional com conceitos
+compatíveis e pesquisar riqueza patrimonial em uma série própria.

@@ -7,19 +7,31 @@ const countries = [{ code: 'BRA', name: 'Brasil' }]
 const envelope = <T>(rows: T[]) => [{ page: 1, pages: 1, total: rows.length, lastupdated: '2026-07-13' }, rows] as [{ page: number; pages: number; total: number; lastupdated: string }, T[]]
 function inputs() {
   return INCOME_DISTRIBUTION.map(d => ({ code: d.code,
-    raw: envelope<IncomeRow>(Array.from({ length: 26 }, (_, i) => ({ indicator: { id: d.code }, countryiso3code: 'BRA', country: { value: 'Brazil' }, date: String(2000 + i), value: i === 25 ? null : i === 0 ? 0 : 20, obs_status: i === 0 ? 'F' : '' }))),
+    raw: envelope<IncomeRow>(Array.from({ length: 26 }, (_, i) => ({ indicator: { id: d.code }, countryiso3code: 'BRA', country: { value: 'Brazil' }, date: String(2000 + i), value: i === 25 ? null : i === 0 ? 0 : 20, obs_status: i === 0 ? 'F' : '', footnote: '' }))),
     metadata: envelope([{ id: d.code, name: d.sourceName, source: { id: '2' }, sourceNote: 'Percentage share of income or consumption.', sourceOrganization: 'World Bank/PIP' }]),
   }))
 }
 const parse = () => parseIncomeDistribution(inputs(), countries, '2026-10-02')
 afterEach(() => vi.restoreAllMocks())
 
+it('retains the WDI survey declaration in values and exports without inferring an empty note', () => {
+  const raw = inputs()
+  raw[0].raw[1][0].footnote = 'Based on data from PNADC-E1. Estimated from unit-record income data.'
+  const data = parseIncomeDistribution(raw, countries, '2026-10-02')
+  expect(data.series[0].points[0].sourceIncomeMetadata?.surveyAcronym).toBe('PNADC-E1')
+  expect(data.series[1].points[0].sourceIncomeMetadata).toBeUndefined()
+  const csv = Papa.parse<Record<string, string>>(incomeDistributionCsv(data), { header: true, skipEmptyLines: true }).data
+  expect(csv[0].pesquisa_wdi).toBe('PNADC-E1')
+  expect(csv[0].conceito_wdi).toBe('income')
+  expect(csv[0].nota_wdi).toBe(raw[0].raw[1][0].footnote)
+})
+
 it('preserves published zero, null, year and raw status; excludes aggregate groups', () => {
   const raw = inputs()
   raw[0].raw[1].push({ ...raw[0].raw[1][0], countryiso3code: 'WLD' }); raw[0].raw[0].total++
   const data = parseIncomeDistribution(raw, countries, '2026-10-02')
   expect(data.series).toHaveLength(2)
-  expect(data.series[0].points[0]).toEqual({ year: 2000, value: 0, status: 'F' })
+  expect(data.series[0].points[0]).toEqual({ year: 2000, value: 0, status: 'F', sourceFootnote: '' })
   expect(data.series[0].points.at(-1)?.value).toBeNull()
 })
 it('rejects truncated pagination, duplicates, missing periods and future/invalid observations', () => {

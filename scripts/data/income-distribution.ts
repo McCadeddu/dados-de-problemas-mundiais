@@ -1,10 +1,10 @@
-import { INCOME_DISTRIBUTION, type IncomeDistribution } from '../../src/lib/incomeDistribution.js'
+import { INCOME_DISTRIBUTION, parseIncomeFootnote, type IncomeDistribution } from '../../src/lib/incomeDistribution.js'
 import { fetchJsonWithRetry } from './http.js'
 
-export type IncomeRow = { indicator: { id: string }; countryiso3code: string; country: { value: string }; date: string; value: number | null; obs_status: string }
+export type IncomeRow = { indicator: { id: string }; countryiso3code: string; country: { value: string }; date: string; value: number | null; obs_status: string; footnote: string }
 type Envelope<T> = [{ page: number; pages: number; total: number; lastupdated?: string }, T[]]
 type Metadata = { id: string; name: string; source: { id: string }; sourceNote: string; sourceOrganization: string }
-export const incomeRequestUrl = (code: string) => `https://api.worldbank.org/v2/country/all/indicator/${code}?source=2&format=json&date=2000:2100&per_page=20000`
+export const incomeRequestUrl = (code: string) => `https://api.worldbank.org/v2/country/all/indicator/${code}?source=2&format=json&date=2000:2100&per_page=20000&footnote=y`
 const metadataUrl = (code: string) => `https://api.worldbank.org/v2/indicator/${code}?source=2&format=json`
 
 function complete<T>(raw: Envelope<T>) {
@@ -33,7 +33,10 @@ export function parseIncomeDistribution(inputs: { code: string; raw: Envelope<In
       if (!/^\d{4}$/.test(row.date) || Number(row.date) < 2000 || Number(row.date) > new Date(now).getUTCFullYear() || typeof row.obs_status !== 'string' || (row.value !== null && (typeof row.value !== 'number' || !Number.isFinite(row.value) || row.value < 0 || row.value > 100))) throw new Error('Distribuição: observação inválida')
       const entry = grouped.get(row.countryiso3code) ?? { indicatorId: definition.id, countryCode: row.countryiso3code, countryName: countryMap.get(row.countryiso3code)!, points: [] }
       if (entry.points.some(p => p.year === Number(row.date))) throw new Error('Distribuição: ano duplicado')
-      entry.points.push({ year: Number(row.date), value: row.value, status: row.obs_status })
+      if (typeof row.footnote !== 'string') throw new Error('Distribuição: nota por observação ausente')
+      const sourceIncomeMetadata = parseIncomeFootnote(row.footnote)
+      entry.points.push({ year: Number(row.date), value: row.value, status: row.obs_status, sourceFootnote: row.footnote,
+        ...(sourceIncomeMetadata ? { sourceIncomeMetadata } : {}) })
       grouped.set(row.countryiso3code, entry)
     }
     if (grouped.size !== countryMap.size || ![...grouped.values()].some(s => s.points.some(p => p.value !== null))) throw new Error('Distribuição: cobertura incompleta')
@@ -67,8 +70,9 @@ export async function collectIncomeDistribution(countries: { code: string; name:
 
 export function incomeDistributionCsv(data: IncomeDistribution) {
   const q = (v: unknown) => `"${String(v ?? '').replaceAll('"', '""')}"`
-  return '\ufeff' + [['indicador', 'codigo_fonte', 'pais', 'nome_pais', 'ano_pesquisa', 'valor', 'unidade', 'sinalizacao', 'atualizacao_base', 'coleta', 'ultima_tentativa', 'cache', 'consulta', 'metodologia', 'licenca'], ...data.series.flatMap(s => s.points.map(p => {
+  return '\ufeff' + [['indicador', 'codigo_fonte', 'pais', 'nome_pais', 'ano_pesquisa', 'valor', 'unidade', 'sinalizacao', 'atualizacao_base', 'coleta', 'ultima_tentativa', 'cache', 'consulta', 'metodologia', 'licenca', 'nota_wdi', 'pesquisa_wdi', 'conceito_wdi', 'tipo_distribuicao_wdi', 'restricao_cobertura_wdi'], ...data.series.flatMap(s => s.points.map(p => {
     const meta = data.indicators.find(i => i.id === s.indicatorId)!
-    return [s.indicatorId, meta.code, s.countryCode, s.countryName, p.year, p.value, '% da renda ou consumo', p.status, data.sourceUpdatedAt, data.fetchedAt, data.lastAttemptAt, data.cached, meta.requestUrl, meta.methodologyUrl, data.licenseUrl]
+    return [s.indicatorId, meta.code, s.countryCode, s.countryName, p.year, p.value, '% da renda ou consumo', p.status, data.sourceUpdatedAt, data.fetchedAt, data.lastAttemptAt, data.cached, meta.requestUrl, meta.methodologyUrl, data.licenseUrl,
+      p.sourceFootnote, p.sourceIncomeMetadata?.surveyAcronym, p.sourceIncomeMetadata?.welfareType, p.sourceIncomeMetadata?.distributionType, p.sourceIncomeMetadata?.coverageRestriction]
   }))].map(row => row.map(q).join(',')).join('\r\n') + '\r\n'
 }

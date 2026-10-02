@@ -1,7 +1,7 @@
 import { cleanup, fireEvent, render, screen, within } from '@testing-library/react'
 import { afterEach, expect, it, vi } from 'vitest'
 import { IncomeDistributionPanel } from './IncomeDistributionPanel'
-import { INCOME_DISTRIBUTION, type IncomeDistribution } from '../lib/incomeDistribution'
+import { INCOME_DISTRIBUTION, parseIncomeFootnote, type IncomeDistribution } from '../lib/incomeDistribution'
 
 const fixture: IncomeDistribution = {
   fetchedAt: '2026-10-02', lastAttemptAt: '2026-10-02', sourceUpdatedAt: '2026-07-13', cached: true, licenseUrl: 'https://data.worldbank.org/',
@@ -9,6 +9,16 @@ const fixture: IncomeDistribution = {
   series: INCOME_DISTRIBUTION.map((d, i) => ({ indicatorId: d.id, countryCode: 'BRA', countryName: 'Brasil', points: [{ year: 2023, value: i ? 0 : 40, status: '' }, { year: 2024, value: i ? null : 39.3, status: '' }] })),
 }
 afterEach(() => { cleanup(); vi.unstubAllGlobals() })
+it('shows the WDI declaration and its explicit urban coverage without assigning a PIP candidate', async () => {
+  const note = 'Based on data from EPHC-S2. Estimated from unit-record income data. Urban only.'
+  const data = { ...fixture, series: fixture.series.map(s => ({ ...s, points: s.points.map(p => ({ ...p, sourceFootnote: note, sourceIncomeMetadata: parseIncomeFootnote(note) })) })) }
+  vi.stubGlobal('fetch', vi.fn().mockImplementation(async (url: string) => url.includes('pip-survey-audit') ? { ok: false } : { ok: true, json: async () => data }))
+  render(<IncomeDistributionPanel countryCode="BRA" countryName="Brasil" />)
+  await screen.findByLabelText('Ano comum da distribuição')
+  expect(screen.getAllByText(/Identificação pela WDI: EPHC-S2; conceito renda/)).toHaveLength(2)
+  expect(screen.getAllByText(/Cobertura apenas urbana/)).toHaveLength(2)
+  expect(screen.getAllByText(`Nota WDI: ${note}`)).toHaveLength(2)
+})
 it('uses only a common year, keeps zero and shows unpaired years solely in history', async () => {
   vi.stubGlobal('fetch', vi.fn().mockImplementation(async (url: string) => url.includes('pip-survey-audit') ? { ok: false } : { ok: true, json: async () => fixture }))
   const view = render(<IncomeDistributionPanel countryCode="BRA" countryName="Brasil" />)
