@@ -28,6 +28,11 @@ brasileira; a estimativa de trabalho forçado é global, referente a 2021.
 
 ## Fontes principais
 
+Distribuição nacional: parcelas da renda ou consumo dos 10% mais ricos e dos
+20% mais pobres (Banco Mundial/PIP), com mapa, histórico e complemento nacional
+em ano comum. [Metodologia e limites](docs/distribuicao-renda.md).
+Atualização: `npm run data:income-distribution`.
+
 Pobreza agora inclui uma [comparação oficial entre país, regiões e mundo](docs/pobreza-agregados.md),
 na linha de US$ 8,30/dia em PPC de 2021, com ano selecionável e CSV/JSON.
 Atualização: `npm run data:poverty-aggregates` (incluída na coleta completa).

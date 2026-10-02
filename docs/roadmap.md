@@ -1,9 +1,20 @@
 # Roadmap
 
+## Distribuição de renda — 02/10/2026
+
+- Etapa de consolidação de 30/09 publicada; CI e deploy confirmados em 02/10.
+- Parcelas nacionais dos 10% superiores e 20% inferiores integradas via WDI/PIP:
+  168 países com observações por série, desde 2000, conforme disponibilidade.
+  Mapas e históricos; complemento nacional em ano comum; CSV/JSON, metadados e
+  atualização diária. Não há média continental/mundial dessas parcelas.
+- Conceito de renda/consumo e pesquisa por observação ainda exigem detalhamento
+  na PIP. Riqueza patrimonial permanece uma lacuna distinta. Ver
+  [distribuicao-renda.md](distribuicao-renda.md).
+
 ## Consolidação — 30/09/2026
 
-Estado: alterações de 30/09 validadas localmente (180 testes, TypeScript, lint e
-build, inclusive base GitHub Pages), ainda sem publicação. Registro em
+Estado: alterações de 30/09 publicadas (180 testes, TypeScript, lint e
+build, inclusive base GitHub Pages). CI e deploy remotos concluídos. Registro em
 [verificacao-2026-09-30.md](verificacao-2026-09-30.md).
 A cópia ativa é `C:/projetos/Mundialidade`; a pasta OneDrive é antiga.
 

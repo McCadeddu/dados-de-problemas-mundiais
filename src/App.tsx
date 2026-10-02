@@ -17,6 +17,7 @@ import { FeminicidePanel } from './components/FeminicidePanel'
 import { FEMINICIDE_RATE_ID, isFeminicideIndicator } from './lib/feminicide'
 import { HungerAggregatesPanel } from './components/HungerAggregatesPanel'
 import { PovertyAggregatesPanel } from './components/PovertyAggregatesPanel'
+import { IncomeDistributionPanel } from './components/IncomeDistributionPanel'
 import { SourceReviewPanel } from './components/SourceReviewPanel'
 import { comparisonSnapshot, permitsCountryRanking } from './lib/comparisonYear'
 import { ThemeCoveragePanel } from './components/ThemeCoveragePanel'
@@ -522,6 +523,7 @@ function App() {
           <IndicatorExplanation indicator={activeIndicator} source={activeSource} />
           {activeThemeId === 'hunger-water' && <HungerAggregatesPanel indicatorId={indicator.id} countrySeries={selectedCountrySeries} countryName={countryName} countryDataGeneratedAt={data.generatedAt} />}
           {indicator.id === 'wb-poverty-685' && <PovertyAggregatesPanel countryCode={countryCode} />}
+          {activeThemeId === 'poverty-inequality' && <IncomeDistributionPanel countryCode={countryCode} countryName={countryName} />}
           <section className="content-grid content-grid--states">
             <article className="panel country-callout"><span>Análise do país</span><h3>{countryName}</h3><p>{data.countries.find((country) => country.code === countryCode)?.continent ?? 'Continente não identificado'} • {indicator.name}</p>{countryGlobalRank > 0 && <p className="country-callout__rank">Posição por valor no recorte mundial em {snapshot?.year ?? 'ano indisponível'}: {countryGlobalRank} de {globalRanking.length} países com dados.</p>}<button className="text-button" onClick={() => { if (countryCode === 'BRA') { setContinent('Todos'); setComparisonCountryCodes((current) => ['BRA', ...current.filter((code) => code !== 'BRA')].slice(0, 5)) }; setView('world') }}>{countryCode === 'BRA' ? 'Comparar Brasil com outros países' : 'Voltar ao panorama mundial'}</button></article>
             <article className="panel">

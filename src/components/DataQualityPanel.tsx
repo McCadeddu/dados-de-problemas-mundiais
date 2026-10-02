@@ -2,6 +2,8 @@ import type { Indicator, LatestValue, Source } from '../types'
 import { genderMetadata } from '../lib/gender'
 
 const denominatorByIndicator: Record<string, string> = {
+  'wb-income-top-10': 'renda ou consumo total da população na pesquisa; os 10% superiores são ordenados por valor per capita',
+  'wb-income-bottom-20': 'renda ou consumo total da população na pesquisa; os 20% inferiores são ordenados por valor per capita',
   'ibge-state-food-insecurity': 'domicílios particulares permanentes da UF, urbanos e rurais, representados pela pesquisa',
   'ibge-state-food-insecurity-moderate': 'domicílios particulares permanentes da UF, urbanos e rurais, representados pela pesquisa',
   'ibge-state-food-insecurity-severe': 'domicílios particulares permanentes da UF, urbanos e rurais, representados pela pesquisa',

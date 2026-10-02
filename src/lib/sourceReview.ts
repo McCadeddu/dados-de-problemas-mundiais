@@ -32,7 +32,7 @@ export const SOURCE_REVIEWS: ThemeReview[] = [
   {
     themeId: 'poverty-inequality', name: 'Pobreza e desigualdade',
     rule: 'SI.POV.UMIC usa US$ 8,30/dia em PPC de 2021. Não concatenar com a antiga PPC de 2017. Pobreza relativa Eurostat e pobreza multidimensional POF permanecem separadas; média de Ginis não é Gini mundial.',
-    next: 'Agregados PIP via WDI integrados. Aprofundar renda versus consumo e ano de pesquisa; validar conectores regionais adicionais sem converter linhas nacionais por câmbio corrente.',
+    next: 'Agregados de pobreza e parcelas dos 10% superiores/20% inferiores via WDI integrados. Aprofundar renda versus consumo e pesquisa por observação; riqueza patrimonial continua pendente. Validar conectores regionais adicionais sem converter linhas nacionais por câmbio corrente.',
     sources: [
       source('Nacional · Brasil', 'IBGE — Síntese de Indicadores Sociais', sis, 'Descrição da edição 2025 localizada; acesso direto retornou 403 nesta consulta.', 'Complemento documental; conferir linha e PPC da edição antes de cruzar os números.'),
       source('Regional · América Latina e Caribe', 'CEPALSTAT — pobreza e distribuição de renda', cepal, 'Catálogo localizado; equivalência entre linhas não validada.', 'Consulta documental; não integrar taxas de linhas diferentes em uma mesma série.'),
@@ -41,6 +41,7 @@ export const SOURCE_REVIEWS: ThemeReview[] = [
       source('Regional · África', 'Banco Africano de Desenvolvimento — indicadores sociais', 'https://www.afdb.org/en/knowledge/publications/gender-poverty-and-environmental-indicators-on-african-countries', 'Catálogo de publicações de gênero, pobreza e ambiente localizado.', 'Referência documental; ainda não é um conector nem validação dos valores de cada tabela.'),
       source('Regional · Ilhas do Pacífico', 'Pacific Community — guia HIES', 'https://www.spc.int/DigitalLibrary/Doc/SDD/Capacity_Development__Guidance_notes/GN_Pacific_HIES_Toolkit_Data_Applications_and_Analysis.pdf?attachment=true', 'Guia localizado: pesquisas de renda/despesa e linhas de necessidades básicas.', 'Referência metodológica; linhas locais e agregados de consumo não equivalem automaticamente a US$ 8,30 em PPC de 2021.'),
       source('Mundial', 'Banco Mundial — SI.POV.UMIC / PIP', 'https://data.worldbank.org/indicator/SI.POV.UMIC', 'Página e API confirmaram US$ 8,30 e PPC de 2021.', 'Países, sete regiões e mundo integrados em uma única coleta; ano selecionável, histórico e exportação com proveniência.'),
+      source('Mundial · séries nacionais', 'Banco Mundial/PIP — distribuição da renda ou consumo', 'https://databank.worldbank.org/metadataglossary/world-development-indicators/series/SI.DST.10TH.10', 'Metadados e API consultados em 02/10/2026: parcelas dos 10% superiores e 20% inferiores; agregação NA.', '168 países com observações em cada série desde 2000. Mesmo ano não comprova pesquisa ou conceito equivalentes; sem média continental/mundial.'),
     ],
   },
   {

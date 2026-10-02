@@ -2,6 +2,7 @@ import { useId, useState } from 'react'
 import type { Indicator, Source } from '../types'
 import { genderMetadata } from '../lib/gender'
 import { HUNGER_AGGREGATE_INDICATORS } from '../lib/hungerAggregates'
+import { INCOME_DISTRIBUTION } from '../lib/incomeDistribution'
 
 const unitExplanations: Record<string, string> = {
   'vítimas': 'Contagem de vítimas registradas, sem denominador populacional. O número depende também do tamanho da população e do registro e classificação pela fonte; não é uma taxa de risco.',
@@ -38,6 +39,7 @@ export function IndicatorExplanation({ indicator, source }: { indicator: Indicat
       <h4>O que é e o que mede</h4>
       <p>{indicator.description.trim() || 'A definição deste indicador ainda não foi disponibilizada. Consulte a metodologia da fonte antes de interpretar o valor.'}</p>
       {indicator.id === 'wb-poverty-685' && <p><a href="https://data.worldbank.org/indicator/SI.POV.UMIC">Definição atual da linha de pobreza (Banco Mundial)</a> · <a href={`${import.meta.env.BASE_URL}data/poverty-definition-review.json`}>Conferência da série e dos metadados</a></p>}
+      {INCOME_DISTRIBUTION.some(d => d.id === indicator.id) && <p>Parcela da renda ou consumo nacional, não percentual de pessoas nem patrimônio. O ano corresponde à pesquisa ou ao início de sua coleta. Esta API não distingue renda e consumo por observação; confira a PIP antes de comparar. <a href={`https://databank.worldbank.org/metadataglossary/world-development-indicators/series/${INCOME_DISTRIBUTION.find(d => d.id === indicator.id)!.code}`}>Metodologia específica</a>.</p>}
       <h4>Como ler a unidade: {indicator.unit}</h4>
       <p>{unitExplanations[indicator.unit] ?? 'A unidade deve ser interpretada conforme a definição e a metodologia da fonte.'}</p>
       <h4>Como interpretar</h4>
