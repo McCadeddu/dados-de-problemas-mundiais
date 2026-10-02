@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import { INCOME_DISTRIBUTION, incomePairYears, type IncomeDistribution } from '../lib/incomeDistribution'
 import { aggregateValue } from '../lib/hungerAggregates'
+import { IncomeSurveyEvidence } from './IncomeSurveyEvidence'
 
 export function IncomeDistributionPanel({ countryCode, countryName }: { countryCode: string; countryName: string }) {
   const [data, setData] = useState<IncomeDistribution | null>(null)
@@ -27,7 +28,8 @@ export function IncomeDistributionPanel({ countryCode, countryName }: { countryC
     <p>Os grupos são definidos pela posição na distribuição per capita de cada país. A medida usa renda ou consumo da pesquisa domiciliar. Ela não mede patrimônio acumulado; o grupo mais rico reúne 10% das pessoas, enquanto o mais pobre reúne 20%.</p>
     {year !== undefined ? <><div className="controls"><label>Ano comum da distribuição<select value={year} onChange={e => setSelectedYear(Number(e.target.value))}>{years.map(y => <option key={y} value={y}>{y}</option>)}</select></label></div>
       <div className="hunger-water-panel__grid">{INCOME_DISTRIBUTION.map((d, i) => <article key={d.id}><h4>{d.name}</h4><strong>{aggregateValue(point(i, year)?.value)}</strong><p>Pesquisa: {year}. Parcela do total nacional.</p>{point(i, year)?.status && <p>Sinalização: {point(i, year)?.status}</p>}</article>)}</div></> : <p role="status">Sem observações das duas parcelas no mesmo ano para este país. Consulte o histórico; valores de anos distintos não preenchem este recorte.</p>}
-    <p>Mesmo ano não comprova a mesma pesquisa ou conceito: esta API não identifica por observação se a distribuição usa renda ou consumo, nem fornece aqui o identificador da pesquisa. Confira a PIP antes de comparar países ou interpretar mudanças históricas. Status vazio não comprova ausência de estimação.</p>
+    <p>Mesmo ano não comprova a mesma pesquisa ou conceito: a API WDI não identifica por observação se a distribuição usa renda ou consumo, nem fornece o identificador da pesquisa. A conferência PIP abaixo apresenta evidências separadas. Status vazio não comprova ausência de estimação.</p>
+    {year !== undefined && <IncomeSurveyEvidence countryCode={countryCode} year={year} wdiFetchedAt={data.fetchedAt} />}
     <details><summary>Histórico e fontes da distribuição</summary>
       <div className="national-data__table"><table><caption>Parcelas nacionais por ano — {countryName}</caption><thead><tr><th scope="col">Ano da pesquisa</th>{INCOME_DISTRIBUTION.map(d => <th key={d.id} scope="col">{d.name}</th>)}</tr></thead><tbody>{historyYears.map(y => <tr key={y}><td>{y}</td>{INCOME_DISTRIBUTION.map((d, i) => <td key={d.id}>{aggregateValue(point(i, y)?.value)}{point(i, y)?.status && ` · ${point(i, y)?.status}`}</td>)}</tr>)}</tbody></table></div>
       {data.indicators.map(meta => <div key={meta.id}><h4>{INCOME_DISTRIBUTION.find(d => d.id === meta.id)?.name}</h4><p>{meta.sourceNote}</p><p>{meta.sourceOrganization}</p><p><a href={meta.methodologyUrl}>Metodologia da parcela</a> · <a href={meta.metadataUrl}>Metadados</a> · <a href={meta.requestUrl}>Consulta dos valores</a></p></div>)}

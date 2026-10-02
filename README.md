@@ -32,6 +32,10 @@ Distribuição nacional: parcelas da renda ou consumo dos 10% mais ricos e dos
 20% mais pobres (Banco Mundial/PIP), com mapa, histórico e complemento nacional
 em ano comum. [Metodologia e limites](docs/distribuicao-renda.md).
 Atualização: `npm run data:income-distribution`.
+O complemento nacional também confere pesquisas candidatas na PIP por país,
+ano e coincidência das duas parcelas. Exibe conceito, sigla, edição e divergências;
+coincidência não comprova a pesquisa usada pela WDI. CSV/JSON de conferência
+disponíveis. Atualização isolada: `npm run data:pip-surveys`.
 
 Pobreza agora inclui uma [comparação oficial entre país, regiões e mundo](docs/pobreza-agregados.md),
 na linha de US$ 8,30/dia em PPC de 2021, com ano selecionável e CSV/JSON.

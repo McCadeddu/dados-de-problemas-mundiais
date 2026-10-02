@@ -10,7 +10,7 @@ const fixture: IncomeDistribution = {
 }
 afterEach(() => { cleanup(); vi.unstubAllGlobals() })
 it('uses only a common year, keeps zero and shows unpaired years solely in history', async () => {
-  vi.stubGlobal('fetch', vi.fn().mockResolvedValue({ ok: true, json: async () => fixture }))
+  vi.stubGlobal('fetch', vi.fn().mockImplementation(async (url: string) => url.includes('pip-survey-audit') ? { ok: false } : { ok: true, json: async () => fixture }))
   const view = render(<IncomeDistributionPanel countryCode="BRA" countryName="Brasil" />)
   const year = await screen.findByLabelText('Ano comum da distribuição')
   expect(year).toHaveValue('2023')
@@ -24,8 +24,9 @@ it('uses only a common year, keeps zero and shows unpaired years solely in histo
   expect(screen.queryByText('39,3%')).not.toBeInTheDocument()
 })
 it('offers retry after failure', async () => {
-  vi.stubGlobal('fetch', vi.fn().mockResolvedValueOnce({ ok: false }).mockResolvedValueOnce({ ok: true, json: async () => fixture }))
+  vi.stubGlobal('fetch', vi.fn().mockResolvedValue({ ok: false }).mockResolvedValueOnce({ ok: false }).mockResolvedValueOnce({ ok: true, json: async () => fixture }))
   render(<IncomeDistributionPanel countryCode="BRA" countryName="Brasil" />)
   fireEvent.click(await screen.findByRole('button', { name: 'Tentar novamente' }))
   expect(await screen.findByLabelText('Ano comum da distribuição')).toBeInTheDocument()
+  expect(await screen.findByRole('button', { name: 'Repetir conferência PIP' })).toBeVisible()
 })

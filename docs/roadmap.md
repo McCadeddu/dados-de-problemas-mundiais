@@ -1,5 +1,17 @@
 # Roadmap
 
+## Pesquisas e conceitos PIP — 02/10/2026
+
+- Conferência nacional por país/ano integrada, com edição PIP fixada e sem
+  interpolação: 1.137 pares com uma candidata coincidente, 689 inconclusivos
+  por precisão, 5 divergentes e 31 sem pesquisa elegível. CSV/JSON e atualização
+  diária incluídos.
+- Brasil/2024: candidata PNADC-E1, conceito renda. Coincidência numérica não
+  comprova vínculo com a pesquisa WDI; edições das bases são diferentes.
+- Pendente: comprovar vínculos WDI–pesquisa antes de automatizar filtros de
+  conceito para comparações internacionais. Riqueza patrimonial permanece
+  uma lacuna distinta. Detalhes em [distribuicao-renda.md](distribuicao-renda.md).
+
 ## Distribuição de renda — 02/10/2026
 
 - Etapa de consolidação de 30/09 publicada; CI e deploy confirmados em 02/10.
@@ -7,8 +19,8 @@
   168 países com observações por série, desde 2000, conforme disponibilidade.
   Mapas e históricos; complemento nacional em ano comum; CSV/JSON, metadados e
   atualização diária. Não há média continental/mundial dessas parcelas.
-- Conceito de renda/consumo e pesquisa por observação ainda exigem detalhamento
-  na PIP. Riqueza patrimonial permanece uma lacuna distinta. Ver
+- Conceito e pesquisa têm agora conferência separada na PIP; a identificação
+  definitiva da pesquisa WDI permanece pendente. Ver
   [distribuicao-renda.md](distribuicao-renda.md).
 
 ## Consolidação — 30/09/2026

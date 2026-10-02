@@ -63,6 +63,48 @@ Status vazio não comprova dado reportado nem ausência de estimação. Dados
 licenciados em CC BY 4.0 pelo Banco Mundial, com atribuição à cadeia WDI/PIP e
 instituições das pesquisas. A licença MIT do código não substitui essa licença.
 
-Próximas etapas: identificar conceito de renda/consumo e pesquisa por observação,
-ampliar desigualdade nacional/subnacional com conceitos compatíveis e pesquisar
-riqueza patrimonial em uma série própria.
+## Conferência das pesquisas PIP
+
+Integrada em 02/10/2026, com edição explícita `20260922_2021_01_02_PROD`,
+PPC 2021, todos os anos de pesquisa, sem preenchimento de lacunas. Foram
+coletadas 2.479 pesquisas. Entre os pares WDI disponíveis desde 2000,
+1.137 país-anos têm uma candidata com ambas as parcelas coincidentes,
+689 são inconclusivos pelo arredondamento, 5 têm parcelas divergentes
+e 31 não têm pesquisa nacional elegível.
+Contagens são de país-anos, não países. Para Brasil/2024, a candidata é
+PNADC-E1, conceito renda, com 39,33% e 3,91% na PIP.
+
+A conferência exige país e ano iguais, início do ano de pesquisa compatível,
+cobertura e nível nacionais, estimativa de pesquisa sem interpolação, e
+coincidência das duas parcelas considerando a precisão WDI (uma casa percentual)
+e a precisão observada na resposta PIP (quatro casas na fração de cada decil).
+Os 20% inferiores são a soma dos dois primeiros decis da PIP. Adota-se margem
+de arredondamento de 0,005 ponto percentual para um decil e 0,01 para a soma
+de dois. Valores junto aos limites de arredondamento WDI (0,05 ponto percentual)
+permanecem inconclusivos; coincidência requer que todo o intervalo PIP caiba
+na faixa WDI. A precisão da resposta é uma premissa desta conferência e deve
+ser revista caso a publicação da API mude. Não se escolhe
+entre múltiplas candidatas coincidentes. Não se atribui conceito ou pesquisa
+ao dado WDI somente por país e ano. Coincidência numérica é evidência, não
+prova de que a WDI utilizou aquela pesquisa; WDI julho/2026 e PIP setembro/2026
+são edições diferentes. As parcelas originais WDI não são substituídas.
+
+O painel nacional apresenta a conferência do ano selecionado. O CSV registra
+todos os resultados, inclusive divergência, limite de precisão, ambiguidade, ausência e par
+incompleto, e os valores de cada candidata. O JSON conserva as pesquisas e
+os campos de comparabilidade. O período comparável da PIP é nacional; não
+certifica equivalência internacional. O conceito candidato não é usado como
+filtro de comparabilidade internacional do mapa.
+
+`npm run data:pip-surveys` refaz somente esta conferência. Também roda ao fim
+de `data:income-distribution`, antes do catálogo nacional na coleta diária.
+Falhas ou perda de cobertura preservam as pesquisas anteriores e suas datas,
+recalculando a conferência contra a WDI atual. Uma conferência de outra coleta
+WDI não é exibida como evidência dos valores atuais. Sem cache, a coleta falha.
+Fontes: [API PIP](https://pip.worldbank.org/api),
+[cliente oficial](https://worldbank.github.io/pipr/reference/get_stats.html).
+Os dados seguem a licença Banco Mundial já documentada acima.
+
+Próximas etapas: comprovar vínculos WDI–pesquisa para automatizar filtros de
+conceito; ampliar desigualdade nacional/subnacional com conceitos compatíveis
+e pesquisar riqueza patrimonial em uma série própria.
