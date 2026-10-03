@@ -15,7 +15,11 @@ describe('IndicatorExplanation', () => {
     for (const config of EDUCATION_WORK_INDICATORS) {
       const indicator = catalog.indicators.find((item) => item.id === config.id)!
       const source = catalog.sources.find((item) => item.id === indicator.sourceId)!
-      expect(source.methodologyUrl).toBe(`https://databank.worldbank.org/metadataglossary/world-development-indicators/series/${config.code}`)
+      const directFlow = config.id === 'ilo-unemployment' ? 'DF_UNE_2EAP_SEX_AGE_RT'
+        : config.id === 'ilo-vulnerable-employment' ? 'DF_EMP_2EMP_SEX_STE_NB' : null
+      expect(source.methodologyUrl).toBe(directFlow
+        ? `https://sdmx.ilo.org/rest/dataflow/ILO/${directFlow}/1.0`
+        : `https://databank.worldbank.org/metadataglossary/world-development-indicators/series/${config.code}`)
     }
   })
   it('provides the catalog definition, unit and source for every selectable indicator', () => {

@@ -51,7 +51,7 @@ for (const artifact of artifacts) {
   const source = data.sources.find(s => s.id === indicator.sourceId)!
   source.name = 'OIT/ILOSTAT — API SDMX direta'
   source.url = artifact.metadata.requestUrl
-  source.methodologyUrl = 'https://webapps.ilo.org/ilostat-files/Documents/SDMX_User_Guide.pdf'
+  source.methodologyUrl = artifact.metadata.metadataUrl
   source.lastUpdated = artifact.metadata.sourceEdition
   source.license = 'Dados públicos OIT/ILOSTAT; citar fonte e cálculo'
   const latest = artifact.series.map(s => ({ indicatorId: id, geographyType: s.geographyType, geographyCode: s.geographyCode, geographyName: s.geographyName, ...s.points.at(-1)! }))
