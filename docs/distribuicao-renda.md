@@ -72,6 +72,28 @@ Metodologias oficiais:
 
 ## Operação e proveniência
 
+### Controle do histórico — 03/10/2026
+
+O histórico nacional mostra pesquisa, conceito, tipo de distribuição, restrição
+de cobertura e nota original em cada ano. Entre observações disponíveis de cada
+país e indicador, confere mudanças nos quatro campos documentados. A coleta de
+02/10 contém 296 transições com mudanças e 158 com metadados insuficientes,
+contando as duas séries separadamente. Mudança de sigla é uma declaração distinta
+na nota, não prova de quebra estatística nem de seu efeito sobre o indicador.
+
+Anos sem valor e zeros são preservados. A referência anterior é o último ano
+disponível da mesma série; lacunas recebem intervalo explícito, sem variação
+anual inferida. Uma observação com nota desconhecida não é atravessada para
+comparar pesquisas conhecidas distantes. Campos iguais não comprovam continuidade
+do desenho amostral, conceito detalhado ou comparabilidade metodológica.
+
+`income-history-review.csv` exporta todos os anos, controles, intervalos, notas
+atual/anterior e proveniência. O JSON identifica a data de revisão separadamente
+da coleta WDI. `npm run data:income-history` revê a coleta existente sem consultar
+novamente a fonte; também roda após a atualização das parcelas na coleta diária.
+As regras seguem as limitações de frequência e comparabilidade descritas na
+[metodologia WDI](https://databank.worldbank.org/metadataglossary/world-development-indicators/series/SI.DST.10TH.10).
+
 `npm run data:income-distribution` atualiza somente esse complemento. A coleta
 também está em `data:build`, executado pela atualização diária existente.
 

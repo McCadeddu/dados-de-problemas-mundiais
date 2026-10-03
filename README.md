@@ -32,6 +32,9 @@ Distribuição por país: parcelas da renda ou consumo dos 10% mais ricos e dos
 20% mais pobres (Banco Mundial/PIP), com mapa, histórico e complemento nacional
 em ano comum. [Metodologia e limites](docs/distribuicao-renda.md).
 Atualização: `npm run data:income-distribution`.
+O histórico nacional identifica mudanças nas notas de pesquisa, conceito e
+cobertura, mantendo lacunas explícitas. CSV/JSON do controle incluem as duas
+notas e os intervalos. Revisão isolada: `npm run data:income-history`.
 Notas por observação WDI identificam pesquisa e conceito quando disponíveis.
 O filtro mundial de renda/consumo usa essas declarações, exclui notas não
 classificadas e cobertura explicitamente urbana, e controla também o histórico

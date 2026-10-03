@@ -5,7 +5,8 @@
   "type": "module",
   "scripts": {
     "data:build": "tsx scripts/data/build.ts && npm run data:education-work && npm run data:food-security-states && npm run data:gender-states && npm run data:forced-labour && npm run data:hunger-aggregates && npm run data:poverty-aggregates && npm run data:income-distribution && npm run data:national",
-    "data:income-distribution": "tsx scripts/data/build-income-distribution.ts && npm run data:pip-surveys",
+    "data:income-distribution": "tsx scripts/data/build-income-distribution.ts && npm run data:income-history && npm run data:pip-surveys",
+    "data:income-history": "tsx scripts/data/build-income-history.ts",
     "data:pip-surveys": "tsx scripts/data/build-pip-survey-audit.ts",
     "data:poverty-aggregates": "tsx scripts/data/build-poverty-aggregates.ts",
     "data:hunger-aggregates": "tsx scripts/data/build-hunger-aggregates.ts",

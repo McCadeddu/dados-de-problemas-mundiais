@@ -1,5 +1,17 @@
 # Roadmap
 
+## Controle do histórico de distribuição — 03/10/2026
+
+- Transições entre observações disponíveis conferem sigla de pesquisa, conceito,
+  microdados/dados agrupados e restrição declarada de cobertura. A coleta WDI de
+  02/10 contém 296 mudanças nesses campos e 158 transições com notas insuficientes,
+  contando as duas séries separadamente. Não são contagens de países.
+- Histórico nacional exibe identificação por ano, campos alterados e intervalos
+  com lacunas. CSV/JSON do controle e atualização diária incluídos.
+- Não há certificação de continuidade por siglas iguais nem atribuição de
+  variação estatística à mudança de pesquisa. Detalhes em
+  [distribuicao-renda.md](distribuicao-renda.md).
+
 ## Notas WDI e filtro de conceito — 02/10/2026
 
 - Vínculo documental encontrado em `footnote=y`: sigla da pesquisa e conceito

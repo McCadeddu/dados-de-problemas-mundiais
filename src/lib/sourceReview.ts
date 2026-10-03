@@ -32,7 +32,7 @@ export const SOURCE_REVIEWS: ThemeReview[] = [
   {
     themeId: 'poverty-inequality', name: 'Pobreza e desigualdade',
     rule: 'SI.POV.UMIC usa US$ 8,30/dia em PPC de 2021. Não concatenar com a antiga PPC de 2017. Pobreza relativa Eurostat e pobreza multidimensional POF permanecem separadas; média de Ginis não é Gini mundial.',
-    next: 'Agregados, parcelas, notas WDI por observação, filtros de renda/consumo e conferência PIP integrados. Detalhar conceitos e desenhos das pesquisas declaradas; riqueza patrimonial continua pendente. Validar conectores regionais adicionais sem converter linhas nacionais por câmbio corrente.',
+    next: 'Agregados, parcelas, notas WDI, filtros de conceito, controle das mudanças no histórico e conferência PIP integrados. Detalhar conceitos e desenhos das pesquisas declaradas; riqueza patrimonial continua pendente. Validar conectores regionais adicionais sem converter linhas nacionais por câmbio corrente.',
     sources: [
       source('Nacional · Brasil', 'IBGE — Síntese de Indicadores Sociais', sis, 'Descrição da edição 2025 localizada; acesso direto retornou 403 nesta consulta.', 'Complemento documental; conferir linha e PPC da edição antes de cruzar os números.'),
       source('Regional · América Latina e Caribe', 'CEPALSTAT — pobreza e distribuição de renda', cepal, 'Catálogo localizado; equivalência entre linhas não validada.', 'Consulta documental; não integrar taxas de linhas diferentes em uma mesma série.'),
