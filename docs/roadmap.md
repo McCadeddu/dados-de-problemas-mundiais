@@ -1,5 +1,16 @@
 # Roadmap
 
+## Âmbitos territoriais na interface — 03/10/2026
+
+- Navegação principal: Problemáticas → Mundo → Continentes → Estados (países).
+- Mundo mantém o recorte global, mesmo depois de selecionar um continente.
+  A página de Continentes reúne o seletor continental, mapa, cobertura e
+  comparações permitidas pela metodologia do indicador.
+- Escolha, pesquisa e comparação de países ficam em Estados. UFs e regiões
+  IBGE aparecem dentro da análise do Brasil, com navegação subordinada.
+- Links anteriores de país, UF e região continuam válidos; a nova página
+  continental usa `visao=continents`.
+
 ## Controle do histórico de distribuição — 03/10/2026
 
 - Transições entre observações disponíveis conferem sigla de pesquisa, conceito,
