@@ -1,5 +1,30 @@
 # Roadmap
 
+## Matriz de cobertura e status — 03/10/2026
+
+- Cobertura por problemática e âmbito territorial, com referências documentais
+  separadas dos conjuntos integrados e lacunas explícitas.
+- Datas de publicação, coleta, tentativa, revisão e processamento distinguidas;
+  cache declarado pode ser filtrado. Ausência de metadados não implica sucesso.
+- Diagnóstico local incluído na coleta completa; arquivos de outra versão do
+  catálogo não são exibidos como matriz válida.
+- Ver [metodologia e atualização](cobertura-status.md). A configuração do projeto
+  no aplicativo ainda aponta para a cópia antiga no OneDrive; o repositório ativo
+  permanece em `C:/projetos/Mundialidade`.
+
+## Retomada consolidada — 03/10/2026
+
+Revisadas as seis conversas do projeto e a conversa inicial relacionada no
+ChatGPT, confrontando os pedidos com o código e os dados atuais. Ver
+[retomada-projeto-2026-10-03.md](retomada-projeto-2026-10-03.md).
+
+Ordem recomendada: consolidar pasta ativa e cobertura/status; recuperar dados
+elegíveis de trabalho; integrar discriminação social; concluir um indicador
+AdaptaBrasil; aprofundar pobreza/riqueza; ampliar agregados e recortes internos.
+Nos dados ativos, o cruzamento trabalho–migração tem zero país-anos elegíveis
+porque as duas séries de trabalho não têm classificação comprovada. Não remover
+a proteção metodológica para produzir resultados.
+
 ## Clareza dos filtros territoriais — 03/10/2026
 
 - Continentes exibidos em português; códigos das fontes e links preservados.
@@ -77,7 +102,7 @@ build, inclusive base GitHub Pages). CI e deploy remotos concluídos. Registro e
 [verificacao-2026-09-30.md](verificacao-2026-09-30.md).
 A cópia ativa é `C:/projetos/Mundialidade`; a pasta OneDrive é antiga.
 
-1. Concluir validação conjunta e preparar publicação das correções locais.
+1. Validação conjunta e publicação das correções concluídas; manter verificações por entrega.
 2. Fechar pobreza/desigualdade: aprofundar concentração de renda e distinguir riqueza.
 3. Trabalho: obter classificação OIT por observação e agregados oficiais regionais/mundiais.
 4. Recuperar discriminação social e integração efetiva AdaptaBrasil.

@@ -20,6 +20,10 @@ brasileira; a estimativa de trabalho forçado é global, referente a 2021.
 
 ## Arquitetura
 
+A [matriz de cobertura e status](docs/cobertura-status.md) distingue conjuntos
+integrados, referências documentais, âmbitos territoriais e datas da coleta.
+Diagnóstico local: `npm run data:coverage-status` (incluído na coleta completa).
+
 - `scripts/data/build.ts`: coleta dados públicos e normaliza o schema.
 - `public/data/`: artefatos gerados consumidos pelo frontend.
 - `src/`: dashboard responsivo, mapas, gráficos e filtros.

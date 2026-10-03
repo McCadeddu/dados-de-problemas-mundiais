@@ -422,6 +422,11 @@ select {
 }
 
 .comparison-filter-notice { border-left: 3px solid var(--theme-accent); }
+.coverage-status summary { cursor: pointer; padding: 0.7rem 0; font-weight: 600; }
+.coverage-status small { display: block; margin-top: 0.4rem; font-weight: 400; }
+.coverage-status__current { background: rgba(148, 163, 184, 0.12); }
+.coverage-status td { min-width: 10rem; }
+.coverage-status th { min-width: 12rem; }
 .country-search-feedback { margin: 0 0 1.5rem; color: #cbd5e1; }
 .country-search-feedback button { margin-left: 0.5rem; }
 
