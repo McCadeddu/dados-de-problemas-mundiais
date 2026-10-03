@@ -1,5 +1,17 @@
 # Roadmap
 
+## Clareza dos filtros territoriais — 03/10/2026
+
+- Continentes exibidos em português; códigos das fontes e links preservados.
+- Trocar continente preserva o país escolhido quando ele pertence ao recorte
+  e mantém a lista de comparação. Países fora do filtro são identificados,
+  com ação para recuperar a comparação completa.
+- Cobertura por ano exibe observações válidas e ausências separadamente;
+  recortes vazios orientam a revisão do ano e dos filtros. Pesquisa sem
+  resultados mantém a seleção atual e permite limpar o termo.
+- Comparações indicam o limite de cinco territórios e como remover escolhas;
+  navegação em duas colunas também atende telas intermediárias.
+
 ## Âmbitos territoriais na interface — 03/10/2026
 
 - Navegação principal: Problemáticas → Mundo → Continentes → Estados (países).

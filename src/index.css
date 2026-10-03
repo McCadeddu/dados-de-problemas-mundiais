@@ -414,6 +414,21 @@ select {
 .subdivision-navigation button[aria-current="page"] { font-weight: 700; text-decoration: underline; }
 .subdivision-navigation button:disabled { opacity: 0.45; cursor: not-allowed; }
 
+.comparison-coverage progress {
+  display: block;
+  width: min(100%, 32rem);
+  height: 0.8rem;
+  accent-color: var(--theme-accent);
+}
+
+.comparison-filter-notice { border-left: 3px solid var(--theme-accent); }
+.country-search-feedback { margin: 0 0 1.5rem; color: #cbd5e1; }
+.country-search-feedback button { margin-left: 0.5rem; }
+
+@media (min-width: 561px) and (max-width: 1100px) {
+  .view-switcher { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+
 .hierarchy {
   display: flex;
   flex-wrap: wrap;

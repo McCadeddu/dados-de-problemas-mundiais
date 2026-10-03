@@ -47,7 +47,8 @@ import type { DashboardData, LatestValue, MigrationFlow, Series } from './types'
 
 type GeoJson = GeoJSON.FeatureCollection
 import { TerritorialNavigation } from './components/TerritorialNavigation'
-import { territorialScope, type ViewMode } from './lib/territorialNavigation'
+import { ComparisonCoverage } from './components/ComparisonCoverage'
+import { continentName, countryInContinent, territorialScope, type ViewMode } from './lib/territorialNavigation'
 
 const THEME_MAP_COLORS: Record<string, string[]> = {
   'hunger-water': ['#dcfce7', '#86efac', '#4ade80', '#16a34a', '#166534'],
@@ -331,7 +332,9 @@ function App() {
   const worldPopulation = data.worldPopulation
     ? Math.round(data.worldPopulation.value + (data.worldPopulation.annualChange * ((clockNow - new Date(data.worldPopulation.referenceYear, 0, 1).getTime()) / (365.25 * 24 * 60 * 60 * 1000))))
     : null
-  const countryName = data.countries.find((country) => country.code === countryCode)?.name ?? countryCode
+  const selectedCountry = data.countries.find((country) => country.code === countryCode)
+  const countryName = selectedCountry?.name ?? countryCode
+  const countryContinent = selectedCountry ? continentName(selectedCountry.continent) : 'Continente não identificado'
   const stateName = data.brazilStates.find((state) => state.code === stateCode)?.name ?? stateCode
   const activeIndicator = effectiveView === 'world' || effectiveView === 'continents' || effectiveView === 'country'
     ? indicator
@@ -361,7 +364,7 @@ function App() {
   const filteredCountries = continent === 'Todos'
     ? data.countries
     : data.countries.filter((country) => country.continent === continent)
-  const countryMatches = filteredCountries.filter((country) => country.name.toLocaleLowerCase('pt-BR').includes(countryQuery.toLocaleLowerCase('pt-BR')))
+  const countryMatches = filteredCountries.filter((country) => country.name.toLocaleLowerCase('pt-BR').includes(countryQuery.trim().toLocaleLowerCase('pt-BR')))
   const countryChoiceOptions = countryMatches.some((country) => country.code === countryCode)
     ? countryMatches
     : [
@@ -393,13 +396,14 @@ function App() {
   const comparisonStates = data.brazilStates.filter((state) => comparisonStateCodes.includes(state.code))
   const comparisonLatest = brazilLatest.filter((item) => comparisonStateCodes.includes(item.geographyCode))
   const comparisonChartData = buildComparisonChartData(data, brazilIndicator.id, comparisonStates)
+  const hiddenComparisonCountries = data.countries.filter(country => comparisonCountryCodes.includes(country.code) && !filteredCountries.some(available => available.code === country.code))
   const comparisonCountries = filteredCountries.filter((country) => comparisonCountryCodes.includes(country.code))
   const comparisonCountryLatest = continentValues.filter((item) => comparisonCountryCodes.includes(item.geographyCode))
   const comparisonHistoryData = isIncomeDistribution(indicator.id) && incomeConcept !== 'all'
     ? { ...data, series: data.series.map(s => s.indicatorId === indicator.id
       ? { ...s, points: s.points.filter(p => permitsIncomeConcept(p.sourceIncomeMetadata, incomeConcept)) } : s) } : data
   const comparisonCountryChartData = buildComparisonChartData(comparisonHistoryData, indicator.id, comparisonCountries)
-  const continentTerritories = data.continents.map((name) => ({ code: name, name }))
+  const continentTerritories = data.continents.map((code) => ({ code, name: continentName(code) }))
   const comparisonContinents = continentTerritories.filter((item) => comparisonContinentCodes.includes(item.code))
   const continentLatest = buildContinentLatestValues(data, indicator.id)
   const comparisonContinentLatest = continentLatest.filter((item) => comparisonContinentCodes.includes(item.geographyCode))
@@ -419,7 +423,7 @@ function App() {
             <div className="controls"><label>Ano comum da comparação<select value={snapshot?.year ?? ''} disabled={!snapshot?.years.length} onChange={event => setComparisonYear(Number(event.target.value))}>{!snapshot?.years.length && <option value="">Aguardando série</option>}{snapshot?.years.map(year => <option key={year} value={year}>{year}</option>)}</select></label></div>
             {isIncomeDistribution(indicator.id) && <><div className="controls"><label>Conceito documentado na WDI<select value={incomeConcept} onChange={event => setIncomeConcept(event.target.value as IncomeConcept)}><option value="all">Todos os conceitos e coberturas</option><option value="income">Somente renda documentada, excluindo cobertura urbana</option><option value="consumption">Somente consumo documentado, excluindo cobertura urbana</option></select></label></div><p>O filtro usa as notas da própria observação WDI e também controla o histórico comparativo. Notas ausentes ou não reconhecidas ficam fora dos filtros de renda/consumo. Mesmo conceito e ano não garantem equivalência entre pesquisas. A ausência de restrição urbana na nota não comprova cobertura nacional.</p>
               <details><summary>Pesquisas e conceitos das {snapshot?.values.length ?? 0} observações do recorte</summary><div className="national-data__table"><table><thead><tr><th>País</th><th>Pesquisa WDI</th><th>Conceito WDI</th><th>Nota da fonte</th></tr></thead><tbody>{snapshot?.values.map(row => <tr key={row.geographyCode}><td>{row.geographyName}</td><td>{row.sourceIncomeMetadata?.surveyAcronym ?? 'Não identificado'}</td><td>{row.sourceIncomeMetadata ? row.sourceIncomeMetadata.welfareType === 'income' ? 'Renda' : 'Consumo' : 'Não identificado'}</td><td>{row.sourceFootnote || 'Nota não disponível'}</td></tr>)}</tbody></table></div><p><a href={`${import.meta.env.BASE_URL}data/income-distribution.csv`} download>Baixar valores e notas WDI (CSV)</a></p></details></>}
-            <p>{snapshot?.values.length ?? 0} de {snapshot?.total ?? 0} países e territórios com dado em {snapshot?.year ?? 'ano ainda indisponível'}. Valores de outros anos não preenchem ausências. O ano comum é necessário, mas não garante que conceitos e pesquisas sejam equivalentes.</p>
+            <ComparisonCoverage count={snapshot?.values.length ?? 0} total={snapshot?.total ?? 0} year={snapshot?.year} loading={activeSeriesLoading} />
             {!!snapshot?.excluded.length && <details><summary>Ver {snapshot.excluded.length} territórios excluídos deste recorte</summary><p>{snapshot.excluded.map(c => c.name).join('; ')}.</p><p>Sem observação única e válida no ano selecionado ou fora do filtro de conceito e cobertura; ausência não é zero.</p></details>}
             <p className="meta">{effectiveView === 'country' ? 'Este seletor controla os cartões de comparação entre países e a posição mundial do país escolhido.' : 'Este seletor controla o mapa, panorama e ranking abaixo.'} Complementos oficiais e históricos têm seletores próprios e identificam seus períodos.</p>
           </section>)
@@ -430,6 +434,7 @@ function App() {
             description={`Selecione de 2 a 5 países do recorte atual. Os cartões mostram apenas ${snapshot?.year ?? 'o ano selecionado'}; o gráfico preserva o histórico. ${permitsCountryRanking(indicator.id) ? 'Confira conceito e população de referência.' : 'Estimativas OIT para contexto; observações imputadas não permitem inferir diferenças de desempenho entre países.'}`}
             territories={filteredCountries}
             selectedCodes={comparisonCountryCodes.filter((code) => filteredCountries.some((country) => country.code === code))}
+            selectionCount={comparisonCountryCodes.length}
             latestValues={comparisonCountryLatest}
             chartData={comparisonCountryChartData}
             unit={indicator.unit}
@@ -469,7 +474,7 @@ function App() {
 
       <p className="hierarchy" aria-label="Caminho de análise">
         Problemática: <strong>{data.themes.find((theme) => theme.id === activeThemeId)?.name}</strong>
-        <span>›</span> {effectiveView === 'world' ? 'Mundo' : effectiveView === 'continents' ? `Continentes › ${continent === 'Todos' ? 'Todos os continentes' : continent}` : effectiveView === 'country' ? `Estados › ${countryName}` : effectiveView === 'states' ? 'Estados › Brasil › UFs' : `Estados › Brasil › ${stateName} › Regiões Imediatas`}
+        <span>›</span> {effectiveView === 'world' ? 'Mundo' : effectiveView === 'continents' ? `Continentes › ${continentName(continent)}` : effectiveView === 'country' ? `Estados › ${countryName}` : effectiveView === 'states' ? 'Estados › Brasil › UFs' : `Estados › Brasil › ${stateName} › Regiões Imediatas`}
       </p>
       {activeSeriesLoading && <p className="series-loading" role="status">Carregando série histórica e comparações para esta visualização...</p>}
       {seriesLoadError && <p className="comparison-warning" role="alert">{seriesLoadError}</p>}
@@ -478,7 +483,7 @@ function App() {
         <>
           <section className="panel controls controls--world">
             <label>Indicador<select value={indicatorId} onChange={(event) => setSelectedIndicatorId(event.target.value)}>{themeIndicators.map((item) => <option key={item.id} value={item.id}>{item.name}</option>)}</select></label>
-            {effectiveView === 'continents' && <label>Continente<select value={continent} onChange={(event) => { const nextContinent = event.target.value; const nextCountries = nextContinent === 'Todos' ? data.countries : data.countries.filter((country) => country.continent === nextContinent); setContinent(nextContinent); setCountryQuery(''); setCountryCode(nextCountries[0]?.code ?? ''); setComparisonCountryCodes(nextCountries.slice(0, 3).map((country) => country.code)) }}><option value="Todos">Todos os continentes</option>{data.continents.map((item) => <option key={item} value={item}>{item}</option>)}</select></label>}
+            {effectiveView === 'continents' && <label>Continente<select value={continent} onChange={(event) => { const nextContinent = event.target.value; setContinent(nextContinent); setCountryQuery(''); setCountryCode(countryInContinent(data.countries, countryCode, nextContinent)) }}><option value="Todos">Todos os continentes</option>{data.continents.map((item) => <option key={item} value={item}>{continentName(item)}</option>)}</select></label>}
           </section>
           {comparisonControls}
           <IndicatorExplanation indicator={activeIndicator} source={activeSource} />
@@ -499,14 +504,14 @@ function App() {
 
           </>}
           <section className="content-grid content-grid--world">
-            <MapPanel title={effectiveView === 'world' ? 'Mapa mundial' : `Mapa por continente: ${continent === 'Todos' ? 'todos' : continent}`} subtitle={`${indicator.name} • ${snapshot?.year ?? 'carregando ano'} • clique para destacar um país`} geography={worldGeo} valueByCode={worldValueByCode} codeKeys={['ADM0_A3', 'ISO_A3', 'SOV_A3', 'gu_a3']} onSelect={(code) => { setCountryCode(code); setCountryQuery('') }} selectedCode={countryCode} formatValue={(value) => formatValue(value, indicator.unit)} direction={indicator.direction} projectionKind="peters" colors={THEME_MAP_COLORS[activeThemeId]} selectedColor="var(--theme-accent)" />
+            <MapPanel title={effectiveView === 'world' ? 'Mapa mundial' : `Mapa por continente: ${continentName(continent)}`} subtitle={`${indicator.name} • ${snapshot?.year ?? 'carregando ano'} • clique para destacar um país`} geography={worldGeo} valueByCode={worldValueByCode} codeKeys={['ADM0_A3', 'ISO_A3', 'SOV_A3', 'gu_a3']} onSelect={(code) => { setCountryCode(code); setCountryQuery('') }} selectedCode={countryCode} formatValue={(value) => formatValue(value, indicator.unit)} direction={indicator.direction} projectionKind="peters" colors={THEME_MAP_COLORS[activeThemeId]} selectedColor="var(--theme-accent)" />
             <article className="panel">
-              <div className="panel__header"><div><h3>{scopeContinent === 'Todos' ? (effectiveView === 'world' ? 'Panorama mundial' : 'Panorama dos continentes') : `Panorama: ${scopeContinent}`}</h3><p>{indicator.description}</p>{continentAverage && <p className="context-metric">Estimativa do painel para o recorte: {formatValue(continentAverage.value, indicator.unit)} ({continentAverage.coverage} países · {continentAverage.firstYear}; não é agregado oficial)</p>}</div><strong className="badge">{snapshot?.year ?? '—'}</strong></div>
+              <div className="panel__header"><div><h3>{scopeContinent === 'Todos' ? (effectiveView === 'world' ? 'Panorama mundial' : 'Panorama dos continentes') : `Panorama: ${continentName(scopeContinent)}`}</h3><p>{indicator.description}</p>{continentAverage && <p className="context-metric">Estimativa do painel para o recorte: {formatValue(continentAverage.value, indicator.unit)} ({continentAverage.coverage} países · {continentAverage.firstYear}; não é agregado oficial)</p>}</div><strong className="badge">{snapshot?.year ?? '—'}</strong></div>
               <div className="world-summary"><strong>{continentValues.length}</strong><span>países com dado no ano e recorte selecionados</span><p>Use o mapa e as regras metodológicas para observar diferenças antes de escolher um país.</p></div>
               <p className="meta">Fonte: <a href={activeSource?.url}>{activeSource?.name}</a> • Atualização conhecida: {activeSource?.lastUpdated}</p>
             </article>
           </section>
-          {permitsCountryRanking(indicator.id) ? <RankingPanel title={scopeContinent === 'Todos' ? 'Ranking global' : `Ranking: ${scopeContinent}`} description={`Até 10 países com os maiores valores em ${snapshot?.year ?? 'ano indisponível'}; ordenação descritiva dos países com dado, sem preencher lacunas.`} ranking={worldRanking} unit={indicator.unit} direction={indicator.direction} color="#2563eb" tooltipFormatter={tooltipFormatter} /> : <section className="panel"><h3>Ranking nacional suspenso</h3><p>A fonte OIT contém estimativas imputadas que não devem sustentar rankings entre países. A base atual não identifica essa condição por observação. O mapa serve como contexto, não como classificação de desempenho.</p><a href="https://databank.worldbank.org/metadataglossary/world-development-indicators/series/SL.UEM.TOTL.ZS">Consultar a restrição metodológica</a></section>}
+          {permitsCountryRanking(indicator.id) ? <RankingPanel title={scopeContinent === 'Todos' ? 'Ranking global' : `Ranking: ${continentName(scopeContinent)}`} description={`Até 10 países com os maiores valores em ${snapshot?.year ?? 'ano indisponível'}; ordenação descritiva dos países com dado, sem preencher lacunas.`} ranking={worldRanking} unit={indicator.unit} direction={indicator.direction} color="#2563eb" tooltipFormatter={tooltipFormatter} /> : <section className="panel"><h3>Ranking nacional suspenso</h3><p>A fonte OIT contém estimativas imputadas que não devem sustentar rankings entre países. A base atual não identifica essa condição por observação. O mapa serve como contexto, não como classificação de desempenho.</p><a href="https://databank.worldbank.org/metadataglossary/world-development-indicators/series/SL.UEM.TOTL.ZS">Consultar a restrição metodológica</a></section>}
           {effectiveView === 'continents' && !supportsPopulationAverage && <section className="panel"><h3>Limites da comparação continental</h3><p>Este indicador não permite uma média continental ponderada pela população total. Selecione um continente para ver os dados dos países com cobertura, sem criar um agregado continental artificial.</p></section>}
           {effectiveView === 'continents' && supportsPopulationAverage && <TerritoryComparisonPanel
             title="Comparar continentes"
@@ -530,21 +535,26 @@ function App() {
         </>
       ) : effectiveView === 'country' ? (
         <>
+          <section className="panel"><h2>Estados: escolher e comparar países</h2><p>Neste âmbito, Estado significa país soberano. Os estados federados brasileiros são subdivisões do Brasil e aparecem dentro de sua análise nacional.</p></section>
           <section className="panel controls controls--country">
             <label>Indicador<select value={indicatorId} onChange={(event) => setSelectedIndicatorId(event.target.value)}>{themeIndicators.map((item) => <option key={item.id} value={item.id}>{item.name}</option>)}</select></label>
-            <label>Filtrar países por continente<select value={continent} onChange={(event) => { const nextContinent = event.target.value; const nextCountries = nextContinent === 'Todos' ? data.countries : data.countries.filter((country) => country.continent === nextContinent); setContinent(nextContinent); setCountryCode(nextCountries[0]?.code ?? '') }}><option value="Todos">Mundo inteiro</option>{data.continents.map((item) => <option key={item} value={item}>{item}</option>)}</select></label>
+            <label>Filtrar países por continente<select value={continent} onChange={(event) => { const nextContinent = event.target.value; setContinent(nextContinent); setCountryQuery(''); setCountryCode(countryInContinent(data.countries, countryCode, nextContinent)) }}><option value="Todos">Mundo inteiro</option>{data.continents.map((item) => <option key={item} value={item}>{continentName(item)}</option>)}</select></label>
             <label>Pesquisar Estado / país<input value={countryQuery} onChange={event => setCountryQuery(event.target.value)} placeholder="Digite um nome" /></label>
             <label>Estado soberano / país<select value={countryCode} onChange={(event) => setCountryCode(event.target.value)}>{countryChoiceOptions.map((country) => <option key={country.code} value={country.code}>{country.name}</option>)}</select></label>
           </section>
-          <section className="panel"><h2>Estados: escolher e comparar países</h2><p>Neste âmbito, Estado significa país soberano. Os estados federados brasileiros são subdivisões do Brasil e aparecem dentro de sua análise nacional.</p></section>
+          {countryQuery.trim() && <p className="country-search-feedback" role="status">{countryMatches.length ? `${countryMatches.length} resultado(s) para “${countryQuery}”.` : `Nenhum país encontrado para “${countryQuery}” neste recorte.`} A seleção atual permanece até você escolher outro país. <button className="text-button" onClick={() => setCountryQuery('')}>Limpar pesquisa</button></p>}
           {comparisonControls}
+          {!!hiddenComparisonCountries.length && <section className="panel comparison-filter-notice" aria-label="Países ocultos pelo filtro continental">
+            <p>Escolhas preservadas fora de {continentName(continent)}: <strong>{hiddenComparisonCountries.map(country => country.name).join(', ')}</strong>. Esses países ficam fora dos gráficos deste recorte.</p>
+            <button className="text-button" onClick={() => { setContinent('Todos'); setCountryQuery('') }}>Mostrar todos os países da comparação</button>
+          </section>}
           {countryComparison}
           <IndicatorExplanation indicator={activeIndicator} source={activeSource} />
           {activeThemeId === 'hunger-water' && <HungerAggregatesPanel indicatorId={indicator.id} countrySeries={selectedCountrySeries} countryName={countryName} countryDataGeneratedAt={data.generatedAt} />}
           {indicator.id === 'wb-poverty-685' && <PovertyAggregatesPanel countryCode={countryCode} />}
           {activeThemeId === 'poverty-inequality' && <IncomeDistributionPanel countryCode={countryCode} countryName={countryName} />}
           <section className="content-grid content-grid--states">
-            <article className="panel country-callout"><span>Análise do país</span><h3>{countryName}</h3><p>{data.countries.find((country) => country.code === countryCode)?.continent ?? 'Continente não identificado'} • {indicator.name}</p>{countryGlobalRank > 0 && <p className="country-callout__rank">Posição por valor no recorte mundial em {snapshot?.year ?? 'ano indisponível'}: {countryGlobalRank} de {globalRanking.length} países com dados.</p>}<button className="text-button" onClick={() => { if (countryCode === 'BRA') { setContinent('Todos'); setComparisonCountryCodes((current) => ['BRA', ...current.filter((code) => code !== 'BRA')].slice(0, 5)) }; setView('country'); document.getElementById('comparar-paises')?.scrollIntoView({ behavior: 'smooth' }) }}>{countryCode === 'BRA' ? 'Comparar Brasil com outros países' : 'Voltar à comparação entre países'}</button></article>
+            <article className="panel country-callout"><span>Análise do país</span><h3>{countryName}</h3><p>{countryContinent} • {indicator.name}</p>{countryGlobalRank > 0 && <p className="country-callout__rank">Posição por valor no recorte mundial em {snapshot?.year ?? 'ano indisponível'}: {countryGlobalRank} de {globalRanking.length} países com dados.</p>}<button className="text-button" onClick={() => { if (countryCode === 'BRA') { setContinent('Todos'); setComparisonCountryCodes((current) => ['BRA', ...current.filter((code) => code !== 'BRA')].slice(0, 5)) }; setView('country'); document.getElementById('comparar-paises')?.scrollIntoView({ behavior: 'smooth' }) }}>{countryCode === 'BRA' ? 'Comparar Brasil com outros países' : 'Voltar à comparação entre países'}</button></article>
             <article className="panel">
               <div className="panel__header"><div><h3>Evolução de {countryName}</h3><p>{indicator.description}</p></div><strong className="badge">{indicator.latestYear}</strong></div>
               <div className="chart"><ResponsiveContainer width="100%" height={300}><LineChart data={selectedCountrySeries?.points ?? []}><CartesianGrid stroke="#334155" strokeDasharray="4 4" /><XAxis dataKey="year" stroke="#a8b8cc" /><YAxis stroke="#a8b8cc" /><Tooltip formatter={tooltipFormatter(indicator.unit)} /><Line type="monotone" dataKey="value" stroke="#2dd4bf" strokeWidth={3} dot={false} /></LineChart></ResponsiveContainer></div>
@@ -726,6 +736,7 @@ type TerritoryComparisonPanelProps = {
   description: string
   territories: Array<{ code: string; name: string }>
   selectedCodes: string[]
+  selectionCount?: number
   latestValues: DashboardData['latest']
   chartData: Array<Record<string, number | string>>
   unit: string
@@ -778,7 +789,7 @@ function buildContinentLatestValues(data: DashboardData, indicatorId: string): L
       indicatorId,
       geographyType: 'country' as const,
       geographyCode: continent,
-      geographyName: continent,
+      geographyName: continentName(continent),
       year: weightedAverage.firstYear,
       value: weightedAverage.value,
     }]
@@ -818,14 +829,14 @@ function buildContinentComparisonChartData(
   })
 }
 
-function TerritoryComparisonPanel({ sectionId, snapshotLabel = 'Último valor disponível', title, description, territories, selectedCodes, latestValues, chartData, unit, color, territoryLabel, onAdd, onRemove, tooltipFormatter }: TerritoryComparisonPanelProps) {
+function TerritoryComparisonPanel({ sectionId, snapshotLabel = 'Último valor disponível', title, description, territories, selectedCodes, selectionCount = selectedCodes.length, latestValues, chartData, unit, color, territoryLabel, onAdd, onRemove, tooltipFormatter }: TerritoryComparisonPanelProps) {
   const selectedTerritories = territories.filter((territory) => selectedCodes.includes(territory.code))
   const latestByCode = new Map(latestValues.map((item) => [item.geographyCode, item]))
   const territoriesWithoutData = selectedTerritories.filter((territory) => !latestByCode.has(territory.code))
   return <section id={sectionId} className="panel comparison-panel">
     <div className="panel__header"><div><h3>{title}</h3><p>{description}</p></div></div>
     <div className="comparison-controls">
-      <select aria-label={`Adicionar ${territoryLabel} à comparação`} defaultValue="" onChange={(event) => { onAdd(event.target.value); event.target.value = '' }}>
+      <select aria-label={`Adicionar ${territoryLabel} à comparação`} defaultValue="" disabled={selectionCount >= 5} onChange={(event) => { onAdd(event.target.value); event.target.value = '' }}>
         <option value="">Adicionar {territoryLabel}</option>
         {territories.filter((territory) => !selectedCodes.includes(territory.code)).map((territory) => <option key={territory.code} value={territory.code}>{territory.name}</option>)}
       </select>
@@ -833,11 +844,12 @@ function TerritoryComparisonPanel({ sectionId, snapshotLabel = 'Último valor di
         {selectedTerritories.map((territory, index) => <button key={territory.code} className="comparison-chip" style={{ '--chip-color': COMPARISON_COLORS[index] } as CSSProperties} onClick={() => onRemove(territory.code)} title="Remover da comparação">{territory.name} <span>×</span></button>)}
       </div>
     </div>
+    <p className="meta" role="status">{selectionCount} de 5 territórios selecionados. {selectionCount !== selectedTerritories.length && `${selectedTerritories.length} visíveis no filtro. `}{selectionCount >= 5 ? 'Limite atingido: remova um território para adicionar outro.' : selectedTerritories.length < 2 ? 'Adicione pelo menos dois territórios neste recorte para comparar.' : 'Use × para remover um território.'}</p>
     {territoriesWithoutData.length > 0 && <p className="comparison-warning">{snapshotLabel}: sem dado para {territoriesWithoutData.map((territory) => territory.name).join(', ')}. Não aparecem nas barras deste recorte; o histórico pode conter outros anos.</p>}
-    <div className="comparison-grid">
+    {selectedTerritories.length > 0 && <div className="comparison-grid">
       <div className="chart"><h4>Evolução histórica</h4><ResponsiveContainer width="100%" height={300}><LineChart data={chartData}><CartesianGrid stroke="#334155" strokeDasharray="4 4" /><XAxis dataKey="year" stroke="#a8b8cc" /><YAxis stroke="#a8b8cc" /><Tooltip formatter={tooltipFormatter(unit)} />{selectedTerritories.map((territory, index) => <Line key={territory.code} type="monotone" dataKey={territory.code} name={territory.name} stroke={COMPARISON_COLORS[index]} strokeWidth={3} dot={false} />)}</LineChart></ResponsiveContainer></div>
       <div className="chart"><h4>{snapshotLabel}</h4><ResponsiveContainer width="100%" height={300}><BarChart data={selectedTerritories.flatMap((territory) => { const latest = latestByCode.get(territory.code); return latest ? [{ name: territory.name, value: latest.value }] : [] })}><CartesianGrid stroke="#334155" strokeDasharray="4 4" /><XAxis dataKey="name" interval={0} angle={-25} textAnchor="end" height={70} stroke="#a8b8cc" /><YAxis stroke="#a8b8cc" /><Tooltip formatter={tooltipFormatter(unit)} /><Bar dataKey="value" fill={color} radius={[6, 6, 0, 0]} /></BarChart></ResponsiveContainer></div>
-    </div>
+    </div>}
   </section>
 }
 
