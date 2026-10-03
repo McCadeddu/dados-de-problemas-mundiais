@@ -427,6 +427,7 @@ select {
 .coverage-status__current { background: rgba(148, 163, 184, 0.12); }
 .coverage-status td { min-width: 10rem; }
 .coverage-status th { min-width: 12rem; }
+.work-migration-comparison button:disabled { opacity: 0.5; cursor: not-allowed; }
 .country-search-feedback { margin: 0 0 1.5rem; color: #cbd5e1; }
 .country-search-feedback button { margin-left: 0.5rem; }
 

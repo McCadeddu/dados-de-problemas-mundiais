@@ -1,7 +1,7 @@
 import type { ThemeId } from '../types'
 
 export type ReviewSource = { scale: string; name: string; url: string; evidence: string; use: string }
-export type ThemeReview = { themeId: ThemeId; name: string; rule: string; next: string; sources: ReviewSource[] }
+export type ThemeReview = { themeId: ThemeId; name: string; rule: string; next: string; sources: ReviewSource[]; reviewedAt?: string }
 export const REVIEW_DATE = '2026-09-30'
 const cepal = 'https://statistics.cepal.org/portal/databank/index.html?lang=es'
 const sis = 'https://www.ibge.gov.br/estatisticas/sociais/populacao/9221-sintese-de-indicadores-sociais.html'
@@ -75,13 +75,13 @@ export const SOURCE_REVIEWS: ThemeReview[] = [
     ],
   },
   {
-    themeId: 'decent-work', name: 'Trabalho e proteção social',
+    themeId: 'decent-work', name: 'Trabalho e proteção social', reviewedAt: '2026-10-03',
     rule: 'Desemprego usa força de trabalho; emprego vulnerável usa ocupados. Séries mensais, trimestrais e anuais não são intercambiáveis. Estimativas imputadas da OIT não sustentam rankings nacionais.',
-    next: 'Preservar sinalizações de imputação e ampliar contribuição previdenciária com denominador compatível; fiscalização de trabalho forçado não mede prevalência.',
+    next: 'Comprovar a origem reportada dos componentes de emprego vulnerável e classificar desemprego juvenil; ampliar contribuição previdenciária com denominador compatível.',
     sources: [
       source('Nacional · Brasil', 'IBGE — Síntese de Indicadores Sociais, trabalho', sis, 'Escopo de trabalho e rendimentos localizado; acesso direto retornou 403.', 'Complemento documental às séries PNAD e aos seis conectores nacionais já disponíveis.'),
       source('Regional e mundial · regiões OIT', 'OIT/Walk Free/OIM — estimativas de trabalho forçado', 'https://www.ilo.org/topics/forced-labour-modern-slavery-and-trafficking-persons/data-and-research-forced-labour', 'Publicação e referência 2021 localizadas.', 'Complemento regional e mundial de 2021 já integrado; não é uma série anual.'),
-      source('Mundial', 'OIT via WDI — desemprego modelado', 'https://databank.worldbank.org/metadataglossary/world-development-indicators/series/SL.UEM.TOTL.ZS', 'Metadados consultados; restrição explícita para comparações de observações imputadas.', 'Série integrada para contexto; ranking suspenso enquanto a imputação não estiver identificada por observação.'),
+      source('Mundial', 'OIT/ILOSTAT — desemprego direto com status', 'https://sdmx.ilo.org/rest/dataflow/ILO/DF_UNE_2EAP_SEX_AGE_RT/1.0', 'API SDMX e dicionário oficial verificados em 03/10/2026; valores reais distinguidos de status ausente.', 'Série direta integrada. Emprego vulnerável exige comprovação nos três componentes; cruzamento conjunto ainda sem amostra elegível.'),
     ],
   },
 ]

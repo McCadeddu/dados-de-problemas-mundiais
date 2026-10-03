@@ -3,6 +3,7 @@ type RetryOptions = {
   timeoutMs?: number
   onRetry?: (message: string) => void
   acceptLanguage?: string
+  accept?: string
 }
 
 class HttpError extends Error {
@@ -60,7 +61,7 @@ async function fetchWithRetry<T>(url: string, accept: string, read: (response: R
 }
 
 export function fetchJsonWithRetry<T>(url: string, options: RetryOptions = {}): Promise<T> {
-  return fetchWithRetry(url, 'application/json', (response) => response.json() as Promise<T>, options)
+  return fetchWithRetry(url, options.accept ?? 'application/json', (response) => response.json() as Promise<T>, options)
 }
 
 export function fetchTextWithRetry(url: string, options: RetryOptions = {}): Promise<string> {

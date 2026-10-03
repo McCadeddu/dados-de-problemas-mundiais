@@ -4,7 +4,7 @@ export function SourceReviewPanel({ themeId }: { themeId: string }) {
   const review = SOURCE_REVIEWS.find(r => r.themeId === themeId)
   if (!review) return null
   return <section className="panel national-data source-review" aria-label="Controle de fontes por problemática">
-    <div className="panel__header"><div><h3>Fontes nacionais, regionais e mundiais</h3><p>Revisão documental de {REVIEW_DATE.split('-').reverse().join('/')} · {review.name}</p></div></div>
+    <div className="panel__header"><div><h3>Fontes nacionais, regionais e mundiais</h3><p>Revisão documental de {(review.reviewedAt ?? REVIEW_DATE).split('-').reverse().join('/')} · {review.name}</p></div></div>
     <p><strong>Regra de comparação:</strong> {review.rule}</p>
     <details><summary>Ver fontes, verificação e situação de integração</summary>
       <p>Esta revisão usa o Brasil como referência nacional e recortes regionais explicitados abaixo. Não certifica todos os países ou continentes. Fonte localizada não significa dados importados ou comparação aprovada.</p>

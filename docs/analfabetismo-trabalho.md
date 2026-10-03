@@ -1,5 +1,11 @@
 # Analfabetismo e trabalho
 
+Atualização de 03/10/2026: desemprego total e emprego vulnerável passaram da
+distribuição WDI para a API SDMX direta OIT, com classificação por observação.
+Cobertura atual: 186 países/territórios. O desemprego juvenil mantém a WDI.
+Consulte [classificação, diagnóstico e limites](classificacao-trabalho-oit.md).
+As coberturas e fontes da tabela inicial abaixo registram a entrega de setembro.
+
 Implementação e fontes verificadas em 18/09/2026. Os dois temas abrem primeiro
 a análise mundial, com mapas, ranking e comparação entre países; o detalhe
 nacional permanece ao final desse percurso.

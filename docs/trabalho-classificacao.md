@@ -1,5 +1,11 @@
 # Comparações de trabalho: classificação das observações
 
+Atualização de 03/10/2026: desemprego total e emprego vulnerável passaram à
+API direta OIT/SDMX. Foram recuperadas 3.367 observações de desemprego com R;
+o emprego vulnerável ainda não tem R nos três componentes. O cruzamento mantém
+zero país-anos elegíveis. Ver [método atual e reprodução](classificacao-trabalho-oit.md).
+O relato abaixo descreve a coleta WDI anterior.
+
 Revisão: 30 de setembro de 2026.
 
 A OIT mistura observações nacionais harmonizadas e imputações em suas estimativas modeladas. Recomenda não usar observações imputadas para comparar ou ordenar países: https://www.ilo.org/resource/news/note-ilo-modelled-estimates-and-country-rankings-or-comparisons

@@ -1,5 +1,10 @@
 # Comparabilidade entre trabalho e migração
 
+Atualização de 03/10/2026: as duas taxas usam a API direta OIT/SDMX.
+A classificação de desemprego foi parcialmente recuperada; os componentes de
+emprego vulnerável ainda não comprovam observações reportadas. O cruzamento
+permanece sem amostra elegível. [Diagnóstico atual](classificacao-trabalho-oit.md).
+
 Esta matriz orienta o próximo ciclo de análise. Ela mantém indicadores com
 conceitos, denominadores, períodos e unidades de observação diferentes em
 linhas separadas. Uma associação descritiva só deve ser calculada depois de

@@ -1,5 +1,15 @@
 # Roadmap
 
+## Classificação direta OIT — 03/10/2026
+
+- Desemprego total e emprego vulnerável usam a API SDMX direta, com edição,
+  status por observação e respostas CSV para reprodução.
+- Recuperadas 3.367 observações de desemprego marcadas como reais. O emprego
+  vulnerável permanece sem comprovação nos três componentes; o cruzamento
+  conjunto com migração continua sem amostra elegível.
+- Diagnóstico na interface distingue reportadas, imputadas, sem comprovação e
+  ausentes por ano/recorte. Ver [método e limites](classificacao-trabalho-oit.md).
+
 ## Matriz de cobertura e status — 03/10/2026
 
 - Cobertura por problemática e âmbito territorial, com referências documentais

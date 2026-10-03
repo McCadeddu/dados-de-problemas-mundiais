@@ -32,6 +32,10 @@ Diagnóstico local: `npm run data:coverage-status` (incluído na coleta completa
 
 ## Fontes principais
 
+Trabalho: [classificação direta da OIT](docs/classificacao-trabalho-oit.md), com
+status por observação e evidência em CSV/JSON. O cruzamento com migração mantém
+as exigências metodológicas quando a condição reportada não está comprovada.
+
 Distribuição por país: parcelas da renda ou consumo dos 10% mais ricos e dos
 20% mais pobres (Banco Mundial/PIP), com mapa, histórico e complemento nacional
 em ano comum. [Metodologia e limites](docs/distribuicao-renda.md).

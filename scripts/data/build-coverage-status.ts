@@ -18,6 +18,7 @@ function dates(a: Artifact = {}) {
     cached: typeof a.cached === 'boolean' ? a.cached : undefined }
 }
 const metadataFiles: Record<string, string> = {
+  'ilo-unemployment': 'ilo-observation-audit.json', 'ilo-vulnerable-employment': 'ilo-observation-audit.json',
   'wb-income-top-10': 'income-distribution.json', 'wb-income-bottom-20': 'income-distribution.json',
   'ibge-state-food-insecurity': 'brazil-food-security-states.json',
   'ibge-state-food-insecurity-moderate': 'brazil-food-security-states.json',
@@ -28,7 +29,11 @@ for (const indicator of catalog.indicators) {
   const file = `series/${indicator.id}.json`
   // Series files are arrays rather than metadata objects.
   const series = await readArtifact(file) as unknown as DashboardData['series'] | undefined
-  const metadata = metadataFiles[indicator.id] ? await readArtifact(metadataFiles[indicator.id]) : undefined
+  let metadata = metadataFiles[indicator.id] ? await readArtifact(metadataFiles[indicator.id]) : undefined
+  if (metadataFiles[indicator.id] === 'ilo-observation-audit.json') {
+    const dataset = (metadata?.datasets as Artifact[] | undefined)?.find(d => d.indicatorId === indicator.id)
+    metadata = { ...metadata, sourceUpdatedAt: dataset?.sourceUpdatedAt }
+  }
   datasets.push({ id: indicator.id, name: indicator.name, themeId: indicator.themeId,
     scope: indicator.geographyType as CoverageScope, file, available: !!series,
     ...observedCoverage((series ?? []).map(s => ({ code: s.geographyCode, points: s.points }))),
