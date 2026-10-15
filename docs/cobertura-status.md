@@ -1,5 +1,9 @@
 # Cobertura territorial e operação da coleta
 
+Desde 15/10/2026, a matriz também identifica explicitamente referências e
+horizontes de cenário do AdaptaBrasil. Esses recortes projetados não são anos
+observados e não são misturados com as séries históricas.
+
 A matriz disponível nas páginas de análise reúne os conjuntos já publicados.
 Ela separa agregados mundiais, regiões oficiais das fontes, séries internacionais
 por país, complementos nacionais, UFs e Regiões Geográficas Imediatas brasileiras.

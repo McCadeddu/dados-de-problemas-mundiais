@@ -14,6 +14,13 @@ const geography: FeatureCollection = {
 }
 
 describe('MapPanel', () => {
+  it('uses a fixed index domain instead of stretching each scenario to its own minimum and maximum', () => {
+    const { container, unmount } = render(<MapPanel title="Risco" subtitle="Cenário" geography={geography}
+      valueByCode={new Map([['BR', { name: 'Brasil', value: .49 }]])} codeKeys={['code']} onSelect={() => {}}
+      valueDomain={[0, 1]} colors={['#02C650', '#A9DE00', '#FFCD00', '#FF8300', '#F40000']} />)
+    expect(container.querySelector('svg path')).toHaveAttribute('fill', '#FFCD00')
+    unmount()
+  })
   it('selects a territory with the keyboard and exposes its value', () => {
     const onSelect = vi.fn()
     render(

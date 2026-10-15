@@ -14,6 +14,7 @@ type MapPanelProps = {
   formatValue?: (value: number) => string
   direction?: 'higher-better' | 'higher-worse' | 'neutral'
   directionExplanation?: string
+  valueDomain?: [number, number]
   projectionKind?: 'mercator' | 'peters'
   width?: number
   height?: number
@@ -51,6 +52,7 @@ export function MapPanel({
   formatValue = (value) => value.toFixed(1),
   direction = 'higher-better',
   directionExplanation,
+  valueDomain,
   projectionKind = 'mercator',
   width = 760,
   height = 420,
@@ -68,8 +70,8 @@ export function MapPanel({
   const values = Array.from(valueByCode.values()).map((item) => item.value)
   const minValue = Math.min(...values)
   const maxValue = Math.max(...values)
-  const scaleMin = Number.isFinite(minValue) ? minValue : 0
-  const scaleMax = Number.isFinite(maxValue) ? maxValue : 1
+  const scaleMin = valueDomain?.[0] ?? (Number.isFinite(minValue) ? minValue : 0)
+  const scaleMax = valueDomain?.[1] ?? (Number.isFinite(maxValue) ? maxValue : 1)
   const colorScale = useMemo(() => {
     return scaleQuantize<string>()
       .domain([scaleMin, scaleMax])

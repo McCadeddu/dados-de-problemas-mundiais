@@ -4,7 +4,7 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "data:build": "tsx scripts/data/build.ts && npm run data:education-work && npm run data:food-security-states && npm run data:gender-states && npm run data:discrimination && npm run data:forced-labour && npm run data:hunger-aggregates && npm run data:poverty-aggregates && npm run data:income-distribution && npm run data:national && npm run data:coverage-status",
+    "data:build": "tsx scripts/data/build.ts && npm run data:education-work && npm run data:food-security-states && npm run data:gender-states && npm run data:discrimination && npm run data:forced-labour && npm run data:hunger-aggregates && npm run data:poverty-aggregates && npm run data:income-distribution && npm run data:national && npm run data:adaptabrasil && npm run data:coverage-status",
     "data:coverage-status": "tsx scripts/data/build-coverage-status.ts",
     "data:income-distribution": "tsx scripts/data/build-income-distribution.ts && npm run data:income-history && npm run data:pip-surveys",
     "data:income-history": "tsx scripts/data/build-income-history.ts",
@@ -14,6 +14,7 @@
     "data:forced-labour": "tsx scripts/data/build-forced-labour.ts",
     "data:gender-states": "tsx scripts/data/build-gender-states.ts",
     "data:discrimination": "tsx scripts/data/build-discrimination.ts",
+    "data:adaptabrasil": "tsx scripts/data/build-adaptabrasil.ts",
     "data:food-security-states": "tsx scripts/data/build-food-security-states.ts",
     "data:education-work": "tsx scripts/data/build-education-work.ts && npm run data:ilo-observations",
     "data:ilo-observations": "tsx scripts/data/build-ilo-observations.ts",

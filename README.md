@@ -32,6 +32,10 @@ Diagnóstico local: `npm run data:coverage-status` (incluído na coleta completa
 
 ## Fontes principais
 
+[AdaptaBrasil por UF](docs/adaptabrasil.md): risco de estresse hídrico, referência
+e cenários separados, escala oficial 0–1, mapa e comparação entre UFs.
+Atualização isolada: `npm run data:adaptabrasil`.
+
 [Discriminação social](docs/discriminacao-social.md): série ODS 16.b.1 da ONU,
 com janela de 12 meses confirmada nas notas e população da pesquisa explícita.
 Atualização isolada: `npm run data:discrimination`.

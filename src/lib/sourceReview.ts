@@ -46,11 +46,11 @@ export const SOURCE_REVIEWS: ThemeReview[] = [
     ],
   },
   {
-    themeId: 'climate-vulnerability', name: 'Vulnerabilidade climática',
-    rule: 'ND-GAIN mede vulnerabilidade e prontidão nacionais. Risco municipal AdaptaBrasil, focos de fogo e anomalias climáticas WMO não usam a mesma escala e não devem formar um ranking conjunto.',
-    next: 'Integrar AdaptaBrasil por ameaça, cenário e horizonte temporal; manter o diagnóstico regional WMO como contexto.',
+    themeId: 'climate-vulnerability', name: 'Vulnerabilidade climática', reviewedAt: '2026-10-15',
+    rule: 'ND-GAIN mede vulnerabilidade e prontidão nacionais. O índice AdaptaBrasil de 0 a 1 por UF tem referências e cenários próprios. Focos de fogo, anomalias climáticas WMO e índices de risco não formam um ranking conjunto.',
+    next: 'Ampliar ameaças e detalhamento municipal do AdaptaBrasil, com cenário e horizonte explícitos; manter o diagnóstico regional WMO como contexto.',
     sources: [
-      source('Nacional · Brasil', 'MCTI — AdaptaBrasil', 'https://adaptabrasil.mcti.gov.br/sobre/lista-de-indicadores', 'Lista de índices e indicadores consultada.', 'Fonte para ampliação municipal; não integrada nesta revisão.'),
+      source('Nacional · Brasil e UFs', 'MCTI — AdaptaBrasil', 'https://sistema.adaptabrasil.mcti.gov.br/2/1/2020/null/BR/estado/adaptabrasil', 'API e metadados consultados em 15/10/2026; resolução estadual publicada pela fonte e códigos conferidos com IBGE.', 'Estresse hídrico integrado: referência 2020 e cenários de 2030/2050, em 27 UFs. Índices oficiais, sem médias municipais calculadas pelo painel.'),
       source('Regional · América Latina e Caribe', 'WMO — Estado do clima 2024', 'https://wmo.int/resources/publication-series/state-of-climate-latin-america-and-caribbean/state-of-climate-latin-america-and-caribbean-2024', 'Relatório e escopo consultados; há edição 2025 indicada no portal.', 'Contexto de eventos e impactos; não é agregado ND-GAIN nem seleção da edição mais recente.'),
       source('Mundial · cobertura por país', 'Notre Dame — ND-GAIN', 'https://gain.nd.edu/our-work/country-index/methodology/', 'Componentes vulnerabilidade e prontidão consultados.', 'Séries nacionais integradas; sem índice continental ou mundial calculado.'),
     ],

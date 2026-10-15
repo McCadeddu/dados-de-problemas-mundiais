@@ -92,5 +92,11 @@ for (const [key, name, themeId, country] of nationalDefinitions) {
     ...observedCoverage(key === 'poverty' ? series.map(s => ({ code: s.countryCode, points: s.points }))
       : [{ code: country, points: points.map(p => ({ ...p, value: p.value ?? p.foodInsecurity ?? p.bothSexes })) }]) })
 }
+const adapta = await readArtifact('adaptabrasil.json')
+for (const snapshot of (adapta?.snapshots ?? []) as Array<{ key: string; year: number; scenarioId: number | null; scenarioLabel: string; requestUrl: string; states: Array<{ code: string; value: number | null }> }>) {
+  datasets.push({ id: `adaptabrasil-${snapshot.key}`, name: `AdaptaBrasil — estresse hídrico · ${snapshot.year} · ${snapshot.scenarioLabel}`,
+    themeId: 'climate-vulnerability', scope: 'brazil-state', file: 'adaptabrasil.json', available: true, ...dates(adapta),
+    sourceUrl: snapshot.requestUrl, ...observedCoverage(snapshot.states.map(s => ({ code: s.code, points: [{ period: snapshot.scenarioId === null ? `Referência ${snapshot.year}` : `Horizonte ${snapshot.year}`, value: s.value }] }))) })
+}
 await writeFile(base + 'coverage-status.json', JSON.stringify({ generatedAt: new Date().toISOString(), catalogGeneratedAt: catalog.generatedAt, datasets }))
 console.log(`Cobertura e status: ${datasets.length} conjuntos; ${datasets.filter(d => d.cached).length} usam cache declarado.`)

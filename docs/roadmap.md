@@ -1,5 +1,16 @@
 # Roadmap
 
+## AdaptaBrasil integrado — 15/10/2026
+
+- Risco de estresse hídrico por UF, publicado diretamente pela fonte: referência
+  2020 e quatro recortes futuros por horizonte/cenário, totalizando 135 índices.
+- Mapa em escala fixa 0–1, comparação de UFs, tabela, CSV e contexto preservado
+  no link; cenários não entram como série de anos observados.
+- Correspondência territorial conferida com IBGE; código divergente de São Paulo
+  documentado sem alterar o valor publicado.
+- Ver [método, fontes e reprodução](adaptabrasil.md). Próxima ampliação: outras
+  ameaças e municípios, com geometrias e recortes próprios.
+
 ## Discriminação social — 15/10/2026
 
 - Primeira série direta ONU/OHCHR integrada: 50 observações em 20 países e
@@ -127,14 +138,16 @@ A cópia ativa é `C:/projetos/Mundialidade`; a pasta OneDrive é antiga.
 1. Validação conjunta e publicação das correções concluídas; manter verificações por entrega.
 2. Fechar pobreza/desigualdade: aprofundar concentração de renda e distinguir riqueza.
 3. Trabalho: obter classificação OIT por observação e agregados oficiais regionais/mundiais.
-4. Recuperar discriminação social e integração efetiva AdaptaBrasil.
+4. Ampliar discriminação social e AdaptaBrasil além das primeiras integrações entregues em 15/10.
 5. Ampliar educação, gênero, migração e subdivisões nacionais, uma entrega por vez.
 
 Navegação: mundo e regiões primeiro; complemento do país somente na análise nacional.
 Cada entrega deve registrar cobertura, limitações, testes e estado de publicação.
-Discriminação social permanece uma lacuna do pedido original, além de gênero.
-AdaptaBrasil ainda tem apenas pré-visualização de CSV; não é um conector integrado.
-Status das fontes existe, mas precisa consolidar falhas, cache e revisões necessárias.
+Discriminação social tem primeira seleção ONU com janela de 12 meses comprovada;
+ampliar cobertura depende de verificar as notas e populações das pesquisas.
+AdaptaBrasil tem conector de estresse hídrico por UF, com referência e cenários
+separados; falta ampliar ameaças e municípios.
+Status e cobertura estão consolidados na matriz; manter as lacunas de metadados explícitas.
 
 ## Próxima etapa
 

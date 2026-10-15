@@ -50,6 +50,7 @@ import { TerritorialNavigation } from './components/TerritorialNavigation'
 import { ComparisonCoverage } from './components/ComparisonCoverage'
 import { CoverageStatusPanel } from './components/CoverageStatusPanel'
 import { DiscriminationNotesPanel } from './components/DiscriminationNotesPanel'
+import { AdaptabrasilPanel } from './components/AdaptabrasilPanel'
 import { DISCRIMINATION_ID, DISCRIMINATION_NOTE, DISCRIMINATION_METADATA, DISCRIMINATION_VALUE_MEANING } from './lib/discrimination'
 import { continentName, countryInContinent, territorialScope, type ViewMode } from './lib/territorialNavigation'
 
@@ -87,7 +88,8 @@ function App() {
   const [seriesLoadError, setSeriesLoadError] = useState<string | null>(null)
   const [migrationFlows, setMigrationFlows] = useState<MigrationFlow[] | null>(null)
   const [migrationFlowsError, setMigrationFlowsError] = useState<string | null>(null)
-  const [adaptCsvPreview, setAdaptCsvPreview] = useState<{ name: string; headers: string[]; rows: number; sample: string[]; missing: string[] } | null>(null)
+  const [adaptaSelection, setAdaptaSelection] = useState(initialValue('adaptaRecorte', '2020-present'))
+  const [adaptaCompareCode, setAdaptaCompareCode] = useState(initialValue('adaptaCompararUf', '29'))
   const [worldGeo, setWorldGeo] = useState<GeoJson | null>(null)
   const [brazilGeo, setBrazilGeo] = useState<GeoJson | null>(null)
   const [brazilMapError, setBrazilMapError] = useState<string | null>(null)
@@ -170,13 +172,15 @@ function App() {
       compararPaises: comparisonCountryCodes.join(','),
       compararContinentes: comparisonContinentCodes.join(','),
       compararEstados: comparisonStateCodes.join(','),
+      adaptaRecorte: adaptaSelection,
+      adaptaCompararUf: adaptaCompareCode,
       compararRegioes: comparisonImmediateRegionCodes.join(','),
     })
     const path = view === 'landing'
       ? import.meta.env.BASE_URL
       : `${getThemePath(data ? getSafeThemeId(data, themeId) : 'hunger-water')}?${params.toString()}`
     window.history.replaceState(null, '', path)
-  }, [activeThemeId, comparisonContinentCodes, comparisonCountryCodes, comparisonImmediateRegionCodes, comparisonStateCodes, comparisonYear, continent, incomeConcept, countryCode, data, immediateIndicatorId, immediateRegionCode, selectedIndicatorId, stateCode, stateIndicatorId, themeId, view])
+  }, [adaptaSelection, adaptaCompareCode, activeThemeId, comparisonContinentCodes, comparisonCountryCodes, comparisonImmediateRegionCodes, comparisonStateCodes, comparisonYear, continent, incomeConcept, countryCode, data, immediateIndicatorId, immediateRegionCode, selectedIndicatorId, stateCode, stateIndicatorId, themeId, view])
 
   const copyShareLink = async () => {
     try {
@@ -186,27 +190,6 @@ function App() {
     }
     setCopied(true)
     window.setTimeout(() => setCopied(false), 1800)
-  }
-
-  const previewAdaptCsv = async (file: File | undefined) => {
-    if (!file) return
-    const lines = (await file.text()).split(/\r?\n/).filter(Boolean)
-    const separator = lines[0]?.includes(';') ? ';' : ','
-    const headers = (lines[0] ?? '').split(separator).map((value) => value.trim())
-    const normalizedHeaders = headers.map((header) => header.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, ''))
-    const checks: Array<[string, RegExp]> = [
-      ['UF ou estado', /\b(uf|estado|sigla_uf)\b/],
-      ['município ou código IBGE', /(municip|codigo.*ibge|cod.*mun)/],
-      ['valor do indicador', /(valor|indice|risco|vulnerab|exposicao)/],
-    ]
-    const missing = checks.flatMap(([label, pattern]) => normalizedHeaders.some((header) => pattern.test(header)) ? [] : [label])
-    setAdaptCsvPreview({
-      name: file.name,
-      headers,
-      rows: Math.max(lines.length - 1, 0),
-      sample: lines.slice(1, 4),
-      missing,
-    })
   }
 
   const themeIndicators = data ? getIndicatorsByTheme(data, activeThemeId).filter(
@@ -560,6 +543,7 @@ function App() {
           {activeThemeId === 'hunger-water' && <HungerAggregatesPanel indicatorId={indicator.id} countrySeries={selectedCountrySeries} countryName={countryName} countryDataGeneratedAt={data.generatedAt} />}
           {indicator.id === 'wb-poverty-685' && <PovertyAggregatesPanel countryCode={countryCode} />}
           {activeThemeId === 'poverty-inequality' && <IncomeDistributionPanel countryCode={countryCode} countryName={countryName} />}
+          {activeThemeId === 'climate-vulnerability' && countryCode === 'BRA' && <AdaptabrasilPanel stateCode={stateCode} onStateChange={setStateCode} selectionKey={adaptaSelection} onSelectionChange={setAdaptaSelection} comparisonCode={adaptaCompareCode} onComparisonChange={setAdaptaCompareCode} />}
           <section className="content-grid content-grid--states">
             <article className="panel country-callout"><span>Análise do país</span><h3>{countryName}</h3><p>{countryContinent} • {indicator.name}</p>{countryGlobalRank > 0 && <p className="country-callout__rank">Posição por valor no recorte mundial em {snapshot?.year ?? 'ano indisponível'}: {countryGlobalRank} de {globalRanking.length} países com dados.</p>}<button className="text-button" onClick={() => { if (countryCode === 'BRA') { setContinent('Todos'); setComparisonCountryCodes((current) => ['BRA', ...current.filter((code) => code !== 'BRA')].slice(0, 5)) }; setView('country'); document.getElementById('comparar-paises')?.scrollIntoView({ behavior: 'smooth' }) }}>{countryCode === 'BRA' ? 'Comparar Brasil com outros países' : 'Voltar à comparação entre países'}</button></article>
             <article className="panel">
@@ -587,7 +571,7 @@ function App() {
           {isFeminicideIndicator(brazilIndicator.id) && <FeminicidePanel indicatorId={brazilIndicator.id} />}
           {brazilIndicator.id.startsWith('ibge-state-food-insecurity') && <section className="panel"><h3>Como ler a insegurança alimentar estadual</h3><p>Percentual de domicílios, urbanos e rurais, representados pela PNAD Contínua. Alguma insegurança inclui os níveis leve, moderado e grave; não some o total às suas partes. São estimativas amostrais: a posição no ranking não demonstra diferença estatisticamente significativa entre estados.</p><p>O histórico estadual começa em 2023. Não há recorte de insegurança alimentar por Região Geográfica Imediata neste painel; água e saneamento medem outras dimensões.</p><p className="meta"><a href={`${import.meta.env.BASE_URL}data/brazil-food-security-states.json`} download>Baixar séries estaduais e proveniência (JSON)</a> · <a href="https://sidra.ibge.gov.br/tabela/9552">Consultar estimativas e coeficientes de variação no IBGE</a></p></section>}
           <IndicatorExplanation indicator={activeIndicator} source={activeSource} />
-          {activeThemeId === 'climate-vulnerability' && <section className="panel source-link-panel"><div><h3>Dados climáticos complementares para o Brasil</h3><p>Como usar: 1. abra o catálogo oficial; 2. baixe um arquivo CSV; 3. selecione-o abaixo; 4. confira as colunas e os avisos; 5. envie o arquivo validado para integração por estado.</p></div><div><a className="advance-button" href="https://www.gov.br/mcti/pt-br/acesso-a-informacao/dados-abertos/dados-abertos/arquivos/adapta-brasil/adaptabrasil" target="_blank" rel="noreferrer">Baixar CSV do AdaptaBrasil</a><label className="csv-upload">Carregar CSV para pré-visualizar<input type="file" accept=".csv,text/csv" onChange={(event) => void previewAdaptCsv(event.target.files?.[0])} /></label></div>{adaptCsvPreview && <div className="csv-preview"><strong>{adaptCsvPreview.name}</strong><p>{adaptCsvPreview.rows.toLocaleString('pt-BR')} linhas de dados. Colunas: {adaptCsvPreview.headers.join(' | ')}</p><p>{adaptCsvPreview.missing.length ? `Atenção: não identifiquei ${adaptCsvPreview.missing.join(', ')}.` : 'Estrutura territorial básica identificada para avaliação.'}</p><code>{adaptCsvPreview.sample.join('\n')}</code></div>}</section>}
+          {activeThemeId === 'climate-vulnerability' && <AdaptabrasilPanel stateCode={stateCode} onStateChange={setStateCode} selectionKey={adaptaSelection} onSelectionChange={setAdaptaSelection} comparisonCode={adaptaCompareCode} onComparisonChange={setAdaptaCompareCode} />}
           {brazilIndicator.id === 'sismigra-state-active-immigrants' && <section className="panel migration-context"><strong>Como interpretar</strong><p>Este mapa soma registros ativos de imigrantes por UF no SISMIGRA/Polícia Federal. Ele não estima todos os migrantes residentes, refugiados, solicitantes de asilo ou pessoas deslocadas à força.</p></section>}
           <section className="content-grid content-grid--states">
             {brazilGeo
