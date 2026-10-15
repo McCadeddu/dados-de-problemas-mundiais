@@ -49,6 +49,8 @@ type GeoJson = GeoJSON.FeatureCollection
 import { TerritorialNavigation } from './components/TerritorialNavigation'
 import { ComparisonCoverage } from './components/ComparisonCoverage'
 import { CoverageStatusPanel } from './components/CoverageStatusPanel'
+import { DiscriminationNotesPanel } from './components/DiscriminationNotesPanel'
+import { DISCRIMINATION_ID, DISCRIMINATION_NOTE, DISCRIMINATION_METADATA, DISCRIMINATION_VALUE_MEANING } from './lib/discrimination'
 import { continentName, countryInContinent, territorialScope, type ViewMode } from './lib/territorialNavigation'
 
 const THEME_MAP_COLORS: Record<string, string[]> = {
@@ -356,7 +358,7 @@ function App() {
       : 'regiões imediatas'
   const activeSeriesLoading = !data.series.some((entry) => entry.indicatorId === activeIndicator.id)
     || ((effectiveView === 'world' || effectiveView === 'continents' || effectiveView === 'country') && data.countryPopulation.length === 0)
-  const directionLabel = activeIndicator.direction === 'neutral'
+  const directionLabel = activeIndicator.id === DISCRIMINATION_ID ? DISCRIMINATION_VALUE_MEANING : activeIndicator.direction === 'neutral'
     ? 'Valores maiores indicam maior volume de registros; a interpretação depende do contexto.'
     : activeIndicator.direction === 'higher-worse'
       ? 'Valores maiores indicam maior pressão ou vulnerabilidade.'
@@ -428,11 +430,12 @@ function App() {
             {!!snapshot?.excluded.length && <details><summary>Ver {snapshot.excluded.length} territórios excluídos deste recorte</summary><p>{snapshot.excluded.map(c => c.name).join('; ')}.</p><p>Sem observação única e válida no ano selecionado ou fora do filtro de conceito e cobertura; ausência não é zero.</p></details>}
             <p className="meta">{effectiveView === 'country' ? 'Este seletor controla os cartões de comparação entre países e a posição mundial do país escolhido.' : 'Este seletor controla o mapa, panorama e ranking abaixo.'} Complementos oficiais e históricos têm seletores próprios e identificam seus períodos.</p>
           </section>)
+  const discriminationSeries = data.series.filter(s => s.indicatorId === DISCRIMINATION_ID && (scopeContinent === 'Todos' || data.countries.some(c => c.code === s.geographyCode && c.continent === scopeContinent)) && (effectiveView !== 'country' || s.geographyCode === countryCode))
   const countryComparison = (<TerritoryComparisonPanel
             sectionId="comparar-paises"
             snapshotLabel={`Valores em ${snapshot?.year ?? 'ano indisponível'}`}
             title="Comparar países"
-            description={`Selecione de 2 a 5 países do recorte atual. Os cartões mostram apenas ${snapshot?.year ?? 'o ano selecionado'}; o gráfico preserva o histórico. ${permitsCountryRanking(indicator.id) ? 'Confira conceito e população de referência.' : 'Estimativas OIT para contexto; observações imputadas não permitem inferir diferenças de desempenho entre países.'}`}
+            description={`Selecione de 2 a 5 países do recorte atual. Os cartões mostram apenas ${snapshot?.year ?? 'o ano selecionado'}; o gráfico preserva o histórico. ${indicator.id === DISCRIMINATION_ID ? DISCRIMINATION_NOTE : permitsCountryRanking(indicator.id) ? 'Confira conceito e população de referência.' : 'Estimativas OIT para contexto; observações imputadas não permitem inferir diferenças de desempenho entre países.'}`}
             territories={filteredCountries}
             selectedCodes={comparisonCountryCodes.filter((code) => filteredCountries.some((country) => country.code === code))}
             selectionCount={comparisonCountryCodes.length}
@@ -489,6 +492,7 @@ function App() {
           </section>
           {comparisonControls}
           <IndicatorExplanation indicator={activeIndicator} source={activeSource} />
+          {indicator.id === DISCRIMINATION_ID && <DiscriminationNotesPanel series={discriminationSeries} year={snapshot?.year} loading={activeSeriesLoading} />}
           {effectiveView === 'world' && <>
           <SourceReviewPanel themeId={activeThemeId} />
           {activeThemeId === 'hunger-water' && <HungerAggregatesPanel indicatorId={indicator.id} />}
@@ -506,14 +510,14 @@ function App() {
 
           </>}
           <section className="content-grid content-grid--world">
-            <MapPanel title={effectiveView === 'world' ? 'Mapa mundial' : `Mapa por continente: ${continentName(continent)}`} subtitle={`${indicator.name} • ${snapshot?.year ?? 'carregando ano'} • clique para destacar um país`} geography={worldGeo} valueByCode={worldValueByCode} codeKeys={['ADM0_A3', 'ISO_A3', 'SOV_A3', 'gu_a3']} onSelect={(code) => { setCountryCode(code); setCountryQuery('') }} selectedCode={countryCode} formatValue={(value) => formatValue(value, indicator.unit)} direction={indicator.direction} projectionKind="peters" colors={THEME_MAP_COLORS[activeThemeId]} selectedColor="var(--theme-accent)" />
+            <MapPanel title={effectiveView === 'world' ? 'Mapa mundial' : `Mapa por continente: ${continentName(continent)}`} subtitle={`${indicator.name} • ${snapshot?.year ?? 'carregando ano'} • clique para destacar um país`} geography={worldGeo} valueByCode={worldValueByCode} codeKeys={['ADM0_A3', 'ISO_A3', 'SOV_A3', 'gu_a3']} onSelect={(code) => { setCountryCode(code); setCountryQuery('') }} selectedCode={countryCode} formatValue={(value) => formatValue(value, indicator.unit)} direction={indicator.direction} directionExplanation={indicator.id === DISCRIMINATION_ID ? DISCRIMINATION_VALUE_MEANING : undefined} projectionKind="peters" colors={THEME_MAP_COLORS[activeThemeId]} selectedColor="var(--theme-accent)" />
             <article className="panel">
               <div className="panel__header"><div><h3>{scopeContinent === 'Todos' ? (effectiveView === 'world' ? 'Panorama mundial' : 'Panorama dos continentes') : `Panorama: ${continentName(scopeContinent)}`}</h3><p>{indicator.description}</p>{continentAverage && <p className="context-metric">Estimativa do painel para o recorte: {formatValue(continentAverage.value, indicator.unit)} ({continentAverage.coverage} países · {continentAverage.firstYear}; não é agregado oficial)</p>}</div><strong className="badge">{snapshot?.year ?? '—'}</strong></div>
               <div className="world-summary"><strong>{continentValues.length}</strong><span>países com dado no ano e recorte selecionados</span><p>Use o mapa e as regras metodológicas para observar diferenças antes de escolher um país.</p></div>
               <p className="meta">Fonte: <a href={activeSource?.url}>{activeSource?.name}</a> • Atualização conhecida: {activeSource?.lastUpdated}</p>
             </article>
           </section>
-          {permitsCountryRanking(indicator.id) ? <RankingPanel title={scopeContinent === 'Todos' ? 'Ranking global' : `Ranking: ${continentName(scopeContinent)}`} description={`Até 10 países com os maiores valores em ${snapshot?.year ?? 'ano indisponível'}; ordenação descritiva dos países com dado, sem preencher lacunas.`} ranking={worldRanking} unit={indicator.unit} direction={indicator.direction} color="#2563eb" tooltipFormatter={tooltipFormatter} /> : <section className="panel"><h3>Ranking nacional suspenso</h3><p>A OIT desaconselha usar observações imputadas para ranquear países. A classificação ainda não está comprovada em parte das observações; consulte o diagnóstico de trabalho e migração. O mapa serve como contexto, sem classificação de desempenho.</p><a href="https://www.ilo.org/resource/news/note-ilo-modelled-estimates-and-country-rankings-or-comparisons">Consultar a restrição metodológica</a></section>}
+          {permitsCountryRanking(indicator.id) ? <RankingPanel title={scopeContinent === 'Todos' ? 'Ranking global' : `Ranking: ${continentName(scopeContinent)}`} description={`Até 10 países com os maiores valores em ${snapshot?.year ?? 'ano indisponível'}; ordenação descritiva dos países com dado, sem preencher lacunas.`} ranking={worldRanking} unit={indicator.unit} direction={indicator.direction} color="#2563eb" tooltipFormatter={tooltipFormatter} /> : <section className="panel"><h3>Ranking nacional suspenso</h3><p>{indicator.id === DISCRIMINATION_ID ? DISCRIMINATION_NOTE : 'A OIT desaconselha usar observações imputadas para ranquear países. A classificação ainda não está comprovada em parte das observações; consulte o diagnóstico de trabalho e migração. O mapa serve como contexto, sem classificação de desempenho.'}</p><a href={indicator.id === DISCRIMINATION_ID ? DISCRIMINATION_METADATA : 'https://www.ilo.org/resource/news/note-ilo-modelled-estimates-and-country-rankings-or-comparisons'}>Consultar a restrição metodológica</a></section>}
           {effectiveView === 'continents' && !supportsPopulationAverage && <section className="panel"><h3>Limites da comparação continental</h3><p>Este indicador não permite uma média continental ponderada pela população total. Selecione um continente para ver os dados dos países com cobertura, sem criar um agregado continental artificial.</p></section>}
           {effectiveView === 'continents' && supportsPopulationAverage && <TerritoryComparisonPanel
             title="Comparar continentes"
@@ -552,6 +556,7 @@ function App() {
           </section>}
           {countryComparison}
           <IndicatorExplanation indicator={activeIndicator} source={activeSource} />
+          {indicator.id === DISCRIMINATION_ID && <DiscriminationNotesPanel series={discriminationSeries} year={snapshot?.year} loading={activeSeriesLoading} />}
           {activeThemeId === 'hunger-water' && <HungerAggregatesPanel indicatorId={indicator.id} countrySeries={selectedCountrySeries} countryName={countryName} countryDataGeneratedAt={data.generatedAt} />}
           {indicator.id === 'wb-poverty-685' && <PovertyAggregatesPanel countryCode={countryCode} />}
           {activeThemeId === 'poverty-inequality' && <IncomeDistributionPanel countryCode={countryCode} countryName={countryName} />}
@@ -683,7 +688,7 @@ function GlobalInsightPanel({ indicator, continent, average, coverage, leadingVa
   leadingValue?: DashboardData['latest'][number]
 }) {
   const scope = continent === 'Todos' ? 'mundo' : continent
-  const meaning = indicator.direction === 'neutral'
+  const meaning = indicator.id === DISCRIMINATION_ID ? 'a proporção de participantes que relataram discriminação na pesquisa' : indicator.direction === 'neutral'
     ? 'maior volume de registros, cuja interpretação depende do contexto'
     : indicator.direction === 'higher-worse'
       ? 'maior pressão ou vulnerabilidade'

@@ -1,5 +1,17 @@
 # Roadmap
 
+## Discriminação social — 15/10/2026
+
+- Primeira série direta ONU/OHCHR integrada: 50 observações em 20 países e
+  territórios, com janela de 12 meses confirmada nas notas individuais.
+- Mundo, Continentes e Estados (países) exibem mapa, histórico e notas de
+  população/pesquisa; sem ranking ou agregação de pesquisas distintas.
+- Paginação, edição, correspondência oficial M49 e exclusões registradas;
+  nenhum dado elegível do Brasil nesta seleção.
+- Ver [método, limites e reprodução](discriminacao-social.md).
+- Metadados OIT reconsultados em 15/10: as duas tabelas mantêm a edição de
+  novembro de 2025. O bloqueio do cruzamento trabalho–migração permanece.
+
 ## Classificação direta OIT — 03/10/2026
 
 - Desemprego total e emprego vulnerável usam a API SDMX direta, com edição,

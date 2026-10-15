@@ -20,13 +20,14 @@ export const SOURCE_REVIEWS: ThemeReview[] = [
     ],
   },
   {
-    themeId: 'gender-equality', name: 'Gênero e discriminação',
+    themeId: 'gender-equality', name: 'Gênero e discriminação', reviewedAt: '2026-10-15',
     rule: 'Cadeiras parlamentares, participação no trabalho, cuidado e violência têm denominadores distintos. Igualar faixa etária, sexo, janela da pesquisa e tipo de violência antes de comparar.',
-    next: 'Ampliar cuidado e violência com janela e população compatíveis; os indicadores atuais não cobrem todas as formas de discriminação.',
+    next: 'Validar pesquisas nacionais e faixas etárias para ampliar a discriminação de 12 meses; manter janelas divergentes e estimativas fora da seleção atual.',
     sources: [
       source('Nacional · Brasil', 'IBGE — Estatísticas de gênero', 'https://www.ibge.gov.br/estatisticas/multidominio/genero/20163-estatisticas-de-genero-indicadores-sociais-das-mulheres-no-brasil.html?=&t=o-que-e', 'Edição 2024 e descrição do produto localizadas.', 'Referência complementar; não corresponde automaticamente às séries já integradas.'),
       source('Regional · América Latina e Caribe', 'CEPAL — Observatório de Igualdade de Gênero', 'https://oig.cepal.org/en', 'Indicadores de autonomia e representação consultados.', 'Consulta documental; conector regional pendente.'),
       source('Mundial', 'IPU via WDI — mulheres no parlamento', 'https://databank.worldbank.org/metadataglossary/world-development-indicators/series/SG.GEN.PARL.ZS', 'Metadados específicos consultados.', 'Série nacional harmonizada integrada; sem média por população total.'),
+      source('Nacional na base mundial', 'OHCHR / ONU — discriminação relatada, ODS 16.b.1', 'https://unstats.un.org/sdgs/metadata/files/Metadata-16-0b-01.pdf', 'API, edição e notas por observação verificadas em 15/10/2026. Há janelas divergentes dentro da série.', 'Integrados apenas dados nacionais C, sem desagregações e com 12 meses explícitos na nota; sem ranking nem agregado mundial/continental.'),
     ],
   },
   {

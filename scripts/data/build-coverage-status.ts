@@ -18,6 +18,7 @@ function dates(a: Artifact = {}) {
     cached: typeof a.cached === 'boolean' ? a.cached : undefined }
 }
 const metadataFiles: Record<string, string> = {
+  'un-discrimination-12-months': 'un-discrimination-audit.json',
   'ilo-unemployment': 'ilo-observation-audit.json', 'ilo-vulnerable-employment': 'ilo-observation-audit.json',
   'wb-income-top-10': 'income-distribution.json', 'wb-income-bottom-20': 'income-distribution.json',
   'ibge-state-food-insecurity': 'brazil-food-security-states.json',

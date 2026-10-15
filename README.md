@@ -32,6 +32,10 @@ Diagnóstico local: `npm run data:coverage-status` (incluído na coleta completa
 
 ## Fontes principais
 
+[Discriminação social](docs/discriminacao-social.md): série ODS 16.b.1 da ONU,
+com janela de 12 meses confirmada nas notas e população da pesquisa explícita.
+Atualização isolada: `npm run data:discrimination`.
+
 Trabalho: [classificação direta da OIT](docs/classificacao-trabalho-oit.md), com
 status por observação e evidência em CSV/JSON. O cruzamento com migração mantém
 as exigências metodológicas quando a condição reportada não está comprovada.

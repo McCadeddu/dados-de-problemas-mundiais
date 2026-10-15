@@ -13,6 +13,7 @@ type MapPanelProps = {
   selectedCode?: string
   formatValue?: (value: number) => string
   direction?: 'higher-better' | 'higher-worse' | 'neutral'
+  directionExplanation?: string
   projectionKind?: 'mercator' | 'peters'
   width?: number
   height?: number
@@ -49,6 +50,7 @@ export function MapPanel({
   selectedCode,
   formatValue = (value) => value.toFixed(1),
   direction = 'higher-better',
+  directionExplanation,
   projectionKind = 'mercator',
   width = 760,
   height = 420,
@@ -156,9 +158,9 @@ export function MapPanel({
         <span>{formatValue(legendValues[legendValues.length - 1])}</span>
       </div>
       <p className="map__legend-caption">
-        {direction === 'neutral'
+        {directionExplanation ?? (direction === 'neutral'
           ? 'Valores maiores indicam maior volume de registros; a interpretação depende do contexto.'
-          : `Valores maiores indicam ${direction === 'higher-worse' ? 'maior pressão ou vulnerabilidade' : 'maior acesso, proteção ou capacidade'}.`}
+          : `Valores maiores indicam ${direction === 'higher-worse' ? 'maior pressão ou vulnerabilidade' : 'maior acesso, proteção ou capacidade'}.`)}
       </p>
     </section>
   )

@@ -24,6 +24,7 @@ it('excludes duplicate and non-finite observations', () => {
 })
 it('does not rank modeled labour series without imputation flags', () => {
   expect(permitsCountryRanking('ilo-unemployment')).toBe(false)
+  expect(permitsCountryRanking('un-discrimination-12-months')).toBe(false)
   expect(permitsCountryRanking('wb-female-labor')).toBe(false)
   expect(permitsCountryRanking('wb-basic-water')).toBe(true)
 })

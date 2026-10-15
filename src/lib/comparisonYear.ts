@@ -24,6 +24,6 @@ export function comparisonSnapshot(data: DashboardData, indicatorId: string, req
 }
 
 export function permitsCountryRanking(indicatorId: string) {
-  // WDI warns against ranking imputed ILO estimates; our files do not retain that flag.
-  return !['ilo-unemployment', 'ilo-youth-unemployment', 'ilo-vulnerable-employment', 'wb-female-labor', 'wb-labor-participation-gap'].includes(indicatorId)
+  // Unknown/imputed labour points and different survey populations cannot support a performance ranking.
+  return !['un-discrimination-12-months', 'ilo-unemployment', 'ilo-youth-unemployment', 'ilo-vulnerable-employment', 'wb-female-labor', 'wb-labor-participation-gap'].includes(indicatorId)
 }

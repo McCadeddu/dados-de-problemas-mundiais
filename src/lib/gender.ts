@@ -1,6 +1,7 @@
 import { FEMINICIDE_COUNT_ID, FEMINICIDE_RATE_ID, RASEAM_URL } from './feminicide.js'
 
 export const genderMetadata: Record<string, { denominator: string; methodologyUrl: string }> = {
+  'un-discrimination-12-months': { denominator: 'população abrangida pela pesquisa nacional; idades e instrumentos variam. ALLAGE não significa todas as idades. Consulte as notas por observação', methodologyUrl: 'https://unstats.un.org/sdgs/metadata/files/Metadata-16-0b-01.pdf' },
   [FEMINICIDE_RATE_ID]: { denominator: 'população feminina da UF no mesmo ano; vítimas / população × 100.000 (IBGE, projeção revisada em 2024)', methodologyUrl: `${RASEAM_URL}#page=459` },
   [FEMINICIDE_COUNT_ID]: { denominator: 'contagem de mulheres vítimas registradas, sem denominador populacional; não é uma taxa de risco', methodologyUrl: `${RASEAM_URL}#page=459` },
   'wb-women-parliament': { denominator: 'cadeiras ocupadas na câmara única ou baixa do parlamento nacional', methodologyUrl: 'https://databank.worldbank.org/metadataglossary/world-development-indicators/series/SG.GEN.PARL.ZS' },
